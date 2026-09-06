@@ -1,0 +1,49 @@
+enabled: false
+features:
+    semantic_analysis: true
+    multi_dimensional: true
+    content_synthesis: true
+    context_updates: false
+    short_term_memory_llm: false
+fallback:
+    enable_auto_fallback: true
+    fallback_threshold: 3
+    max_retries: 2
+llm:
+    provider: openai
+    model: gpt-4
+    max_tokens: 4000
+    temperature: 0.1
+    timeout: 30
+storage:
+    timeline_db:
+        enabled: false
+        connection_string: ""
+    knowledge_graph:
+        enabled: false
+        connection_string: ""
+smart_storage:
+    confidence_thresholds:
+        timeline_storage: 0
+        knowledge_graph_storage: 0
+        vector_storage: 0
+        context_only_threshold: 0
+    multi_vector:
+        enabled_dimensions: []
+        default_weights: {}
+        max_dimensions: 0
+    strategy:
+        enable_fallback: false
+        fallback_to_single_vector: false
+        log_analysis_details: false
+        enable_async_storage: false
+        storage_timeout_seconds: 0
+performance:
+    max_concurrent_requests: 10
+    request_timeout: 60
+    cache_enabled: true
+    cache_ttl: 300
+monitoring:
+    metrics_enabled: true
+    log_level: info
+    alert_enabled: false

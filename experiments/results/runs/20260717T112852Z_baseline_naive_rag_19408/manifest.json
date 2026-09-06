@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260717T112852Z_baseline_naive_rag_19408",
+    "started_at":  "2026-07-17T11:28:52.3694027Z",
+    "ended_at":  "2026-07-17T11:29:41.0535915Z",
+    "outcome":  "succeeded",
+    "error":  null,
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260717T112910Z_baseline_naive_rag.json",
+    "command":  "python experiments\\scripts\\run_baseline_retrieval.py baseline_naive_rag",
+    "command_sha256":  "25b9cfd16335bef5f6972cd5144e4639a588c2b53a0923b82ba8e6cc4ad6cfd0",
+    "configuration":  {
+                          "name":  "baseline_naive_rag",
+                          "base_env_sha256":  "8caa63910698aad2429ed66f99ac45aa38e84394fe0c29a10fa958ffaca82405",
+                          "overlay_env_sha256":  "c41382a04a1314840dcc49854f5714089582430502c162cf6a7687b9b69b2337",
+                          "effective_env_sha256":  "00c5e11a35d2fbe2816a0007b01e2a976b3852bb82ecf2bd6210e5e349a1529c"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "0f27d1535aa3ca733202e10e4fae87dd41897e718695de801b3cd7562e8202b8"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T112852Z_baseline_naive_rag_19408\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T112852Z_baseline_naive_rag_19408\\evaluation.log"
+                  }
+}

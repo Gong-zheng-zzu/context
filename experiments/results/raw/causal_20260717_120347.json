@@ -1,0 +1,104 @@
+{
+  "timestamp": "20260717_120347",
+  "run_label": "causal_jwt_smoke",
+  "case_file": "D:\\context\\context-keeper-main\\testdata\\causal_test_cases.json",
+  "requested_min_confidence": 0.01,
+  "scoring": {
+    "dataset": "20 annotated O-M-P-R causal test cases",
+    "matching": "NFKC/case normalization plus whole-label containment; no semantic similarity model",
+    "business_metric_denominator": "only HTTP-successful, contract-valid responses",
+    "empty_relations": "valid business response scored as an extraction miss"
+  },
+  "detailed_results": [
+    {
+      "case_id": "TC001",
+      "run_label": "causal_jwt_smoke",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 23154.637000000002,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "李爷爷",
+        "mediator": "服用降压药",
+        "property": "体位性低血压",
+        "result": "在洗手间滑倒",
+        "confidence": 0.8475,
+        "rule_confidence": 0.95,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "李爷爷服用降压药后出现体位性低血压，在洗手间滑倒"
+        ],
+        "timestamp": "2026-07-17T12:03:16.399431357+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": true,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T12:03:25.664940"
+    },
+    {
+      "case_id": "TC002",
+      "run_label": "causal_jwt_smoke",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 22130.115,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "患者",
+        "mediator": "长期卧床",
+        "property": "",
+        "result": "压疮",
+        "confidence": 0.87,
+        "rule_confidence": 0.87,
+        "pmi_confidence": 0,
+        "llm_confidence": 0,
+        "evidence": [
+          "王奶奶因长期卧床导致肌肉萎缩，双腿无力难以行走"
+        ],
+        "timestamp": "2026-07-17T12:03:47.497775632+08:00"
+      },
+      "field_matches": {
+        "object": false,
+        "mediator": true,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.8,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T12:03:47.797597"
+    }
+  ],
+  "metrics": {
+    "run_label": "causal_jwt_smoke",
+    "total_samples": 2,
+    "api_success_count": 2,
+    "api_error_count": 0,
+    "relation_found_count": 2,
+    "tuple_match_count": 1,
+    "tuple_and_confidence_pass_count": 0,
+    "object_match_count": 1,
+    "mediator_match_count": 2,
+    "property_match_count": 1,
+    "result_match_count": 1,
+    "relation_found_rate": 1.0,
+    "tuple_accuracy": 0.5,
+    "tuple_and_confidence_accuracy": 0.0,
+    "object_accuracy": 0.5,
+    "mediator_accuracy": 1.0,
+    "property_accuracy": 0.5,
+    "result_accuracy": 0.5,
+    "avg_best_relation_confidence": 0.85875,
+    "avg_latency_ms": 22642.376000000004
+  }
+}

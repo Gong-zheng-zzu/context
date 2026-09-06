@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>忆安智护 - 护工端</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #c8e6c9 100%);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #ffffff 0%, #f1f8f5 100%);
+            border-right: 1px solid #a5d6a7;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(76, 175, 80, 0.08);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(102, 187, 106, 0.3);
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 187, 106, 0.3);
+        }
+
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 187, 106, 0.4);
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .history-item {
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .history-item:hover {
+            background: #f5f5f5;
+        }
+
+        .history-item.active {
+            background: linear-gradient(135deg, #c8e6c9 0%, #c8e6c9 100%);
+            color: #43a047;
+            font-weight: 600;
+            border-left: 3px solid #66bb6a;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .privacy-status {
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 13px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(102, 187, 106, 0.3);
+        }
+
+        .privacy-status-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        /* 主聊天区域 */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .chat-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffa06b 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* 消息区域 */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: linear-gradient(180deg, #fffaf7 0%, #e8f5e9 100%);
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 24px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+            box-shadow: 0 2px 8px rgba(102, 187, 106, 0.3);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #ffa726 0%, #ffb74d 100%);
+            box-shadow: 0 2px 8px rgba(255, 167, 38, 0.3);
+        }
+
+        .message-content {
+            max-width: 70%;
+            margin: 0 15px;
+        }
+
+        .message-bubble {
+            padding: 15px 18px;
+            border-radius: 16px;
+            line-height: 1.6;
+            font-size: 20px;
+        }
+
+        .message.assistant .message-bubble {
+            background: white;
+            color: #2c3e50;
+            border: 1px solid #a5d6a7;
+            box-shadow: 0 2px 8px rgba(102, 187, 106, 0.1);
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 187, 106, 0.3);
+        }
+
+        .message-time {
+            font-size: 16px;
+            color: #95a5a6;
+            margin-top: 6px;
+            padding: 0 5px;
+        }
+
+        /* 欢迎界面 */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 40px;
+        }
+
+        .welcome-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 粒子爱心效果 */
+        .particle-heart {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+        }
+
+        .particle-heart::before {
+            content: "💗";
+            font-size: 80px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter: drop-shadow(0 0 20px rgba(255, 105, 180, 0.6));
+        }
+
+        /* 粒子效果 */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #ff69b4 0%, #ff1493 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particle-float 3s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.8);
+        }
+
+        @keyframes particle-float {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* 为不同的粒子设置不同的动画延迟和位置 */
+        .particle:nth-child(1) { --tx: -60px; --ty: -60px; animation-delay: 0s; }
+        .particle:nth-child(2) { --tx: 60px; --ty: -60px; animation-delay: 0.1s; }
+        .particle:nth-child(3) { --tx: -80px; --ty: 0px; animation-delay: 0.2s; }
+        .particle:nth-child(4) { --tx: 80px; --ty: 0px; animation-delay: 0.3s; }
+        .particle:nth-child(5) { --tx: -60px; --ty: 60px; animation-delay: 0.4s; }
+        .particle:nth-child(6) { --tx: 60px; --ty: 60px; animation-delay: 0.5s; }
+        .particle:nth-child(7) { --tx: 0px; --ty: -80px; animation-delay: 0.6s; }
+        .particle:nth-child(8) { --tx: 0px; --ty: 80px; animation-delay: 0.7s; }
+        .particle:nth-child(9) { --tx: -40px; --ty: -70px; animation-delay: 0.8s; }
+        .particle:nth-child(10) { --tx: 40px; --ty: -70px; animation-delay: 0.9s; }
+        .particle:nth-child(11) { --tx: -70px; --ty: -40px; animation-delay: 1s; }
+        .particle:nth-child(12) { --tx: 70px; --ty: -40px; animation-delay: 1.1s; }
+        .particle:nth-child(13) { --tx: -70px; --ty: 40px; animation-delay: 1.2s; }
+        .particle:nth-child(14) { --tx: 70px; --ty: 40px; animation-delay: 1.3s; }
+        .particle:nth-child(15) { --tx: -40px; --ty: 70px; animation-delay: 1.4s; }
+        .particle:nth-child(16) { --tx: 40px; --ty: 70px; animation-delay: 1.5s; }
+        .particle:nth-child(17) { --tx: -50px; --ty: -50px; animation-delay: 1.6s; }
+        .particle:nth-child(18) { --tx: 50px; --ty: -50px; animation-delay: 1.7s; }
+        .particle:nth-child(19) { --tx: -50px; --ty: 50px; animation-delay: 1.8s; }
+        .particle:nth-child(20) { --tx: 50px; --ty: 50px; animation-delay: 1.9s; }
+
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+
+        .welcome-desc {
+            font-size: 16px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 500px;
+            line-height: 1.6;
+        }
+
+        .quick-questions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .quick-question {
+            background: white;
+            border: 2px solid #a5d6a7;
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            box-shadow: 0 2px 8px rgba(102, 187, 106, 0.1);
+        }
+
+        .quick-question:hover {
+            border-color: #66bb6a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 187, 106, 0.2);
+        }
+
+        .quick-question-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .quick-question-text {
+            font-size: 19px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        /* 输入区域 */
+        .input-area {
+            padding: 20px 30px;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .message-input {
+            width: 100%;
+            min-height: 50px;
+            max-height: 150px;
+            padding: 14px 50px 14px 18px;
+            border: 2px solid #a5d6a7;
+            border-radius: 25px;
+            font-size: 20px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 187, 106, 0.05);
+        }
+
+        .message-input:focus {
+            border-color: #66bb6a;
+            box-shadow: 0 4px 12px rgba(102, 187, 106, 0.15);
+        }
+
+        .message-input::placeholder {
+            color: #bdc3c7;
+        }
+
+        .attach-btn {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: background 0.2s ease;
+        }
+
+        .attach-btn:hover {
+            background: #a5d6a7;
+        }
+
+        /* 文件上传相关样式 */
+        .file-input {
+            display: none;
+        }
+
+        .file-preview-container {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .file-preview-item {
+            position: relative;
+            background: white;
+            border: 2px solid #a5d6a7;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 300px;
+            box-shadow: 0 2px 8px rgba(102, 187, 106, 0.1);
+        }
+
+        .file-preview-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .file-preview-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-preview-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-preview-size {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 2px;
+        }
+
+        .file-preview-remove {
+            width: 24px;
+            height: 24px;
+            background: #ff6b6b;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: background 0.2s ease;
+        }
+
+        .file-preview-remove:hover {
+            background: #ff5252;
+        }
+
+        .file-upload-progress {
+            margin-top: 5px;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .file-upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+            transition: width 0.3s ease;
+        }
+
+        .file-message-attachment {
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .message.user .file-message-attachment {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .message.assistant .file-message-attachment {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #66bb6a 0%, #81c784 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(102, 187, 106, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(102, 187, 106, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .record-controls { display: flex; align-items: center; gap: 8px; }
+        .record-category { height: 34px; max-width: 100px; border: 1px solid #a5d6a7; background: #fff; color: #2e7d32; font-size: 12px; padding: 0 5px; }
+        .record-save-btn { width: 34px; height: 34px; font-size: 16px; background: #2e7d32; }
+
+        .input-hint {
+            font-size: 16px;
+            color: #95a5a6;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* 加载动画 */
+        .typing-indicator {
+            display: flex;
+            gap: 6px;
+            padding: 15px 18px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #95a5a6;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 968px) {
+            .sidebar {
+                display: none;
+            }
+
+            .quick-questions {
+                grid-template-columns: 1fr;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #95a5a6;
+        }
+
+        /* 登录界面样式 */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f1f8e9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 90%;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #42a5f5 0%, #66bb6a 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 20px;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .test-users-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .test-users-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .test-users-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .test-user-btn {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .test-user-btn:hover {
+            border-color: #42a5f5;
+            background: #f5f9ff;
+            transform: translateY(-2px);
+        }
+
+        .test-user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffa06b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .test-user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .test-user-id {
+            font-size: 11px;
+            color: #95a5a6;
+        }
+
+        .login-hint {
+            text-align: center;
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 20px;
+        }
+
+        /* 退出登录按钮 */
+        .logout-btn {
+            background: transparent;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 13px;
+            color: #7f8c8d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+            background: #fff5f5;
+        }
+
+        /* Agent模式开关 */
+        .agent-toggle-row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+        .agent-toggle { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+        .agent-toggle input { display: none; }
+        .agent-toggle-slider {
+            width: 36px; height: 20px; background: #ccc; border-radius: 10px;
+            position: relative; transition: background 0.3s;
+        }
+        .agent-toggle-slider::after {
+            content: ''; position: absolute; top: 2px; left: 2px;
+            width: 16px; height: 16px; background: #fff; border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .agent-toggle input:checked + .agent-toggle-slider { background: #4caf50; }
+        .agent-toggle input:checked + .agent-toggle-slider::after { transform: translateX(16px); }
+        .agent-toggle-label { font-size: 12px; color: #666; font-weight: 500; }
+        .agent-toggle input:checked ~ .agent-toggle-label { color: #4caf50; }
+        .agent-trace {
+            margin: 4px 60px 4px 60px; border: 1px solid #e0e0e0; border-radius: 8px;
+            background: #fafbfc; font-size: 12px; overflow: hidden;
+        }
+        .agent-trace-toggle {
+            padding: 8px 12px; cursor: pointer; color: #1565c0; font-weight: 500;
+            background: #f0f4f8; border-bottom: 1px solid #e0e0e0;
+            transition: background 0.2s;
+        }
+        .agent-trace-toggle:hover { background: #e3edf7; }
+        .agent-trace-content { display: none; padding: 8px 12px; }
+        .agent-trace.expanded .agent-trace-content { display: block; }
+        .agent-trace.expanded .agent-trace-toggle { border-bottom: 1px solid #e0e0e0; }
+        .agent-step {
+            margin-bottom: 8px; padding: 6px 8px; border-radius: 6px;
+            background: #fff; border-left: 3px solid #1565c0;
+        }
+        .agent-step-header { font-weight: 600; color: #1565c0; margin-bottom: 4px; font-size: 11px; }
+        .agent-action { color: #e65100; margin-bottom: 3px; line-height: 1.5; }
+        .agent-execution-status { color: #2e7d32; margin-bottom: 3px; line-height: 1.5; }
+        .agent-label { font-weight: 600; }
+        .agent-stats { color: #888; font-size: 11px; text-align: right; margin-top: 4px; padding-top: 6px; border-top: 1px solid #eee; }
+        .agent-fallback-tag { color: #ff9800; font-weight: 500; }
+    </style>
+    <!-- 配置文件 -->
+    <script src="js/config.js"></script>
+    <!-- 通用聊天功能 -->
+    <script src="js/chat-common.js?v=workflow-governance-1"></script>
+    <script src="js/auth-security-override.js"></script>
+</head>
+<body>
+    <!-- 登录界面 -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-logo">🧑‍⚕️</div>
+                <div class="login-title">护工对话端</div>
+                <div class="login-subtitle">选择测试用户快速登录</div>
+            </div>
+
+            <div class="test-users-section">
+                <div class="test-users-title">测试用户快速登录</div>
+                <div class="test-users-grid">
+                    <button class="test-user-btn" onclick="quickLogin('护工小王', 'caregiver_wang')">
+                        <div class="test-user-avatar">👨‍⚕️</div>
+                        <div class="test-user-name">护工小王</div>
+                        <div class="test-user-id">caregiver_wang</div>
+                    </button>
+                    <button class="test-user-btn" onclick="quickLogin('护工小李', 'caregiver_li')">
+                        <div class="test-user-avatar">👩‍⚕️</div>
+                        <div class="test-user-name">护工小李</div>
+                        <div class="test-user-id">caregiver_li</div>
+                    </button>
+                    <button class="test-user-btn" onclick="quickLogin('护工小张', 'caregiver_zhang')">
+                        <div class="test-user-avatar">👨‍⚕️</div>
+                        <div class="test-user-name">护工小张</div>
+                        <div class="test-user-id">caregiver_zhang</div>
+                    </button>
+                    <button class="test-user-btn" onclick="quickLogin('护工小刘', 'caregiver_liu')">
+                        <div class="test-user-avatar">👩‍⚕️</div>
+                        <div class="test-user-name">护工小刘</div>
+                        <div class="test-user-id">caregiver_liu</div>
+                    </button>
+                </div>
+                <div class="login-hint">
+                    点击任意用户即可快速登录，无需密码
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">🧑‍⚕️</div>
+                    <div class="logo-text">忆安智护</div>
+                </div>
+                <button class="new-chat-btn" onclick="newChat()">
+                    ➕ 新对话
+                </button>
+            </div>
+
+            <div class="chat-history">
+                <!-- 历史记录将通过JavaScript动态加载 -->
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="role_selection.html" class="back-btn">
+                    ← 返回角色选择
+                </a>
+            </div>
+        </div>
+
+        <!-- 主聊天区域 -->
+        <div class="chat-main">
+            <div class="chat-header">
+                <div class="chat-title">🧑‍⚕️ 护工对话助手</div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">护工</div>
+                    <button class="logout-btn" onclick="logout()">切换用户</button>
+                </div>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <!-- 欢迎界面 -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-icon">
+                        <div class="particle-heart">
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                            <div class="particle"></div>
+                        </div>
+                    </div>
+                    <div class="welcome-title">您好！我是护工助手</div>
+                    <div class="welcome-desc">
+                        我可以帮您快速记录老人的生命体征数据、护理情况、用药信息等。只需用对话方式告诉我，我会自动识别并保存到系统中。
+                    </div>
+                    <div class="quick-questions">
+                        <div class="quick-question" onclick="sendQuickQuestion('记录张奶奶血压130/80，体温36.5度')">
+                            <div class="quick-question-icon">📊</div>
+                            <div class="quick-question-text">记录生命体征</div>
+                        </div>
+                        <div class="quick-question" onclick="sendQuickQuestion('记录李爷爷今天的护理情况')">
+                            <div class="quick-question-icon">📝</div>
+                            <div class="quick-question-text">记录护理情况</div>
+                        </div>
+                        <div class="quick-question" onclick="sendQuickQuestion('王奶奶今天服用了降压药')">
+                            <div class="quick-question-icon">💊</div>
+                            <div class="quick-question-text">记录用药</div>
+                        </div>
+                        <div class="quick-question" onclick="sendQuickQuestion('赵爷爷今天有点发烧，需要注意')">
+                            <div class="quick-question-icon">⚠️</div>
+                            <div class="quick-question-text">报告异常情况</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <textarea
+                            class="message-input"
+                            id="messageInput"
+                            placeholder="例如：记录张奶奶血压130/80，体温36.5度..."
+                            rows="1"
+                            onkeydown="handleKeyDown(event)"
+                            oninput="autoResize(this)"
+                        ></textarea>
+                        <button class="attach-btn" onclick="attachFile()">📎</button>
+                        <input type="file" id="fileInput" class="file-input" accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.doc,.docx,.txt" onchange="handleFileSelect(event)" multiple>
+                    </div>
+                    <div class="agent-toggle-row">
+                        <label class="agent-toggle" title="按身份与会话边界调用已登记工具">
+                            <input type="checkbox" id="agentToggle" onchange="toggleAgentMode(this.checked)">
+                            <span class="agent-toggle-slider"></span>
+                            <span class="agent-toggle-label">受控 Agent 执行</span>
+                        </label>
+                        <span class="agent-toggle-label" id="agentModeStatus">当前：普通对话</span>
+                        <div class="record-controls">
+                            <select id="nursingRecordCategory" class="record-category" aria-label="护理记录类别">
+                                <option value="日常护理">日常护理</option>
+                                <option value="生命体征">生命体征</option>
+                                <option value="用药">用药</option>
+                                <option value="异常事件">异常事件</option>
+                            </select>
+                            <button class="send-btn record-save-btn" type="button" title="保存护理记录" onclick="saveNursingRecordFromInput()">💾</button>
+                            <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="filePreviewContainer" class="file-preview-container"></div>
+                <div class="input-hint">任务示例：<button type="button" onclick="sendQuickQuestion('查询近期风险事件')">查询近期风险事件</button> <button type="button" onclick="sendQuickQuestion('整理今日护理记录')">整理护理记录</button> <button type="button" onclick="sendQuickQuestion('生成交接摘要')">生成交接摘要</button> <a href="pccm.html">PCCM 因果分析（独立分析）</a></div>
+                <div class="input-hint">
+                    💡 提示：您可以直接说"记录XXX的血压、体温"等，我会自动识别并保存
+                </div>
+                <div class="input-hint" style="margin-top: 5px; font-size: 11px; color: #7f8c8d;">
+                    支持上传：图片(JPG/PNG/GIF)、PDF、文本文件(TXT)、Word文档(DOC/DOCX)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 护工角色配置
+        const ROLE_CONFIG = {
+            role: 'caregiver',
+            roleName: '护工',
+            quickQuestions: [
+                { icon: '📊', text: '记录生命体征', question: '护理记录：张奶奶血压130/80，体温36.5度', category: '生命体征' },
+                { icon: '📝', text: '记录护理情况', question: '护理记录：李爷爷今天的护理情况', category: '日常护理' },
+                { icon: '💊', text: '记录用药', question: '护理记录：王奶奶今天服用了降压药', category: '用药' },
+                { icon: '⚠️', text: '报告异常情况', question: '护理记录：赵爷爷今天有点发烧，需要注意', category: '异常事件' }
+            ]
+        };
+
+        // 初始化
+        initializeChat(ROLE_CONFIG);
+    </script>
+</body>
+</html>

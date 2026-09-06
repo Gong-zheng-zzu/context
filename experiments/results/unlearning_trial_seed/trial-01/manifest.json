@@ -1,0 +1,2082 @@
+{
+  "schema": "unlearning-trial-seed-v1",
+  "created_at": "2026-07-26T08:24:23Z",
+  "trial": 1,
+  "scope": {
+    "user_id": "eval_user_001",
+    "target_session_id": "eval_retrieval_test",
+    "control_session_id": "eval_unlearning_control"
+  },
+  "source": {
+    "path": "experiments/datasets/retrieval_corpus/retrieval_corpus_30.json",
+    "sha256": "751572402e7923a37dfd9d8f8008ca51640bd3916368eb248bae9a5db6efa6ef",
+    "dual_digest": {
+      "hash_algorithms": [
+        "SHA-256",
+        "SM3"
+      ],
+      "sha256": "751572402e7923a37dfd9d8f8008ca51640bd3916368eb248bae9a5db6efa6ef",
+      "sm3": {
+        "status": "available",
+        "provider": "hashlib_openssl",
+        "value": "cbbc62c764a73019a2ee13ed0e250ebeed4db8ecfadc1dc1c0ad91aff38620bf"
+      },
+      "generated_at": "2026-07-26T08:22:36Z"
+    },
+    "document_count": 30,
+    "corpus_metadata": {
+      "source_file": "datasets\\nursing_data\\nursing_records.json",
+      "source_record_count": 9809,
+      "selected_document_count": 30,
+      "ground_truth_document_count": 7,
+      "selection_seed": 20260715,
+      "source_sha256": "a2fcd9ae0de11f158b945f3196027dc2458979cdfc9b47f5e8253838baad584d"
+    }
+  },
+  "target_doc_ids": [
+    "elder_020_2026-06-06T03:43:43.194500",
+    "elder_025_2026-06-06T02:40:43.194500",
+    "elder_033_2026-06-06T03:33:43.194500",
+    "elder_047_2026-06-06T03:59:43.194500",
+    "elder_080_2026-06-06T02:10:43.194500",
+    "elder_082_2026-06-06T03:54:43.194500",
+    "elder_084_2026-06-06T03:36:43.194500",
+    "elder_014_2026-06-28T03:06:43.194500",
+    "elder_079_2026-07-02T07:55:43.194500",
+    "elder_013_2026-06-20T18:09:43.194500",
+    "elder_081_2026-07-02T21:49:43.194500",
+    "elder_008_2026-07-01T10:25:43.194500",
+    "elder_078_2026-06-30T10:34:43.194500",
+    "elder_047_2026-06-27T06:48:43.194500",
+    "elder_010_2026-07-02T07:51:43.194500",
+    "elder_038_2026-06-14T14:31:43.194500",
+    "elder_034_2026-06-25T16:47:43.194500",
+    "elder_061_2026-06-07T12:18:43.194500",
+    "elder_100_2026-06-23T21:30:43.194500",
+    "elder_091_2026-06-18T11:18:43.194500",
+    "elder_027_2026-07-04T17:58:43.194500",
+    "elder_002_2026-07-02T06:45:43.194500",
+    "elder_093_2026-06-17T07:12:43.194500",
+    "elder_005_2026-06-14T02:56:43.194500",
+    "elder_041_2026-06-25T08:36:43.194500",
+    "elder_053_2026-06-29T07:47:43.194500",
+    "elder_079_2026-06-13T21:16:43.194500",
+    "elder_023_2026-06-16T17:04:43.194500",
+    "elder_028_2026-06-13T18:44:43.194500",
+    "elder_013_2026-06-20T06:57:43.194500"
+  ],
+  "target_cleanup": {
+    "target_session_id": "eval_retrieval_test",
+    "dry_run": {
+      "http_status": 404,
+      "response_sha256": "a690d49dd9a98bdffc614864972153c9a3d330b2402b05337be0c8a4a3c0d632",
+      "complete": false,
+      "error": "count session file/cache: session not found: eval_retrieval_test"
+    },
+    "delete": {
+      "http_status": 404,
+      "response_sha256": "e70a4df8f26526cdca526e083a2f02cc93bac33b4b2955beeea1683e2c7250a5",
+      "complete": false,
+      "error": "count session file/cache: session not found: eval_retrieval_test"
+    },
+    "absence_evidence": {
+      "http_status": 200,
+      "response_sha256": "1b9db90bfc45008632b6615f417b7a5ad89004379f5b40ead136b491e8007b9e",
+      "success": true,
+      "error": "",
+      "documents": [
+        {
+          "doc_id": "elder_020_2026-06-06T03:43:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_025_2026-06-06T02:40:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_033_2026-06-06T03:33:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_047_2026-06-06T03:59:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_080_2026-06-06T02:10:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_082_2026-06-06T03:54:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_084_2026-06-06T03:36:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_014_2026-06-28T03:06:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_079_2026-07-02T07:55:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_013_2026-06-20T18:09:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_081_2026-07-02T21:49:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_008_2026-07-01T10:25:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_078_2026-06-30T10:34:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_047_2026-06-27T06:48:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_010_2026-07-02T07:51:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_038_2026-06-14T14:31:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_034_2026-06-25T16:47:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_061_2026-06-07T12:18:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_100_2026-06-23T21:30:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_091_2026-06-18T11:18:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_027_2026-07-04T17:58:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_002_2026-07-02T06:45:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_093_2026-06-17T07:12:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_005_2026-06-14T02:56:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_041_2026-06-25T08:36:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_053_2026-06-29T07:47:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_079_2026-06-13T21:16:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_023_2026-06-16T17:04:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_028_2026-06-13T18:44:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        },
+        {
+          "doc_id": "elder_013_2026-06-20T06:57:43.194500",
+          "vector": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "timeline": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          },
+          "graph": {
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
+          }
+        }
+      ]
+    },
+    "state": "already_absent",
+    "pre_counts": {
+      "qdrant": 0,
+      "timescaledb": 0,
+      "neo4j": 0,
+      "session_file_cache": 0
+    },
+    "post_counts": {
+      "qdrant": 0,
+      "timescaledb": 0,
+      "neo4j": 0,
+      "session_file_cache": 0
+    }
+  },
+  "writes": {
+    "target": [
+      {
+        "doc_id": "elder_020_2026-06-06T03:43:43.194500",
+        "request_sha256": "80722ec47c9d72d6151d528745ff3ba1a64bc6431d1b5ff3ca58c83c85c62245",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "14206624c455c090dbfd988d6559c6bd47ba5058f49c600270a70b57cf951cc6",
+        "memory_id": "8edc174f-d5a5-52b3-9fac-06e54afcea3b"
+      },
+      {
+        "doc_id": "elder_025_2026-06-06T02:40:43.194500",
+        "request_sha256": "56ff8b0b6ed410ee453becb13c470728cfa85bee159d69c5e87c05d82f9fe5c4",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "1c2b2c97fc77162d846b228a0d4c2183e3adb8c1d80ec0dd35f66326f888b754",
+        "memory_id": "b3acb225-52b1-52a3-a0cf-da260ca4095b"
+      },
+      {
+        "doc_id": "elder_033_2026-06-06T03:33:43.194500",
+        "request_sha256": "e00fb4eb61664f6b8b7b00658e634b6a5a042037c0926636a6470033d114392e",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "1e0be3c0a86d4d294afca69e3b741c199aa68d40db690a1f547e36b488c5a224",
+        "memory_id": "53113269-8ac1-5f7b-849a-f7273480bf76"
+      },
+      {
+        "doc_id": "elder_047_2026-06-06T03:59:43.194500",
+        "request_sha256": "c97b00c3f72ecc80eaad581e3177701d144f1d2f78518154a7b5a37387f99820",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "f65293b51b854c5e0c69db73fe3d487a2c66da68285e3bc823141ea06c849f4b",
+        "memory_id": "6f824fa9-8b59-503f-83c1-c3789a5cf78b"
+      },
+      {
+        "doc_id": "elder_080_2026-06-06T02:10:43.194500",
+        "request_sha256": "82fa5e02c07186ba23e6ba29f05f96c4d8ca9c249f6da4bfd418de91e94303a1",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "986198f29abe0eae98d657e5dda79f1ebbe069655cca87d5d44be9ac641d8f2d",
+        "memory_id": "8698afcb-ce71-5e9a-adaf-b50d35beafb7"
+      },
+      {
+        "doc_id": "elder_082_2026-06-06T03:54:43.194500",
+        "request_sha256": "e146c59748fe9e82ec570ba01eb5ad739c95d6c54a86cdba360d1ed6f8e9f125",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "90291e2678b685b5db8846fda99ad1235155424904922563701320dde0da4a12",
+        "memory_id": "136f5a64-b23f-5eb6-800d-76c98ad29034"
+      },
+      {
+        "doc_id": "elder_084_2026-06-06T03:36:43.194500",
+        "request_sha256": "4d068f9d1e57d740e8126fc5670e1e9828236f14421ded8e71da4acd3e29b49c",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "922548a08e744d8f0235286d8ea5e86581dceeb512a83f34658ce8cb2b792307",
+        "memory_id": "8ddfa3cf-20b6-58ee-8ea1-4a61b1460973"
+      },
+      {
+        "doc_id": "elder_014_2026-06-28T03:06:43.194500",
+        "request_sha256": "349883dd697dc4e5a6059fa838fa0d485e4f7998cd0ae12e4ae23850b630cc5c",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "cd8a7cafffbefc44b6e8168ef0dbf205a4bdf5d9ac593b34bf72d8f117fe481b",
+        "memory_id": "9aa996c5-1c74-5fc5-b151-58cf83aa8ee5"
+      },
+      {
+        "doc_id": "elder_079_2026-07-02T07:55:43.194500",
+        "request_sha256": "521dfdc6f61fa48c479e9f21f99f208f5d15d334573486b8037d4c2ed65268bd",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "8d5f3198bdecff70737675f34796fa00e42640a8a2bb4294dbce35007b0ede4f",
+        "memory_id": "d142f7a9-5a5c-5ebe-b74c-d6840c65dde4"
+      },
+      {
+        "doc_id": "elder_013_2026-06-20T18:09:43.194500",
+        "request_sha256": "41b9f40371b43942d5bf7be7e9c292c1806e36bb49c050c2a91ea5a10090a1e9",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "8c7e516ea6b392864dfae5c211a23977ee3c83c2c6b1d6278ced79176dc16171",
+        "memory_id": "fd37d214-9a61-5053-814f-a83a667f0ce9"
+      },
+      {
+        "doc_id": "elder_081_2026-07-02T21:49:43.194500",
+        "request_sha256": "8d7a725cc033628fe2af6fe29495d466afea37cb5903f7c2548d11be9640cfeb",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "b5ad03f5d73fe422c60a1272362987310651cef92226a4fe645e8bd29a033560",
+        "memory_id": "bbcc354b-ed1e-5882-941a-006e8650a6b7"
+      },
+      {
+        "doc_id": "elder_008_2026-07-01T10:25:43.194500",
+        "request_sha256": "09e3147658b9a1af11c794b5cbb867773ac182171c56a72029a59e5c0c58d7ad",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "ca2c522d627b1f40ebfbc1c6754222a5055c4340a20a14fe8dbe6002d892a15d",
+        "memory_id": "1b890f6f-f82a-5867-b4b6-ecc198e037a5"
+      },
+      {
+        "doc_id": "elder_078_2026-06-30T10:34:43.194500",
+        "request_sha256": "7952afe5b3c7da3d08b91949917199a5121bead9dfa48665e04e5e7c31c27f1a",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "8127482ca1dcf5086f7f5569fdec70538694699fef779f291d46726b89959b08",
+        "memory_id": "ece03b54-3b50-59e3-be3f-9b5665e26eda"
+      },
+      {
+        "doc_id": "elder_047_2026-06-27T06:48:43.194500",
+        "request_sha256": "83f49bfc9633eb29d706426127cdd5687a08cac3472b6280a3e8941a502f0c9d",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "7e95a4beebf75e6a2e3023e0a4590e056cfb32ceb94cf4cac2f5a6b0acea2b76",
+        "memory_id": "db71f264-a4ef-520e-81c4-bff99c825ae7"
+      },
+      {
+        "doc_id": "elder_010_2026-07-02T07:51:43.194500",
+        "request_sha256": "4e1ff977d6a8556269ea8082677d409b5560bdd7c19c4564445eedfc5576d56f",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "6f17e152e70b3042d1a54f498d97dde8a92671c5b7eb83dfb0c3c3c866442be5",
+        "memory_id": "707f5931-c02f-5174-b898-b7d328850197"
+      },
+      {
+        "doc_id": "elder_038_2026-06-14T14:31:43.194500",
+        "request_sha256": "cc7e28edea10680e0f1ff1600775332efc2768fa83b8bb77371352efeed83469",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "9d4348970c8fbf08eeab69665ecae7697c4fd34224b21b7f9462871955e13268",
+        "memory_id": "bf52c0cd-2823-5405-83da-fc2125b78791"
+      },
+      {
+        "doc_id": "elder_034_2026-06-25T16:47:43.194500",
+        "request_sha256": "74bdf89ae485f6971d8d0f2e1017f996124fec5bec5fdd90847bf83335c4d056",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "5a74e5dc6f7d41661f9dc37c50de195a6dff4bd6529d8b64c239b547add9d7ac",
+        "memory_id": "bcc75e5a-02b4-52c1-a27b-b5b1ac3dd462"
+      },
+      {
+        "doc_id": "elder_061_2026-06-07T12:18:43.194500",
+        "request_sha256": "f51bb93c1f0c8584b53b476aa66f00faee78ada6e31e0d68b957499fb4fe153d",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "22e4dbbd10629d989e20015804395d56aa13c259453abfe290653b48ae41e3be",
+        "memory_id": "9b120e52-78e8-5626-a7dc-c91b7953e138"
+      },
+      {
+        "doc_id": "elder_100_2026-06-23T21:30:43.194500",
+        "request_sha256": "e5a04048232633f238dce465afe1d5c968b073db3c3e74520803837ca120d70b",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "a3a925ee6993b5b43b159c6150427c730e9e255c1974e0dbe012f9e2ebe765a7",
+        "memory_id": "99b76ead-2120-5716-a6e3-3ee9afb4f9b4"
+      },
+      {
+        "doc_id": "elder_091_2026-06-18T11:18:43.194500",
+        "request_sha256": "c47869a8d7348f37a2577335b01c3e4c19d15e8dcd87ee1c3480e902ce44d56c",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "cabf8dda907f7bdc84b006b8f63e8eed8a36ba1f5167e654a2f004edb3df07fa",
+        "memory_id": "e18890dd-7758-55b7-933e-f4cf6f63a92c"
+      },
+      {
+        "doc_id": "elder_027_2026-07-04T17:58:43.194500",
+        "request_sha256": "64c9dcca63e9ca4893be28d7508e10eb905e1e262d536a3ae7aa68dac6ac0e80",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "aa5b694a783bfb240f8f452ab4d9ebc0c3e6b952cd8773276c35e2bceeb05177",
+        "memory_id": "c369408d-5b62-5da2-a1c2-40bc5c1217e6"
+      },
+      {
+        "doc_id": "elder_002_2026-07-02T06:45:43.194500",
+        "request_sha256": "15a0246613a516dc925ebe8e88d049e5763bc5ecda49990b7079e008cc0d3e53",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "0c1a667eb01e012b11d22b8ff76efae3f41fc62c73552bc4fd7fde0b786a1623",
+        "memory_id": "fc186d8e-0635-5dce-b569-f7061581e5b8"
+      },
+      {
+        "doc_id": "elder_093_2026-06-17T07:12:43.194500",
+        "request_sha256": "b717e4ae6e5262a7521c4cbd99aa2076655bb9c576eb4b858696ddb73f0a180e",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "5529082a76af3f3e5a62401589455bdc534bad44693e0bff74de876faef9f150",
+        "memory_id": "2c26f5bd-36c9-5ea9-91e0-8dfd454aa154"
+      },
+      {
+        "doc_id": "elder_005_2026-06-14T02:56:43.194500",
+        "request_sha256": "8867cf51950e68d7649531dd2b2dad07f9c7c97ddbe5d5ce3c1261a6c8ab75db",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "fb7def3143270a309214388e35329fb9317fd353d641376d8449b5dc17c2117e",
+        "memory_id": "402ea1d1-e0fa-50f8-83c5-6b83ca8c1437"
+      },
+      {
+        "doc_id": "elder_041_2026-06-25T08:36:43.194500",
+        "request_sha256": "efbb9c4e023fd8c1cb4d8328bff3cacbe8b4dbf3e03dc5f47641669766dce358",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "a9a21bc08ca31808afeab58c8358060d3ab693175f97af8f3c2eec8738695b87",
+        "memory_id": "71720e23-ebbd-5e94-8f36-24ed10fccc4b"
+      },
+      {
+        "doc_id": "elder_053_2026-06-29T07:47:43.194500",
+        "request_sha256": "f4e14fc9220a92081f891830a0313d3a1031ae5f40470fec3958f7eca4b893cb",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "f767c5e5f37fe70591606040f68b4058ebcb53b7066c5b2dcda5ef307f664dd6",
+        "memory_id": "f9c66d16-f733-5bb1-992d-85e01f66efd7"
+      },
+      {
+        "doc_id": "elder_079_2026-06-13T21:16:43.194500",
+        "request_sha256": "b21e52ee1e2d1332708a2acca13a3e297a2b3dd414dc8343f469b91df9ef8554",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "159d296011a20a81ec1c0593f2300e1383d509d84125ce41fc38f4652f4bf853",
+        "memory_id": "56d9981a-8e3b-5712-9ed6-85a666f97db6"
+      },
+      {
+        "doc_id": "elder_023_2026-06-16T17:04:43.194500",
+        "request_sha256": "01191824ae7baa39163cbe053e1f824421d6816f2a6d8f5f39543e87dbf53b66",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "53d7a895cbf29e7ae3d8c53209dc5558fb5b29915b3b9c2a21c3228932bbaf75",
+        "memory_id": "1e884490-8238-544f-b2c9-9680fe1fb648"
+      },
+      {
+        "doc_id": "elder_028_2026-06-13T18:44:43.194500",
+        "request_sha256": "e697d2c21b1cc348040a419499b479b100d722a740bdb08d031fd1069940e428",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "8a94aef015cd6a178e0244528a5e733ec2519c0f9dd768b9cf3f0cd4ae831ace",
+        "memory_id": "592a510b-330c-5a59-917f-5e67782cfc3e"
+      },
+      {
+        "doc_id": "elder_013_2026-06-20T06:57:43.194500",
+        "request_sha256": "4cacdd3989746288324bc20dcb04dbcdfff40f14ea82e22e3f35123a8f55e768",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "037cfd137482a0b7a43e2e1da318300241b1d67d076cd39bf72cd6926cfc815c",
+        "memory_id": "113117de-6b23-5723-be4e-2b9e1197f98d"
+      }
+    ],
+    "control": [
+      {
+        "doc_id": "elder_020_2026-06-06T03:43:43.194500",
+        "request_sha256": "9d209983d2b57289c92f934f6b0e9e3ffdb7fcbb1608830a449c695061312f5f",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "cddd1bf189b77d5dc3f40ea0393626bde795743a0579182f855c1d91a06ad17f",
+        "memory_id": "325fa49f-285d-50d6-8455-c41186bf2811"
+      },
+      {
+        "doc_id": "elder_025_2026-06-06T02:40:43.194500",
+        "request_sha256": "fa3401e6550cec6a0ea2433aabf218825373a22112d6116887e2550b7f4b2dd1",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "492ad8e2050c1a3bd6484f50ee9175ceb78a7cf24c831d34caf520262102522b",
+        "memory_id": "7e92e877-9003-5a24-968b-777161d4c8e7"
+      },
+      {
+        "doc_id": "elder_033_2026-06-06T03:33:43.194500",
+        "request_sha256": "0ab8f8760bc2f61daa60cc03a2e833bcc407ac005a101b5e05f877798b41829e",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "bedd83f926217f6394b5c50674528c592b320a86d3335cfd79321a83acd8d9b6",
+        "memory_id": "088a214e-6c2c-55d2-b840-5b3e12d29260"
+      },
+      {
+        "doc_id": "elder_047_2026-06-06T03:59:43.194500",
+        "request_sha256": "81e429067cdbe4db06c2b122049fc76ae50e3aaaade2073fff9ad3547e173a5e",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "a4d063195ca497548bd2cb2234e5b08fc331d2b8d36269038a893a54ba838d86",
+        "memory_id": "a66794c5-7c7f-517f-bd92-d2246f74af07"
+      },
+      {
+        "doc_id": "elder_080_2026-06-06T02:10:43.194500",
+        "request_sha256": "3368b42602036563ceddb266e01a7cf4b895495b08a4580fd61c5519c538ec8a",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "81837bbfe8a015432ace6137b4408be495919d0dc32bc87039a729b1cabc3b75",
+        "memory_id": "b866b17f-7ffc-559c-929c-07ac6d3dfb15"
+      },
+      {
+        "doc_id": "elder_082_2026-06-06T03:54:43.194500",
+        "request_sha256": "f69cc46e63a830a703f59580e8ba6871f8fe6282432a31b4a6b10579c5f9297e",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "566f8bfe3ae4eca559c921e64b3ce70d59be809b65a9eda0a3045daf102cdbb9",
+        "memory_id": "dad10c1a-d190-5e33-b64d-1f44a1554e67"
+      },
+      {
+        "doc_id": "elder_084_2026-06-06T03:36:43.194500",
+        "request_sha256": "2e1dbe4fa8b4843a19b832829d2f93e975a139c9e1095104d9c342c8fdce924e",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "1fd281f46d3f2ffb14b3f5f7fbf7ad55ff0a28fed27b39be08331ce884b360c8",
+        "memory_id": "0aa4af33-6778-5f90-b474-6c76dfc23bda"
+      },
+      {
+        "doc_id": "elder_014_2026-06-28T03:06:43.194500",
+        "request_sha256": "f299cdd4c83d849b7263302a5e4c6daab11663f69f0a0f189a2508594da61eb3",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "224f5bdc75a68131c0258320fdc58ef4318d28851fcfb9277ef4c1e25ca3fd65",
+        "memory_id": "f44704ee-bcab-5488-b4c7-0d70cd89f230"
+      },
+      {
+        "doc_id": "elder_079_2026-07-02T07:55:43.194500",
+        "request_sha256": "92ecdff9dec120a0b037504c689b9ad1b14ccb34c956224c566f61995b9c4608",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "172502e77968b533852772c9449fe44fbe8422f244897e0cd0099f6af270a781",
+        "memory_id": "92177a7f-6c4e-5bd8-b253-39c42fbb304b"
+      },
+      {
+        "doc_id": "elder_013_2026-06-20T18:09:43.194500",
+        "request_sha256": "dcf052f2771f3d5f9c293ea67d8bc2746fd3ede29a7f558c3f214e6274327fb7",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "651c6c359d3e6418c7894363bd9b159f429fc35dfadfa715342ae10f9c5ff7f1",
+        "memory_id": "b127f9e8-2278-55d4-8bb5-43210ce56057"
+      },
+      {
+        "doc_id": "elder_081_2026-07-02T21:49:43.194500",
+        "request_sha256": "3b09b9ae7133a85a208dc76b87daa6f4d2e6b66fa9736f0872995d5f59d0cb3d",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "accc64d94e56d8a7a7ee397bcda010d7fdef2bfdaa466f27eaa9736a8506a891",
+        "memory_id": "98fec560-55b1-5083-afd8-d373ced1c057"
+      },
+      {
+        "doc_id": "elder_008_2026-07-01T10:25:43.194500",
+        "request_sha256": "b44c0709ea11362057822f968af1a3c019b0c2acd8c449af7ce0e97eb9b58932",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "f679e746409c6a11449e7be83cb0f3559765ba17c1bdf7499206513e6d2658ba",
+        "memory_id": "aeb7319d-84f0-5896-9b02-0007e001b8df"
+      },
+      {
+        "doc_id": "elder_078_2026-06-30T10:34:43.194500",
+        "request_sha256": "f1856f27c3c015ce7f984e26afe54a53b4cfb59bb465c42ab279d2e9e207c065",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "24f135ad47c6785f05db0bb00e9fb46cde2b542134a6c871a73676674a692bff",
+        "memory_id": "8a12e2f6-e960-5b79-b971-1c21cd87e56e"
+      },
+      {
+        "doc_id": "elder_047_2026-06-27T06:48:43.194500",
+        "request_sha256": "b9b60b66b7e6a20ed47f2d0d3eec240a865f0f1acb5cc00dd8c20709b753b057",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "58a15ad9f511d0dca7d4649c6204abcf67a6306aa9ce3db4e7b2bb33fd9a2dcb",
+        "memory_id": "73a8a684-db13-55f3-82db-8210300e932f"
+      },
+      {
+        "doc_id": "elder_010_2026-07-02T07:51:43.194500",
+        "request_sha256": "682710c816fb2a6b5a0ae8b198bc5c9a42528f4fd6537dd434fede7ff2e38f36",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "a9f9a33e568632dec40fdbd477d6befd2b3010590abc6b49345620c40ac6f66e",
+        "memory_id": "be7d71a3-cd4a-5d57-a2c9-5f052a88cca9"
+      },
+      {
+        "doc_id": "elder_038_2026-06-14T14:31:43.194500",
+        "request_sha256": "3fb7b03636e34052acaad674316869de24aca909b39bc58a0c6dccb85d437abb",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "a0299e24e1f8cf363ed47469469f11011cd4c0bf72cf8b9863dd4a8427aa5abf",
+        "memory_id": "0df57490-35ad-5b7b-a66d-435c56316dcc"
+      },
+      {
+        "doc_id": "elder_034_2026-06-25T16:47:43.194500",
+        "request_sha256": "94144346f2b9744ff4a59586ba2b7fd281ff8a84d4a56fc42920d7c6d395df74",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "8a7013b886a0859bd675a6e836117a1d9ce951bbf15a232ea17646e2fde109b8",
+        "memory_id": "0711a3cb-7d4e-5c11-bee2-e64a007f2053"
+      },
+      {
+        "doc_id": "elder_061_2026-06-07T12:18:43.194500",
+        "request_sha256": "d71f5864f9e6aac76bdc83c3718e774bca8a7cf40f2f0cda524dcacd0895df5c",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "287175a8a847e101d787e0753381a6a39380de0ba508ddbd509135f58a7d630a",
+        "memory_id": "27211bee-6ede-5a37-8ccb-91a241ae86a4"
+      },
+      {
+        "doc_id": "elder_100_2026-06-23T21:30:43.194500",
+        "request_sha256": "16c38ae0860e68624e8d406d3ed8bcd614822fc879e019e768733d309b381c07",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "ffbbad963b5f8f15dc0e4dad26590a9f29c1f8428202d7c90b57d987182c9ced",
+        "memory_id": "07312f80-8061-5904-9153-bbe8d318f766"
+      },
+      {
+        "doc_id": "elder_091_2026-06-18T11:18:43.194500",
+        "request_sha256": "ecad4bccffc48a8e121eb2ba2b07f08f7df7164966475ef9993d83a10160bc9c",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "42d865ec038296c32b4449144bde2bbd3c99d2731e265475b863e8a56b414e2c",
+        "memory_id": "7cde0f84-686c-525f-b14f-68d5dbc93885"
+      },
+      {
+        "doc_id": "elder_027_2026-07-04T17:58:43.194500",
+        "request_sha256": "535de5fc248c2f31c54cb62fe0da3c8b06ae855cc3e1b7817d45212111c77f74",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "e4636f869e1e47d76bcd69432b27c14b69eb9016a412556fb96251d2b95bf76d",
+        "memory_id": "55b4edbd-951e-5a59-91e8-0a0e681aef76"
+      },
+      {
+        "doc_id": "elder_002_2026-07-02T06:45:43.194500",
+        "request_sha256": "53b59c937946cc399c10b3bdfc1c424d868b4c55ef6a9b170f9d54f33bd3bfb4",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "3f6015e7c2c2dd4a8100440347b2c5200153990c410378ce912001c026812b9c",
+        "memory_id": "321fdae0-daf3-5f99-8564-290af901de7f"
+      },
+      {
+        "doc_id": "elder_093_2026-06-17T07:12:43.194500",
+        "request_sha256": "1b3891c153ad5683c81c83483c569066b9840a7f5dc7715fd929698fc6a48bff",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "2d3ab237486df0a18b1d09b2c50915ade27619f540254f722d355a9f8a52d1d0",
+        "memory_id": "661883ba-2917-5f78-a2cb-fc9a6e0512b5"
+      },
+      {
+        "doc_id": "elder_005_2026-06-14T02:56:43.194500",
+        "request_sha256": "16561b28099877e42e1b50899fcca16604ef2fd25fc7ce07b0079cfd1ba91c61",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "e16c3b26a08b8ffba1f36a631a1b259367df75d2e39e1653a67b3d86463efca3",
+        "memory_id": "07067b42-5a90-5c21-b048-81ee3e618e33"
+      },
+      {
+        "doc_id": "elder_041_2026-06-25T08:36:43.194500",
+        "request_sha256": "92de0228c9d7ebad15293ca3edd182f748ddc8e36165c43c5a86ee38a27805de",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "01af68239224adc577e9aa8d0830d1e1e96e51cfb01ef409f261b87f3e2965b3",
+        "memory_id": "d190511c-e16d-535e-86c1-04e85f01ed4d"
+      },
+      {
+        "doc_id": "elder_053_2026-06-29T07:47:43.194500",
+        "request_sha256": "af41056743fb0a96c38e81183be11de9d427d94ca0e5d3a42a2893e35c2c02b0",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "23870ad59c35c26ea37383880cd17b715d435034e05555e8abf2ff99191402bf",
+        "memory_id": "e5bf3532-e1dc-5d63-aa43-8d91d19ae1ea"
+      },
+      {
+        "doc_id": "elder_079_2026-06-13T21:16:43.194500",
+        "request_sha256": "2d07024be5e2f77fa571fb3f7371b9afe35101b52b45223ee9026b6112b64d3f",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "4f48889b49df9f8f4ec0f82e88d377d34c447058f1509669c9aad3523d9a99fe",
+        "memory_id": "1534beb2-4ebe-5c4c-8d27-cf9583d539e8"
+      },
+      {
+        "doc_id": "elder_023_2026-06-16T17:04:43.194500",
+        "request_sha256": "9a1d0a895e38298678148b685f1d174507534ac2f76a7a2a5689bab8434ec3d3",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "453c9118c9341574f7ee6c0ad9ae2739e5689cdccf058a24c50344bf8d87218e",
+        "memory_id": "f2267fb2-d4cd-53fd-9e22-f0769d2f0921"
+      },
+      {
+        "doc_id": "elder_028_2026-06-13T18:44:43.194500",
+        "request_sha256": "7df34f458e748e30ddc0946142fecb9ea953f2d324f836856b28861eadc7418a",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "1a874da9e500895e65ff97fd6ea7a8a63e6d9be13fe0b46fdec1b4bbcd6c80c5",
+        "memory_id": "656b92d1-ee6b-5ce1-b4c2-9bd8222fad81"
+      },
+      {
+        "doc_id": "elder_013_2026-06-20T06:57:43.194500",
+        "request_sha256": "e0c3295969410396c9177986ba759e408398abb5057738e796ef232815149f69",
+        "attempts": [
+          {
+            "attempt": 1,
+            "http_status": 200,
+            "rate_limit_limit": "60"
+          }
+        ],
+        "http_status": 200,
+        "response_sha256": "2cefd8770bbc1f4e29ef545b6bc9bee6b9247fc254293095b6d47697dd6274ac",
+        "memory_id": "57f41b1b-c474-5608-8cc3-06a281cdad49"
+      }
+    ]
+  },
+  "rate_limit": {
+    "requested_max_requests_per_minute": 50.0,
+    "request_interval_seconds": 1.2,
+    "max_retries": 6,
+    "observed_limits": [
+      "60"
+    ]
+  },
+  "verification": {
+    "target_threeway": {
+      "http_status": 200,
+      "response_sha256": "be3c01ccd0c164aad67653fefdac174ddbbfa0d20fd8be18a4939aa81f69316b",
+      "documents": [
+        {
+          "doc_id": "elder_020_2026-06-06T03:43:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_025_2026-06-06T02:40:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_033_2026-06-06T03:33:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_047_2026-06-06T03:59:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_080_2026-06-06T02:10:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_082_2026-06-06T03:54:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_084_2026-06-06T03:36:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_014_2026-06-28T03:06:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_079_2026-07-02T07:55:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_013_2026-06-20T18:09:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_081_2026-07-02T21:49:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_008_2026-07-01T10:25:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_078_2026-06-30T10:34:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_047_2026-06-27T06:48:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 10,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_010_2026-07-02T07:51:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_038_2026-06-14T14:31:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_034_2026-06-25T16:47:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_061_2026-06-07T12:18:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_100_2026-06-23T21:30:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_091_2026-06-18T11:18:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_027_2026-07-04T17:58:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_002_2026-07-02T06:45:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 10,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_093_2026-06-17T07:12:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_005_2026-06-14T02:56:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_041_2026-06-25T08:36:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 16,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_053_2026-06-29T07:47:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_079_2026-06-13T21:16:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_023_2026-06-16T17:04:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_028_2026-06-13T18:44:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 13,
+            "status": "verified"
+          }
+        },
+        {
+          "doc_id": "elder_013_2026-06-20T06:57:43.194500",
+          "vector": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "timeline": {
+            "verified": true,
+            "count": 1,
+            "status": "verified"
+          },
+          "graph": {
+            "verified": true,
+            "count": 10,
+            "status": "verified"
+          }
+        }
+      ]
+    },
+    "control_dry_run": {
+      "http_status": 200,
+      "response_sha256": "3e3d8a529d49b7a31fc716e79cd8556d052b0d7a7c8a49cd05e1b3779a149b39",
+      "stores": [
+        {
+          "store": "qdrant",
+          "status": "dry_run",
+          "before": 30,
+          "deleted": 0,
+          "after": 30
+        },
+        {
+          "store": "timescaledb",
+          "status": "dry_run",
+          "before": 30,
+          "deleted": 0,
+          "after": 30
+        },
+        {
+          "store": "neo4j",
+          "status": "dry_run",
+          "before": 349,
+          "deleted": 0,
+          "after": 349
+        },
+        {
+          "store": "session_file_cache",
+          "status": "dry_run",
+          "before": 3,
+          "deleted": 0,
+          "after": 3
+        }
+      ]
+    }
+  },
+  "errors": [],
+  "control_deleted": false
+}

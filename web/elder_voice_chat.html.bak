@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>忆安智护 - 老人端</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            height: 100vh;
+            overflow: hidden;
+            font-size: 18px;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 侧边栏 - 简化版 */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #ffffff 0%, #faf5fb 100%);
+            border-right: 1px solid #ce93d8;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(156, 39, 176, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ab47bc 0%, #ba68c8 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(171, 71, 188, 0.3);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: auto;
+        }
+
+        .back-btn {
+            width: 100%;
+            background: white;
+            border: 2px solid #ab47bc;
+            color: #7b1fa2;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .back-btn:hover {
+            background: #f3e5f5;
+        }
+
+        /* 主聊天区域 */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .chat-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #ab47bc 0%, #ba68c8 100%);
+            color: white;
+        }
+
+        .chat-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7b1fa2;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* 消息区域 - 大字体 */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: linear-gradient(180deg, #fafafa 0%, #f5f5f5 100%);
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 30px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, #ab47bc 0%, #ba68c8 100%);
+            box-shadow: 0 2px 8px rgba(171, 71, 188, 0.3);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #9c27b0 0%, #ab47bc 100%);
+            box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3);
+        }
+
+        .message-content {
+            max-width: 70%;
+            margin: 0 20px;
+        }
+
+        .message-bubble {
+            padding: 20px 24px;
+            border-radius: 20px;
+            line-height: 1.8;
+            font-size: 20px;
+        }
+
+        .message.assistant .message-bubble {
+            background: white;
+            color: #2c3e50;
+            border: 2px solid #e1bee7;
+            box-shadow: 0 2px 8px rgba(171, 71, 188, 0.1);
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #ab47bc 0%, #ba68c8 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(171, 71, 188, 0.3);
+        }
+
+        .message-time {
+            font-size: 14px;
+            color: #95a5a6;
+            margin-top: 8px;
+            padding: 0 5px;
+        }
+
+        /* 欢迎界面 - 大字体 */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 40px;
+        }
+
+        .welcome-icon {
+            font-size: 100px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-title {
+            font-size: 36px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .welcome-desc {
+            font-size: 20px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 50px;
+            max-width: 700px;
+            line-height: 1.8;
+        }
+
+        .quick-questions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .quick-question {
+            background: white;
+            border: 3px solid #e1bee7;
+            border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(171, 71, 188, 0.1);
+        }
+
+        .quick-question:hover {
+            border-color: #ab47bc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(171, 71, 188, 0.2);
+        }
+
+        .quick-question-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .quick-question-text {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        /* 输入区域 - 大按钮 */
+        .input-area {
+            padding: 25px 30px;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .message-input {
+            width: 100%;
+            min-height: 60px;
+            max-height: 150px;
+            padding: 18px 130px 18px 24px;
+            border: 3px solid #e1bee7;
+            border-radius: 30px;
+            font-size: 20px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(171, 71, 188, 0.05);
+        }
+
+        .message-input:focus {
+            border-color: #ab47bc;
+            box-shadow: 0 4px 12px rgba(171, 71, 188, 0.15);
+        }
+
+        .message-input::placeholder {
+            color: #bdc3c7;
+        }
+
+        /* 语音按钮 - 大按钮 */
+        .voice-btn {
+            position: absolute;
+            right: 15px;
+            bottom: 15px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ab47bc 0%, #ba68c8 100%);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(171, 71, 188, 0.3);
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(171, 71, 188, 0.4);
+        }
+
+        .voice-btn.recording {
+            background: linear-gradient(135deg, #e53935 0%, #ef5350 100%);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* 文件上传相关样式 */
+        .file-input {
+            display: none;
+        }
+
+        .file-preview-container {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .file-preview-item {
+            position: relative;
+            background: white;
+            border: 2px solid #e1bee7;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 300px;
+            box-shadow: 0 2px 8px rgba(171, 71, 188, 0.1);
+        }
+
+        .file-preview-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .file-preview-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-preview-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-preview-size {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 2px;
+        }
+
+        .file-preview-remove {
+            width: 24px;
+            height: 24px;
+            background: #ff6b6b;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: background 0.2s ease;
+        }
+
+        .file-preview-remove:hover {
+            background: #ff5252;
+        }
+
+        .file-message-attachment {
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .message.user .file-message-attachment {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .message.assistant .file-message-attachment {
+            background: #f3e5f5;
+            border: 1px solid #e1bee7;
+        }
+
+        .attach-btn {
+            position: absolute;
+            right: 70px;
+            bottom: 15px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ab47bc 0%, #ba68c8 100%);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(171, 71, 188, 0.3);
+        }
+
+        .attach-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(171, 71, 188, 0.4);
+        }
+
+        .send-btn {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ab47bc 0%, #ba68c8 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(171, 71, 188, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(171, 71, 188, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .input-hint {
+            font-size: 16px;
+            color: #95a5a6;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .voice-status {
+            font-size: 18px;
+            color: #e53935;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        /* 加载动画 */
+        .typing-indicator {
+            display: flex;
+            gap: 8px;
+            padding: 20px 24px;
+        }
+
+        .typing-dot {
+            width: 12px;
+            height: 12px;
+            background: #95a5a6;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 968px) {
+            .sidebar {
+                display: none;
+            }
+
+            .quick-questions {
+                grid-template-columns: 1fr;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #bdc3c7;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #95a5a6;
+        }
+
+        /* 登录界面样式 */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ab47bc 0%, #ba68c8 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0 auto 20px;
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+
+        .test-users-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .test-users-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .test-users-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .test-user-btn {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .test-user-btn:hover {
+            border-color: #ab47bc;
+            background: #faf5fb;
+            transform: translateY(-2px);
+        }
+
+        .test-user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ab47bc 0%, #ba68c8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .test-user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .test-user-id {
+            font-size: 13px;
+            color: #95a5a6;
+        }
+
+        .login-hint {
+            text-align: center;
+            font-size: 14px;
+            color: #95a5a6;
+            margin-top: 20px;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 15px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录界面 -->
+    <div class="login-overlay" id="loginOverlay">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-logo">👴</div>
+                <div class="login-title">老人对话端</div>
+                <div class="login-subtitle">选择测试用户快速登录</div>
+            </div>
+
+            <div class="test-users-section">
+                <div class="test-users-title">测试用户快速登录</div>
+                <div class="test-users-grid">
+                    <button class="test-user-btn" onclick="quickLogin('张爷爷', 'elder_zhang')">
+                        <div class="test-user-avatar">👴</div>
+                        <div class="test-user-name">张爷爷</div>
+                        <div class="test-user-id">elder_zhang</div>
+                    </button>
+                    <button class="test-user-btn" onclick="quickLogin('李奶奶', 'elder_li')">
+                        <div class="test-user-avatar">👵</div>
+                        <div class="test-user-name">李奶奶</div>
+                        <div class="test-user-id">elder_li</div>
+                    </button>
+                    <button class="test-user-btn" onclick="quickLogin('王爷爷', 'elder_wang')">
+                        <div class="test-user-avatar">👴</div>
+                        <div class="test-user-name">王爷爷</div>
+                        <div class="test-user-id">elder_wang</div>
+                    </button>
+                    <button class="test-user-btn" onclick="quickLogin('赵奶奶', 'elder_zhao')">
+                        <div class="test-user-avatar">👵</div>
+                        <div class="test-user-name">赵奶奶</div>
+                        <div class="test-user-id">elder_zhao</div>
+                    </button>
+                </div>
+                <div class="login-hint">
+                    点击任意用户即可快速登录，无需密码
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">👴</div>
+                    <div class="logo-text">忆安智护</div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="/web/role_selection.html" class="back-btn">
+                    ← 返回
+                </a>
+            </div>
+        </div>
+
+        <!-- 主聊天区域 -->
+        <div class="chat-main">
+            <div class="chat-header">
+                <div class="chat-title">👴 老人健康助手</div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">老人</div>
+                    <button class="logout-btn" onclick="logout()">切换用户</button>
+                </div>
+            </div>
+
+            <div class="messages-container" id="messagesContainer">
+                <!-- 欢迎界面 -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-icon">👴</div>
+                    <div class="welcome-title">您好！我是您的健康助手</div>
+                    <div class="welcome-desc">
+                        您可以点击下面的按钮，或者点击麦克风说话，我会告诉您的健康状况。
+                    </div>
+                    <div class="quick-questions">
+                        <div class="quick-question" onclick="sendQuickQuestion('我今天感觉怎么样')">
+                            <div class="quick-question-icon">❤️</div>
+                            <div class="quick-question-text">我今天怎么样</div>
+                        </div>
+                        <div class="quick-question" onclick="sendQuickQuestion('我的血压正常吗')">
+                            <div class="quick-question-icon">📊</div>
+                            <div class="quick-question-text">我的血压</div>
+                        </div>
+                        <div class="quick-question" onclick="sendQuickQuestion('今天吃什么药')">
+                            <div class="quick-question-icon">💊</div>
+                            <div class="quick-question-text">今天吃什么药</div>
+                        </div>
+                        <div class="quick-question" onclick="sendQuickQuestion('我需要注意什么')">
+                            <div class="quick-question-icon">💡</div>
+                            <div class="quick-question-text">注意事项</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <textarea
+                            class="message-input"
+                            id="messageInput"
+                            placeholder="点击麦克风说话，或者在这里输入..."
+                            rows="1"
+                            onkeydown="handleKeyDown(event)"
+                            oninput="autoResize(this)"
+                        ></textarea>
+                        <button class="attach-btn" onclick="attachFile()">📎</button>
+                        <input type="file" id="fileInput" class="file-input" accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.doc,.docx,.txt" onchange="handleFileSelect(event)" multiple>
+                        <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceRecording()">
+                            🎤
+                        </button>
+                    </div>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                        ➤
+                    </button>
+                </div>
+                <div id="filePreviewContainer" class="file-preview-container"></div>
+                <div class="voice-status" id="voiceStatus"></div>
+                <div class="input-hint">
+                    💡 提示：点击麦克风按钮说话，我会自动识别并回答您
+                </div>
+                <div class="input-hint" style="margin-top: 5px; font-size: 14px; color: #7f8c8d;">
+                    支持上传：图片(JPG/PNG/GIF)、PDF、文本文件(TXT)、Word文档(DOC/DOCX)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 配置文件 -->
+    <script src="js/config.js"></script>
+    <!-- 通用聊天功能 -->
+    <script src="js/chat-common.js"></script>
+    <script>
+        // 老人端特定配置
+        const ROLE_CONFIG = {
+            role: 'elder',
+            roleName: '老人',
+            systemPrompt: `你是老人健康助手。你的职责是：
+1. 用简单、温暖的语言与老人交流
+2. 告诉老人他们的健康状况
+3. 提供生活建议和鼓励
+4. 回答老人的日常问题
+
+使用：
+- 简短的句子
+- 通俗的词汇
+- 温暖的语气
+- 适合语音播报的表达
+
+避免使用医学术语，用老人能理解的方式说话。`,
+            quickQuestions: [
+                { icon: '❤️', text: '我今天怎么样', question: '我今天感觉怎么样' },
+                { icon: '📊', text: '我的血压', question: '我的血压正常吗' },
+                { icon: '💊', text: '今天吃什么药', question: '今天吃什么药' },
+                { icon: '💡', text: '注意事项', question: '我需要注意什么' }
+            ],
+            enableVoice: true,
+            autoSpeak: true
+        };
+
+        // 语音识别相关
+        let recognition = null;
+        let isRecording = false;
+        let synthesis = window.speechSynthesis;
+
+        // 初始化语音识别
+        function initVoiceRecognition() {
+            // 检查浏览器是否支持语音识别
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                console.warn('浏览器不支持语音识别');
+                document.getElementById('voiceBtn').style.display = 'none';
+                return;
+            }
+
+            recognition = new SpeechRecognition();
+            recognition.lang = 'zh-CN';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = function() {
+                isRecording = true;
+                document.getElementById('voiceBtn').classList.add('recording');
+                document.getElementById('voiceBtn').textContent = '🔴';
+                document.getElementById('voiceStatus').textContent = '正在听您说话...';
+            };
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                console.log('识别结果:', transcript);
+                document.getElementById('messageInput').value = transcript;
+                document.getElementById('voiceStatus').textContent = '';
+
+                // 自动发送
+                setTimeout(() => {
+                    sendMessage();
+                }, 500);
+            };
+
+            recognition.onerror = function(event) {
+                console.error('语音识别错误:', event.error);
+                document.getElementById('voiceStatus').textContent = '识别失败，请重试';
+                stopVoiceRecording();
+            };
+
+            recognition.onend = function() {
+                stopVoiceRecording();
+            };
+        }
+
+        // 切换语音录制
+        function toggleVoiceRecording() {
+            if (!recognition) {
+                alert('您的浏览器不支持语音识别功能');
+                return;
+            }
+
+            if (isRecording) {
+                stopVoiceRecording();
+            } else {
+                startVoiceRecording();
+            }
+        }
+
+        // 开始语音录制
+        function startVoiceRecording() {
+            try {
+                recognition.start();
+            } catch (error) {
+                console.error('启动语音识别失败:', error);
+            }
+        }
+
+        // 停止语音录制
+        function stopVoiceRecording() {
+            if (recognition && isRecording) {
+                recognition.stop();
+            }
+            isRecording = false;
+            document.getElementById('voiceBtn').classList.remove('recording');
+            document.getElementById('voiceBtn').textContent = '🎤';
+            document.getElementById('voiceStatus').textContent = '';
+        }
+
+        // 语音播报
+        function speakText(text) {
+            if (!ROLE_CONFIG.autoSpeak) return;
+
+            // 停止当前播报
+            synthesis.cancel();
+
+            // 创建新的语音播报
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.9; // 稍慢一点
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+
+            synthesis.speak(utterance);
+        }
+
+        // 重写sendMessage，添加语音播报
+        const originalSendMessage = window.sendMessage;
+        window.sendMessage = async function() {
+            // 停止语音录制
+            if (isRecording) {
+                stopVoiceRecording();
+            }
+
+            // 调用原始发送函数
+            await originalSendMessage();
+        };
+
+        // 监听AI回复，自动播报
+        const originalAddMessage = window.addMessage;
+        window.addMessage = function(type, content, timestamp, files) {
+            originalAddMessage(type, content, timestamp, files);
+
+            // 如果是AI回复，自动播报
+            if (type === 'assistant' && ROLE_CONFIG.autoSpeak) {
+                speakText(content);
+            }
+        };
+
+        // 初始化
+        initializeChat(ROLE_CONFIG);
+
+        // 初始化语音识别
+        if (ROLE_CONFIG.enableVoice) {
+            initVoiceRecognition();
+        }
+    </script>
+</body>
+</html>

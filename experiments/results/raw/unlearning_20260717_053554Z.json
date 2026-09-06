@@ -1,0 +1,39 @@
+{
+  "schema_version": 2,
+  "execution_mode": "live_api",
+  "timestamp_utc": "2026-07-17T05:35:54.354231+00:00",
+  "api_contract": {
+    "delete_endpoint": "/api/v1/unlearning/users/:user_id",
+    "verify_endpoint": "/api/v1/unlearning/verify/:user_id",
+    "authentication": "Bearer JWT",
+    "required_sequence": "pre-count -> delete -> post-count -> retrieval probe -> verify"
+  },
+  "runtime_label": "full_system",
+  "metric_definition": {
+    "success": "positive pre-count, successful delete, post-count=0, retrieval probe passes, is_fully_unlearned=true",
+    "api_errors": "Never converted into a successful deletion or percentage metric."
+  },
+  "result": {
+    "target_user_id": "eval_user_001",
+    "collection_name": "nursing_records",
+    "http_status": 200,
+    "error_type": null,
+    "error_message": null,
+    "delete_latency_ms": 56.193,
+    "pre_remaining_vector_count": 30,
+    "removed_vector_count": 30,
+    "post_remaining_vector_count": 0,
+    "retrieval_probe_passed": true,
+    "is_fully_unlearned": true,
+    "verification_details": [
+      {
+        "collection_name": "nursing_records",
+        "remaining_vectors": 0,
+        "max_similarity": 0,
+        "passed": true
+      }
+    ],
+    "status": "passed",
+    "timestamp_utc": "2026-07-17T05:35:54.354231+00:00"
+  }
+}

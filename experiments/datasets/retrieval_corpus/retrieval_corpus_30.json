@@ -1,0 +1,578 @@
+{
+  "metadata": {
+    "source_file": "datasets\\nursing_data\\nursing_records.json",
+    "source_record_count": 9809,
+    "selected_document_count": 30,
+    "ground_truth_document_count": 7,
+    "selection_seed": 20260715,
+    "source_sha256": "a2fcd9ae0de11f158b945f3196027dc2458979cdfc9b47f5e8253838baad584d"
+  },
+  "documents": [
+    {
+      "doc_id": "elder_020_2026-06-06T03:43:43.194500",
+      "content": "患者编号: elder_020\n患者姓名: 周玲\n记录时间: 2026-06-06T03:43:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 周玲，73岁，阿尔茨海默病中期，服用多奈哌齐10mg/日。夜班护士记录：凌晨3:37，患者独自下床，试图走出病房，称'要回家做饭'。护士劝阻时患者情绪激动，推搡护士。判断为夜间谵妄发作。处理：使用安抚技术，陪伴患者回房间，播放其喜爱的老歌，逐渐平复情绪。未使用约束带，遵循非药物干预原则。家属已告知，建议调整夜间照护策略。",
+      "metadata": {
+        "patient_id": "elder_020",
+        "patient_name": "周玲",
+        "timestamp": "2026-06-06T03:43:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_025_2026-06-06T02:40:43.194500",
+      "content": "患者编号: elder_025\n患者姓名: 李国强\n记录时间: 2026-06-06T02:40:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 李国强，70岁，阿尔茨海默病中期，服用多奈哌齐10mg/日。夜班护士记录：凌晨2:13，患者独自下床，试图走出病房，称'要回家做饭'。护士劝阻时患者情绪激动，推搡护士。判断为夜间谵妄发作。处理：使用安抚技术，陪伴患者回房间，播放其喜爱的老歌，逐渐平复情绪。未使用约束带，遵循非药物干预原则。家属已告知，建议调整夜间照护策略。",
+      "metadata": {
+        "patient_id": "elder_025",
+        "patient_name": "李国强",
+        "timestamp": "2026-06-06T02:40:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_033_2026-06-06T03:33:43.194500",
+      "content": "患者编号: elder_033\n患者姓名: 赵志强\n记录时间: 2026-06-06T03:33:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 赵志强下午出现定向力障碍，不认识护工，坚称自己在家中。护士耐心引导，使用怀旧疗法，向患者展示熟悉的物品，情绪逐渐稳定。",
+      "metadata": {
+        "patient_id": "elder_033",
+        "patient_name": "赵志强",
+        "timestamp": "2026-06-06T03:33:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_047_2026-06-06T03:59:43.194500",
+      "content": "患者编号: elder_047\n患者姓名: 王桂英\n记录时间: 2026-06-06T03:59:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 王桂英，85岁，阿尔茨海默病中期，服用多奈哌齐10mg/日。夜班护士记录：凌晨3:07，患者独自下床，试图走出病房，称'要回家做饭'。护士劝阻时患者情绪激动，推搡护士。判断为夜间谵妄发作。处理：使用安抚技术，陪伴患者回房间，播放其喜爱的老歌，逐渐平复情绪。未使用约束带，遵循非药物干预原则。家属已告知，建议调整夜间照护策略。",
+      "metadata": {
+        "patient_id": "elder_047",
+        "patient_name": "王桂英",
+        "timestamp": "2026-06-06T03:59:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_080_2026-06-06T02:10:43.194500",
+      "content": "患者编号: elder_080\n患者姓名: 王明\n记录时间: 2026-06-06T02:10:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 王明下午出现定向力障碍，不认识护工，坚称自己在家中。护士耐心引导，使用怀旧疗法，向患者展示熟悉的物品，情绪逐渐稳定。",
+      "metadata": {
+        "patient_id": "elder_080",
+        "patient_name": "王明",
+        "timestamp": "2026-06-06T02:10:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_082_2026-06-06T03:54:43.194500",
+      "content": "患者编号: elder_082\n患者姓名: 李娟\n记录时间: 2026-06-06T03:54:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 李娟，73岁，阿尔茨海默病中期，服用多奈哌齐10mg/日。夜班护士记录：凌晨3:40，患者独自下床，试图走出病房，称'要回家做饭'。护士劝阻时患者情绪激动，推搡护士。判断为夜间谵妄发作。处理：使用安抚技术，陪伴患者回房间，播放其喜爱的老歌，逐渐平复情绪。未使用约束带，遵循非药物干预原则。家属已告知，建议调整夜间照护策略。",
+      "metadata": {
+        "patient_id": "elder_082",
+        "patient_name": "李娟",
+        "timestamp": "2026-06-06T03:54:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_084_2026-06-06T03:36:43.194500",
+      "content": "患者编号: elder_084\n患者姓名: 杨桂英\n记录时间: 2026-06-06T03:36:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 杨桂英，94岁，阿尔茨海默病中期，服用多奈哌齐10mg/日。夜班护士记录：凌晨3:11，患者独自下床，试图走出病房，称'要回家做饭'。护士劝阻时患者情绪激动，推搡护士。判断为夜间谵妄发作。处理：使用安抚技术，陪伴患者回房间，播放其喜爱的老歌，逐渐平复情绪。未使用约束带，遵循非药物干预原则。家属已告知，建议调整夜间照护策略。",
+      "metadata": {
+        "patient_id": "elder_084",
+        "patient_name": "杨桂英",
+        "timestamp": "2026-06-06T03:36:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_014_2026-06-28T03:06:43.194500",
+      "content": "患者编号: elder_014\n患者姓名: 陈桂英\n记录时间: 2026-06-28T03:06:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 陈桂英，84岁，阿尔茨海默病中期，服用多奈哌齐10mg/日。夜班护士记录：凌晨3:35，患者独自下床，试图走出病房，称'要回家做饭'。护士劝阻时患者情绪激动，推搡护士。判断为夜间谵妄发作。处理：使用安抚技术，陪伴患者回房间，播放其喜爱的老歌，逐渐平复情绪。未使用约束带，遵循非药物干预原则。家属已告知，建议调整夜间照护策略。",
+      "metadata": {
+        "patient_id": "elder_014",
+        "patient_name": "陈桂英",
+        "timestamp": "2026-06-28T03:06:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_079_2026-07-02T07:55:43.194500",
+      "content": "患者编号: elder_079\n患者姓名: 杨秀英\n记录时间: 2026-07-02T07:55:43.194500\n事件类型: fall\n严重程度: high\n护理记录: 杨秀英，75岁，夜间3:17起床如厕，在洗手间滑倒。护士听到响声立即赶到，发现患者坐在地上，诉右髋部疼痛。查体：右髋关节活动受限，局部压痛明显。处理：协助患者躺下，冰敷患处，通知医生行X线检查排除骨折。",
+      "metadata": {
+        "patient_id": "elder_079",
+        "patient_name": "杨秀英",
+        "timestamp": "2026-07-02T07:55:43.194500",
+        "type": "health_record",
+        "event_type": "fall",
+        "severity": "high",
+        "tags": [
+          "摔倒",
+          "安全事件",
+          "洗手间",
+          "紧急处理"
+        ],
+        "causal_factors": [
+          "低血压",
+          "服药",
+          "体位变化"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_013_2026-06-20T18:09:43.194500",
+      "content": "患者编号: elder_013\n患者姓名: 吴志强\n记录时间: 2026-06-20T18:09:43.194500\n事件类型: meal\n严重程度: medium\n护理记录: 吴志强晚餐食欲较差，几乎未进食，仅喝少量汤水。询问原因，患者诉无食欲，未诉不适。",
+      "metadata": {
+        "patient_id": "elder_013",
+        "patient_name": "吴志强",
+        "timestamp": "2026-06-20T18:09:43.194500",
+        "type": "health_record",
+        "event_type": "meal",
+        "severity": "medium",
+        "tags": [
+          "饮食",
+          "晚餐",
+          "较差"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_081_2026-07-02T21:49:43.194500",
+      "content": "患者编号: elder_081\n患者姓名: 赵红\n记录时间: 2026-07-02T21:49:43.194500\n事件类型: medication\n严重程度: normal\n护理记录: 赵红，79岁，21:00服用多奈哌齐（10mg），每日一次。患者服药后无不适反应，生命体征平稳。",
+      "metadata": {
+        "patient_id": "elder_081",
+        "patient_name": "赵红",
+        "timestamp": "2026-07-02T21:49:43.194500",
+        "type": "health_record",
+        "event_type": "medication",
+        "severity": "normal",
+        "tags": [
+          "服药",
+          "多奈哌齐",
+          "常规护理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_008_2026-07-01T10:25:43.194500",
+      "content": "患者编号: elder_008\n患者姓名: 周军\n记录时间: 2026-07-01T10:25:43.194500\n事件类型: mood\n严重程度: medium\n护理记录: 周军今日显得焦虑不安，反复询问家属何时来访，安抚后情绪略有缓解。",
+      "metadata": {
+        "patient_id": "elder_008",
+        "patient_name": "周军",
+        "timestamp": "2026-07-01T10:25:43.194500",
+        "type": "health_record",
+        "event_type": "mood",
+        "severity": "medium",
+        "tags": [
+          "情绪",
+          "焦虑",
+          "心理护理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_078_2026-06-30T10:34:43.194500",
+      "content": "患者编号: elder_078\n患者姓名: 黄芳\n记录时间: 2026-06-30T10:34:43.194500\n事件类型: pain\n严重程度: medium\n护理记录: 黄芳诉腰部疼痛，疼痛评分5/10分。疼痛明显。协助患者调整体位，进行物理治疗，疼痛有所缓解。",
+      "metadata": {
+        "patient_id": "elder_078",
+        "patient_name": "黄芳",
+        "timestamp": "2026-06-30T10:34:43.194500",
+        "type": "health_record",
+        "event_type": "pain",
+        "severity": "medium",
+        "tags": [
+          "疼痛",
+          "腰部",
+          "评分5"
+        ],
+        "structured_data": {
+          "pain_location": "腰部",
+          "pain_level": 5
+        }
+      }
+    },
+    {
+      "doc_id": "elder_047_2026-06-27T06:48:43.194500",
+      "content": "患者编号: elder_047\n患者姓名: 王桂英\n记录时间: 2026-06-27T06:48:43.194500\n事件类型: sleep\n严重程度: medium\n护理记录: 王桂英夜间睡眠较差，辗转反侧至凌晨1:00方入睡，5:00即醒，诉多梦，白天精神欠佳。",
+      "metadata": {
+        "patient_id": "elder_047",
+        "patient_name": "王桂英",
+        "timestamp": "2026-06-27T06:48:43.194500",
+        "type": "health_record",
+        "event_type": "sleep",
+        "severity": "medium",
+        "tags": [
+          "睡眠",
+          "较差"
+        ],
+        "structured_data": {
+          "sleep_quality": "较差"
+        }
+      }
+    },
+    {
+      "doc_id": "elder_010_2026-07-02T07:51:43.194500",
+      "content": "患者编号: elder_010\n患者姓名: 黄伟\n记录时间: 2026-07-02T07:51:43.194500\n事件类型: vital_signs\n严重程度: normal\n护理记录: 黄伟，93岁，7:00常规生命体征监测：血压144/84mmHg，心率81次/分，体温36.3℃，空腹血糖10.0mmol/L。生命体征平稳，无异常。",
+      "metadata": {
+        "patient_id": "elder_010",
+        "patient_name": "黄伟",
+        "timestamp": "2026-07-02T07:51:43.194500",
+        "type": "health_record",
+        "event_type": "vital_signs",
+        "severity": "normal",
+        "tags": [
+          "生命体征",
+          "血压",
+          "心率"
+        ],
+        "structured_data": {
+          "blood_pressure": "144/84",
+          "heart_rate": 81,
+          "temperature": 36.3,
+          "blood_glucose": 10.0
+        }
+      }
+    },
+    {
+      "doc_id": "elder_038_2026-06-14T14:31:43.194500",
+      "content": "患者编号: elder_038\n患者姓名: 周建国\n记录时间: 2026-06-14T14:31:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 周建国下午出现定向力障碍，不认识护工，坚称自己在家中。护士耐心引导，使用怀旧疗法，向患者展示熟悉的物品，情绪逐渐稳定。",
+      "metadata": {
+        "patient_id": "elder_038",
+        "patient_name": "周建国",
+        "timestamp": "2026-06-14T14:31:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_034_2026-06-25T16:47:43.194500",
+      "content": "患者编号: elder_034\n患者姓名: 吴红\n记录时间: 2026-06-25T16:47:43.194500\n事件类型: fall\n严重程度: high\n护理记录: 吴红，82岁，夜间2:03起床如厕，在楼梯口滑倒。护士听到响声立即赶到，发现患者坐在地上，诉右髋部疼痛。查体：右髋关节活动受限，局部压痛明显。处理：协助患者躺下，冰敷患处，通知医生行X线检查排除骨折。",
+      "metadata": {
+        "patient_id": "elder_034",
+        "patient_name": "吴红",
+        "timestamp": "2026-06-25T16:47:43.194500",
+        "type": "health_record",
+        "event_type": "fall",
+        "severity": "high",
+        "tags": [
+          "摔倒",
+          "安全事件",
+          "楼梯口",
+          "紧急处理"
+        ],
+        "causal_factors": [
+          "环境因素",
+          "夜间"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_061_2026-06-07T12:18:43.194500",
+      "content": "患者编号: elder_061\n患者姓名: 吴鹏\n记录时间: 2026-06-07T12:18:43.194500\n事件类型: meal\n严重程度: normal\n护理记录: 吴鹏午餐食欲良好，主食、副食均完食，饮水充足。",
+      "metadata": {
+        "patient_id": "elder_061",
+        "patient_name": "吴鹏",
+        "timestamp": "2026-06-07T12:18:43.194500",
+        "type": "health_record",
+        "event_type": "meal",
+        "severity": "normal",
+        "tags": [
+          "饮食",
+          "午餐",
+          "良好"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_100_2026-06-23T21:30:43.194500",
+      "content": "患者编号: elder_100\n患者姓名: 刘芳\n记录时间: 2026-06-23T21:30:43.194500\n事件类型: medication\n严重程度: normal\n护理记录: 刘芳，92岁，21:00服用二甲双胍（500mg），每日两次。患者服药后无不适反应，生命体征平稳。",
+      "metadata": {
+        "patient_id": "elder_100",
+        "patient_name": "刘芳",
+        "timestamp": "2026-06-23T21:30:43.194500",
+        "type": "health_record",
+        "event_type": "medication",
+        "severity": "normal",
+        "tags": [
+          "服药",
+          "二甲双胍",
+          "常规护理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_091_2026-06-18T11:18:43.194500",
+      "content": "患者编号: elder_091\n患者姓名: 李秀英\n记录时间: 2026-06-18T11:18:43.194500\n事件类型: mood\n严重程度: medium\n护理记录: 李秀英今日显得焦虑不安，反复询问家属何时来访，安抚后情绪略有缓解。",
+      "metadata": {
+        "patient_id": "elder_091",
+        "patient_name": "李秀英",
+        "timestamp": "2026-06-18T11:18:43.194500",
+        "type": "health_record",
+        "event_type": "mood",
+        "severity": "medium",
+        "tags": [
+          "情绪",
+          "焦虑",
+          "心理护理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_027_2026-07-04T17:58:43.194500",
+      "content": "患者编号: elder_027\n患者姓名: 杨军\n记录时间: 2026-07-04T17:58:43.194500\n事件类型: pain\n严重程度: medium\n护理记录: 杨军诉右肩疼痛，疼痛评分4/10分。疼痛明显。协助患者调整体位，进行物理治疗，疼痛有所缓解。",
+      "metadata": {
+        "patient_id": "elder_027",
+        "patient_name": "杨军",
+        "timestamp": "2026-07-04T17:58:43.194500",
+        "type": "health_record",
+        "event_type": "pain",
+        "severity": "medium",
+        "tags": [
+          "疼痛",
+          "右肩",
+          "评分4"
+        ],
+        "structured_data": {
+          "pain_location": "右肩",
+          "pain_level": 4
+        }
+      }
+    },
+    {
+      "doc_id": "elder_002_2026-07-02T06:45:43.194500",
+      "content": "患者编号: elder_002\n患者姓名: 赵磊\n记录时间: 2026-07-02T06:45:43.194500\n事件类型: sleep\n严重程度: low\n护理记录: 赵磊夜间睡眠良好，22:30入睡，次日6:30自然醒，期间未起夜，精神状态佳。",
+      "metadata": {
+        "patient_id": "elder_002",
+        "patient_name": "赵磊",
+        "timestamp": "2026-07-02T06:45:43.194500",
+        "type": "health_record",
+        "event_type": "sleep",
+        "severity": "low",
+        "tags": [
+          "睡眠",
+          "良好"
+        ],
+        "structured_data": {
+          "sleep_quality": "良好"
+        }
+      }
+    },
+    {
+      "doc_id": "elder_093_2026-06-17T07:12:43.194500",
+      "content": "患者编号: elder_093\n患者姓名: 李伟\n记录时间: 2026-06-17T07:12:43.194500\n事件类型: vital_signs\n严重程度: normal\n护理记录: 李伟，90岁，7:00常规生命体征监测：血压135/72mmHg，心率79次/分，体温36.4℃，空腹血糖9.8mmol/L。生命体征平稳，无异常。",
+      "metadata": {
+        "patient_id": "elder_093",
+        "patient_name": "李伟",
+        "timestamp": "2026-06-17T07:12:43.194500",
+        "type": "health_record",
+        "event_type": "vital_signs",
+        "severity": "normal",
+        "tags": [
+          "生命体征",
+          "血压",
+          "心率"
+        ],
+        "structured_data": {
+          "blood_pressure": "135/72",
+          "heart_rate": 79,
+          "temperature": 36.4,
+          "blood_glucose": 9.8
+        }
+      }
+    },
+    {
+      "doc_id": "elder_005_2026-06-14T02:56:43.194500",
+      "content": "患者编号: elder_005\n患者姓名: 赵玲\n记录时间: 2026-06-14T02:56:43.194500\n事件类型: confusion\n严重程度: high\n护理记录: 赵玲，92岁，阿尔茨海默病中期，服用多奈哌齐10mg/日。夜班护士记录：凌晨2:09，患者独自下床，试图走出病房，称'要回家做饭'。护士劝阻时患者情绪激动，推搡护士。判断为夜间谵妄发作。处理：使用安抚技术，陪伴患者回房间，播放其喜爱的老歌，逐渐平复情绪。未使用约束带，遵循非药物干预原则。家属已告知，建议调整夜间照护策略。",
+      "metadata": {
+        "patient_id": "elder_005",
+        "patient_name": "赵玲",
+        "timestamp": "2026-06-14T02:56:43.194500",
+        "type": "health_record",
+        "event_type": "confusion",
+        "severity": "high",
+        "tags": [
+          "认知障碍",
+          "谵妄",
+          "阿尔茨海默病",
+          "紧急处理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_041_2026-06-25T08:36:43.194500",
+      "content": "患者编号: elder_041\n患者姓名: 杨红\n记录时间: 2026-06-25T08:36:43.194500\n事件类型: fall\n严重程度: high\n护理记录: 杨红，70岁，夜间4:03起床如厕，在楼梯口滑倒。护士听到响声立即赶到，发现患者坐在地上，诉右髋部疼痛。查体：右髋关节活动受限，局部压痛明显。处理：协助患者躺下，冰敷患处，通知医生行X线检查排除骨折。",
+      "metadata": {
+        "patient_id": "elder_041",
+        "patient_name": "杨红",
+        "timestamp": "2026-06-25T08:36:43.194500",
+        "type": "health_record",
+        "event_type": "fall",
+        "severity": "high",
+        "tags": [
+          "摔倒",
+          "安全事件",
+          "楼梯口",
+          "紧急处理"
+        ],
+        "causal_factors": [
+          "环境因素",
+          "夜间"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_053_2026-06-29T07:47:43.194500",
+      "content": "患者编号: elder_053\n患者姓名: 黄娟\n记录时间: 2026-06-29T07:47:43.194500\n事件类型: meal\n严重程度: medium\n护理记录: 黄娟早餐食欲较差，几乎未进食，仅喝少量汤水。询问原因，患者诉无食欲，未诉不适。",
+      "metadata": {
+        "patient_id": "elder_053",
+        "patient_name": "黄娟",
+        "timestamp": "2026-06-29T07:47:43.194500",
+        "type": "health_record",
+        "event_type": "meal",
+        "severity": "medium",
+        "tags": [
+          "饮食",
+          "早餐",
+          "较差"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_079_2026-06-13T21:16:43.194500",
+      "content": "患者编号: elder_079\n患者姓名: 杨秀英\n记录时间: 2026-06-13T21:16:43.194500\n事件类型: medication\n严重程度: normal\n护理记录: 杨秀英早21点服用常规药物阿司匹林。药物从药盒中取出，患者在护士监督下完成服药。",
+      "metadata": {
+        "patient_id": "elder_079",
+        "patient_name": "杨秀英",
+        "timestamp": "2026-06-13T21:16:43.194500",
+        "type": "health_record",
+        "event_type": "medication",
+        "severity": "normal",
+        "tags": [
+          "服药",
+          "阿司匹林",
+          "常规护理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_023_2026-06-16T17:04:43.194500",
+      "content": "患者编号: elder_023\n患者姓名: 吴磊\n记录时间: 2026-06-16T17:04:43.194500\n事件类型: mood\n严重程度: medium\n护理记录: 吴磊今日显得焦虑不安，反复询问家属何时来访，安抚后情绪略有缓解。",
+      "metadata": {
+        "patient_id": "elder_023",
+        "patient_name": "吴磊",
+        "timestamp": "2026-06-16T17:04:43.194500",
+        "type": "health_record",
+        "event_type": "mood",
+        "severity": "medium",
+        "tags": [
+          "情绪",
+          "焦虑",
+          "心理护理"
+        ]
+      }
+    },
+    {
+      "doc_id": "elder_028_2026-06-13T18:44:43.194500",
+      "content": "患者编号: elder_028\n患者姓名: 李明\n记录时间: 2026-06-13T18:44:43.194500\n事件类型: pain\n严重程度: high\n护理记录: 李明诉右肩疼痛，疼痛评分7/10分。疼痛剧烈，影响活动。已通知医生，遵医嘱给予止痛药物，局部冷敷处理。",
+      "metadata": {
+        "patient_id": "elder_028",
+        "patient_name": "李明",
+        "timestamp": "2026-06-13T18:44:43.194500",
+        "type": "health_record",
+        "event_type": "pain",
+        "severity": "high",
+        "tags": [
+          "疼痛",
+          "右肩",
+          "评分7"
+        ],
+        "structured_data": {
+          "pain_location": "右肩",
+          "pain_level": 7
+        }
+      }
+    },
+    {
+      "doc_id": "elder_013_2026-06-20T06:57:43.194500",
+      "content": "患者编号: elder_013\n患者姓名: 吴志强\n记录时间: 2026-06-20T06:57:43.194500\n事件类型: sleep\n严重程度: medium\n护理记录: 吴志强夜间睡眠较差，辗转反侧至凌晨1:00方入睡，5:00即醒，诉多梦，白天精神欠佳。",
+      "metadata": {
+        "patient_id": "elder_013",
+        "patient_name": "吴志强",
+        "timestamp": "2026-06-20T06:57:43.194500",
+        "type": "health_record",
+        "event_type": "sleep",
+        "severity": "medium",
+        "tags": [
+          "睡眠",
+          "较差"
+        ],
+        "structured_data": {
+          "sleep_quality": "较差"
+        }
+      }
+    }
+  ]
+}

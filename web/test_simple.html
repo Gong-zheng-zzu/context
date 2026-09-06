@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单测试页面</title>
+</head>
+<body>
+    <h1>测试页面</h1>
+    <button id="testBtn">测试可视化服务</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('testBtn').addEventListener('click', async () => {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '正在测试...';
+
+            try {
+                // 测试可视化服务
+                const response = await fetch('http://localhost:5001/health');
+                const data = await response.json();
+                resultDiv.innerHTML = `✅ 可视化服务正常: ${JSON.stringify(data)}`;
+            } catch (error) {
+                resultDiv.innerHTML = `❌ 错误: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

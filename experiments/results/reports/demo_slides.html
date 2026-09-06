@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Context-Keeper 快速演示</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #000;
+        }
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            page-break-after: always;
+        }
+        .slide1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .slide2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .slide3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .slide4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        h1 { font-size: 64px; margin: 20px; }
+        h2 { font-size: 48px; margin: 10px; }
+        p { font-size: 24px; margin: 10px; }
+        .metric-big {
+            font-size: 72px;
+            font-weight: bold;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide slide1">
+        <h1>Context-Keeper</h1>
+        <h2>AI Agent安全治理平台</h2>
+        <p>4类实验 × 多配置对比</p>
+        <p>生成时间：2026-07-13 16:52</p>
+    </div>
+
+    <div class="slide slide2">
+        <h2>安全防护</h2>
+        <p class="metric-big">&lt;10% ASR</p>
+        <p>6类攻击 × 600样本</p>
+        <p>提示注入、记忆投毒、权限提升、隐私泄露、幻觉诱导、遗忘绕过</p>
+    </div>
+
+    <div class="slide slide3">
+        <h2>因果推理 + 检索融合</h2>
+        <p class="metric-big">&gt;85% 准确率</p>
+        <p class="metric-big">&gt;0.80 MRR</p>
+        <p>PCCM融合算法 + 三路检索（向量+图谱+时序）</p>
+    </div>
+
+    <div class="slide slide4">
+        <h2>机器遗忘</h2>
+        <p class="metric-big">&gt;95% 遗忘率</p>
+        <p class="metric-big">&lt;5% 副作用率</p>
+        <p>梯度正交投影算法 × 5场景验证</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,742 @@
+{
+    "schema_version":  2,
+    "execution_mode":  "live_api",
+    "timestamp_utc":  "2026-07-17T15:37:38.432352+00:00",
+    "base_url":  "http://127.0.0.1:8088",
+    "run_label":  "causal_ompr_calibrated",
+    "case_file":  "D:\\context\\context-keeper-main\\testdata\\causal_test_cases.json",
+    "case_file_sha256":  "980ee6f93f8710d771156f33d97a0097451e4eaa2eaad4fb8fde349906528adf",
+    "requested_min_confidence":  0.01,
+    "api_contract":  {
+                         "login_endpoint":  "/api/auth/login",
+                         "extraction_endpoint":  "/api/v1/causal/extract",
+                         "authentication":  "Bearer JWT"
+                     },
+    "preflight":  {
+                      "health":  "服务正常",
+                      "authentication":  {
+                                             "http_status":  200,
+                                             "error_type":  null
+                                         }
+                  },
+    "scoring":  {
+                    "dataset":  "20 annotated O-M-P-R causal test cases",
+                    "matching":  "NFKC/case normalization plus whole-label containment; no semantic similarity model",
+                    "business_metric_denominator":  "only HTTP-successful, contract-valid responses",
+                    "empty_relations":  "valid business response scored as an extraction miss"
+                },
+    "detailed_results":  [
+                             {
+                                 "case_id":  "TC001",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  14813.529,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "李爷爷",
+                                                       "mediator":  "服用降压药",
+                                                       "property":  "体位性低血压",
+                                                       "result":  "在洗手间滑倒",
+                                                       "confidence":  0.9476111111111111,
+                                                       "rule_confidence":  0.95,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.907,
+                                                       "evidence":  [
+                                                                        "李爷爷服用降压药后出现体位性低血压，在洗手间滑倒"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:33:53.76969654+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.85,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:33:53.930774"
+                             },
+                             {
+                                 "case_id":  "TC002",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  13238.052,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "王奶奶",
+                                                       "mediator":  "长期卧床",
+                                                       "property":  "肌肉萎缩",
+                                                       "result":  "双腿无力难以行走",
+                                                       "confidence":  0.9395,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.9395,
+                                                       "evidence":  [
+                                                                        "因长期卧床，导致肌肉萎缩"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:34:07.001207853+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.8,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:34:07.169385"
+                             },
+                             {
+                                 "case_id":  "TC003",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  13571.122000000001,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "张大爷",
+                                                       "mediator":  "糖尿病",
+                                                       "property":  "末梢神经病变",
+                                                       "result":  "足部溃疡",
+                                                       "confidence":  0.95,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.95,
+                                                       "evidence":  [
+                                                                        "张大爷 糖尿病 导致 足部溃疡"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:34:20.590445824+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.85,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:34:20.740507"
+                             },
+                             {
+                                 "case_id":  "TC004",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  13649.108,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "刘奶奶",
+                                                       "mediator":  "高血压",
+                                                       "property":  "脑血管压力增高",
+                                                       "result":  "脑卒中",
+                                                       "confidence":  0.907,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.907,
+                                                       "evidence":  [
+                                                                        "刘奶奶高血压未控制，脑血管压力增高引发脑卒中"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:34:34.221816591+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.9,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:34:34.390833"
+                             },
+                             {
+                                 "case_id":  "TC005",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  16831.005999999998,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "赵爷爷",
+                                                       "mediator":  "服用安眠药",
+                                                       "property":  "意识模糊",
+                                                       "result":  "夜间跌倒受伤",
+                                                       "confidence":  0.9177222222222223,
+                                                       "rule_confidence":  0.92,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.8790000000000001,
+                                                       "evidence":  [
+                                                                        "赵爷爷服用安眠药后，出现意识模糊"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:34:51.129307928+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.85,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:34:51.221839"
+                             },
+                             {
+                                 "case_id":  "TC006",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  14195.413999999999,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "陈奶奶",
+                                                       "mediator":  "营养不良",
+                                                       "property":  "免疫力下降",
+                                                       "result":  "反复感染",
+                                                       "confidence":  0.907,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.907,
+                                                       "evidence":  [
+                                                                        "陈奶奶 营养不良 导致 免疫力 下降，反复 感染"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:35:05.25773507+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.8,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:35:05.417793"
+                             },
+                             {
+                                 "case_id":  "TC007",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  16736.339,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "孙爷爷",
+                                                       "mediator":  "缺乏运动",
+                                                       "property":  "骨质疏松",
+                                                       "result":  "骨折风险增加",
+                                                       "confidence":  0.907,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.907,
+                                                       "evidence":  [
+                                                                        "孙爷爷缺乏运动，导致骨质疏松"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:35:22.066595973+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.8,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:35:22.154720"
+                             },
+                             {
+                                 "case_id":  "TC008",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  14704.426,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "周奶奶",
+                                                       "mediator":  "阿尔茨海默病",
+                                                       "property":  "认知功能下降",
+                                                       "result":  "外出后走失",
+                                                       "confidence":  0.9395,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.9395,
+                                                       "evidence":  [
+                                                                        "周奶奶 阿尔茨海默病 导致 认知功能下降"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:35:36.692078886+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.9,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:35:36.859146"
+                             },
+                             {
+                                 "case_id":  "TC009",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  16308.184000000001,
+                                 "relation_count":  0,
+                                 "extracted":  false,
+                                 "best_relation":  null,
+                                 "field_matches":  {
+                                                       "object":  false,
+                                                       "mediator":  false,
+                                                       "property":  false,
+                                                       "result":  false
+                                                   },
+                                 "tuple_match":  false,
+                                 "confidence_threshold":  0.75,
+                                 "confidence_threshold_met":  false,
+                                 "timestamp":  "2026-07-17T23:35:53.168252"
+                             },
+                             {
+                                 "case_id":  "TC010",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  16614.486,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "郑奶奶",
+                                                       "mediator":  "心房颤动",
+                                                       "property":  "血栓形成",
+                                                       "result":  "脑栓塞",
+                                                       "confidence":  0.95,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.95,
+                                                       "evidence":  [
+                                                                        "郑奶奶 心房颤动 导致 血栓形成"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:36:09.661389969+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.9,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:36:09.783975"
+                             },
+                             {
+                                 "case_id":  "TC011",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  13984.768,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "黄爷爷",
+                                                       "mediator":  "脱水",
+                                                       "property":  "尿液浓缩",
+                                                       "result":  "泌尿系感染",
+                                                       "confidence":  0.8930000000000001,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.8930000000000001,
+                                                       "evidence":  [
+                                                                        "黄爷爷 脱水 导致 尿液浓缩，出现 泌尿系感染"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:36:23.695249811+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  false,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  false,
+                                 "confidence_threshold":  0.75,
+                                 "confidence_threshold_met":  false,
+                                 "timestamp":  "2026-07-17T23:36:23.768743"
+                             },
+                             {
+                                 "case_id":  "TC012",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  8042.332,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "林奶奶",
+                                                       "mediator":  "视力下降",
+                                                       "property":  "环境感知受损",
+                                                       "result":  "碰撞受伤",
+                                                       "confidence":  0.907,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.907,
+                                                       "evidence":  [
+                                                                        "林奶奶视力下降导致环境感知受损，碰撞受伤"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:36:31.740953097+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.85,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:36:31.811647"
+                             },
+                             {
+                                 "case_id":  "TC013",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  8269.391000000001,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "马爷爷",
+                                                       "mediator":  "服用镇静药",
+                                                       "property":  "肌肉松弛",
+                                                       "result":  "步态不稳",
+                                                       "confidence":  0.9395,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.9395,
+                                                       "evidence":  [
+                                                                        "马爷爷服用镇静药，导致肌肉松弛，步态不稳"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:36:40.002719381+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.8,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:36:40.081038"
+                             },
+                             {
+                                 "case_id":  "TC014",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  8187.919000000001,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "杨奶奶",
+                                                       "mediator":  "慢性肾病",
+                                                       "property":  "肾功能恶化",
+                                                       "result":  "肾衰竭",
+                                                       "confidence":  0.95,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.95,
+                                                       "evidence":  [
+                                                                        "杨奶奶 慢性肾病 导致 肾功能恶化，进展为 肾衰竭"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:36:48.190282119+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  false,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  false,
+                                 "confidence_threshold":  0.85,
+                                 "confidence_threshold_met":  false,
+                                 "timestamp":  "2026-07-17T23:36:48.269466"
+                             },
+                             {
+                                 "case_id":  "TC015",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  8075.388,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "徐爷爷",
+                                                       "mediator":  "帕金森病",
+                                                       "property":  "肢体震颤",
+                                                       "result":  "用餐时烫伤",
+                                                       "confidence":  0.907,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.907,
+                                                       "evidence":  [
+                                                                        "徐爷爷 帕金森病 导致 肢体震颤"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:36:56.250666027+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.85,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:36:56.344854"
+                             },
+                             {
+                                 "case_id":  "TC016",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  8217.380000000001,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "胡奶奶",
+                                                       "mediator":  "抑郁症",
+                                                       "property":  "神经递质失衡",
+                                                       "result":  "睡眠食欲障碍",
+                                                       "confidence":  0.907,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.907,
+                                                       "evidence":  [
+                                                                        "胡奶奶抑郁症导致神经递质失衡，睡眠食欲障碍"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:37:04.468378983+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.8,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:37:04.562805"
+                             },
+                             {
+                                 "case_id":  "TC017",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  8343.508,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "梁爷爷",
+                                                       "mediator":  "长期吸烟",
+                                                       "property":  "肺功能受损",
+                                                       "result":  "呼吸困难",
+                                                       "confidence":  0.95,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.95,
+                                                       "evidence":  [
+                                                                        "梁爷爷长期吸烟导致肺功能受损，出现呼吸困难"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:37:12.826724107+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.9,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:37:12.907472"
+                             },
+                             {
+                                 "case_id":  "TC018",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  8297.356,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "谢奶奶",
+                                                       "mediator":  "类风湿关节炎",
+                                                       "property":  "关节变形",
+                                                       "result":  "日常活动受限",
+                                                       "confidence":  0.9395,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.9395,
+                                                       "evidence":  [
+                                                                        "谢奶奶 类风湿关节炎 导致 关节变形，日常活动受限"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:37:21.113693667+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.85,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:37:21.204828"
+                             },
+                             {
+                                 "case_id":  "TC019",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  8339.715999999999,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "何爷爷",
+                                                       "mediator":  "前列腺增生",
+                                                       "property":  "夜尿频繁",
+                                                       "result":  "睡眠质量下降",
+                                                       "confidence":  0.907,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.907,
+                                                       "evidence":  [
+                                                                        "何爷爷 前列腺增生 导致 夜尿频繁"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:37:29.463405171+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.8,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:37:29.545181"
+                             },
+                             {
+                                 "case_id":  "TC020",
+                                 "run_label":  "causal_ompr_calibrated",
+                                 "http_status":  200,
+                                 "error_type":  null,
+                                 "error_message":  null,
+                                 "latency_ms":  8885.617999999999,
+                                 "relation_count":  1,
+                                 "extracted":  true,
+                                 "best_relation":  {
+                                                       "object":  "罗奶奶",
+                                                       "mediator":  "甲状腺功能减退",
+                                                       "property":  "代谢率降低",
+                                                       "result":  "疲乏体重增加",
+                                                       "confidence":  0.8930000000000001,
+                                                       "rule_confidence":  0,
+                                                       "pmi_confidence":  0,
+                                                       "llm_confidence":  0.8930000000000001,
+                                                       "evidence":  [
+                                                                        "罗奶奶 甲状腺功能减退 导致 代谢率降低，出现 疲乏体重增加"
+                                                                    ],
+                                                       "timestamp":  "2026-07-17T23:37:38.336546892+08:00"
+                                                   },
+                                 "field_matches":  {
+                                                       "object":  true,
+                                                       "mediator":  true,
+                                                       "property":  true,
+                                                       "result":  true
+                                                   },
+                                 "tuple_match":  true,
+                                 "confidence_threshold":  0.85,
+                                 "confidence_threshold_met":  true,
+                                 "timestamp":  "2026-07-17T23:37:38.431808"
+                             }
+                         ],
+    "metrics":  {
+                    "run_label":  "causal_ompr_calibrated",
+                    "total_samples":  20,
+                    "api_success_count":  20,
+                    "api_error_count":  0,
+                    "relation_found_count":  19,
+                    "tuple_match_count":  17,
+                    "tuple_and_confidence_pass_count":  17,
+                    "object_match_count":  19,
+                    "mediator_match_count":  19,
+                    "property_match_count":  17,
+                    "result_match_count":  19,
+                    "relation_found_rate":  0.95,
+                    "tuple_accuracy":  0.85,
+                    "tuple_and_confidence_accuracy":  0.85,
+                    "object_accuracy":  0.95,
+                    "mediator_accuracy":  0.95,
+                    "property_accuracy":  0.85,
+                    "result_accuracy":  0.95,
+                    "avg_best_relation_confidence":  0.9241228070175439,
+                    "avg_latency_ms":  11965.252100000002
+                },
+    "runner_provenance":  {
+                              "run_id":  "20260717T153319Z_full_system_10276",
+                              "manifest":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T153319Z_full_system_10276\\manifest.json",
+                              "outcome":  "succeeded",
+                              "report_eligible":  true,
+                              "error":  null,
+                              "configuration":  {
+                                                    "name":  "full_system",
+                                                    "base_env_sha256":  "8caa63910698aad2429ed66f99ac45aa38e84394fe0c29a10fa958ffaca82405",
+                                                    "overlay_env_sha256":  "76cbe83cd2babea4a3d542dcb12543f7c289174cb463c256c02190968d5c4901",
+                                                    "effective_env_sha256":  "47c71a53d56da78cf532d362a0f61d4b5e5e887410059a6ba1ff622e98467576"
+                                                },
+                              "data":  {
+                                           "datasets_tree_sha256":  "0f27d1535aa3ca733202e10e4fae87dd41897e718695de801b3cd7562e8202b8"
+                                       },
+                              "environment":  {
+                                                  "powershell":  "5.1.26100.6899",
+                                                  "docker_compose":  "Docker Compose version v5.1.2",
+                                                  "platform":  "Microsoft Windows NT 10.0.26100.0"
+                                              },
+                              "evaluator_exit_code":  0,
+                              "smoke_status":  "passed"
+                          }
+}

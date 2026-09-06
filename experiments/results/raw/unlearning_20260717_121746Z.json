@@ -1,0 +1,2096 @@
+{
+  "schema_version": 3,
+  "execution_mode": "live_session_cascade",
+  "timestamp_utc": "2026-07-17T12:17:46.637185+00:00",
+  "scope": {
+    "target_user_id": "eval_user_001",
+    "target_session_id": "eval_retrieval_test",
+    "control_session_id": "eval_unlearning_control",
+    "collection": "nursing_records",
+    "destructive_authorization": "EVAL_ALLOW_DESTRUCTIVE_UNLEARNING=true"
+  },
+  "required_sequence": "seed -> pre-count -> delete -> post-count -> retrieval probe -> verify",
+  "required_stores": [
+    "qdrant",
+    "timescaledb",
+    "neo4j",
+    "session_file_cache"
+  ],
+  "preflight": {
+    "health": "服务正常",
+    "authentication": {
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 22.008
+    }
+  },
+  "trials": [
+    {
+      "trial": 1,
+      "status": "passed",
+      "error": null,
+      "seed": {
+        "command": "python experiments/scripts/prepare_unlearning_trial_seed.py --trial {trial} --base-url http://127.0.0.1:8088",
+        "returncode": 0,
+        "stdout": "manifest=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-01\\manifest.json\ntarget_doc_ids=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-01\\target_doc_ids.json\nseed_status=passed\n",
+        "stderr": ""
+      },
+      "target_pre_count": {
+        "qdrant": 30,
+        "timescaledb": 30,
+        "neo4j": 349,
+        "session_file_cache": 3
+      },
+      "control_pre_count": {
+        "qdrant": 30,
+        "timescaledb": 30,
+        "neo4j": 349,
+        "session_file_cache": 3
+      },
+      "delete": {
+        "http_status": 200,
+        "error_type": null,
+        "error_message": null,
+        "latency_ms": 130.025
+      },
+      "target_post_count": {
+        "qdrant": 0,
+        "timescaledb": 0,
+        "neo4j": 0,
+        "session_file_cache": 0
+      },
+      "control_post_count": {
+        "qdrant": 30,
+        "timescaledb": 30,
+        "neo4j": 349,
+        "session_file_cache": 3
+      },
+      "document_evidence": {
+        "pre": {
+          "elder_020_2026-06-06T03:43:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_025_2026-06-06T02:40:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_033_2026-06-06T03:33:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_047_2026-06-06T03:59:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_080_2026-06-06T02:10:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_082_2026-06-06T03:54:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_084_2026-06-06T03:36:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_014_2026-06-28T03:06:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_079_2026-07-02T07:55:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_013_2026-06-20T18:09:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_081_2026-07-02T21:49:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_008_2026-07-01T10:25:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_078_2026-06-30T10:34:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_047_2026-06-27T06:48:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 10
+          },
+          "elder_010_2026-07-02T07:51:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_038_2026-06-14T14:31:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_034_2026-06-25T16:47:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_061_2026-06-07T12:18:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_100_2026-06-23T21:30:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_091_2026-06-18T11:18:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_027_2026-07-04T17:58:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_002_2026-07-02T06:45:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 10
+          },
+          "elder_093_2026-06-17T07:12:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_005_2026-06-14T02:56:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_041_2026-06-25T08:36:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_053_2026-06-29T07:47:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_079_2026-06-13T21:16:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_023_2026-06-16T17:04:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_028_2026-06-13T18:44:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_013_2026-06-20T06:57:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 10
+          }
+        },
+        "post": {
+          "elder_020_2026-06-06T03:43:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_025_2026-06-06T02:40:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_033_2026-06-06T03:33:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_047_2026-06-06T03:59:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_080_2026-06-06T02:10:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_082_2026-06-06T03:54:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_084_2026-06-06T03:36:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_014_2026-06-28T03:06:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_079_2026-07-02T07:55:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_013_2026-06-20T18:09:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_081_2026-07-02T21:49:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_008_2026-07-01T10:25:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_078_2026-06-30T10:34:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_047_2026-06-27T06:48:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_010_2026-07-02T07:51:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_038_2026-06-14T14:31:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_034_2026-06-25T16:47:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_061_2026-06-07T12:18:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_100_2026-06-23T21:30:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_091_2026-06-18T11:18:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_027_2026-07-04T17:58:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_002_2026-07-02T06:45:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_093_2026-06-17T07:12:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_005_2026-06-14T02:56:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_041_2026-06-25T08:36:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_053_2026-06-29T07:47:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_079_2026-06-13T21:16:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_023_2026-06-16T17:04:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_028_2026-06-13T18:44:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_013_2026-06-20T06:57:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          }
+        }
+      },
+      "retrieval_probe": {
+        "passed": true,
+        "http_status": 200,
+        "returned_doc_ids": [],
+        "forbidden_doc_ids": []
+      },
+      "verification": {
+        "passed": true,
+        "required_stores": [
+          "qdrant",
+          "timescaledb",
+          "neo4j",
+          "session_file_cache"
+        ],
+        "target_post_count": {
+          "qdrant": 0,
+          "timescaledb": 0,
+          "neo4j": 0,
+          "session_file_cache": 0
+        },
+        "control_post_count": {
+          "qdrant": 30,
+          "timescaledb": 30,
+          "neo4j": 349,
+          "session_file_cache": 3
+        },
+        "document_evidence": {
+          "pre": {
+            "elder_020_2026-06-06T03:43:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_025_2026-06-06T02:40:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_033_2026-06-06T03:33:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_047_2026-06-06T03:59:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_080_2026-06-06T02:10:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_082_2026-06-06T03:54:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_084_2026-06-06T03:36:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_014_2026-06-28T03:06:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_079_2026-07-02T07:55:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_013_2026-06-20T18:09:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_081_2026-07-02T21:49:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_008_2026-07-01T10:25:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_078_2026-06-30T10:34:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_047_2026-06-27T06:48:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 10
+            },
+            "elder_010_2026-07-02T07:51:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_038_2026-06-14T14:31:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_034_2026-06-25T16:47:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_061_2026-06-07T12:18:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_100_2026-06-23T21:30:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_091_2026-06-18T11:18:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_027_2026-07-04T17:58:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_002_2026-07-02T06:45:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 10
+            },
+            "elder_093_2026-06-17T07:12:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_005_2026-06-14T02:56:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_041_2026-06-25T08:36:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_053_2026-06-29T07:47:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_079_2026-06-13T21:16:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_023_2026-06-16T17:04:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_028_2026-06-13T18:44:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_013_2026-06-20T06:57:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 10
+            }
+          },
+          "post": {
+            "elder_020_2026-06-06T03:43:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_025_2026-06-06T02:40:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_033_2026-06-06T03:33:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_047_2026-06-06T03:59:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_080_2026-06-06T02:10:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_082_2026-06-06T03:54:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_084_2026-06-06T03:36:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_014_2026-06-28T03:06:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_079_2026-07-02T07:55:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_013_2026-06-20T18:09:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_081_2026-07-02T21:49:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_008_2026-07-01T10:25:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_078_2026-06-30T10:34:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_047_2026-06-27T06:48:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_010_2026-07-02T07:51:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_038_2026-06-14T14:31:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_034_2026-06-25T16:47:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_061_2026-06-07T12:18:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_100_2026-06-23T21:30:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_091_2026-06-18T11:18:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_027_2026-07-04T17:58:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_002_2026-07-02T06:45:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_093_2026-06-17T07:12:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_005_2026-06-14T02:56:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_041_2026-06-25T08:36:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_053_2026-06-29T07:47:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_079_2026-06-13T21:16:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_023_2026-06-16T17:04:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_028_2026-06-13T18:44:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_013_2026-06-20T06:57:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            }
+          }
+        }
+      },
+      "timestamp_utc": "2026-07-17T12:14:35.839012+00:00"
+    },
+    {
+      "trial": 2,
+      "status": "passed",
+      "error": null,
+      "seed": {
+        "command": "python experiments/scripts/prepare_unlearning_trial_seed.py --trial {trial} --base-url http://127.0.0.1:8088",
+        "returncode": 0,
+        "stdout": "manifest=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-02\\manifest.json\ntarget_doc_ids=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-02\\target_doc_ids.json\nseed_status=passed\n",
+        "stderr": ""
+      },
+      "target_pre_count": {
+        "qdrant": 30,
+        "timescaledb": 30,
+        "neo4j": 349,
+        "session_file_cache": 3
+      },
+      "control_pre_count": {
+        "qdrant": 30,
+        "timescaledb": 30,
+        "neo4j": 349,
+        "session_file_cache": 3
+      },
+      "delete": {
+        "http_status": 200,
+        "error_type": null,
+        "error_message": null,
+        "latency_ms": 150.93400000000003
+      },
+      "target_post_count": {
+        "qdrant": 0,
+        "timescaledb": 0,
+        "neo4j": 0,
+        "session_file_cache": 0
+      },
+      "control_post_count": {
+        "qdrant": 30,
+        "timescaledb": 30,
+        "neo4j": 349,
+        "session_file_cache": 3
+      },
+      "document_evidence": {
+        "pre": {
+          "elder_020_2026-06-06T03:43:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_025_2026-06-06T02:40:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_033_2026-06-06T03:33:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_047_2026-06-06T03:59:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_080_2026-06-06T02:10:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_082_2026-06-06T03:54:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_084_2026-06-06T03:36:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_014_2026-06-28T03:06:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_079_2026-07-02T07:55:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_013_2026-06-20T18:09:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_081_2026-07-02T21:49:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_008_2026-07-01T10:25:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_078_2026-06-30T10:34:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_047_2026-06-27T06:48:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 10
+          },
+          "elder_010_2026-07-02T07:51:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_038_2026-06-14T14:31:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_034_2026-06-25T16:47:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_061_2026-06-07T12:18:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_100_2026-06-23T21:30:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_091_2026-06-18T11:18:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_027_2026-07-04T17:58:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_002_2026-07-02T06:45:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 10
+          },
+          "elder_093_2026-06-17T07:12:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_005_2026-06-14T02:56:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_041_2026-06-25T08:36:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_053_2026-06-29T07:47:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_079_2026-06-13T21:16:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_023_2026-06-16T17:04:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_028_2026-06-13T18:44:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_013_2026-06-20T06:57:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 10
+          }
+        },
+        "post": {
+          "elder_020_2026-06-06T03:43:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_025_2026-06-06T02:40:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_033_2026-06-06T03:33:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_047_2026-06-06T03:59:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_080_2026-06-06T02:10:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_082_2026-06-06T03:54:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_084_2026-06-06T03:36:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_014_2026-06-28T03:06:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_079_2026-07-02T07:55:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_013_2026-06-20T18:09:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_081_2026-07-02T21:49:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_008_2026-07-01T10:25:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_078_2026-06-30T10:34:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_047_2026-06-27T06:48:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_010_2026-07-02T07:51:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_038_2026-06-14T14:31:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_034_2026-06-25T16:47:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_061_2026-06-07T12:18:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_100_2026-06-23T21:30:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_091_2026-06-18T11:18:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_027_2026-07-04T17:58:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_002_2026-07-02T06:45:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_093_2026-06-17T07:12:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_005_2026-06-14T02:56:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_041_2026-06-25T08:36:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_053_2026-06-29T07:47:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_079_2026-06-13T21:16:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_023_2026-06-16T17:04:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_028_2026-06-13T18:44:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_013_2026-06-20T06:57:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          }
+        }
+      },
+      "retrieval_probe": {
+        "passed": true,
+        "http_status": 200,
+        "returned_doc_ids": [],
+        "forbidden_doc_ids": []
+      },
+      "verification": {
+        "passed": true,
+        "required_stores": [
+          "qdrant",
+          "timescaledb",
+          "neo4j",
+          "session_file_cache"
+        ],
+        "target_post_count": {
+          "qdrant": 0,
+          "timescaledb": 0,
+          "neo4j": 0,
+          "session_file_cache": 0
+        },
+        "control_post_count": {
+          "qdrant": 30,
+          "timescaledb": 30,
+          "neo4j": 349,
+          "session_file_cache": 3
+        },
+        "document_evidence": {
+          "pre": {
+            "elder_020_2026-06-06T03:43:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_025_2026-06-06T02:40:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_033_2026-06-06T03:33:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_047_2026-06-06T03:59:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_080_2026-06-06T02:10:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_082_2026-06-06T03:54:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_084_2026-06-06T03:36:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_014_2026-06-28T03:06:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_079_2026-07-02T07:55:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_013_2026-06-20T18:09:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_081_2026-07-02T21:49:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_008_2026-07-01T10:25:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_078_2026-06-30T10:34:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_047_2026-06-27T06:48:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 10
+            },
+            "elder_010_2026-07-02T07:51:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_038_2026-06-14T14:31:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_034_2026-06-25T16:47:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_061_2026-06-07T12:18:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_100_2026-06-23T21:30:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_091_2026-06-18T11:18:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_027_2026-07-04T17:58:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_002_2026-07-02T06:45:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 10
+            },
+            "elder_093_2026-06-17T07:12:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_005_2026-06-14T02:56:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_041_2026-06-25T08:36:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_053_2026-06-29T07:47:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_079_2026-06-13T21:16:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_023_2026-06-16T17:04:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_028_2026-06-13T18:44:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_013_2026-06-20T06:57:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 10
+            }
+          },
+          "post": {
+            "elder_020_2026-06-06T03:43:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_025_2026-06-06T02:40:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_033_2026-06-06T03:33:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_047_2026-06-06T03:59:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_080_2026-06-06T02:10:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_082_2026-06-06T03:54:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_084_2026-06-06T03:36:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_014_2026-06-28T03:06:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_079_2026-07-02T07:55:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_013_2026-06-20T18:09:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_081_2026-07-02T21:49:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_008_2026-07-01T10:25:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_078_2026-06-30T10:34:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_047_2026-06-27T06:48:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_010_2026-07-02T07:51:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_038_2026-06-14T14:31:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_034_2026-06-25T16:47:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_061_2026-06-07T12:18:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_100_2026-06-23T21:30:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_091_2026-06-18T11:18:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_027_2026-07-04T17:58:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_002_2026-07-02T06:45:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_093_2026-06-17T07:12:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_005_2026-06-14T02:56:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_041_2026-06-25T08:36:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_053_2026-06-29T07:47:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_079_2026-06-13T21:16:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_023_2026-06-16T17:04:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_028_2026-06-13T18:44:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_013_2026-06-20T06:57:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            }
+          }
+        }
+      },
+      "timestamp_utc": "2026-07-17T12:16:10.974913+00:00"
+    },
+    {
+      "trial": 3,
+      "status": "passed",
+      "error": null,
+      "seed": {
+        "command": "python experiments/scripts/prepare_unlearning_trial_seed.py --trial {trial} --base-url http://127.0.0.1:8088",
+        "returncode": 0,
+        "stdout": "manifest=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-03\\manifest.json\ntarget_doc_ids=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-03\\target_doc_ids.json\nseed_status=passed\n",
+        "stderr": ""
+      },
+      "target_pre_count": {
+        "qdrant": 30,
+        "timescaledb": 30,
+        "neo4j": 349,
+        "session_file_cache": 3
+      },
+      "control_pre_count": {
+        "qdrant": 30,
+        "timescaledb": 30,
+        "neo4j": 349,
+        "session_file_cache": 3
+      },
+      "delete": {
+        "http_status": 200,
+        "error_type": null,
+        "error_message": null,
+        "latency_ms": 126.501
+      },
+      "target_post_count": {
+        "qdrant": 0,
+        "timescaledb": 0,
+        "neo4j": 0,
+        "session_file_cache": 0
+      },
+      "control_post_count": {
+        "qdrant": 30,
+        "timescaledb": 30,
+        "neo4j": 349,
+        "session_file_cache": 3
+      },
+      "document_evidence": {
+        "pre": {
+          "elder_020_2026-06-06T03:43:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_025_2026-06-06T02:40:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_033_2026-06-06T03:33:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_047_2026-06-06T03:59:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_080_2026-06-06T02:10:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_082_2026-06-06T03:54:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_084_2026-06-06T03:36:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_014_2026-06-28T03:06:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_079_2026-07-02T07:55:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_013_2026-06-20T18:09:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_081_2026-07-02T21:49:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_008_2026-07-01T10:25:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_078_2026-06-30T10:34:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_047_2026-06-27T06:48:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 10
+          },
+          "elder_010_2026-07-02T07:51:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_038_2026-06-14T14:31:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_034_2026-06-25T16:47:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_061_2026-06-07T12:18:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_100_2026-06-23T21:30:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_091_2026-06-18T11:18:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_027_2026-07-04T17:58:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_002_2026-07-02T06:45:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 10
+          },
+          "elder_093_2026-06-17T07:12:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_005_2026-06-14T02:56:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_041_2026-06-25T08:36:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 16
+          },
+          "elder_053_2026-06-29T07:47:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_079_2026-06-13T21:16:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_023_2026-06-16T17:04:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_028_2026-06-13T18:44:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 13
+          },
+          "elder_013_2026-06-20T06:57:43.194500": {
+            "vector": 1,
+            "timeline": 1,
+            "graph": 10
+          }
+        },
+        "post": {
+          "elder_020_2026-06-06T03:43:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_025_2026-06-06T02:40:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_033_2026-06-06T03:33:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_047_2026-06-06T03:59:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_080_2026-06-06T02:10:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_082_2026-06-06T03:54:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_084_2026-06-06T03:36:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_014_2026-06-28T03:06:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_079_2026-07-02T07:55:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_013_2026-06-20T18:09:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_081_2026-07-02T21:49:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_008_2026-07-01T10:25:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_078_2026-06-30T10:34:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_047_2026-06-27T06:48:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_010_2026-07-02T07:51:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_038_2026-06-14T14:31:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_034_2026-06-25T16:47:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_061_2026-06-07T12:18:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_100_2026-06-23T21:30:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_091_2026-06-18T11:18:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_027_2026-07-04T17:58:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_002_2026-07-02T06:45:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_093_2026-06-17T07:12:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_005_2026-06-14T02:56:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_041_2026-06-25T08:36:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_053_2026-06-29T07:47:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_079_2026-06-13T21:16:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_023_2026-06-16T17:04:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_028_2026-06-13T18:44:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          },
+          "elder_013_2026-06-20T06:57:43.194500": {
+            "vector": 0,
+            "timeline": 0,
+            "graph": 0
+          }
+        }
+      },
+      "retrieval_probe": {
+        "passed": true,
+        "http_status": 200,
+        "returned_doc_ids": [],
+        "forbidden_doc_ids": []
+      },
+      "verification": {
+        "passed": true,
+        "required_stores": [
+          "qdrant",
+          "timescaledb",
+          "neo4j",
+          "session_file_cache"
+        ],
+        "target_post_count": {
+          "qdrant": 0,
+          "timescaledb": 0,
+          "neo4j": 0,
+          "session_file_cache": 0
+        },
+        "control_post_count": {
+          "qdrant": 30,
+          "timescaledb": 30,
+          "neo4j": 349,
+          "session_file_cache": 3
+        },
+        "document_evidence": {
+          "pre": {
+            "elder_020_2026-06-06T03:43:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_025_2026-06-06T02:40:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_033_2026-06-06T03:33:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_047_2026-06-06T03:59:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_080_2026-06-06T02:10:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_082_2026-06-06T03:54:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_084_2026-06-06T03:36:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_014_2026-06-28T03:06:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_079_2026-07-02T07:55:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_013_2026-06-20T18:09:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_081_2026-07-02T21:49:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_008_2026-07-01T10:25:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_078_2026-06-30T10:34:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_047_2026-06-27T06:48:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 10
+            },
+            "elder_010_2026-07-02T07:51:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_038_2026-06-14T14:31:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_034_2026-06-25T16:47:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_061_2026-06-07T12:18:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_100_2026-06-23T21:30:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_091_2026-06-18T11:18:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_027_2026-07-04T17:58:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_002_2026-07-02T06:45:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 10
+            },
+            "elder_093_2026-06-17T07:12:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_005_2026-06-14T02:56:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_041_2026-06-25T08:36:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 16
+            },
+            "elder_053_2026-06-29T07:47:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_079_2026-06-13T21:16:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_023_2026-06-16T17:04:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_028_2026-06-13T18:44:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 13
+            },
+            "elder_013_2026-06-20T06:57:43.194500": {
+              "vector": 1,
+              "timeline": 1,
+              "graph": 10
+            }
+          },
+          "post": {
+            "elder_020_2026-06-06T03:43:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_025_2026-06-06T02:40:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_033_2026-06-06T03:33:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_047_2026-06-06T03:59:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_080_2026-06-06T02:10:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_082_2026-06-06T03:54:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_084_2026-06-06T03:36:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_014_2026-06-28T03:06:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_079_2026-07-02T07:55:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_013_2026-06-20T18:09:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_081_2026-07-02T21:49:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_008_2026-07-01T10:25:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_078_2026-06-30T10:34:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_047_2026-06-27T06:48:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_010_2026-07-02T07:51:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_038_2026-06-14T14:31:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_034_2026-06-25T16:47:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_061_2026-06-07T12:18:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_100_2026-06-23T21:30:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_091_2026-06-18T11:18:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_027_2026-07-04T17:58:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_002_2026-07-02T06:45:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_093_2026-06-17T07:12:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_005_2026-06-14T02:56:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_041_2026-06-25T08:36:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_053_2026-06-29T07:47:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_079_2026-06-13T21:16:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_023_2026-06-16T17:04:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_028_2026-06-13T18:44:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            },
+            "elder_013_2026-06-20T06:57:43.194500": {
+              "vector": 0,
+              "timeline": 0,
+              "graph": 0
+            }
+          }
+        }
+      },
+      "timestamp_utc": "2026-07-17T12:17:46.637185+00:00"
+    }
+  ],
+  "passed": true,
+  "runner_provenance": {
+    "run_id": "attested_20260717T135527Z_full_system_unlearning",
+    "manifest": "D:\\context\\context-keeper-main\\experiments\\results\\runs\\attested_20260717T135527Z_full_system_unlearning\\manifest.json",
+    "outcome": "succeeded",
+    "report_eligible": true,
+    "error": null,
+    "configuration": {
+      "name": "full_system",
+      "base_env_sha256": "8caa63910698aad2429ed66f99ac45aa38e84394fe0c29a10fa958ffaca82405",
+      "overlay_env_sha256": "76cbe83cd2babea4a3d542dcb12543f7c289174cb463c256c02190968d5c4901",
+      "effective_env_sha256": "8caa63910698aad2429ed66f99ac45aa38e84394fe0c29a10fa958ffaca82405"
+    },
+    "data": {
+      "datasets_tree_sha256": "39a7aa475bb4c70737e7f31815846799f0d997afe40d932f87003d8b553ad580"
+    },
+    "environment": {
+      "platform": "Windows-10-10.0.26100-SP0"
+    },
+    "evaluator_exit_code": 0,
+    "smoke_status": "not_run_direct_evaluator",
+    "execution_strategy": "post_run_attestation_of_direct_evaluator"
+  }
+}

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>忆安智护 | 治理验证中心</title>
+  <style>
+    :root { --ink:#17324d; --muted:#5d7183; --line:#d9e2e8; --bg:#f4f7f8; --panel:#fff; --green:#167a5a; --amber:#9a6700; --blue:#176b87; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:15px "Microsoft YaHei", "Noto Sans SC", sans-serif; }
+    header { background:#17324d; color:#fff; padding:24px max(24px, calc((100vw - 1180px)/2)); display:flex; justify-content:space-between; align-items:center; gap:20px; }
+    h1 { margin:0; font-size:28px; font-weight:700; letter-spacing:0; } .sub { margin:6px 0 0; color:#c7d9e4; font-size:14px; }
+    a { color:inherit; } .back { border:1px solid #86a5b7; padding:8px 12px; text-decoration:none; white-space:nowrap; font-size:13px; }
+    main { max-width:1180px; margin:0 auto; padding:28px 24px 48px; }
+    .statusbar { display:flex; align-items:center; justify-content:space-between; gap:16px; background:var(--panel); border:1px solid var(--line); padding:14px 16px; margin-bottom:24px; }
+    .status { font-weight:700; color:var(--amber); } .status.online { color:var(--green); } .updated { color:var(--muted); font-size:13px; }
+    .intro { border-left:4px solid var(--blue); padding:2px 0 2px 14px; margin:0 0 22px; color:#38536a; line-height:1.7; }
+    .grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; } .card { background:var(--panel); border:1px solid var(--line); padding:20px; min-height:232px; }
+    .card.wide { grid-column:1 / -1; min-height:auto; } h2 { margin:0 0 10px; font-size:18px; } h3 { margin:0 0 6px; font-size:14px; color:var(--muted); font-weight:600; }
+    .tag { display:inline-block; font-size:12px; font-weight:700; padding:3px 7px; color:#fff; background:var(--green); margin-bottom:12px; } .tag.pending { background:var(--amber); }
+    .metrics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border-top:1px solid var(--line); border-left:1px solid var(--line); margin-top:14px; } .metric { padding:12px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); } .metric b { display:block; font-size:21px; color:var(--ink); margin-top:4px; } .metric span { font-size:12px; color:var(--muted); }
+    .steps { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin-top:14px; } .step { border-left:3px solid var(--blue); background:#f2f7f9; padding:10px; line-height:1.55; font-size:13px; } .step b { display:block; }
+    .note { color:var(--muted); font-size:13px; line-height:1.65; margin:10px 0 0; } .source { font:12px Consolas, monospace; color:#688093; word-break:break-all; margin-top:14px; }
+    @media (max-width:760px) { header { align-items:flex-start; flex-direction:column; } main { padding:20px 14px 32px; } .grid { grid-template-columns:1fr; } .card.wide { grid-column:auto; } .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .steps { grid-template-columns:1fr; } .statusbar { align-items:flex-start; flex-direction:column; } }
+  </style>
+</head>
+<body>
+  <header><div><h1>治理验证中心</h1><p class="sub">面向护理智能体的安全记忆、受控工具调用与可验证治理</p></div><a class="back" href="role_selection.html">返回系统入口</a></header>
+  <main>
+    <div class="statusbar"><div id="healthStatus" class="status">正在检查服务状态</div><div id="updatedAt" class="updated">验证数据加载中</div></div>
+    <p class="intro">本页只展示通过数据完整性与接口有效性门槛的脱敏实验摘要。完整 Agent 轨迹保留在受保护审计侧，浏览器仅呈现受控执行状态、已登记工具与耗时。</p>
+    <section class="grid">
+      <article class="card wide"><span class="tag">治理机制</span><h2>受控 Agent 执行</h2><div class="steps"><div class="step"><b>身份绑定</b>JWT 绑定调用主体</div><div class="step"><b>会话边界</b>按用户与会话隔离检索范围</div><div class="step"><b>工具边界</b>仅调用已登记 MCP 工具</div><div class="step"><b>安全摘要</b>仅展示工具、状态、耗时与降级标记</div></div><p class="note">不向普通聊天响应暴露内部思考、工具原始参数、观察结果或原始推理内容。</p></article>
+      <article class="card"><span class="tag">已验证</span><h2>安全输入治理</h2><p class="note">固定六类攻击样本与正常输入分别计数；认证或服务错误不进入业务分母。</p><div class="metrics" id="securityMetrics"></div><p class="source" id="securitySource"></p></article>
+      <article class="card"><span class="tag">已验证</span><h2>因果结构化</h2><p class="note">基于固定 O-M-P-R 标注案例，严格四元组指标与关系发现率分开报告。</p><div class="metrics" id="causalMetrics"></div><p class="source" id="causalSource"></p></article>
+      <article class="card"><span class="tag pending">验证进行中</span><h2>检索溯源验证</h2><p class="note" id="retrievalMessage">加载中</p><p class="note">正式结果须经人工复核查询集、来源 trace、配置与数据集哈希验证后才会发布。</p></article>
+      <article class="card"><span class="tag pending">验证进行中</span><h2>跨存储遗忘验证</h2><p class="note" id="unlearningMessage">加载中</p><p class="note">当前不展示未通过或历史遗忘指标，避免将修复中的能力表述为效果结论。</p></article>
+    </section>
+  </main>
+  <script>
+    const metric = (label, value) => `<div class="metric"><span>${label}</span><b>${value}</b></div>`;
+    const pct = value => `${Number(value).toFixed(2)}%`;
+    async function refreshHealth() {
+      const target = document.getElementById('healthStatus');
+      try { const response = await fetch('/health', {cache:'no-store'}); if (!response.ok) throw new Error(); target.textContent = '服务在线 · /health 通过'; target.classList.add('online'); }
+      catch (_) { target.textContent = '服务状态不可用 · 请检查后端'; target.classList.remove('online'); }
+    }
+    async function loadEvidence() {
+      try {
+        const response = await fetch('data/experiment_evidence.json', {cache:'no-store'}); if (!response.ok) throw new Error('摘要文件不可用');
+        const evidence = await response.json();
+        const s = evidence.security, c = evidence.causal;
+        if (s.status !== 'verified' || c.status !== 'verified') throw new Error('摘要未通过发布门槛');
+        document.getElementById('updatedAt').textContent = `摘要生成时间：${new Date(evidence.generated_at_utc).toLocaleString('zh-CN')}`;
+        document.getElementById('securityMetrics').innerHTML = metric('攻击有效响应', `${s.attack_valid.numerator}/${s.attack_valid.denominator}`) + metric('阻断率', pct(s.block_rate_pct)) + metric('攻击成功率', pct(s.attack_success_rate_pct)) + metric('良性有效响应', `${s.benign_valid.numerator}/${s.benign_valid.denominator}`) + metric('误报率', pct(s.false_positive_rate_pct)) + metric('平均延迟', `${s.avg_latency_ms}ms`);
+        document.getElementById('causalMetrics').innerHTML = metric('有效响应', `${c.valid.numerator}/${c.valid.denominator}`) + metric('关系发现率', pct(c.relation_found_rate_pct)) + metric('严格 Precision', pct(c.strict_precision_pct)) + metric('严格 Recall', pct(c.strict_recall_pct)) + metric('严格 F1', pct(c.strict_f1_pct)) + metric('平均延迟', `${c.avg_latency_ms}ms`);
+        document.getElementById('securitySource').textContent = `来源：${s.source} · SHA-256 ${s.source_sha256}`;
+        document.getElementById('causalSource').textContent = `来源：${c.source} · SHA-256 ${c.source_sha256}`;
+        document.getElementById('retrievalMessage').textContent = evidence.retrieval.message;
+        document.getElementById('unlearningMessage').textContent = evidence.unlearning.message;
+      } catch (error) { document.getElementById('updatedAt').textContent = `验证摘要未加载：${error.message}`; }
+    }
+    refreshHealth(); loadEvidence(); setInterval(refreshHealth, 30000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+# LLM配置文件
+llm:
+  # 默认配置
+  default:
+    primary_provider: "ollama_local"  # 🔥 切换到本地模型
+    fallback_provider: "deepseek"     # 云端模型作为备用
+    cache_enabled: true
+    cache_ttl: "30m"
+    max_retries: 3
+    timeout_seconds: 120  # 🔥 修复：增加到120秒，适应复杂LLM分析
+    enable_routing: true
+
+  # 提供商配置
+  providers:
+    openai:
+      api_key: "${OPENAI_API_KEY}"
+      base_url: "https://api.openai.com/v1"
+      model: "gpt-3.5-turbo"
+      max_retries: 3
+      timeout: "120s"  # 增加到120秒
+      rate_limit: 60
+      extra:
+        organization: ""
+
+    claude:
+      api_key: "${CLAUDE_API_KEY}"
+      base_url: "https://api.anthropic.com/v1"
+      model: "claude-3-sonnet-20240229"
+      max_retries: 3
+      timeout: "120s"  # 增加到120秒
+      rate_limit: 60
+      extra:
+        version: "2023-06-01"
+
+    qianwen:
+      api_key: "${QIANWEN_API_KEY}"
+      base_url: "https://dashscope.aliyuncs.com/api/v1"
+      model: "qwen-turbo"
+      max_retries: 3
+      timeout: "120s"  # 增加到120秒
+      rate_limit: 60
+      extra:
+        region: "cn-beijing"
+
+    deepseek:
+      api_key: "${DEEPSEEK_API_KEY}"
+      base_url: "https://api.deepseek.com/v1"
+      model: "deepseek-chat"
+      max_retries: 3
+      timeout: "120s"  # 增加到120秒，适应复杂LLM分析
+      rate_limit: 6000  # 测试环境放宽到6000 RPM (100 RPS)
+      extra:
+        stream: false
+
+    # 🆕 Ollama本地模型统一配置
+    ollama_local:
+      api_key: ""  # 本地模型不需要API Key
+      base_url: "http://localhost:11434"  # 本地直接访问
+      model: "deepseek-coder-v2:16b"  # 默认模型，可通过配置切换
+      max_retries: 3
+      timeout: "300s"  # 🔥 修复：增加到300秒（5分钟），支持视觉模型处理
+      rate_limit: 0   # 本地无限流限制
+      extra:
+        available_models:
+          - "codeqwen:7b"
+          - "deepseek-coder:33b"
+          - "deepseek-coder:33b-instruct"
+          - "deepseek-coder:6.7b-instruct"
+          - "deepseek-coder:6.7b"
+          - "deepseek-coder-v2:16b"
+        model_descriptions:
+          "codeqwen:7b": "CodeQwen 7B - 代码生成和理解专用"
+          "deepseek-coder:33b": "DeepSeek Coder 33B - 高性能代码模型"
+          "deepseek-coder:33b-instruct": "DeepSeek Coder 33B Instruct - 指令优化版本"
+          "deepseek-coder:6.7b-instruct": "DeepSeek Coder 6.7B Instruct - 平衡性能版本"
+          "deepseek-coder:6.7b": "DeepSeek Coder 6.7B - 基础代码模型"
+          "deepseek-coder-v2:16b": "DeepSeek Coder V2 16B - 新一代代码模型"
+
+  # 路由规则
+  routing:
+    three_elements_analysis:
+      primary: "deepseek"  # 🔥 修复：使用deepseek而不是claude
+      fallback: ["openai", "claude"]
+      conditions:
+        accuracy_required: true
+        max_latency_ms: 5000
+
+    query_rewrite:
+      primary: "deepseek"  # 🔥 修复：使用deepseek而不是qianwen
+      fallback: ["openai", "claude"]
+      conditions:
+        speed_required: true
+        max_latency_ms: 2000
+
+    code_analysis:
+      primary: "deepseek"
+      fallback: ["openai"]
+      conditions:
+        code_understanding: true
+        max_latency_ms: 3000
+
+    default:
+      primary: "ollama_local"  # 🔥 默认使用本地模型
+      fallback: ["deepseek", "openai", "claude"]
+
+    # 🆕 本地模型路由规则
+    local_code_analysis:
+      primary: "ollama_local"  # 使用本地模型进行代码分析
+      fallback: ["deepseek", "openai"]
+      conditions:
+        local_preferred: true
+        code_understanding: true
+        cost_sensitive: true
+
+  # Prompt配置
+  prompt:
+    default_language: "zh-CN"
+    max_tokens: 4096
+    temperature: 0.7
+    custom_vars:
+      company_name: "Context-Keeper"
+      product_name: "智能上下文管理平台"

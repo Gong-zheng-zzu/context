@@ -1,0 +1,38 @@
+# Docker Compose 覆盖配置示例
+# 复制此文件为 docker-compose.override.yml 并根据需要修改
+
+version: '3.8'
+
+services:
+  context-keeper:
+    # 开发模式：挂载源代码实现热重载
+    # volumes:
+    #   - ./cmd:/app/cmd:ro
+    #   - ./internal:/app/internal:ro
+    #   - ./pkg:/app/pkg:ro
+
+    # 开发模式：启用调试日志
+    # environment:
+    #   - LOG_LEVEL=debug
+    #   - DEBUG=true
+
+    # 生产模式：限制资源使用
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2'
+    #       memory: 2G
+    #     reservations:
+    #       cpus: '1'
+    #       memory: 1G
+
+  # 启用 Nginx 反向代理
+  # nginx:
+  #   profiles: []  # 移除 profile 限制，使其默认启动
+
+  # 启用监控服务
+  # prometheus:
+  #   profiles: []
+  #
+  # grafana:
+  #   profiles: []

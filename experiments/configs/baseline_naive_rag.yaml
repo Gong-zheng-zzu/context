@@ -1,0 +1,72 @@
+# Baseline 2: Naive RAG配置（只有向量检索，无安全防护）
+# 模拟传统RAG系统，用于证明安全模块的价值
+
+name: "Baseline 2 - Naive RAG"
+description: "传统RAG系统：向量检索 + LLM生成，无安全防护"
+
+# LLM配置
+llm:
+  provider: "ollama"
+  model: "qwen2.5:7b"
+  base_url: "http://localhost:11434"
+  temperature: 0.7
+  max_tokens: 512
+
+# 启用基础向量检索
+memory:
+  enabled: true
+  vector_store:
+    enabled: true
+    type: "vearch"
+    collection: "nursing_records"
+    top_k: 5
+  # 关闭知识图谱和时间线
+  knowledge_graph:
+    enabled: false
+  timeline:
+    enabled: false
+
+# 关闭多维检索和RRF融合
+retrieval:
+  multi_dimensional:
+    enabled: false
+  rrf_fusion:
+    enabled: false
+
+# 关闭所有安全模块
+security:
+  # PCCM因果推理
+  pccm:
+    enabled: false
+    rule_weight: 0.0
+    pmi_weight: 0.0
+    llm_weight: 0.0
+
+  # CASIA上下文敏感识别
+  casia:
+    enabled: false
+
+  # ASDF对抗样本检测
+  asdf:
+    enabled: false
+    prompt_injection_detection: false
+    memory_poisoning_detection: false
+
+  # 隐私检测与脱敏
+  privacy:
+    enabled: false
+    pii_detection: false
+    redaction: false
+
+  # RBAC权限控制
+  rbac:
+    enabled: false
+    enforce_user_isolation: false
+
+  # 审计日志
+  audit:
+    enabled: false
+
+# 机器遗忘
+unlearning:
+  enabled: false

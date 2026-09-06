@@ -1,0 +1,99 @@
+{
+  "timestamp_utc": "2026-07-17T06:22:39.474100+00:00",
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "auth": {
+    "http_status": 200,
+    "error_type": null,
+    "error_message": null
+  },
+  "passed": true,
+  "preflight": {
+    "http_status": 200,
+    "data": {
+      "complete": false,
+      "result": {
+        "session_id": "eval_retrieval_test",
+        "user_id": "eval_user_001",
+        "dry_run": true,
+        "complete": false,
+        "stores": [
+          {
+            "store": "qdrant",
+            "status": "dry_run",
+            "before": 30,
+            "deleted": 0,
+            "after": 30
+          },
+          {
+            "store": "timescaledb",
+            "status": "dry_run",
+            "before": 0,
+            "deleted": 0,
+            "after": 0
+          },
+          {
+            "store": "neo4j",
+            "status": "dry_run",
+            "before": 0,
+            "deleted": 0,
+            "after": 0
+          },
+          {
+            "store": "session_file_cache",
+            "status": "dry_run",
+            "before": 3,
+            "deleted": 0,
+            "after": 3
+          }
+        ]
+      }
+    },
+    "error": null
+  },
+  "deletion": {
+    "http_status": 200,
+    "data": {
+      "complete": true,
+      "result": {
+        "session_id": "eval_retrieval_test",
+        "user_id": "eval_user_001",
+        "dry_run": false,
+        "complete": true,
+        "stores": [
+          {
+            "store": "qdrant",
+            "status": "deleted",
+            "before": 30,
+            "deleted": 30,
+            "after": 0
+          },
+          {
+            "store": "timescaledb",
+            "status": "deleted",
+            "before": 0,
+            "deleted": 0,
+            "after": 0
+          },
+          {
+            "store": "neo4j",
+            "status": "deleted",
+            "before": 0,
+            "deleted": 0,
+            "after": 0
+          },
+          {
+            "store": "session_file_cache",
+            "status": "deleted",
+            "before": 3,
+            "deleted": 3,
+            "after": 0
+          }
+        ]
+      }
+    },
+    "error": null
+  }
+}

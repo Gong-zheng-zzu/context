@@ -1,0 +1,88 @@
+# Baseline 3: RAG + 规则过滤配置
+# 传统RAG + 简单规则过滤（敏感词黑名单），用于对比高级防御的效果
+
+name: "Baseline 3 - RAG with Rule-based Filter"
+description: "传统RAG + 简单规则过滤（敏感词、关键词黑名单）"
+
+# LLM配置
+llm:
+  provider: "ollama"
+  model: "qwen2.5:7b"
+  base_url: "http://localhost:11434"
+  temperature: 0.7
+  max_tokens: 512
+
+# 启用基础向量检索
+memory:
+  enabled: true
+  vector_store:
+    enabled: true
+    type: "vearch"
+    collection: "nursing_records"
+    top_k: 5
+  # 关闭知识图谱和时间线
+  knowledge_graph:
+    enabled: false
+  timeline:
+    enabled: false
+
+# 关闭多维检索
+retrieval:
+  multi_dimensional:
+    enabled: false
+  rrf_fusion:
+    enabled: false
+
+# 部分安全模块
+security:
+  # 关闭PCCM因果推理
+  pccm:
+    enabled: false
+
+  # 关闭CASIA上下文识别
+  casia:
+    enabled: false
+
+  # 关闭ASDF对抗样本检测（使用简单规则替代）
+  asdf:
+    enabled: false
+
+  # 启用基础隐私检测（正则匹配）
+  privacy:
+    enabled: true
+    pii_detection: true
+    detection_method: "regex"  # 只用正则，不用上下文分析
+    redaction: true
+    redact_patterns:
+      - pattern: '\d{17}[\dXx]'  # 身份证号
+        type: "id_card"
+      - pattern: '1[3-9]\d{9}'  # 手机号
+        type: "phone"
+      - pattern: '\d{3,4}-?\d{7,8}'  # 座机
+        type: "phone"
+
+  # 启用简单黑名单过滤
+  blacklist:
+    enabled: true
+    keywords:
+      - "忽略之前"
+      - "忽略规则"
+      - "系统命令"
+      - "bypass"
+      - "override"
+      - "admin"
+      - "删除所有"
+      - "导出数据"
+
+  # 关闭RBAC（只做简单权限检查）
+  rbac:
+    enabled: false
+
+  # 启用简单审计
+  audit:
+    enabled: true
+    log_level: "basic"  # 只记录请求/响应，不记录决策链
+
+# 关闭机器遗忘
+unlearning:
+  enabled: false

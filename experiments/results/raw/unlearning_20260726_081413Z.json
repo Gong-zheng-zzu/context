@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "execution_mode": "live_session_cascade",
+  "timestamp_utc": "2026-07-26T08:14:13.635756+00:00",
+  "scope": {
+    "target_user_id": "eval_user_001",
+    "target_session_id": "eval_retrieval_test",
+    "control_session_id": "eval_unlearning_control",
+    "collection": "nursing_records",
+    "destructive_authorization": "EVAL_ALLOW_DESTRUCTIVE_UNLEARNING=true"
+  },
+  "required_sequence": "seed -> pre-count -> delete -> post-count -> retrieval probe -> verify",
+  "required_stores": [
+    "qdrant",
+    "timescaledb",
+    "neo4j",
+    "session_file_cache"
+  ],
+  "preflight": {
+    "health": "服务正常",
+    "authentication": {
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 12.504
+    }
+  },
+  "trials": [
+    {
+      "trial": 1,
+      "status": "seed_failed",
+      "error": "seed command failed",
+      "seed": {
+        "command": "python experiments/scripts/prepare_unlearning_trial_seed.py --trial {trial} --base-url http://127.0.0.1:8088",
+        "returncode": 2,
+        "stdout": "",
+        "stderr": "ERROR: EXPERIMENT_STRUCTURED_THREEWAY_ENABLED=true is required for bounded structured writes\n"
+      },
+      "target_pre_count": {},
+      "control_pre_count": {},
+      "delete": {},
+      "target_post_count": {},
+      "control_post_count": {},
+      "document_evidence": {},
+      "retrieval_probe": {},
+      "verification": {},
+      "timestamp_utc": "2026-07-26T08:14:13.087874+00:00"
+    },
+    {
+      "trial": 2,
+      "status": "seed_failed",
+      "error": "seed command failed",
+      "seed": {
+        "command": "python experiments/scripts/prepare_unlearning_trial_seed.py --trial {trial} --base-url http://127.0.0.1:8088",
+        "returncode": 2,
+        "stdout": "",
+        "stderr": "ERROR: EXPERIMENT_STRUCTURED_THREEWAY_ENABLED=true is required for bounded structured writes\n"
+      },
+      "target_pre_count": {},
+      "control_pre_count": {},
+      "delete": {},
+      "target_post_count": {},
+      "control_post_count": {},
+      "document_evidence": {},
+      "retrieval_probe": {},
+      "verification": {},
+      "timestamp_utc": "2026-07-26T08:14:13.362356+00:00"
+    },
+    {
+      "trial": 3,
+      "status": "seed_failed",
+      "error": "seed command failed",
+      "seed": {
+        "command": "python experiments/scripts/prepare_unlearning_trial_seed.py --trial {trial} --base-url http://127.0.0.1:8088",
+        "returncode": 2,
+        "stdout": "",
+        "stderr": "ERROR: EXPERIMENT_STRUCTURED_THREEWAY_ENABLED=true is required for bounded structured writes\n"
+      },
+      "target_pre_count": {},
+      "control_pre_count": {},
+      "delete": {},
+      "target_post_count": {},
+      "control_post_count": {},
+      "document_evidence": {},
+      "retrieval_probe": {},
+      "verification": {},
+      "timestamp_utc": "2026-07-26T08:14:13.635756+00:00"
+    }
+  ],
+  "passed": false
+}

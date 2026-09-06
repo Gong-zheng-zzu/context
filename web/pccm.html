@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>忆安智护 | PCCM 因果分析</title>
+  <style>
+    :root { --ink:#17324d; --muted:#617384; --line:#d9e2e8; --bg:#f4f7f8; --panel:#fff; --accent:#176b87; --ok:#167a5a; }
+    * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--ink); font:15px "Microsoft YaHei",sans-serif; }
+    header { background:#17324d; color:#fff; padding:22px max(20px,calc((100vw - 1120px)/2)); display:flex; justify-content:space-between; gap:16px; align-items:center; } h1 { font-size:25px; margin:0; } header p { margin:6px 0 0; color:#c7d9e4; font-size:13px; } a { color:inherit; } .back { text-decoration:none; border:1px solid #86a5b7; padding:8px 12px; white-space:nowrap; }
+    main { max-width:1120px; margin:0 auto; padding:26px 20px 48px; } .notice { border-left:4px solid var(--accent); padding:12px 14px; background:#eaf4f7; margin-bottom:18px; line-height:1.65; } .layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); gap:16px; } .panel { background:var(--panel); border:1px solid var(--line); padding:18px; } h2 { margin:0 0 12px; font-size:18px; }
+    textarea { width:100%; min-height:250px; resize:vertical; border:1px solid #b9c9d3; padding:12px; font:14px "Microsoft YaHei",sans-serif; line-height:1.65; } button { margin-top:12px; border:0; background:var(--accent); color:#fff; padding:10px 16px; cursor:pointer; font:14px "Microsoft YaHei",sans-serif; } button:disabled { opacity:.6; cursor:wait; } .status { margin-top:12px; padding:10px; background:#f2f7f9; color:var(--muted); font-size:13px; line-height:1.6; } .status.error { background:#fff1f1; color:#9b2727; } .status.ok { background:#edf8f3; color:var(--ok); }
+    .summary { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; } .pill { background:#edf4f6; color:#31556a; padding:5px 8px; font-size:12px; } .empty { color:var(--muted); padding:22px 0; text-align:center; } table { width:100%; border-collapse:collapse; font-size:13px; } th,td { border:1px solid var(--line); padding:8px; vertical-align:top; text-align:left; word-break:break-word; } th { background:#edf4f6; white-space:nowrap; } .evidence { color:#526b7c; }
+    @media(max-width:780px){header{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}main{padding:18px 12px}.panel{padding:14px}table{display:block;overflow:auto}}
+  </style>
+</head>
+<body>
+  <header><div><h1>PCCM 因果分析</h1><p>独立 JWT 保护分析，实时结果仅展示，不写入共享图谱。</p></div><a class="back" href="role_selection.html">返回系统入口</a></header>
+  <main>
+    <div class="notice">该页面调用真实因果抽取接口。输入先经 ASDF 与敏感信息脱敏链路处理；页面仅显示脱敏 O-C-P-R 关系、置信度与耗时，不展示模型内部推理。</div>
+    <section class="layout"><article class="panel"><h2>护理文本</h2><textarea id="inputText">张奶奶上午头晕，血压145/92，昨晚睡眠不足。服用降压药后出现轻度恶心，午休后症状缓解。</textarea><button id="runButton" type="button">开始 PCCM 分析</button><div id="status" class="status">等待登录后分析。</div></article><article class="panel"><h2>真实结构化结果</h2><div id="summary" class="summary"></div><div id="result"><p class="empty">尚未执行分析。</p></div></article></section>
+  </main>
+  <script src="js/config.js"></script>
+  <script>
+    const storage = window.CONFIG && CONFIG.AUTH_STORAGE === 'local' ? localStorage : sessionStorage;
+    const baseUrl = window.CONFIG ? CONFIG.API_BASE_URL : '';
+    const statusEl = document.getElementById('status'), summaryEl = document.getElementById('summary'), resultEl = document.getElementById('result');
+    const escapeHtml = value => { const node = document.createElement('div'); node.textContent = String(value || ''); return node.innerHTML; };
+    const confidence = value => Number.isFinite(Number(value)) ? Number(value).toFixed(3) : '-';
+    function setStatus(message, type='') { statusEl.textContent = message; statusEl.className = `status ${type}`; }
+    function render(data) {
+      const sec = data.security_execution || {};
+      summaryEl.innerHTML = [`关系数：${data.count || 0}`,`耗时：${data.process_time_ms || 0}ms`,data.analysis_only ? '分析模式：仅展示' : '分析模式：未知',`ASDF：${sec.asdf_checked ? '已检查' : '不可用'}`,sec.input_normalized ? '输入：已归一化' : '输入：无需归一化'].map(text => `<span class="pill">${escapeHtml(text)}</span>`).join('');
+      if (!Array.isArray(data.relations) || !data.relations.length) { resultEl.innerHTML = '<p class="empty">未发现满足当前阈值的因果关系。</p>'; return; }
+      const rows = data.relations.map(r => `<tr><td>${escapeHtml(r.object)}</td><td>${escapeHtml(r.mediator)}</td><td>${escapeHtml(r.property)}</td><td>${escapeHtml(r.result)}</td><td>${confidence(r.rule_confidence)}</td><td>${confidence(r.pmi_confidence)}</td><td>${confidence(r.llm_confidence)}</td><td>${confidence(r.confidence)}</td><td class="evidence">${Array.isArray(r.evidence) ? r.evidence.map(escapeHtml).join('<br>') : '-'}</td></tr>`).join('');
+      resultEl.innerHTML = `<table><thead><tr><th>O 对象</th><th>C 中介</th><th>P 属性</th><th>R 结果</th><th>规则</th><th>PMI</th><th>LLM</th><th>PCCM</th><th>脱敏证据</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+    document.getElementById('runButton').addEventListener('click', async () => {
+      const token = storage.getItem('jwt_token'), text = document.getElementById('inputText').value.trim();
+      if (!token) { setStatus('请先通过角色页面登录，再进行 PCCM 分析。', 'error'); return; }
+      if (!text) { setStatus('请输入护理文本。', 'error'); return; }
+      const button = document.getElementById('runButton'); button.disabled = true; summaryEl.innerHTML=''; resultEl.innerHTML='<p class="empty">正在调用真实因果抽取接口...</p>'; setStatus('ASDF、脱敏与 PCCM 分析执行中。');
+      try { const response = await fetch(`${baseUrl}/api/v1/causal/extract`, {method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({text,use_rules:true,use_pmi:true,use_llm:true,min_confidence:0.5,persist:false})}); const data = await response.json(); if (!response.ok) throw new Error(data.error || `请求失败 (${response.status})`); render(data); setStatus(`分析完成：${data.count || 0} 条关系；未写入共享图谱。`, 'ok'); }
+      catch (error) { resultEl.innerHTML='<p class="empty">无法获取分析结果。</p>'; setStatus(error.message, 'error'); }
+      finally { button.disabled=false; }
+    });
+  </script>
+</body>
+</html>

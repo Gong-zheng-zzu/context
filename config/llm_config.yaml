@@ -1,0 +1,518 @@
+# ============================================
+# Context-Keeper LLM 配置文件
+# ============================================
+# 本地优先策略：Ollama 本地模型 + DeepSeek/OpenAI/Claude 云端备用
+# 两阶段架构：广域召回（100条）→ 精准排序（TOP-N）
+# ============================================
+
+# ============================================
+# 一、提供商配置 (Providers Configuration)
+# ============================================
+providers:
+  # 本地提供商 - Ollama
+  ollama_local:
+    type: "ollama"
+    base_url: "http://localhost:11434"
+    api_key: ""  # 本地模型不需要 API Key
+    enabled: true
+    priority: 1  # 最高优先级
+    description: "本地 Ollama 模型，零成本、隐私保护"
+
+    # 健康检查配置
+    health_check:
+      enabled: true
+      endpoint: "/api/tags"
+      interval_seconds: 60
+      timeout_seconds: 5
+
+    # 性能配置
+    performance:
+      max_concurrent_requests: 4  # 根据本地GPU/CPU性能调整
+      queue_size: 20
+      request_timeout_seconds: 300  # 5分钟，支持大模型推理
+
+  # 云端提供商 - DeepSeek（推荐）
+  deepseek:
+    type: "openai_compatible"
+    base_url: "https://api.deepseek.com/v1"
+    api_key: "${DEEPSEEK_API_KEY}"
+    enabled: true
+    priority: 2
+    description: "DeepSeek 云端模型，性价比高、代码能力强"
+
+    performance:
+      max_concurrent_requests: 10
+      queue_size: 50
+      request_timeout_seconds: 120
+      rate_limit_rpm: 6000  # 每分钟6000次请求
+      rate_limit_tpm: 600000  # 每分钟60万tokens
+
+  # 云端提供商 - OpenAI
+  openai:
+    type: "openai"
+    base_url: "https://api.openai.com/v1"
+    api_key: "${OPENAI_API_KEY}"
+    enabled: true
+    priority: 3
+    description: "OpenAI GPT 模型，通用能力强"
+
+    performance:
+      max_concurrent_requests: 5
+      queue_size: 30
+      request_timeout_seconds: 120
+      rate_limit_rpm: 3500  # GPT-3.5-turbo 的 Tier 1 限制
+      rate_limit_tpm: 60000
+
+  # 云端提供商 - Claude (Anthropic)
+  claude:
+    type: "anthropic"
+    base_url: "https://api.anthropic.com/v1"
+    api_key: "${CLAUDE_API_KEY}"
+    enabled: true
+    priority: 4
+    description: "Claude 模型，上下文理解能力强"
+
+    performance:
+      max_concurrent_requests: 5
+      queue_size: 30
+      request_timeout_seconds: 120
+      rate_limit_rpm: 1000
+      rate_limit_tpm: 100000
+
+    extra:
+      anthropic_version: "2023-06-01"
+
+# ============================================
+# 二、模型配置 (Models Configuration)
+# ============================================
+models:
+  # 本地模型列表
+  local_models:
+    # DeepSeek Coder V2 16B - 推荐用于代码分析
+    - name: "deepseek-coder-v2:16b"
+      provider: "ollama_local"
+      type: "code"
+      description: "DeepSeek Coder V2 16B - 新一代代码理解模型"
+      context_window: 16384
+      max_output_tokens: 4096
+      recommended_for: ["code_analysis", "recall_stage", "ranking_stage"]
+      parameters:
+        temperature: 0.3  # 代码任务使用较低温度
+        top_p: 0.9
+        top_k: 40
+        repeat_penalty: 1.1
+      performance:
+        avg_tokens_per_second: 15  # 根据实际硬件调整
+        memory_required_gb: 10
+
+    # DeepSeek Coder 33B - 高性能版本
+    - name: "deepseek-coder:33b-instruct"
+      provider: "ollama_local"
+      type: "code"
+      description: "DeepSeek Coder 33B Instruct - 高性能指令优化版本"
+      context_window: 16384
+      max_output_tokens: 4096
+      recommended_for: ["ranking_stage", "complex_analysis"]
+      parameters:
+        temperature: 0.2
+        top_p: 0.95
+        top_k: 40
+      performance:
+        avg_tokens_per_second: 8
+        memory_required_gb: 20
+
+    # CodeQwen 7B - 轻量级代码模型
+    - name: "codeqwen:7b"
+      provider: "ollama_local"
+      type: "code"
+      description: "CodeQwen 7B - 轻量级代码生成模型"
+      context_window: 8192
+      max_output_tokens: 2048
+      recommended_for: ["recall_stage", "quick_analysis"]
+      parameters:
+        temperature: 0.4
+        top_p: 0.9
+      performance:
+        avg_tokens_per_second: 25
+        memory_required_gb: 5
+
+  # 云端模型列表
+  cloud_models:
+    # DeepSeek Chat - 云端推荐模型
+    - name: "deepseek-chat"
+      provider: "deepseek"
+      type: "chat"
+      description: "DeepSeek Chat - 通用对话模型，性价比高"
+      context_window: 32768
+      max_output_tokens: 4096
+      cost_per_1k_tokens:
+        input: 0.0001  # $0.1/M tokens
+        output: 0.0002  # $0.2/M tokens
+      recommended_for: ["recall_stage", "ranking_stage", "general_chat"]
+      parameters:
+        temperature: 0.7
+        top_p: 0.95
+
+    # GPT-3.5-turbo - OpenAI 备用模型
+    - name: "gpt-3.5-turbo"
+      provider: "openai"
+      type: "chat"
+      description: "GPT-3.5 Turbo - OpenAI 通用模型"
+      context_window: 16385
+      max_output_tokens: 4096
+      cost_per_1k_tokens:
+        input: 0.0005
+        output: 0.0015
+      recommended_for: ["fallback", "general_chat"]
+      parameters:
+        temperature: 0.7
+
+    # Claude 3 Sonnet - 高质量备用
+    - name: "claude-3-sonnet-20240229"
+      provider: "claude"
+      type: "chat"
+      description: "Claude 3 Sonnet - 高质量理解模型"
+      context_window: 200000
+      max_output_tokens: 4096
+      cost_per_1k_tokens:
+        input: 0.003
+        output: 0.015
+      recommended_for: ["complex_ranking", "fallback"]
+      parameters:
+        temperature: 0.7
+
+# ============================================
+# 三、两阶段配置 (Two-Stage Configuration)
+# ============================================
+# 这是 Context-Keeper 的核心架构配置
+two_stage_config:
+  # 阶段 1: 广域召回（Broad Recall）
+  recall_stage:
+    enabled: true
+    description: "第一阶段：从大量候选中快速召回TOP-100"
+
+    # 召回阶段的模型选择
+    model_selection:
+      primary_model: "deepseek-coder-v2:16b"  # 本地模型优先
+      fallback_models:
+        - "deepseek-chat"  # 云端备用1
+        - "gpt-3.5-turbo"  # 云端备用2
+
+    # 召回参数配置
+    parameters:
+      target_recall_count: 100  # 召回100条候选
+      min_recall_count: 50      # 最少召回50条
+      max_recall_count: 200     # 最多召回200条
+
+      # LLM 参数（召回阶段追求速度）
+      llm_params:
+        temperature: 0.3  # 较低温度，保证稳定性
+        max_tokens: 2048  # 输出token限制
+        top_p: 0.9
+
+      # 性能要求
+      performance:
+        max_latency_ms: 5000  # 5秒超时
+        enable_caching: true  # 启用缓存加速
+        cache_ttl_minutes: 30
+        enable_batching: true  # 启用批处理
+        batch_size: 10
+
+    # 召回策略
+    strategy:
+      method: "vector_search_with_llm_rerank"
+      vector_search:
+        top_k: 200  # 向量检索先召回200条
+        similarity_threshold: 0.6
+      llm_filter:
+        enabled: true
+        filter_to: 100  # LLM过滤到100条
+
+  # 阶段 2: 精准排序（Precise Ranking）
+  ranking_stage:
+    enabled: true
+    description: "第二阶段：对TOP-100进行精准排序，返回TOP-N"
+
+    # 排序阶段的模型选择
+    model_selection:
+      primary_model: "deepseek-coder:33b-instruct"  # 使用更强的本地模型
+      fallback_models:
+        - "deepseek-chat"
+        - "claude-3-sonnet-20240229"  # 复杂情况使用Claude
+
+    # 排序参数配置
+    parameters:
+      input_count: 100        # 输入100条候选
+      target_output_count: 10  # 默认返回TOP-10
+      min_output_count: 5     # 最少返回5条
+      max_output_count: 20    # 最多返回20条
+
+      # LLM 参数（排序阶段追求质量）
+      llm_params:
+        temperature: 0.2  # 更低温度，保证准确性
+        max_tokens: 4096
+        top_p: 0.95
+
+      # 性能要求
+      performance:
+        max_latency_ms: 10000  # 10秒超时
+        enable_caching: true
+        cache_ttl_minutes: 60
+        enable_batching: false  # 排序阶段不批处理
+
+    # 排序策略
+    strategy:
+      method: "llm_based_ranking"
+      scoring_criteria:
+        - name: "relevance"
+          weight: 0.5
+          description: "与查询的相关性"
+        - name: "recency"
+          weight: 0.2
+          description: "时间新鲜度"
+        - name: "quality"
+          weight: 0.3
+          description: "内容质量"
+
+  # 两阶段协同配置
+  coordination:
+    enable_stage_skipping: true  # 允许跳过召回阶段（候选少于100时）
+    stage_skip_threshold: 50     # 候选少于50直接进入排序
+    enable_parallel_execution: false  # 不并行执行（顺序执行更稳定）
+
+    # 质量保证
+    quality_assurance:
+      enable_consistency_check: true  # 检查两阶段结果一致性
+      min_overlap_ratio: 0.7         # 排序结果至少70%来自召回结果
+
+# ============================================
+# 四、备用策略 (Fallback Strategy)
+# ============================================
+fallback_strategy:
+  enabled: true
+  description: "本地模型失败时的云端备用策略"
+
+  # 触发条件
+  triggers:
+    - type: "connection_error"
+      description: "本地 Ollama 连接失败"
+      action: "switch_to_cloud"
+
+    - type: "timeout"
+      description: "本地模型推理超时"
+      threshold_seconds: 300
+      action: "switch_to_cloud"
+
+    - type: "error_rate_high"
+      description: "本地模型错误率过高"
+      threshold_percentage: 50
+      time_window_minutes: 10
+      action: "switch_to_cloud"
+
+    - type: "quality_low"
+      description: "本地模型输出质量低"
+      threshold_score: 0.5
+      action: "retry_with_cloud"
+
+  # 备用顺序
+  fallback_order:
+    recall_stage:
+      - "ollama_local"   # 优先级1：本地
+      - "deepseek"       # 优先级2：DeepSeek云端
+      - "openai"         # 优先级3：OpenAI
+
+    ranking_stage:
+      - "ollama_local"   # 优先级1：本地（更强模型）
+      - "deepseek"       # 优先级2：DeepSeek云端
+      - "claude"         # 优先级3：Claude（高质量）
+      - "openai"         # 优先级4：OpenAI
+
+  # 重试策略
+  retry_policy:
+    max_retries: 3
+    retry_delay_seconds: 2
+    exponential_backoff: true
+    backoff_multiplier: 2
+    max_retry_delay_seconds: 30
+
+  # 降级策略
+  degradation:
+    enable_graceful_degradation: true
+    fallback_to_vector_only: true  # 所有LLM失败时，降级到纯向量检索
+    vector_only_top_k: 20
+
+# ============================================
+# 五、性能配置 (Performance Settings)
+# ============================================
+performance_settings:
+  # 全局超时配置
+  timeouts:
+    default_timeout_seconds: 120
+    recall_stage_timeout_seconds: 30
+    ranking_stage_timeout_seconds: 60
+    health_check_timeout_seconds: 5
+
+  # 重试配置
+  retries:
+    max_retries: 3
+    retry_on_timeout: true
+    retry_on_rate_limit: true
+    retry_on_server_error: true  # 5xx错误重试
+    retry_delay_seconds: 1
+
+  # 并发限制
+  concurrency:
+    # 全局并发限制
+    global_max_concurrent: 20
+
+    # 按提供商限制
+    per_provider:
+      ollama_local: 4   # 本地资源有限
+      deepseek: 10      # 云端可以更高
+      openai: 5
+      claude: 5
+
+    # 按阶段限制
+    per_stage:
+      recall_stage: 10   # 召回阶段可以并发
+      ranking_stage: 5   # 排序阶段限制并发
+
+  # 队列配置
+  queuing:
+    enabled: true
+    max_queue_size: 100
+    queue_timeout_seconds: 300  # 队列等待超时
+    priority_levels: 3  # 支持3个优先级
+
+  # 批处理配置
+  batching:
+    enabled: true
+    max_batch_size: 10
+    batch_timeout_ms: 100  # 批次等待时间
+    adaptive_batching: true  # 自动调整批次大小
+
+  # 缓存配置
+  caching:
+    enabled: true
+    cache_backend: "redis"  # redis / memory / disk
+    redis_url: "redis://localhost:6379/0"
+
+    # 缓存策略
+    strategies:
+      - type: "query_cache"
+        ttl_minutes: 30
+        max_entries: 10000
+
+      - type: "result_cache"
+        ttl_minutes: 60
+        max_entries: 5000
+
+      - type: "model_output_cache"
+        ttl_minutes: 120
+        max_entries: 20000
+
+    # 缓存key生成
+    cache_key_include:
+      - "query_text"
+      - "model_name"
+      - "temperature"
+      - "top_p"
+
+  # 负载均衡
+  load_balancing:
+    enabled: true
+    strategy: "round_robin"  # round_robin / least_connections / weighted
+    health_check_enabled: true
+
+  # 限流配置
+  rate_limiting:
+    enabled: true
+    algorithm: "token_bucket"  # token_bucket / sliding_window
+
+    # 全局限流
+    global:
+      requests_per_minute: 1000
+      tokens_per_minute: 100000
+
+    # 按用户限流
+    per_user:
+      requests_per_minute: 100
+      tokens_per_minute: 10000
+
+  # 监控指标
+  monitoring:
+    enabled: true
+    metrics_export_interval_seconds: 60
+    metrics_backend: "prometheus"  # prometheus / statsd / cloudwatch
+
+    # 关键指标
+    track_metrics:
+      - "request_count"
+      - "request_duration"
+      - "token_usage"
+      - "error_rate"
+      - "cache_hit_rate"
+      - "queue_length"
+      - "fallback_count"
+
+# ============================================
+# 六、环境配置 (Environment Profiles)
+# ============================================
+environments:
+  # 开发环境
+  development:
+    active_providers: ["ollama_local", "deepseek"]
+    default_model: "codeqwen:7b"  # 开发用轻量级模型
+    enable_debug_logging: true
+    enable_request_logging: true
+    cache_enabled: true
+    performance_settings:
+      timeouts:
+        default_timeout_seconds: 300  # 开发环境允许更长时间
+      concurrency:
+        global_max_concurrent: 5
+
+  # 测试环境
+  testing:
+    active_providers: ["ollama_local", "deepseek", "openai"]
+    default_model: "deepseek-coder-v2:16b"
+    enable_debug_logging: true
+    enable_request_logging: true
+    cache_enabled: false  # 测试环境禁用缓存
+    performance_settings:
+      timeouts:
+        default_timeout_seconds: 120
+      retries:
+        max_retries: 1  # 测试环境减少重试
+
+  # 生产环境
+  production:
+    active_providers: ["ollama_local", "deepseek", "openai", "claude"]
+    default_model: "deepseek-coder-v2:16b"
+    enable_debug_logging: false
+    enable_request_logging: false  # 生产环境只记录错误
+    cache_enabled: true
+    performance_settings:
+      timeouts:
+        default_timeout_seconds: 120
+      retries:
+        max_retries: 3
+      concurrency:
+        global_max_concurrent: 20
+      monitoring:
+        enabled: true
+
+# ============================================
+# 七、特性开关 (Feature Flags)
+# ============================================
+feature_flags:
+  enable_two_stage_architecture: true
+  enable_local_model_first: true
+  enable_cloud_fallback: true
+  enable_result_caching: true
+  enable_query_rewriting: true
+  enable_semantic_search: true
+  enable_hybrid_search: true  # 向量 + 关键词混合搜索
+  enable_adaptive_timeout: true  # 自适应超时
+  enable_cost_optimization: true  # 成本优化（优先使用便宜模型）
+  enable_quality_monitoring: true  # 输出质量监控

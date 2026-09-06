@@ -1,0 +1,32 @@
+﻿{
+    "schema_version":  1,
+    "run_id":  "20260717T060902Z_full_system_9512",
+    "started_at":  "2026-07-17T06:09:02.5666353Z",
+    "ended_at":  "2026-07-17T06:09:57.0277060Z",
+    "outcome":  "runner_failed",
+    "error":  "expected exactly one new raw JSON result, found 0",
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  null,
+    "command":  "Write-Output runner_preflight_only",
+    "command_sha256":  "09ed26bd9126def4dc1cb9662b8b442358c87433d6f276e21c64508db75056ed",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "d35e59f8e83b2976d9686e642ae42bfeb56828795bb50c0eab47804fcadad25d",
+                          "overlay_env_sha256":  "c73faeb727d53a8450adb891aa542dc857cd5d5f3fbebdaec0fe207000130a80",
+                          "effective_env_sha256":  "40af11b59a4413e280480cea1cdd99a72f9c9b41d994d7e515ec972861d99f4b"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "0f27d1535aa3ca733202e10e4fae87dd41897e718695de801b3cd7562e8202b8"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T060902Z_full_system_9512\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T060902Z_full_system_9512\\evaluation.log"
+                  }
+}

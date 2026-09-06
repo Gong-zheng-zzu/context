@@ -1,0 +1,83 @@
+[
+  {
+    "id": "rule-001",
+    "name": "高危凭证检测",
+    "description": "检测 API 密钥、密码、私钥等高危凭证",
+    "sensitive_types": [
+      "api_key",
+      "password",
+      "private_key",
+      "aws_key",
+      "secret_key"
+    ],
+    "security_level": "high",
+    "actions": [
+      "log",
+      "redact",
+      "alert"
+    ],
+    "enabled": true,
+    "created_at": "2026-07-01T22:36:54.9749564+08:00",
+    "updated_at": "2026-07-01T22:36:54.9749564+08:00",
+    "threshold_count": 1,
+    "threshold_window": 60
+  },
+  {
+    "id": "rule-002",
+    "name": "认证令牌检测",
+    "description": "检测各类认证令牌",
+    "sensitive_types": [
+      "token",
+      "bearer_token"
+    ],
+    "security_level": "medium",
+    "actions": [
+      "log",
+      "redact"
+    ],
+    "enabled": true,
+    "created_at": "2026-07-01T22:36:54.9749564+08:00",
+    "updated_at": "2026-07-01T22:36:54.9749564+08:00",
+    "threshold_count": 3,
+    "threshold_window": 300
+  },
+  {
+    "id": "rule-003",
+    "name": "个人信息检测",
+    "description": "检测信用卡、社保号、手机号等个人敏感信息",
+    "sensitive_types": [
+      "credit_card",
+      "ssn",
+      "phone"
+    ],
+    "security_level": "medium",
+    "actions": [
+      "log",
+      "redact"
+    ],
+    "enabled": true,
+    "created_at": "2026-07-01T22:36:54.9749564+08:00",
+    "updated_at": "2026-07-01T22:36:54.9749564+08:00",
+    "threshold_count": 5,
+    "threshold_window": 600
+  },
+  {
+    "id": "rule-004",
+    "name": "数据库凭证检测",
+    "description": "检测数据库连接字符串和凭证",
+    "sensitive_types": [
+      "database_credential"
+    ],
+    "security_level": "high",
+    "actions": [
+      "log",
+      "redact",
+      "alert"
+    ],
+    "enabled": true,
+    "created_at": "2026-07-01T22:36:54.9749564+08:00",
+    "updated_at": "2026-07-01T22:36:54.9749564+08:00",
+    "threshold_count": 1,
+    "threshold_window": 60
+  }
+]

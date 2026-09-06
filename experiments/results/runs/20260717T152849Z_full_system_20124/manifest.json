@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260717T152849Z_full_system_20124",
+    "started_at":  "2026-07-17T15:28:49.7773992Z",
+    "ended_at":  "2026-07-17T15:29:41.8803065Z",
+    "outcome":  "succeeded",
+    "error":  null,
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260717_232941.json",
+    "command":  "python experiments\\scripts\\cleanup_eval_session.py --confirm; python experiments\\scripts\\prepare_structured_threeway_seed.py --submit --overwrite --base-url http://127.0.0.1:8088; python experiments\\scripts\\run_trace_queries.py --mode rrf --limit 10 --base-url http://127.0.0.1:8088 --session-id eval_retrieval_test --output experiments\\results\\trace\\full_system_direct_rrf_formal_trace.json; python experiments\\scripts\\retrieval_eval.py --queries 50 --configs full_system --retrieval-mode rrf",
+    "command_sha256":  "02a29c15e770278dd168a761eafec8d33a2805e4ef8470949d2cb5e94e369860",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "8caa63910698aad2429ed66f99ac45aa38e84394fe0c29a10fa958ffaca82405",
+                          "overlay_env_sha256":  "76cbe83cd2babea4a3d542dcb12543f7c289174cb463c256c02190968d5c4901",
+                          "effective_env_sha256":  "47c71a53d56da78cf532d362a0f61d4b5e5e887410059a6ba1ff622e98467576"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "0f27d1535aa3ca733202e10e4fae87dd41897e718695de801b3cd7562e8202b8"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T152849Z_full_system_20124\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T152849Z_full_system_20124\\evaluation.log"
+                  }
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "structured-threeway-verification-v2",
+  "verified_at": "2026-07-17T11:08:06Z",
+  "manifest": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T110735Z_baseline_naive_rag\\seed\\manifest.json",
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "input_audit": {
+    "status": "passed",
+    "errors": []
+  },
+  "vector": {
+    "status": "not_run"
+  },
+  "three_way": {
+    "status": "not_run"
+  }
+}

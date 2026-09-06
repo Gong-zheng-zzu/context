@@ -1,0 +1,600 @@
+{
+  "timestamp": "20260717_132701",
+  "run_label": "causal_jwt_canonical_full",
+  "case_file": "D:\\context\\context-keeper-main\\testdata\\causal_test_cases.json",
+  "requested_min_confidence": 0.01,
+  "scoring": {
+    "dataset": "20 annotated O-M-P-R causal test cases",
+    "matching": "NFKC/case normalization plus whole-label containment; no semantic similarity model",
+    "business_metric_denominator": "only HTTP-successful, contract-valid responses",
+    "empty_relations": "valid business response scored as an extraction miss"
+  },
+  "detailed_results": [
+    {
+      "case_id": "TC001",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 12169.319,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "李爷爷",
+        "mediator": "服用降压药",
+        "property": "体位性低血压",
+        "result": "在洗手间滑倒",
+        "confidence": 0.8475,
+        "rule_confidence": 0.95,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "李爷爷服用降压药后出现体位性低血压，在洗手间滑倒"
+        ],
+        "timestamp": "2026-07-17T13:22:12.102741849+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": true,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:22:12.372356"
+    },
+    {
+      "case_id": "TC002",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 12321.109999999999,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "患者",
+        "mediator": "长期卧床",
+        "property": "",
+        "result": "压疮",
+        "confidence": 0.87,
+        "rule_confidence": 0.87,
+        "pmi_confidence": 0,
+        "llm_confidence": 0,
+        "evidence": [
+          "王奶奶因长期卧床导致肌肉萎缩，双腿无力难以行走"
+        ],
+        "timestamp": "2026-07-17T13:22:24.588476343+08:00"
+      },
+      "field_matches": {
+        "object": false,
+        "mediator": true,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.8,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:22:24.695459"
+    },
+    {
+      "case_id": "TC003",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 10887.682,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "张大爷",
+        "mediator": "糖尿病",
+        "property": "末梢神经病变",
+        "result": "足部溃疡",
+        "confidence": 0.04000000000000001,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "糖尿病引起末梢神经病变，导致足部溃疡"
+        ],
+        "timestamp": "2026-07-17T13:22:35.425249089+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": true,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:22:35.583141"
+    },
+    {
+      "case_id": "TC004",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 11655.545999999998,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "刘奶奶",
+        "mediator": "高血压未控制",
+        "property": "脑卒中",
+        "result": "脑血管压力增高",
+        "confidence": 0.04000000000000001,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "刘奶奶高血压未控制, 脑血管压力增高引发脑卒中"
+        ],
+        "timestamp": "2026-07-17T13:22:47.120074805+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.9,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:22:47.239685"
+    },
+    {
+      "case_id": "TC005",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 9893.425000000001,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "赵爷爷",
+        "mediator": "服用安眠药",
+        "property": "夜间跌倒受伤",
+        "result": "意识模糊",
+        "confidence": 0.8220000000000001,
+        "rule_confidence": 0.92,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": null,
+        "timestamp": "2026-07-17T13:22:56.972466671+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:22:57.133110"
+    },
+    {
+      "case_id": "TC006",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 11439.391,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "陈奶奶",
+        "mediator": "无",
+        "property": "免疫力下降",
+        "result": "反复感染",
+        "confidence": 0.04400000000000001,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "营养不良导致免疫力下降",
+          "反复感染"
+        ],
+        "timestamp": "2026-07-17T13:23:08.083317739+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": false,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.8,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:23:08.572501"
+    },
+    {
+      "case_id": "TC007",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 10968.244999999999,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "孙爷爷",
+        "mediator": "缺乏运动",
+        "property": "骨折风险增加",
+        "result": "",
+        "confidence": 0.04000000000000001,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "孙爷爷缺乏运动导致骨质疏松，骨折风险增加"
+        ],
+        "timestamp": "2026-07-17T13:23:19.444398301+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.8,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:23:19.540746"
+    },
+    {
+      "case_id": "TC008",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 22443.897,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "周奶奶",
+        "mediator": "",
+        "property": "认知功能下降",
+        "result": "外出后走失",
+        "confidence": 0.04400000000000001,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "阿尔茨海默病导致认知功能下降",
+          "外出后走失"
+        ],
+        "timestamp": "2026-07-17T13:23:41.9153717+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": false,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.9,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:23:41.984643"
+    },
+    {
+      "case_id": "TC009",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 14732.931,
+      "relation_count": 0,
+      "extracted": false,
+      "best_relation": null,
+      "field_matches": {
+        "object": false,
+        "mediator": false,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.75,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:23:56.718590"
+    },
+    {
+      "case_id": "TC010",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 30020.208,
+      "relation_count": 0,
+      "extracted": false,
+      "best_relation": null,
+      "field_matches": {
+        "object": false,
+        "mediator": false,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.9,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:24:26.739753"
+    },
+    {
+      "case_id": "TC011",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 30035.399,
+      "relation_count": 0,
+      "extracted": false,
+      "best_relation": null,
+      "field_matches": {
+        "object": false,
+        "mediator": false,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.75,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:24:56.775152"
+    },
+    {
+      "case_id": "TC012",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 30008.579999999998,
+      "relation_count": 0,
+      "extracted": false,
+      "best_relation": null,
+      "field_matches": {
+        "object": false,
+        "mediator": false,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:25:26.783732"
+    },
+    {
+      "case_id": "TC013",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 30007.168,
+      "relation_count": 0,
+      "extracted": false,
+      "best_relation": null,
+      "field_matches": {
+        "object": false,
+        "mediator": false,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.8,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:25:56.790900"
+    },
+    {
+      "case_id": "TC014",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 27495.08,
+      "relation_count": 0,
+      "extracted": false,
+      "best_relation": null,
+      "field_matches": {
+        "object": false,
+        "mediator": false,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:26:24.285980"
+    },
+    {
+      "case_id": "TC015",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 6786.115,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "徐爷爷",
+        "mediator": "无",
+        "property": "帕金森病导致肢体震颤",
+        "result": "用餐时烫伤",
+        "confidence": 0.04400000000000001,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "徐爷爷帕金森病导致肢体震颤",
+          "用餐时烫伤"
+        ],
+        "timestamp": "2026-07-17T13:26:30.999534221+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": false,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:26:31.072095"
+    },
+    {
+      "case_id": "TC016",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 1758.4550000000002,
+      "relation_count": 0,
+      "extracted": false,
+      "best_relation": null,
+      "field_matches": {
+        "object": false,
+        "mediator": false,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.8,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:26:32.830550"
+    },
+    {
+      "case_id": "TC017",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 1689.882,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "梁爷爷",
+        "mediator": "长期吸烟",
+        "property": "呼吸困难",
+        "result": "肺功能受损",
+        "confidence": 0.04000000000000001,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "梁爷爷长期吸烟导致肺功能受损，出现呼吸困难"
+        ],
+        "timestamp": "2026-07-17T13:26:34.454476734+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.9,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:26:34.521431"
+    },
+    {
+      "case_id": "TC018",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 8841.114,
+      "relation_count": 0,
+      "extracted": false,
+      "best_relation": null,
+      "field_matches": {
+        "object": false,
+        "mediator": false,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:26:43.363068"
+    },
+    {
+      "case_id": "TC019",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 9106.294,
+      "relation_count": 0,
+      "extracted": false,
+      "best_relation": null,
+      "field_matches": {
+        "object": false,
+        "mediator": false,
+        "property": false,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.8,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:26:52.469362"
+    },
+    {
+      "case_id": "TC020",
+      "run_label": "causal_jwt_canonical_full",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 8806.076,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "罗奶奶",
+        "mediator": "甲状腺功能减退",
+        "property": "代谢率降低、疲乏体重增加",
+        "result": "",
+        "confidence": 0.04000000000000001,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8,
+        "evidence": [
+          "罗奶奶甲状腺功能减退导致代谢率降低，疲乏体重增加"
+        ],
+        "timestamp": "2026-07-17T13:27:00.857363413+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": false,
+        "property": true,
+        "result": false
+      },
+      "tuple_match": false,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": false,
+      "timestamp": "2026-07-17T13:27:01.275438"
+    }
+  ],
+  "metrics": {
+    "run_label": "causal_jwt_canonical_full",
+    "total_samples": 20,
+    "api_success_count": 20,
+    "api_error_count": 0,
+    "relation_found_count": 11,
+    "tuple_match_count": 2,
+    "tuple_and_confidence_pass_count": 0,
+    "object_match_count": 10,
+    "mediator_match_count": 7,
+    "property_match_count": 6,
+    "result_match_count": 5,
+    "relation_found_rate": 0.55,
+    "tuple_accuracy": 0.1,
+    "tuple_and_confidence_accuracy": 0.0,
+    "object_accuracy": 0.5,
+    "mediator_accuracy": 0.35,
+    "property_accuracy": 0.3,
+    "result_accuracy": 0.25,
+    "avg_best_relation_confidence": 0.2610454545454546,
+    "avg_latency_ms": 15053.295849999999
+  }
+}

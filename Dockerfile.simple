@@ -1,0 +1,74 @@
+# 简化版 Dockerfile - 直接使用预编译的二进制文件
+FROM alpine:3.19
+
+# 安装运行时依赖 + Tesseract OCR
+RUN apk add --no-cache \
+    ca-certificates \
+    tzdata \
+    curl \
+    jq \
+    bash \
+    procps \
+    coreutils \
+    util-linux \
+    tesseract-ocr \
+    tesseract-ocr-data-chi_sim \
+    tesseract-ocr-data-chi_tra \
+    tesseract-ocr-data-eng \
+    leptonica-dev \
+    && rm -rf /var/cache/apk/*
+
+# 创建非特权用户
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -u 1001 -S appuser -G appgroup
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制预编译的二进制文件
+COPY bin/context-keeper /app/bin/context-keeper
+
+# 复制脚本
+COPY scripts/manage.sh /app/scripts/manage.sh
+COPY scripts/docker-entrypoint.sh /app/docker-entrypoint.sh
+COPY scripts/docker-log-monitor.sh /app/log-monitor.sh
+COPY scripts/build/ /app/scripts/build/
+
+# 复制前端文件
+COPY web/ /app/web/
+
+# 创建必要的目录
+RUN mkdir -p /app/data /app/data/logs /app/config /app/logs && \
+    chown -R appuser:appgroup /app
+
+# 设置执行权限
+RUN chmod +x /app/bin/context-keeper \
+    /app/scripts/manage.sh /app/docker-entrypoint.sh \
+    /app/log-monitor.sh
+
+# 设置环境变量
+ENV RUN_MODE=http \
+    HTTP_SERVER_PORT=8088 \
+    STORAGE_PATH=/app/data \
+    LOG_LEVEL=info \
+    TZ=Asia/Shanghai \
+    PROJECT_ROOT=/app \
+    PID_DIR=/app/logs \
+    CONTEXT_KEEPER_LOG_DIR=/app/data/logs \
+    CONTEXT_KEEPER_LOG_TO_STDOUT=true
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:${HTTP_SERVER_PORT}/health || exit 1
+
+# 暴露端口
+EXPOSE 8088
+
+# 切换到非特权用户
+USER appuser
+
+# 设置入口点
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
+
+# 默认命令
+CMD ["http"]

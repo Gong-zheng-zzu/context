@@ -1,0 +1,246 @@
+{
+  "version": "1.0",
+  "description": "护理记录样本 - 用于因果关系抽取测试",
+  "records": [
+    {
+      "record_id": "NR001",
+      "resident_name": "李爷爷",
+      "date": "2026-07-01",
+      "content": "李爷爷今晨服用降压药后起床去洗手间，突然感到头晕目眩，站立不稳，在洗手间门口滑倒。护工及时发现并扶起，检查后发现右手腕轻微擦伤，血压测量为90/60mmHg，较平时偏低。",
+      "expected_causal": {
+        "object": "李爷爷",
+        "mediator": "服用降压药",
+        "property": "体位性低血压",
+        "result": "洗手间滑倒"
+      }
+    },
+    {
+      "record_id": "NR002",
+      "resident_name": "王奶奶",
+      "date": "2026-07-02",
+      "content": "王奶奶因髋关节手术后已卧床3周，今日尝试下床活动时发现双腿无力，难以支撑身体重量。物理治疗师评估后认为是长期卧床导致的肌肉萎缩。",
+      "expected_causal": {
+        "object": "王奶奶",
+        "mediator": "长期卧床",
+        "property": "肌肉萎缩",
+        "result": "双腿无力"
+      }
+    },
+    {
+      "record_id": "NR003",
+      "resident_name": "张大爷",
+      "date": "2026-07-03",
+      "content": "张大爷糖尿病史15年，近期血糖控制不佳。今日足部检查发现左脚趾有2cm溃疡面，患者表示数日前受伤但无明显痛感。医生诊断为糖尿病足并发末梢神经病变。",
+      "expected_causal": {
+        "object": "张大爷",
+        "mediator": "糖尿病",
+        "property": "末梢神经病变",
+        "result": "足部溃疡"
+      }
+    },
+    {
+      "record_id": "NR004",
+      "resident_name": "刘奶奶",
+      "date": "2026-07-04",
+      "content": "刘奶奶高血压病史20年，因自觉症状改善擅自停药2月。今晨突然出现右侧肢体无力、言语不清，血压测量180/110mmHg。急送医院诊断为急性脑卒中。",
+      "expected_causal": {
+        "object": "刘奶奶",
+        "mediator": "高血压未控制",
+        "property": "脑血管压力增高",
+        "result": "急性脑卒中"
+      }
+    },
+    {
+      "record_id": "NR005",
+      "resident_name": "赵爷爷",
+      "date": "2026-07-05",
+      "content": "赵爷爷因失眠服用佐匹克隆，夜间2点起床如厕时意识模糊，在走廊摔倒。值班护士发现时患者神志不清，额头有淤青。",
+      "expected_causal": {
+        "object": "赵爷爷",
+        "mediator": "服用安眠药",
+        "property": "意识模糊",
+        "result": "夜间跌倒"
+      }
+    },
+    {
+      "record_id": "NR006",
+      "resident_name": "陈奶奶",
+      "date": "2026-07-06",
+      "content": "陈奶奶近2月食欲不振，体重下降5kg。本周出现咳嗽发热，体温38.5℃，血常规显示白细胞低于正常值。医生诊断为营养不良导致免疫力下降，继发呼吸道感染。",
+      "expected_causal": {
+        "object": "陈奶奶",
+        "mediator": "营养不良",
+        "property": "免疫力下降",
+        "result": "呼吸道感染"
+      }
+    },
+    {
+      "record_id": "NR007",
+      "resident_name": "孙爷爷",
+      "date": "2026-07-07",
+      "content": "孙爷爷平时喜静不好动，很少参加院内活动。今日骨密度检查报告显示T值-3.2，属于重度骨质疏松。医生建议增加运动和补充钙剂，警惕骨折风险。",
+      "expected_causal": {
+        "object": "孙爷爷",
+        "mediator": "缺乏运动",
+        "property": "骨质疏松",
+        "result": "骨折风险增加"
+      }
+    },
+    {
+      "record_id": "NR008",
+      "resident_name": "周奶奶",
+      "date": "2026-06-28",
+      "content": "周奶奶阿尔茨海默病中期，今日下午独自外出散步后未能返回。家属和工作人员在附近街区找寻2小时后才在公交站台发现，患者已无法说清自己的住址。",
+      "expected_causal": {
+        "object": "周奶奶",
+        "mediator": "阿尔茨海默病",
+        "property": "认知功能下降",
+        "result": "走失"
+      }
+    },
+    {
+      "record_id": "NR009",
+      "resident_name": "吴爷爷",
+      "date": "2026-06-29",
+      "content": "吴爷爷腰椎间盘突出症，持续疼痛3月。近期夜间常因疼痛难以入睡，白天精神萎靡，情绪低落，不愿与人交流。心理咨询师评估为慢性疼痛继发情绪障碍。",
+      "expected_causal": {
+        "object": "吴爷爷",
+        "mediator": "慢性疼痛",
+        "property": "睡眠障碍",
+        "result": "情绪低落"
+      }
+    },
+    {
+      "record_id": "NR010",
+      "resident_name": "郑奶奶",
+      "date": "2026-06-30",
+      "content": "郑奶奶心房颤动病史5年，规律服用抗凝药。本月因自觉药物副作用停药1周，今晨突然出现偏瘫、失语。CT检查确诊为脑栓塞，医生认为与停用抗凝药导致血栓形成相关。",
+      "expected_causal": {
+        "object": "郑奶奶",
+        "mediator": "心房颤动未抗凝",
+        "property": "血栓形成",
+        "result": "脑栓塞"
+      }
+    },
+    {
+      "record_id": "NR011",
+      "resident_name": "黄爷爷",
+      "date": "2026-06-25",
+      "content": "黄爷爷夏季饮水量少，近日出现尿频、尿痛、尿液混浊等症状。尿常规检查显示白细胞+++，诊断为泌尿系感染。医生嘱咐增加饮水量，避免脱水。",
+      "expected_causal": {
+        "object": "黄爷爷",
+        "mediator": "脱水",
+        "property": "泌尿系统防御力下降",
+        "result": "泌尿系感染"
+      }
+    },
+    {
+      "record_id": "NR012",
+      "resident_name": "林奶奶",
+      "date": "2026-06-26",
+      "content": "林奶奶双眼白内障术后视力仍较差，今日在房间内行走时撞到桌角，左肩部挫伤。护理员建议调整房间布局，增加照明设施。",
+      "expected_causal": {
+        "object": "林奶奶",
+        "mediator": "视力下降",
+        "property": "环境感知受损",
+        "result": "碰撞受伤"
+      }
+    },
+    {
+      "record_id": "NR013",
+      "resident_name": "马爷爷",
+      "date": "2026-06-27",
+      "content": "马爷爷因焦虑服用苯二氮卓类药物，近期增加剂量。今晨起床时步态不稳，差点摔倒。医生认为可能与药物剂量过大导致肌肉松弛有关。",
+      "expected_causal": {
+        "object": "马爷爷",
+        "mediator": "服用镇静药",
+        "property": "肌肉松弛",
+        "result": "步态不稳"
+      }
+    },
+    {
+      "record_id": "NR014",
+      "resident_name": "杨奶奶",
+      "date": "2026-06-24",
+      "content": "杨奶奶慢性肾功能不全，近期水肿明显加重，尿量减少。血生化检查显示肌酐、尿素氮显著升高，诊断为肾衰竭急性加重。",
+      "expected_causal": {
+        "object": "杨奶奶",
+        "mediator": "慢性肾病",
+        "property": "肾功能进行性恶化",
+        "result": "肾衰竭"
+      }
+    },
+    {
+      "record_id": "NR015",
+      "resident_name": "徐爷爷",
+      "date": "2026-06-23",
+      "content": "徐爷爷帕金森病史8年，肢体震颤明显。今日用餐时手抖严重，不慎将热汤洒在腿上，造成小面积烫伤。",
+      "expected_causal": {
+        "object": "徐爷爷",
+        "mediator": "帕金森病",
+        "property": "肢体震颤",
+        "result": "烫伤"
+      }
+    },
+    {
+      "record_id": "NR016",
+      "resident_name": "胡奶奶",
+      "date": "2026-06-22",
+      "content": "胡奶奶抑郁症病史3年，近期自诉睡眠不佳、食欲减退、对活动失去兴趣。心理评估量表得分显示抑郁症状加重。",
+      "expected_causal": {
+        "object": "胡奶奶",
+        "mediator": "抑郁症",
+        "property": "神经递质失衡",
+        "result": "睡眠食欲障碍"
+      }
+    },
+    {
+      "record_id": "NR017",
+      "resident_name": "梁爷爷",
+      "date": "2026-06-21",
+      "content": "梁爷爷慢性阻塞性肺疾病，长期吸烟史40年。今日出现呼吸困难加重，血氧饱和度86%，给予吸氧后缓解。医生强调戒烟的重要性。",
+      "expected_causal": {
+        "object": "梁爷爷",
+        "mediator": "长期吸烟",
+        "property": "肺功能受损",
+        "result": "呼吸困难"
+      }
+    },
+    {
+      "record_id": "NR018",
+      "resident_name": "谢奶奶",
+      "date": "2026-06-20",
+      "content": "谢奶奶类风湿关节炎多年，双手关节变形。今日尝试独自穿衣时因手指僵硬无法扣纽扣，需要护工协助。",
+      "expected_causal": {
+        "object": "谢奶奶",
+        "mediator": "类风湿关节炎",
+        "property": "关节变形僵硬",
+        "result": "日常活动受限"
+      }
+    },
+    {
+      "record_id": "NR019",
+      "resident_name": "何爷爷",
+      "date": "2026-06-19",
+      "content": "何爷爷前列腺增生症，夜尿频繁每晚5-6次。因频繁起夜影响睡眠质量，白天常打瞌睡。泌尿外科会诊建议药物治疗。",
+      "expected_causal": {
+        "object": "何爷爷",
+        "mediator": "前列腺增生",
+        "property": "夜尿频繁",
+        "result": "睡眠质量下降"
+      }
+    },
+    {
+      "record_id": "NR020",
+      "resident_name": "罗奶奶",
+      "date": "2026-06-18",
+      "content": "罗奶奶甲状腺功能减退症，近期疲乏无力、怕冷、体重增加。复查甲功发现TSH明显升高，调整左甲状腺素剂量。",
+      "expected_causal": {
+        "object": "罗奶奶",
+        "mediator": "甲减",
+        "property": "代谢率降低",
+        "result": "疲乏体重增加"
+      }
+    }
+  ]
+}

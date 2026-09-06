@@ -1,0 +1,24 @@
+{
+  "configs_tested": [
+    {
+      "hash": "42b9ca0fcd270609c612b5784fd452d4b8ef8b902f6b32fa52fced4492e1f861",
+      "name": "baseline_naive_rag",
+      "path": "D:\\context\\context-keeper-main\\experiments\\configs\\baseline_naive_rag.yaml"
+    },
+    {
+      "hash": "6821f0bb37af9b26b1e495602c8267d9d0b9cfecd9be143c59ff0aa7c0f805f5",
+      "name": "full_system",
+      "path": "D:\\context\\context-keeper-main\\experiments\\configs\\full_system.yaml"
+    }
+  ],
+  "differences_count": 6,
+  "test_name": "config_switching_contract",
+  "timestamp": "16948",
+  "validations": {
+    "baseline_structure_valid": true,
+    "config_differences_detectable": true,
+    "different_configs_have_different_hashes": true,
+    "full_system_structure_valid": true,
+    "hash_calculation_is_idempotent": true
+  }
+}

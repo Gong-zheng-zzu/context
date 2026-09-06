@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "run_id": "20260717T112910Z_baseline_naive_rag",
+  "started_at": "2026-07-17T11:29:10Z",
+  "outcome": "succeeded",
+  "execution_mode": "live_api",
+  "runtime": {
+    "config_name": "baseline_naive_rag",
+    "runtime_env_file": "D:\\context\\context-keeper-main\\experiments\\runtime_env\\baseline_naive_rag.env",
+    "runtime_env_sha256": "c41382a04a1314840dcc49854f5714089582430502c162cf6a7687b9b69b2337",
+    "operator_attestation": "baseline_naive_rag",
+    "docker_managed_by_runner": false,
+    "authentication_strategy": "password_login"
+  },
+  "evidence_requirements": {
+    "trace_query_count": 10,
+    "trace_requests_must_succeed_for_filter_baseline": false,
+    "trace_candidate_filter_required": false,
+    "retrieval_result_must_have_sourced_doc_ids": true
+  },
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "data": {
+    "corpus": "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_corpus\\retrieval_corpus_30.json",
+    "ground_truth": "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_groundtruth\\query_answer_pairs.json",
+    "expected_document_count": 30,
+    "expected_query_count": 50
+  },
+  "artifacts": {
+    "cleanup": {
+      "path": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\cleanup.json",
+      "sha256": "1f2d3369a8642a882c45d14e84cb602f666b3d638c474a4f09a2b1fc62df6ff7"
+    },
+    "seed_manifest": {
+      "path": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\seed\\manifest.json",
+      "sha256": "3e6b762d642b9bc5a9b6bd3eb67d9d458cbd966e2cfa26f8bd226ad26fae0cd3"
+    },
+    "seed_verification": {
+      "path": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\seed_verification.json",
+      "sha256": "4d7e74b010dfefc7ee3b705dace251e920bb5bdf671d52fb372c217ec8b4609a"
+    },
+    "trace": {
+      "path": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\trace.json",
+      "sha256": "d30823a10bc66f5c77e3db587a71988229aba51607454a060e8c499c17f149f3"
+    },
+    "retrieval_result": {
+      "path": "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260717T112910Z_baseline_naive_rag.json",
+      "sha256": "42d623e9c0ecc4b47bd3ea53da001257300d7580e602c7ec8c88cdb8a9a25ae7"
+    }
+  },
+  "stages": [
+    {
+      "name": "validate_dataset",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\validate_retrieval_dataset.py"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\validate_dataset.log",
+      "started_at": "2026-07-17T11:29:10Z",
+      "ended_at": "2026-07-17T11:29:10Z",
+      "exit_code": 0
+    },
+    {
+      "name": "cleanup",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\cleanup_eval_session.py",
+        "--confirm",
+        "--base-url",
+        "http://127.0.0.1:8088",
+        "--output",
+        "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\cleanup.json"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\cleanup.log",
+      "started_at": "2026-07-17T11:29:10Z",
+      "ended_at": "2026-07-17T11:29:11Z",
+      "exit_code": 0
+    },
+    {
+      "name": "seed_30_documents",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\prepare_structured_threeway_seed.py",
+        "--submit",
+        "--overwrite",
+        "--base-url",
+        "http://127.0.0.1:8088",
+        "--output-dir",
+        "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\seed"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\seed_30_documents.log",
+      "started_at": "2026-07-17T11:29:11Z",
+      "ended_at": "2026-07-17T11:29:22Z",
+      "exit_code": 0
+    },
+    {
+      "name": "verify_seed_evidence",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\verify_structured_threeway_seed.py",
+        "--manifest",
+        "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\seed\\manifest.json",
+        "--base-url",
+        "http://127.0.0.1:8088",
+        "--output",
+        "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\seed_verification.json",
+        "--require-vector-evidence"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\verify_seed_evidence.log",
+      "started_at": "2026-07-17T11:29:22Z",
+      "ended_at": "2026-07-17T11:29:23Z",
+      "exit_code": 0
+    },
+    {
+      "name": "trace",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\run_trace_queries.py",
+        "--mode",
+        "vector",
+        "--limit",
+        "10",
+        "--base-url",
+        "http://127.0.0.1:8088",
+        "--session-id",
+        "eval_retrieval_test",
+        "--output",
+        "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\trace.json"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\trace.log",
+      "started_at": "2026-07-17T11:29:23Z",
+      "ended_at": "2026-07-17T11:29:34Z",
+      "exit_code": 0
+    },
+    {
+      "name": "evaluate_50_queries",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\retrieval_eval.py",
+        "--queries",
+        "50",
+        "--configs",
+        "baseline_naive_rag",
+        "--retrieval-mode",
+        "vector",
+        "--base-url",
+        "http://127.0.0.1:8088",
+        "--output",
+        "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260717T112910Z_baseline_naive_rag.json"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\evaluate_50_queries.log",
+      "started_at": "2026-07-17T11:29:34Z",
+      "ended_at": "2026-07-17T11:29:40Z",
+      "exit_code": 0
+    },
+    {
+      "name": "verify_retrieval_evidence",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\verify_retrieval_evidence.py",
+        "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260717T112910Z_baseline_naive_rag.json"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T112910Z_baseline_naive_rag\\verify_retrieval_evidence.log",
+      "started_at": "2026-07-17T11:29:40Z",
+      "ended_at": "2026-07-17T11:29:40Z",
+      "exit_code": 0
+    }
+  ],
+  "error": null,
+  "ended_at": "2026-07-17T11:29:40Z"
+}

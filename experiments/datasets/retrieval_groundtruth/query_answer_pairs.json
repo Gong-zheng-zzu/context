@@ -1,0 +1,365 @@
+{
+  "metadata": {
+    "generated_at": "2026-07-13T16:40:00",
+    "total_pairs": 50,
+    "breakdown": {
+      "temporal": 17,
+      "causal": 17,
+      "general": 16
+    },
+    "description": "检索ground truth数据集（已去重，修复通配符）",
+    "last_updated": "2026-07-13"
+  },
+  "queries": [
+    {
+      "query_id": "temporal_001",
+      "query_type": "temporal",
+      "question": "王明最近的健康记录和变化趋势是什么？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500"],
+      "expected_keywords": ["王明", "趋势", "confusion"]
+    },
+    {
+      "query_id": "temporal_002",
+      "query_type": "temporal",
+      "question": "李国强最近的健康记录和变化趋势是什么？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500"],
+      "expected_keywords": ["李国强", "趋势", "阿尔茨海默病"]
+    },
+    {
+      "query_id": "temporal_003",
+      "query_type": "temporal",
+      "question": "赵志强最近的健康记录和变化趋势是什么？",
+      "ground_truth_docs": ["elder_033_2026-06-06T03:33:43.194500"],
+      "expected_keywords": ["赵志强", "趋势", "定向力障碍"]
+    },
+    {
+      "query_id": "temporal_004",
+      "query_type": "temporal",
+      "question": "杨桂英最近的健康记录和变化趋势是什么？",
+      "ground_truth_docs": ["elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["杨桂英", "趋势", "谵妄"]
+    },
+    {
+      "query_id": "temporal_005",
+      "query_type": "temporal",
+      "question": "周玲最近的健康记录和变化趋势是什么？",
+      "ground_truth_docs": ["elder_020_2026-06-06T03:43:43.194500"],
+      "expected_keywords": ["周玲", "趋势", "夜间谵妄"]
+    },
+    {
+      "query_id": "temporal_006",
+      "query_type": "temporal",
+      "question": "李娟最近的健康记录和变化趋势是什么？",
+      "ground_truth_docs": ["elder_082_2026-06-06T03:54:43.194500"],
+      "expected_keywords": ["李娟", "趋势", "情绪激动"]
+    },
+    {
+      "query_id": "temporal_007",
+      "query_type": "temporal",
+      "question": "王桂英最近的健康记录和变化趋势是什么？",
+      "ground_truth_docs": ["elder_047_2026-06-06T03:59:43.194500"],
+      "expected_keywords": ["王桂英", "趋势", "用药"]
+    },
+    {
+      "query_id": "temporal_008",
+      "query_type": "temporal",
+      "question": "患者最近7天的认知障碍发作频率？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500", "elder_025_2026-06-06T02:40:43.194500"],
+      "expected_keywords": ["认知障碍", "频率", "7天"]
+    },
+    {
+      "query_id": "temporal_009",
+      "query_type": "temporal",
+      "question": "夜间谵妄事件的时间分布规律？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["夜间", "谵妄", "时间"]
+    },
+    {
+      "query_id": "temporal_010",
+      "query_type": "temporal",
+      "question": "阿尔茨海默病患者用药后的效果变化？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["阿尔茨海默病", "用药", "效果"]
+    },
+    {
+      "query_id": "temporal_011",
+      "query_type": "temporal",
+      "question": "最近一个月血压波动超过20mmHg的患者统计？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["血压", "波动", "一个月"]
+    },
+    {
+      "query_id": "temporal_012",
+      "query_type": "temporal",
+      "question": "夜间2-4点谵妄事件的时间分布规律？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500"],
+      "expected_keywords": ["夜间", "谵妄", "分布"]
+    },
+    {
+      "query_id": "temporal_013",
+      "query_type": "temporal",
+      "question": "用药后48小时内副作用监测记录汇总？",
+      "ground_truth_docs": ["elder_047_2026-06-06T03:59:43.194500", "elder_082_2026-06-06T03:54:43.194500"],
+      "expected_keywords": ["用药", "48小时", "副作用"]
+    },
+    {
+      "query_id": "temporal_014",
+      "query_type": "temporal",
+      "question": "跌倒风险评分的3个月变化趋势？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500", "elder_033_2026-06-06T03:33:43.194500"],
+      "expected_keywords": ["跌倒", "风险", "趋势"]
+    },
+    {
+      "query_id": "temporal_015",
+      "query_type": "temporal",
+      "question": "情绪波动与时段关联分析（早中晚夜）？",
+      "ground_truth_docs": ["elder_084_2026-06-06T03:36:43.194500", "elder_082_2026-06-06T03:54:43.194500"],
+      "expected_keywords": ["情绪", "时段", "关联"]
+    },
+    {
+      "query_id": "temporal_016",
+      "query_type": "temporal",
+      "question": "认知功能MMSE评分的月度对比？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_020_2026-06-06T03:43:43.194500"],
+      "expected_keywords": ["认知", "MMSE", "月度"]
+    },
+    {
+      "query_id": "temporal_017",
+      "query_type": "temporal",
+      "question": "护理干预前后7天的行为改善对比？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_020_2026-06-06T03:43:43.194500"],
+      "expected_keywords": ["干预", "7天", "对比"]
+    },
+    {
+      "query_id": "causal_001",
+      "query_type": "causal",
+      "question": "李国强的夜间谵妄是什么原因引起的？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500"],
+      "expected_keywords": ["李国强", "谵妄", "原因", "阿尔茨海默病"]
+    },
+    {
+      "query_id": "causal_002",
+      "query_type": "causal",
+      "question": "为什么杨桂英会出现情绪激动？",
+      "ground_truth_docs": ["elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["杨桂英", "情绪激动", "原因"]
+    },
+    {
+      "query_id": "causal_003",
+      "query_type": "causal",
+      "question": "周玲试图离开病房的诱因是什么？",
+      "ground_truth_docs": ["elder_020_2026-06-06T03:43:43.194500"],
+      "expected_keywords": ["周玲", "离开病房", "诱因"]
+    },
+    {
+      "query_id": "causal_004",
+      "query_type": "causal",
+      "question": "多奈哌齐用药与谵妄发作的关系？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["多奈哌齐", "谵妄", "关系"]
+    },
+    {
+      "query_id": "causal_005",
+      "query_type": "causal",
+      "question": "定向力障碍的诱发因素有哪些？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500", "elder_033_2026-06-06T03:33:43.194500"],
+      "expected_keywords": ["定向力障碍", "诱发因素"]
+    },
+    {
+      "query_id": "causal_006",
+      "query_type": "causal",
+      "question": "怀旧疗法为什么能稳定患者情绪？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500"],
+      "expected_keywords": ["怀旧疗法", "稳定", "情绪"]
+    },
+    {
+      "query_id": "causal_007",
+      "query_type": "causal",
+      "question": "夜间活动增加与谵妄的因果关系？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_020_2026-06-06T03:43:43.194500"],
+      "expected_keywords": ["夜间活动", "谵妄", "因果"]
+    },
+    {
+      "query_id": "causal_008",
+      "query_type": "causal",
+      "question": "认知障碍导致的行为异常有哪些？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500", "elder_025_2026-06-06T02:40:43.194500"],
+      "expected_keywords": ["认知障碍", "行为异常"]
+    },
+    {
+      "query_id": "causal_009",
+      "query_type": "causal",
+      "question": "非药物干预原则在紧急处理中的作用？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500"],
+      "expected_keywords": ["非药物干预", "紧急处理", "作用"]
+    },
+    {
+      "query_id": "causal_010",
+      "query_type": "causal",
+      "question": "安抚技术如何平复患者情绪？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["安抚技术", "平复", "情绪"]
+    },
+    {
+      "query_id": "causal_011",
+      "query_type": "causal",
+      "question": "睡眠质量下降导致认知功能恶化的因果链？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_080_2026-06-06T02:10:43.194500"],
+      "expected_keywords": ["睡眠", "认知", "因果"]
+    },
+    {
+      "query_id": "causal_012",
+      "query_type": "causal",
+      "question": "室温过高与夜间躁动的关联分析？",
+      "ground_truth_docs": ["elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["室温", "躁动", "关联"]
+    },
+    {
+      "query_id": "causal_013",
+      "query_type": "causal",
+      "question": "家属探访频率对患者情绪稳定性的影响？",
+      "ground_truth_docs": ["elder_082_2026-06-06T03:54:43.194500", "elder_047_2026-06-06T03:59:43.194500"],
+      "expected_keywords": ["探访", "情绪", "影响"]
+    },
+    {
+      "query_id": "causal_014",
+      "query_type": "causal",
+      "question": "阿尔茨海默症患者便秘与谵妄发作的因果关系？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500"],
+      "expected_keywords": ["便秘", "谵妄", "因果"]
+    },
+    {
+      "query_id": "causal_015",
+      "query_type": "causal",
+      "question": "社交活动参与度对认知衰退速度的影响？",
+      "ground_truth_docs": ["elder_020_2026-06-06T03:43:43.194500", "elder_033_2026-06-06T03:33:43.194500"],
+      "expected_keywords": ["社交", "认知", "衰退"]
+    },
+    {
+      "query_id": "causal_016",
+      "query_type": "causal",
+      "question": "护士换班时段（交接班）患者不安行为增加的原因？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["换班", "不安", "原因"]
+    },
+    {
+      "query_id": "causal_017",
+      "query_type": "causal",
+      "question": "多重用药（5种以上）与跌倒风险的因果分析？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500"],
+      "expected_keywords": ["多重用药", "跌倒", "风险"]
+    },
+    {
+      "query_id": "general_001",
+      "query_type": "general",
+      "question": "王明的基本健康状况如何？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500"],
+      "expected_keywords": ["王明", "健康状况"]
+    },
+    {
+      "query_id": "general_002",
+      "query_type": "general",
+      "question": "查询李国强的护理记录",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500"],
+      "expected_keywords": ["李国强", "护理记录"]
+    },
+    {
+      "query_id": "general_003",
+      "query_type": "general",
+      "question": "赵志强最近有哪些健康事件？",
+      "ground_truth_docs": ["elder_033_2026-06-06T03:33:43.194500"],
+      "expected_keywords": ["赵志强", "健康事件"]
+    },
+    {
+      "query_id": "general_004",
+      "query_type": "general",
+      "question": "告诉我杨桂英的情况",
+      "ground_truth_docs": ["elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["杨桂英", "情况"]
+    },
+    {
+      "query_id": "general_005",
+      "query_type": "general",
+      "question": "周玲的confusion记录",
+      "ground_truth_docs": ["elder_020_2026-06-06T03:43:43.194500"],
+      "expected_keywords": ["周玲", "confusion"]
+    },
+    {
+      "query_id": "general_006",
+      "query_type": "general",
+      "question": "李娟服用的药物有哪些？",
+      "ground_truth_docs": ["elder_082_2026-06-06T03:54:43.194500"],
+      "expected_keywords": ["李娟", "药物", "多奈哌齐"]
+    },
+    {
+      "query_id": "general_007",
+      "query_type": "general",
+      "question": "王桂英的年龄和主要诊断",
+      "ground_truth_docs": ["elder_047_2026-06-06T03:59:43.194500"],
+      "expected_keywords": ["王桂英", "年龄", "阿尔茨海默病"]
+    },
+    {
+      "query_id": "general_008",
+      "query_type": "general",
+      "question": "哪些患者出现了夜间谵妄？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_084_2026-06-06T03:36:43.194500", "elder_020_2026-06-06T03:43:43.194500"],
+      "expected_keywords": ["夜间谵妄", "患者"]
+    },
+    {
+      "query_id": "general_009",
+      "query_type": "general",
+      "question": "护理记录中的紧急处理标签",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500", "elder_025_2026-06-06T02:40:43.194500"],
+      "expected_keywords": ["紧急处理", "标签"]
+    },
+    {
+      "query_id": "general_010",
+      "query_type": "general",
+      "question": "所有阿尔茨海默病中期患者",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_084_2026-06-06T03:36:43.194500", "elder_020_2026-06-06T03:43:43.194500"],
+      "expected_keywords": ["阿尔茨海默病", "中期"]
+    },
+    {
+      "query_id": "general_011",
+      "query_type": "general",
+      "question": "所有患者的年龄段分布和性别比例统计？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500", "elder_025_2026-06-06T02:40:43.194500", "elder_033_2026-06-06T03:33:43.194500", "elder_084_2026-06-06T03:36:43.194500", "elder_020_2026-06-06T03:43:43.194500", "elder_082_2026-06-06T03:54:43.194500", "elder_047_2026-06-06T03:59:43.194500"],
+      "expected_keywords": ["年龄", "性别", "统计"]
+    },
+    {
+      "query_id": "general_012",
+      "query_type": "general",
+      "question": "当前所有在用药物清单及使用频率？",
+      "ground_truth_docs": ["elder_025_2026-06-06T02:40:43.194500", "elder_082_2026-06-06T03:54:43.194500", "elder_047_2026-06-06T03:59:43.194500"],
+      "expected_keywords": ["药物", "清单", "频率"]
+    },
+    {
+      "query_id": "general_013",
+      "query_type": "general",
+      "question": "护理活动类型统计（喂食、翻身、清洁等）？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500", "elder_025_2026-06-06T02:40:43.194500", "elder_033_2026-06-06T03:33:43.194500"],
+      "expected_keywords": ["护理", "活动", "统计"]
+    },
+    {
+      "query_id": "general_014",
+      "query_type": "general",
+      "question": "最高频的5种症状及其发生次数排名？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500", "elder_025_2026-06-06T02:40:43.194500", "elder_084_2026-06-06T03:36:43.194500", "elder_020_2026-06-06T03:43:43.194500"],
+      "expected_keywords": ["症状", "频率", "排名"]
+    },
+    {
+      "query_id": "general_015",
+      "query_type": "general",
+      "question": "年龄>80岁且有跌倒史的患者筛选？",
+      "ground_truth_docs": ["elder_080_2026-06-06T02:10:43.194500", "elder_084_2026-06-06T03:36:43.194500"],
+      "expected_keywords": ["80岁", "跌倒", "筛选"]
+    },
+    {
+      "query_id": "general_016",
+      "query_type": "general",
+      "question": "非药物干预（音乐疗法、芳香疗法）的使用记录？",
+      "ground_truth_docs": ["elder_033_2026-06-06T03:33:43.194500", "elder_047_2026-06-06T03:59:43.194500"],
+      "expected_keywords": ["非药物", "疗法", "记录"]
+    }
+  ]
+}

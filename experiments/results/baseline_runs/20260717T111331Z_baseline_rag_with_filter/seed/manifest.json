@@ -1,0 +1,466 @@
+{
+  "schema": "structured-threeway-seed-manifest-v1",
+  "created_at": "2026-07-17T11:13:31Z",
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "source": {
+    "path": "experiments/datasets/retrieval_corpus/retrieval_corpus_30.json",
+    "sha256": "751572402e7923a37dfd9d8f8008ca51640bd3916368eb248bae9a5db6efa6ef",
+    "document_count": 30,
+    "corpus_metadata": {
+      "source_file": "datasets\\nursing_data\\nursing_records.json",
+      "source_record_count": 9809,
+      "selected_document_count": 30,
+      "ground_truth_document_count": 7,
+      "selection_seed": 20260715,
+      "source_sha256": "a2fcd9ae0de11f158b945f3196027dc2458979cdfc9b47f5e8253838baad584d"
+    }
+  },
+  "three_way_contract": {
+    "write_endpoint": "/mcp/tools/create_context",
+    "authentication": "JWT Bearer token from /api/auth/login",
+    "vector": "submitted through unified ingestion; retrieval can be independently checked",
+    "timeline": "submitted through unified ingestion; no documented session/doc-scoped public read API",
+    "graph": "submitted through unified ingestion; no documented session/doc-scoped public read API"
+  },
+  "causal_document_count": 3,
+  "documents": [
+    {
+      "doc_id": "elder_020_2026-06-06T03:43:43.194500",
+      "patient_id": "elder_020",
+      "timestamp": "2026-06-06T03:43:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "46d681c75f42a6b368c83c465947fbf99b0ecb9b16931f78c74b00446e145820",
+      "request_sha256": "812356fb4b05af056e914bbfac50ec9491a6ebfbc256d212000f0a26c981e760"
+    },
+    {
+      "doc_id": "elder_025_2026-06-06T02:40:43.194500",
+      "patient_id": "elder_025",
+      "timestamp": "2026-06-06T02:40:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "5585d226642199388f00d10c6db39a42db8f35a97ea7b32e58e0d3855dddaaf1",
+      "request_sha256": "1ddaf2dcc8bbe2a7abf74f80c7abdb3de60a1e1555f45521d6e129a082d80129"
+    },
+    {
+      "doc_id": "elder_033_2026-06-06T03:33:43.194500",
+      "patient_id": "elder_033",
+      "timestamp": "2026-06-06T03:33:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "8c52192915dbd6e4074ad2149cff391086fab24ab66b1e9a9a808ec8e1011ec3",
+      "request_sha256": "6bdfab8904c476c671a3fa8da6a6e168f1938e60290299b86a7595cf69f4cfd6"
+    },
+    {
+      "doc_id": "elder_047_2026-06-06T03:59:43.194500",
+      "patient_id": "elder_047",
+      "timestamp": "2026-06-06T03:59:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "1ee8ef0e72f9213281cf32c2a3974cab7f57274d36c3a3e5d19bcb9713fb62ae",
+      "request_sha256": "b426c11f10204c9f4fbdd754eadef55cee38dff8bfd1415b4971e7bf617b3407"
+    },
+    {
+      "doc_id": "elder_080_2026-06-06T02:10:43.194500",
+      "patient_id": "elder_080",
+      "timestamp": "2026-06-06T02:10:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "35c700d2cc7b816ab838f85ac4f25d79b25e27cc23eaeb418757d4260744cd86",
+      "request_sha256": "673e8a53768a6f8e72a2ff41a5b06ff7ecd6099bbfdbcd7cf50fc8ceead48f13"
+    },
+    {
+      "doc_id": "elder_082_2026-06-06T03:54:43.194500",
+      "patient_id": "elder_082",
+      "timestamp": "2026-06-06T03:54:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "5135776384fb64861819902958154a50a7761569d1e54372cb2b4d2e33a58419",
+      "request_sha256": "883f7011a6b8d550f7d9aaac1a0f1f6da3e9c541f9ce4c7ad7a53bed491bce0f"
+    },
+    {
+      "doc_id": "elder_084_2026-06-06T03:36:43.194500",
+      "patient_id": "elder_084",
+      "timestamp": "2026-06-06T03:36:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "0a774c68fce76bd4daf0e0cb0cc2b0f4b0cffa34801e11c81d4ee8c34e5cfeb2",
+      "request_sha256": "1e63e7cfac54d6179e88e5749c4e8930f3997e640877cf94aeeb01d5d46312d8"
+    },
+    {
+      "doc_id": "elder_014_2026-06-28T03:06:43.194500",
+      "patient_id": "elder_014",
+      "timestamp": "2026-06-28T03:06:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "44d2eed18c4b96a22da8f8ab7e420702189e2ea4d1b56d7505efa2e9d2c3ba53",
+      "request_sha256": "b860f8bb05d770df3b623875874311b17e5d5f13532820d5303f2f2d4dd4d24c"
+    },
+    {
+      "doc_id": "elder_079_2026-07-02T07:55:43.194500",
+      "patient_id": "elder_079",
+      "timestamp": "2026-07-02T07:55:43.194500",
+      "event_type": "fall",
+      "tags": [
+        "摔倒",
+        "安全事件",
+        "洗手间",
+        "紧急处理"
+      ],
+      "has_causal_fields": true,
+      "source_record_sha256": "b392c957e2d6be360d0cc2d96e82a1020c86a88853a96d59ce96eac44799b607",
+      "request_sha256": "98618e2a2ee421141bea2a92feccad6637cc13752597608dc47d799b7f84a13c"
+    },
+    {
+      "doc_id": "elder_013_2026-06-20T18:09:43.194500",
+      "patient_id": "elder_013",
+      "timestamp": "2026-06-20T18:09:43.194500",
+      "event_type": "meal",
+      "tags": [
+        "饮食",
+        "晚餐",
+        "较差"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "f4f315203cf7d6f9be79d2e14ab986b6216f4b302f7e3759f6a03b933c1e504f",
+      "request_sha256": "fe48c29ea335603acf05eb92ea6d10556a4b0e9a158275ba49bdb055985c856f"
+    },
+    {
+      "doc_id": "elder_081_2026-07-02T21:49:43.194500",
+      "patient_id": "elder_081",
+      "timestamp": "2026-07-02T21:49:43.194500",
+      "event_type": "medication",
+      "tags": [
+        "服药",
+        "多奈哌齐",
+        "常规护理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "90d047b90c45cda50aae424ac7ca489195cdde0d12de2517e819d0789deb0ace",
+      "request_sha256": "54e7165417ee891f86f1b046e3891aa1ce0bdeaa9bf358d271ed0def0049135b"
+    },
+    {
+      "doc_id": "elder_008_2026-07-01T10:25:43.194500",
+      "patient_id": "elder_008",
+      "timestamp": "2026-07-01T10:25:43.194500",
+      "event_type": "mood",
+      "tags": [
+        "情绪",
+        "焦虑",
+        "心理护理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "8efccc68435d58e630f4ecd38c309d1566f204878705e3d90084bb9b83983a15",
+      "request_sha256": "141aaeabb997b7e181be598b41c7b30218afd701f0d1318a31a1611a5dffdb6d"
+    },
+    {
+      "doc_id": "elder_078_2026-06-30T10:34:43.194500",
+      "patient_id": "elder_078",
+      "timestamp": "2026-06-30T10:34:43.194500",
+      "event_type": "pain",
+      "tags": [
+        "疼痛",
+        "腰部",
+        "评分5"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "02e449939549b7ff4002aa26728015a7c8fd9956452495a179834f7323bb67c2",
+      "request_sha256": "49320d056053c2a044dc36e9379737c7358a078256b233effd74f2569cf268cb"
+    },
+    {
+      "doc_id": "elder_047_2026-06-27T06:48:43.194500",
+      "patient_id": "elder_047",
+      "timestamp": "2026-06-27T06:48:43.194500",
+      "event_type": "sleep",
+      "tags": [
+        "睡眠",
+        "较差"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "095300e12a2c32605e59e746be388eedcfbdaf9256202413738b6c5dae118ff7",
+      "request_sha256": "163e312edf8133b95ab615d6ff0e7d6dfa5c92b6d9f4c0b00896f2ce4123eee6"
+    },
+    {
+      "doc_id": "elder_010_2026-07-02T07:51:43.194500",
+      "patient_id": "elder_010",
+      "timestamp": "2026-07-02T07:51:43.194500",
+      "event_type": "vital_signs",
+      "tags": [
+        "生命体征",
+        "血压",
+        "心率"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "867129f830848a74218ae9ed5062eab51a9220956939c1df56e3b7a5dfdee0d5",
+      "request_sha256": "8e36fa7b37b1f7ce32c8d1945a42322817c244335896f4ee595444b301d77688"
+    },
+    {
+      "doc_id": "elder_038_2026-06-14T14:31:43.194500",
+      "patient_id": "elder_038",
+      "timestamp": "2026-06-14T14:31:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "6357e6294a34590b2beffb4e3b287fc3a89b4663d2e51295dccf5b359fd3bd24",
+      "request_sha256": "c10036fefb9b882bb639f5bd6b6ec1916ffe64cc9d51e91e7fffec7154edadad"
+    },
+    {
+      "doc_id": "elder_034_2026-06-25T16:47:43.194500",
+      "patient_id": "elder_034",
+      "timestamp": "2026-06-25T16:47:43.194500",
+      "event_type": "fall",
+      "tags": [
+        "摔倒",
+        "安全事件",
+        "楼梯口",
+        "紧急处理"
+      ],
+      "has_causal_fields": true,
+      "source_record_sha256": "5f27411ab037c9d17a65aeeb4558b01b848bc492fcbb469ab352abe714665242",
+      "request_sha256": "4e3d5b2b560706c5053b867f7d7b0f45964d2db2ced21da266cc091694e58917"
+    },
+    {
+      "doc_id": "elder_061_2026-06-07T12:18:43.194500",
+      "patient_id": "elder_061",
+      "timestamp": "2026-06-07T12:18:43.194500",
+      "event_type": "meal",
+      "tags": [
+        "饮食",
+        "午餐",
+        "良好"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "cfff7a32019151908b81d9c1de8366d77cb5fe2992060f39d6297dcd25c07313",
+      "request_sha256": "af5b16eef5f1b09b8b7f0aa7e54a4e08c5665dc5f55d2514f4011d6832f1eda2"
+    },
+    {
+      "doc_id": "elder_100_2026-06-23T21:30:43.194500",
+      "patient_id": "elder_100",
+      "timestamp": "2026-06-23T21:30:43.194500",
+      "event_type": "medication",
+      "tags": [
+        "服药",
+        "二甲双胍",
+        "常规护理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "641c9141a86d975211d10621ccc07662c148cf6b6177e284a18cf5b758470596",
+      "request_sha256": "5d8dfea5dd3a770540d6065141144a7d4fb186d67809253472abf9a2374a70ba"
+    },
+    {
+      "doc_id": "elder_091_2026-06-18T11:18:43.194500",
+      "patient_id": "elder_091",
+      "timestamp": "2026-06-18T11:18:43.194500",
+      "event_type": "mood",
+      "tags": [
+        "情绪",
+        "焦虑",
+        "心理护理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "8a47addb79c2c0773bdb032dfe181c966e0627d97dae6a119fbdfeb5ae132fd3",
+      "request_sha256": "8b931b97deabbcd0ce6641ed1f93e264d07489954d44b87d082cb918c616722a"
+    },
+    {
+      "doc_id": "elder_027_2026-07-04T17:58:43.194500",
+      "patient_id": "elder_027",
+      "timestamp": "2026-07-04T17:58:43.194500",
+      "event_type": "pain",
+      "tags": [
+        "疼痛",
+        "右肩",
+        "评分4"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "9c0c3aa85a61c600d94a9490752b98be4d2ac27f761ae4bcd1d1e0c54f482868",
+      "request_sha256": "23f9a76d8fe987926967ee2b58692f1ad78b7689f8fbc6e987e88190037a370f"
+    },
+    {
+      "doc_id": "elder_002_2026-07-02T06:45:43.194500",
+      "patient_id": "elder_002",
+      "timestamp": "2026-07-02T06:45:43.194500",
+      "event_type": "sleep",
+      "tags": [
+        "睡眠",
+        "良好"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "298f3e88c3120f830fdf40e0d3960b4ed63e386a7aaeeecda354f0a847ac7968",
+      "request_sha256": "9d37f89ee85fa3e41a60ba41c8624607dfbf23fe2331e7a3917771596bc184d6"
+    },
+    {
+      "doc_id": "elder_093_2026-06-17T07:12:43.194500",
+      "patient_id": "elder_093",
+      "timestamp": "2026-06-17T07:12:43.194500",
+      "event_type": "vital_signs",
+      "tags": [
+        "生命体征",
+        "血压",
+        "心率"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "ff3cb6a350f94a5d3adac9c4820c1a03686d0741ed9c410b26d9cb586daf3590",
+      "request_sha256": "638d6af32c7fafc64052d86d6a59ecee79939ed0c8295518cb4e84b475b18011"
+    },
+    {
+      "doc_id": "elder_005_2026-06-14T02:56:43.194500",
+      "patient_id": "elder_005",
+      "timestamp": "2026-06-14T02:56:43.194500",
+      "event_type": "confusion",
+      "tags": [
+        "认知障碍",
+        "谵妄",
+        "阿尔茨海默病",
+        "紧急处理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "fa1a39ed4dc70a37d62995ee8800250fadc668eb93153c4430076d7fab711a69",
+      "request_sha256": "ba065a4a8c1ebfacada93c3a69a502bb75dfa4ba2472515460608107c7430acd"
+    },
+    {
+      "doc_id": "elder_041_2026-06-25T08:36:43.194500",
+      "patient_id": "elder_041",
+      "timestamp": "2026-06-25T08:36:43.194500",
+      "event_type": "fall",
+      "tags": [
+        "摔倒",
+        "安全事件",
+        "楼梯口",
+        "紧急处理"
+      ],
+      "has_causal_fields": true,
+      "source_record_sha256": "66e935f9cf351e15453ef83c7298fce4972953cbebe020fd8074e27d5175df4d",
+      "request_sha256": "36afcacdc142bf004f016df026df0809652a45c007b567a6ceda2955c9502fda"
+    },
+    {
+      "doc_id": "elder_053_2026-06-29T07:47:43.194500",
+      "patient_id": "elder_053",
+      "timestamp": "2026-06-29T07:47:43.194500",
+      "event_type": "meal",
+      "tags": [
+        "饮食",
+        "早餐",
+        "较差"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "583deaacfb9f9057c35b096627d05013346f4e2f8c286bf3b39f83d155dbc4f9",
+      "request_sha256": "37e40ec6f18bc96730320e6d57f358687d55b3180dbe2e81931997c8eb451c02"
+    },
+    {
+      "doc_id": "elder_079_2026-06-13T21:16:43.194500",
+      "patient_id": "elder_079",
+      "timestamp": "2026-06-13T21:16:43.194500",
+      "event_type": "medication",
+      "tags": [
+        "服药",
+        "阿司匹林",
+        "常规护理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "993d0af51ac942d5b754e3db87dfcc0e3adec582b38bdacbd7a4faaaa3499d2f",
+      "request_sha256": "e7f08b30bac88ff6feefe87cf5ed70e66597ab6f9e7b6543658d6acb0b571e76"
+    },
+    {
+      "doc_id": "elder_023_2026-06-16T17:04:43.194500",
+      "patient_id": "elder_023",
+      "timestamp": "2026-06-16T17:04:43.194500",
+      "event_type": "mood",
+      "tags": [
+        "情绪",
+        "焦虑",
+        "心理护理"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "72c02cc1c57e7926dc2322b62272e587f2746e1139658c5c62e1a74ab7eda3ae",
+      "request_sha256": "3d106d149d8534df6adae55243d3b03a3f784d2611eafeffa04183afb5b45566"
+    },
+    {
+      "doc_id": "elder_028_2026-06-13T18:44:43.194500",
+      "patient_id": "elder_028",
+      "timestamp": "2026-06-13T18:44:43.194500",
+      "event_type": "pain",
+      "tags": [
+        "疼痛",
+        "右肩",
+        "评分7"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "6f1c2983feab4b405897e437cf474adc82e782fd1fedbcd1293d8c3f11c0d791",
+      "request_sha256": "7e876c0f3ff5dba09b8365c68f7fd0a93cce7ad70140d01ab8f44894447a3bf0"
+    },
+    {
+      "doc_id": "elder_013_2026-06-20T06:57:43.194500",
+      "patient_id": "elder_013",
+      "timestamp": "2026-06-20T06:57:43.194500",
+      "event_type": "sleep",
+      "tags": [
+        "睡眠",
+        "较差"
+      ],
+      "has_causal_fields": false,
+      "source_record_sha256": "85e3abe5a527140b0a00b6f46985cd20ac1efcbd0275bc78659c8eb8c8777354",
+      "request_sha256": "f6dec3a6467485dbc0efa81b94685d962c04c21924bcb9ee40dc237b6668b62e"
+    }
+  ],
+  "request_file": {
+    "path": "create_context_requests.jsonl",
+    "sha256": "013b6e26cb8c47402a96e9c3554230b99692bcf6f3795b5233f3bdadb87c46a5"
+  },
+  "mode": "dry_run"
+}

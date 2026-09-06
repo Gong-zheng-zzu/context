@@ -1,0 +1,67 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'context-keeper'
+    environment: 'production'
+
+# Alertmanager配置
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+# 规则文件
+rule_files:
+  # - "alerts/*.yml"
+
+# 抓取配置
+scrape_configs:
+  # Prometheus自身监控
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # Context-Keeper服务监控
+  - job_name: 'context-keeper'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['context-keeper:8088']
+        labels:
+          service: 'context-keeper'
+          component: 'main'
+
+  # Qdrant向量数据库监控
+  - job_name: 'qdrant'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['qdrant:6333']
+        labels:
+          service: 'qdrant'
+          component: 'vector-db'
+
+  # Ollama本地模型服务监控
+  - job_name: 'ollama'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['ollama:11434']
+        labels:
+          service: 'ollama'
+          component: 'llm'
+
+  # Node Exporter（可选，用于系统指标）
+  # - job_name: 'node'
+  #   static_configs:
+  #     - targets: ['node-exporter:9100']
+  #       labels:
+  #         service: 'node-exporter'
+
+  # Docker容器监控（可选）
+  # - job_name: 'docker'
+  #   static_configs:
+  #     - targets: ['cadvisor:8080']
+  #       labels:
+  #         service: 'cadvisor'

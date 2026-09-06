@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑匣子审计日志 - 智能健康管理平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .title-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .tech-badges {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            min-height: 600px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .panel-content {
+            min-height: 400px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+
+        .search-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(44, 62, 80, 0.4);
+        }
+
+        .audit-record {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2c3e50;
+            transition: all 0.3s ease;
+        }
+
+        .audit-record:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .record-id {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .record-time {
+            font-size: 12px;
+            color: #95a5a6;
+        }
+
+        .record-section {
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .section-content {
+            font-size: 13px;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .tag-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .tag-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .tag-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .tag-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .decision-chain {
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            margin-top: 10px;
+        }
+
+        .chain-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .chain-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+
+        .step-arrow {
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.05) 0%, rgba(52, 73, 94, 0.05) 100%);
+            border-radius: 12px;
+            border: 2px solid #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-desc {
+            font-size: 12px;
+            color: #95a5a6;
+        }
+
+        .export-section {
+            margin-top: 20px;
+        }
+
+        .export-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
+        }
+
+        .blockchain-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1) 0%, rgba(192, 57, 43, 0.1) 100%);
+            border-radius: 12px;
+            border: 2px dashed #e74c3c;
+            margin-top: 15px;
+        }
+
+        .blockchain-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .blockchain-text {
+            flex: 1;
+        }
+
+        .blockchain-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 3px;
+        }
+
+        .blockchain-desc {
+            font-size: 11px;
+            color: #7f8c8d;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .feature-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .feature-content {
+            flex: 1;
+        }
+
+        .feature-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 3px;
+        }
+
+        .feature-desc {
+            font-size: 11px;
+            color: #7f8c8d;
+        }
+
+        .hash-display {
+            padding: 12px;
+            background: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            word-break: break-all;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <div class="title-left">
+                    <div class="icon">📦</div>
+                    <div>
+                        <h1>黑匣子审计日志系统</h1>
+                        <div class="subtitle">AI决策全链路溯源 × 司法级证据链 × 不可篡改</div>
+                    </div>
+                </div>
+                <div class="tech-badges">
+                    <div class="tech-badge">审计覆盖率100%</div>
+                    <div class="tech-badge">区块链存证</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- 左侧：审计日志列表 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <div class="panel-icon">📋</div>
+                        审计记录查询
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div class="search-bar">
+                        <input type="text" class="search-input" placeholder="搜索用户ID、操作类型、时间范围...">
+                        <button class="search-btn">🔍 查询</button>
+                    </div>
+
+                    <!-- 审计记录1 -->
+                    <div class="audit-record">
+                        <div class="record-header">
+                            <div class="record-id">审计ID: AUD-20240523-001</div>
+                            <div class="record-time">2024-05-23 14:32:15</div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">基础信息</div>
+                            <div class="section-content">
+                                <strong>用户：</strong>张伟 (UID: user_001)<br>
+                                <strong>操作：</strong>查询健康档案<br>
+                                <strong>IP地址：</strong>192.168.1.100<br>
+                                <strong>设备：</strong>Chrome 122.0 / Windows 11
+                            </div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">检索明细</div>
+                            <div class="section-content">
+                                <strong>查询内容：</strong>"最近3个月的血压记录"<br>
+                                <strong>检索引擎：</strong>时间线记忆引擎 + 向量语义引擎<br>
+                                <strong>召回结果：</strong>15条记录<br>
+                                <strong>重排序后：</strong>Top-5结果<br>
+                                <span class="tag tag-success">检索成功</span>
+                                <span class="tag tag-info">响应时间: 2.3s</span>
+                            </div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">AI决策链</div>
+                            <div class="decision-chain">
+                                <div class="chain-step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">语义分析：识别为"时间类查询"</div>
+                                    <div class="step-arrow">→</div>
+                                </div>
+                                <div class="chain-step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">检索策略：优先使用时间线引擎</div>
+                                    <div class="step-arrow">→</div>
+                                </div>
+                                <div class="chain-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">宽召回：并行查询3个引擎，召回15条</div>
+                                    <div class="step-arrow">→</div>
+                                </div>
+                                <div class="chain-step">
+                                    <div class="step-number">4</div>
+                                    <div class="step-content">重排序：基于时效性+相关性排序</div>
+                                    <div class="step-arrow">→</div>
+                                </div>
+                                <div class="chain-step">
+                                    <div class="step-number">5</div>
+                                    <div class="step-content">隐私脱敏：三层检测+九层过滤</div>
+                                    <div class="step-arrow">→</div>
+                                </div>
+                                <div class="chain-step">
+                                    <div class="step-number">6</div>
+                                    <div class="step-content">返回结果：Top-5记录（已脱敏）</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">安全审计</div>
+                            <div class="section-content">
+                                <span class="tag tag-success">身份验证通过</span>
+                                <span class="tag tag-success">权限检查通过</span>
+                                <span class="tag tag-success">数据隔离验证</span>
+                                <span class="tag tag-success">脱敏处理完成</span>
+                            </div>
+                        </div>
+
+                        <div class="hash-display">
+                            区块链哈希: 0x7f9a8b3c2d1e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a
+                        </div>
+                    </div>
+
+                    <!-- 审计记录2 -->
+                    <div class="audit-record">
+                        <div class="record-header">
+                            <div class="record-id">审计ID: AUD-20240523-002</div>
+                            <div class="record-time">2024-05-23 14:35:42</div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">基础信息</div>
+                            <div class="section-content">
+                                <strong>用户：</strong>李护工 (UID: caregiver_005)<br>
+                                <strong>操作：</strong>生成护理日志<br>
+                                <strong>IP地址：</strong>192.168.1.105<br>
+                                <strong>设备：</strong>Mobile Safari / iOS 17.4
+                            </div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">处理明细</div>
+                            <div class="section-content">
+                                <strong>输入：</strong>口语化护理记录（156字）<br>
+                                <strong>PCCM处理：</strong>因果纠偏 + 逻辑重构<br>
+                                <strong>输出：</strong>标准护理日志（328字）<br>
+                                <span class="tag tag-success">生成成功</span>
+                                <span class="tag tag-info">结构化程度: 92%</span>
+                            </div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">安全审计</div>
+                            <div class="section-content">
+                                <span class="tag tag-success">角色权限验证</span>
+                                <span class="tag tag-warning">检测到敏感信息3处</span>
+                                <span class="tag tag-success">自动脱敏完成</span>
+                            </div>
+                        </div>
+
+                        <div class="hash-display">
+                            区块链哈希: 0x3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b
+                        </div>
+                    </div>
+
+                    <!-- 审计记录3 -->
+                    <div class="audit-record">
+                        <div class="record-header">
+                            <div class="record-id">审计ID: AUD-20240523-003</div>
+                            <div class="record-time">2024-05-23 14:38:19</div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">基础信息</div>
+                            <div class="section-content">
+                                <strong>用户：</strong>王医生 (UID: doctor_012)<br>
+                                <strong>操作：</strong>访问患者病历<br>
+                                <strong>IP地址：</strong>10.0.2.50<br>
+                                <strong>设备：</strong>Edge 122.0 / Windows 10
+                            </div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">访问明细</div>
+                            <div class="section-content">
+                                <strong>患者：</strong>张奶奶 (PID: patient_089)<br>
+                                <strong>访问内容：</strong>完整病历档案<br>
+                                <strong>数据量：</strong>23条记录，5份报告<br>
+                                <span class="tag tag-success">访问授权</span>
+                                <span class="tag tag-info">医患关系验证</span>
+                            </div>
+                        </div>
+
+                        <div class="record-section">
+                            <div class="section-title">安全审计</div>
+                            <div class="section-content">
+                                <span class="tag tag-success">医生资质验证</span>
+                                <span class="tag tag-success">访问权限确认</span>
+                                <span class="tag tag-success">数据完整性校验</span>
+                                <span class="tag tag-success">加密传输TLS 1.3</span>
+                            </div>
+                        </div>
+
+                        <div class="hash-display">
+                            区块链哈希: 0x5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：统计与导出 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <div class="panel-icon">📊</div>
+                        审计统计
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">今日审计记录</div>
+                            <div class="stat-value">1,247</div>
+                            <div class="stat-desc">较昨日 +12.3%</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-label">审计覆盖率</div>
+                            <div class="stat-value">100%</div>
+                            <div class="stat-desc">全链路可追溯</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-label">异常操作拦截</div>
+                            <div class="stat-value">23</div>
+                            <div class="stat-desc">安全防护生效</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-label">区块链存证</div>
+                            <div class="stat-value">1,247</div>
+                            <div class="stat-desc">不可篡改保证</div>
+                        </div>
+                    </div>
+
+                    <div class="blockchain-badge">
+                        <div class="blockchain-icon">⛓️</div>
+                        <div class="blockchain-text">
+                            <div class="blockchain-title">区块链存证技术</div>
+                            <div class="blockchain-desc">司法级证据链，防篡改保证</div>
+                        </div>
+                    </div>
+
+                    <div class="export-section">
+                        <div style="font-size: 14px; font-weight: 700; color: #2c3e50; margin-bottom: 15px;">导出功能</div>
+                        <button class="export-btn">
+                            📄 导出PDF报告
+                        </button>
+                        <button class="export-btn" style="background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);">
+                            📊 导出Excel表格
+                        </button>
+                        <button class="export-btn" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);">
+                            🔗 导出区块链证书
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <div style="font-size: 14px; font-weight: 700; color: #2c3e50; margin-bottom: 15px;">核心特性</div>
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">🔍</div>
+                                <div class="feature-content">
+                                    <div class="feature-title">全链路追溯</div>
+                                    <div class="feature-desc">从用户请求到AI决策全程记录</div>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🔒</div>
+                                <div class="feature-content">
+                                    <div class="feature-title">不可篡改</div>
+                                    <div class="feature-desc">区块链存证，司法级证据链</div>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">⚡</div>
+                                <div class="feature-content">
+                                    <div class="feature-title">实时监控</div>
+                                    <div class="feature-desc">异常操作即时告警与拦截</div>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">📈</div>
+                                <div class="feature-content">
+                                    <div class="feature-title">合规报告</div>
+                                    <div class="feature-desc">自动生成医疗行业审计报告</div>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🎯</div>
+                                <div class="feature-content">
+                                    <div class="feature-title">精准溯源</div>
+                                    <div class="feature-desc">AI决策每一步都可追溯验证</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,3686 @@
+[
+  {
+    "elder_id": "elder_001",
+    "name": "杨勇",
+    "gender": "男",
+    "age": 76,
+    "birth_year": 1950,
+    "bed_number": "215A",
+    "admission_date": "2025-11-29",
+    "chronic_diseases": [
+      "骨质疏松",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "杨明",
+      "relationship": "女儿",
+      "phone": "13991068170"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_002",
+    "name": "赵磊",
+    "gender": "男",
+    "age": 71,
+    "birth_year": 1955,
+    "bed_number": "417A",
+    "admission_date": "2025-09-30",
+    "chronic_diseases": [
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "赵明",
+      "relationship": "儿子",
+      "phone": "13998996606"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_003",
+    "name": "吴玲",
+    "gender": "女",
+    "age": 70,
+    "birth_year": 1956,
+    "bed_number": "411B",
+    "admission_date": "2025-08-26",
+    "chronic_diseases": [
+      "高血压",
+      "骨质疏松",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "吴华",
+      "relationship": "儿子",
+      "phone": "13943861717"
+    },
+    "care_level": "一级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_004",
+    "name": "赵鹏",
+    "gender": "男",
+    "age": 91,
+    "birth_year": 1935,
+    "bed_number": "413A",
+    "admission_date": "2026-04-28",
+    "chronic_diseases": [
+      "高血压",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "赵明",
+      "relationship": "侄子",
+      "phone": "13917364891"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_005",
+    "name": "赵玲",
+    "gender": "女",
+    "age": 92,
+    "birth_year": 1934,
+    "bed_number": "515B",
+    "admission_date": "2026-03-26",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "赵华",
+      "relationship": "侄女",
+      "phone": "13988844489"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_006",
+    "name": "吴军",
+    "gender": "男",
+    "age": 83,
+    "birth_year": 1943,
+    "bed_number": "510A",
+    "admission_date": "2026-05-30",
+    "chronic_diseases": [
+      "糖尿病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "吴明",
+      "relationship": "侄女",
+      "phone": "13982073294"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_007",
+    "name": "周建国",
+    "gender": "男",
+    "age": 93,
+    "birth_year": 1933,
+    "bed_number": "307B",
+    "admission_date": "2025-08-11",
+    "chronic_diseases": [
+      "糖尿病",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "周明",
+      "relationship": "女儿",
+      "phone": "13972375156"
+    },
+    "care_level": "三级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_008",
+    "name": "周军",
+    "gender": "男",
+    "age": 74,
+    "birth_year": 1952,
+    "bed_number": "201B",
+    "admission_date": "2025-10-04",
+    "chronic_diseases": [
+      "冠心病",
+      "骨质疏松",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "周明",
+      "relationship": "儿子",
+      "phone": "13980733433"
+    },
+    "care_level": "一级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_009",
+    "name": "黄伟",
+    "gender": "男",
+    "age": 81,
+    "birth_year": 1945,
+    "bed_number": "503A",
+    "admission_date": "2025-10-09",
+    "chronic_diseases": [
+      "骨质疏松",
+      "阿尔茨海默病",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "黄明",
+      "relationship": "侄女",
+      "phone": "13921292458"
+    },
+    "care_level": "一级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_010",
+    "name": "黄伟",
+    "gender": "男",
+    "age": 93,
+    "birth_year": 1933,
+    "bed_number": "303A",
+    "admission_date": "2025-11-27",
+    "chronic_diseases": [
+      "糖尿病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "黄明",
+      "relationship": "女儿",
+      "phone": "13924105339"
+    },
+    "care_level": "一级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_011",
+    "name": "周建国",
+    "gender": "男",
+    "age": 74,
+    "birth_year": 1952,
+    "bed_number": "312B",
+    "admission_date": "2025-09-25",
+    "chronic_diseases": [
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "周明",
+      "relationship": "侄女",
+      "phone": "13960061695"
+    },
+    "care_level": "三级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_012",
+    "name": "陈华",
+    "gender": "女",
+    "age": 76,
+    "birth_year": 1950,
+    "bed_number": "416B",
+    "admission_date": "2025-10-28",
+    "chronic_diseases": [
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "陈华",
+      "relationship": "侄女",
+      "phone": "13987652369"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_013",
+    "name": "吴志强",
+    "gender": "男",
+    "age": 81,
+    "birth_year": 1945,
+    "bed_number": "218B",
+    "admission_date": "2026-01-25",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "糖尿病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "吴明",
+      "relationship": "儿子",
+      "phone": "13934036909"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_014",
+    "name": "陈桂英",
+    "gender": "女",
+    "age": 84,
+    "birth_year": 1942,
+    "bed_number": "303A",
+    "admission_date": "2025-11-20",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "冠心病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "陈华",
+      "relationship": "儿子",
+      "phone": "13930208963"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_015",
+    "name": "李静",
+    "gender": "女",
+    "age": 82,
+    "birth_year": 1944,
+    "bed_number": "512A",
+    "admission_date": "2025-07-16",
+    "chronic_diseases": [
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "李华",
+      "relationship": "侄子",
+      "phone": "13997175588"
+    },
+    "care_level": "一级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_016",
+    "name": "刘华",
+    "gender": "女",
+    "age": 94,
+    "birth_year": 1932,
+    "bed_number": "519B",
+    "admission_date": "2026-05-16",
+    "chronic_diseases": [
+      "骨质疏松",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "刘华",
+      "relationship": "女儿",
+      "phone": "13941607019"
+    },
+    "care_level": "三级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_017",
+    "name": "周丽",
+    "gender": "女",
+    "age": 88,
+    "birth_year": 1938,
+    "bed_number": "311B",
+    "admission_date": "2025-09-28",
+    "chronic_diseases": [
+      "高血压",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "周华",
+      "relationship": "儿子",
+      "phone": "13961181901"
+    },
+    "care_level": "三级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_018",
+    "name": "黄玲",
+    "gender": "女",
+    "age": 94,
+    "birth_year": 1932,
+    "bed_number": "509B",
+    "admission_date": "2025-12-09",
+    "chronic_diseases": [
+      "骨质疏松",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "黄华",
+      "relationship": "侄子",
+      "phone": "13991485751"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_019",
+    "name": "王勇",
+    "gender": "男",
+    "age": 95,
+    "birth_year": 1931,
+    "bed_number": "512B",
+    "admission_date": "2026-05-01",
+    "chronic_diseases": [
+      "冠心病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "王明",
+      "relationship": "侄女",
+      "phone": "13912976939"
+    },
+    "care_level": "三级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_020",
+    "name": "周玲",
+    "gender": "女",
+    "age": 73,
+    "birth_year": 1953,
+    "bed_number": "312A",
+    "admission_date": "2026-05-03",
+    "chronic_diseases": [
+      "高血压",
+      "骨质疏松",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "周华",
+      "relationship": "女儿",
+      "phone": "13946526843"
+    },
+    "care_level": "一级护理",
+    "mobility": "卧床",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_021",
+    "name": "王国强",
+    "gender": "男",
+    "age": 70,
+    "birth_year": 1956,
+    "bed_number": "209B",
+    "admission_date": "2026-03-09",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "冠心病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "王明",
+      "relationship": "儿子",
+      "phone": "13986558856"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_022",
+    "name": "刘玲",
+    "gender": "女",
+    "age": 92,
+    "birth_year": 1934,
+    "bed_number": "315A",
+    "admission_date": "2025-10-18",
+    "chronic_diseases": [
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "刘华",
+      "relationship": "儿子",
+      "phone": "13959072549"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_023",
+    "name": "吴磊",
+    "gender": "男",
+    "age": 89,
+    "birth_year": 1937,
+    "bed_number": "206B",
+    "admission_date": "2026-04-26",
+    "chronic_diseases": [
+      "糖尿病",
+      "冠心病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "吴明",
+      "relationship": "侄子",
+      "phone": "13972388154"
+    },
+    "care_level": "三级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_024",
+    "name": "周红",
+    "gender": "女",
+    "age": 73,
+    "birth_year": 1953,
+    "bed_number": "409A",
+    "admission_date": "2026-05-31",
+    "chronic_diseases": [
+      "冠心病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "周华",
+      "relationship": "女儿",
+      "phone": "13918346292"
+    },
+    "care_level": "三级护理",
+    "mobility": "卧床",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_025",
+    "name": "李国强",
+    "gender": "男",
+    "age": 70,
+    "birth_year": 1956,
+    "bed_number": "414B",
+    "admission_date": "2026-02-05",
+    "chronic_diseases": [
+      "糖尿病",
+      "阿尔茨海默病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "李明",
+      "relationship": "儿子",
+      "phone": "13949855306"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_026",
+    "name": "杨建国",
+    "gender": "男",
+    "age": 87,
+    "birth_year": 1939,
+    "bed_number": "310A",
+    "admission_date": "2025-10-17",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "杨明",
+      "relationship": "儿子",
+      "phone": "13975133097"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_027",
+    "name": "杨军",
+    "gender": "男",
+    "age": 86,
+    "birth_year": 1940,
+    "bed_number": "219A",
+    "admission_date": "2025-07-25",
+    "chronic_diseases": [
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "杨明",
+      "relationship": "侄子",
+      "phone": "13954398867"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_028",
+    "name": "李明",
+    "gender": "男",
+    "age": 82,
+    "birth_year": 1944,
+    "bed_number": "401A",
+    "admission_date": "2025-10-27",
+    "chronic_diseases": [
+      "骨质疏松",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "李明",
+      "relationship": "儿子",
+      "phone": "13955908638"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_029",
+    "name": "吴鹏",
+    "gender": "男",
+    "age": 89,
+    "birth_year": 1937,
+    "bed_number": "217A",
+    "admission_date": "2026-04-05",
+    "chronic_diseases": [
+      "骨质疏松",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "吴明",
+      "relationship": "女儿",
+      "phone": "13929301941"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_030",
+    "name": "吴鹏",
+    "gender": "男",
+    "age": 70,
+    "birth_year": 1956,
+    "bed_number": "210A",
+    "admission_date": "2026-02-22",
+    "chronic_diseases": [
+      "高血压",
+      "骨质疏松",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "吴明",
+      "relationship": "侄女",
+      "phone": "13930367080"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_031",
+    "name": "吴志强",
+    "gender": "男",
+    "age": 72,
+    "birth_year": 1954,
+    "bed_number": "204B",
+    "admission_date": "2025-12-25",
+    "chronic_diseases": [
+      "高血压",
+      "糖尿病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "吴明",
+      "relationship": "侄子",
+      "phone": "13959935061"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_032",
+    "name": "黄丽",
+    "gender": "女",
+    "age": 93,
+    "birth_year": 1933,
+    "bed_number": "317B",
+    "admission_date": "2026-05-04",
+    "chronic_diseases": [
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "黄华",
+      "relationship": "侄女",
+      "phone": "13934161646"
+    },
+    "care_level": "三级护理",
+    "mobility": "卧床",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_033",
+    "name": "赵志强",
+    "gender": "男",
+    "age": 93,
+    "birth_year": 1933,
+    "bed_number": "206B",
+    "admission_date": "2025-10-05",
+    "chronic_diseases": [
+      "高血压",
+      "骨质疏松",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "赵明",
+      "relationship": "侄女",
+      "phone": "13982731917"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_034",
+    "name": "吴红",
+    "gender": "女",
+    "age": 82,
+    "birth_year": 1944,
+    "bed_number": "406B",
+    "admission_date": "2025-08-20",
+    "chronic_diseases": [
+      "糖尿病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "吴华",
+      "relationship": "侄女",
+      "phone": "13952678193"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_035",
+    "name": "陈秀英",
+    "gender": "女",
+    "age": 93,
+    "birth_year": 1933,
+    "bed_number": "414B",
+    "admission_date": "2025-09-27",
+    "chronic_diseases": [
+      "高血压",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "陈华",
+      "relationship": "侄子",
+      "phone": "13940495732"
+    },
+    "care_level": "一级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_036",
+    "name": "黄红",
+    "gender": "女",
+    "age": 76,
+    "birth_year": 1950,
+    "bed_number": "204A",
+    "admission_date": "2025-12-06",
+    "chronic_diseases": [
+      "糖尿病",
+      "阿尔茨海默病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "黄华",
+      "relationship": "侄女",
+      "phone": "13932024642"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_037",
+    "name": "李静",
+    "gender": "女",
+    "age": 80,
+    "birth_year": 1946,
+    "bed_number": "202B",
+    "admission_date": "2025-07-13",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "高血压",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "李华",
+      "relationship": "侄子",
+      "phone": "13985768594"
+    },
+    "care_level": "三级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_038",
+    "name": "周建国",
+    "gender": "男",
+    "age": 87,
+    "birth_year": 1939,
+    "bed_number": "309B",
+    "admission_date": "2025-09-23",
+    "chronic_diseases": [
+      "骨质疏松",
+      "冠心病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "周明",
+      "relationship": "儿子",
+      "phone": "13949398991"
+    },
+    "care_level": "三级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_039",
+    "name": "赵玲",
+    "gender": "女",
+    "age": 95,
+    "birth_year": 1931,
+    "bed_number": "206A",
+    "admission_date": "2025-12-04",
+    "chronic_diseases": [
+      "骨质疏松",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "赵华",
+      "relationship": "侄女",
+      "phone": "13972884838"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_040",
+    "name": "陈娟",
+    "gender": "女",
+    "age": 87,
+    "birth_year": 1939,
+    "bed_number": "218A",
+    "admission_date": "2026-01-27",
+    "chronic_diseases": [
+      "冠心病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "陈华",
+      "relationship": "女儿",
+      "phone": "13926702579"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_041",
+    "name": "杨红",
+    "gender": "女",
+    "age": 70,
+    "birth_year": 1956,
+    "bed_number": "319B",
+    "admission_date": "2025-09-07",
+    "chronic_diseases": [
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "杨华",
+      "relationship": "儿子",
+      "phone": "13948936604"
+    },
+    "care_level": "一级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_042",
+    "name": "黄勇",
+    "gender": "男",
+    "age": 84,
+    "birth_year": 1942,
+    "bed_number": "217B",
+    "admission_date": "2025-11-24",
+    "chronic_diseases": [
+      "冠心病",
+      "糖尿病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "黄明",
+      "relationship": "儿子",
+      "phone": "13940622925"
+    },
+    "care_level": "三级护理",
+    "mobility": "卧床",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_043",
+    "name": "吴丽",
+    "gender": "女",
+    "age": 72,
+    "birth_year": 1954,
+    "bed_number": "409B",
+    "admission_date": "2025-12-27",
+    "chronic_diseases": [
+      "骨质疏松",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "吴华",
+      "relationship": "侄子",
+      "phone": "13952659412"
+    },
+    "care_level": "三级护理",
+    "mobility": "卧床",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_044",
+    "name": "赵丽",
+    "gender": "女",
+    "age": 95,
+    "birth_year": 1931,
+    "bed_number": "216B",
+    "admission_date": "2025-08-10",
+    "chronic_diseases": [
+      "冠心病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "赵华",
+      "relationship": "女儿",
+      "phone": "13985556860"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_045",
+    "name": "李勇",
+    "gender": "男",
+    "age": 83,
+    "birth_year": 1943,
+    "bed_number": "520B",
+    "admission_date": "2025-07-17",
+    "chronic_diseases": [
+      "骨质疏松",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "李明",
+      "relationship": "女儿",
+      "phone": "13964655707"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_046",
+    "name": "刘志强",
+    "gender": "男",
+    "age": 81,
+    "birth_year": 1945,
+    "bed_number": "303A",
+    "admission_date": "2025-12-03",
+    "chronic_diseases": [
+      "骨质疏松",
+      "糖尿病",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "刘明",
+      "relationship": "女儿",
+      "phone": "13937878329"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_047",
+    "name": "王桂英",
+    "gender": "女",
+    "age": 85,
+    "birth_year": 1941,
+    "bed_number": "208B",
+    "admission_date": "2026-03-27",
+    "chronic_diseases": [
+      "高血压",
+      "阿尔茨海默病",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "王华",
+      "relationship": "女儿",
+      "phone": "13917866716"
+    },
+    "care_level": "三级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_048",
+    "name": "周丽",
+    "gender": "女",
+    "age": 91,
+    "birth_year": 1935,
+    "bed_number": "410A",
+    "admission_date": "2026-04-19",
+    "chronic_diseases": [
+      "高血压",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "周华",
+      "relationship": "女儿",
+      "phone": "13918365054"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_049",
+    "name": "周丽",
+    "gender": "女",
+    "age": 81,
+    "birth_year": 1945,
+    "bed_number": "320B",
+    "admission_date": "2025-07-25",
+    "chronic_diseases": [
+      "糖尿病",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "周华",
+      "relationship": "侄女",
+      "phone": "13998804709"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_050",
+    "name": "王桂英",
+    "gender": "女",
+    "age": 74,
+    "birth_year": 1952,
+    "bed_number": "308A",
+    "admission_date": "2026-01-05",
+    "chronic_diseases": [
+      "糖尿病",
+      "阿尔茨海默病",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "王华",
+      "relationship": "儿子",
+      "phone": "13943601096"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_051",
+    "name": "吴涛",
+    "gender": "男",
+    "age": 91,
+    "birth_year": 1935,
+    "bed_number": "516B",
+    "admission_date": "2025-07-24",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "高血压",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "吴明",
+      "relationship": "侄女",
+      "phone": "13975105863"
+    },
+    "care_level": "三级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_052",
+    "name": "赵军",
+    "gender": "男",
+    "age": 91,
+    "birth_year": 1935,
+    "bed_number": "310A",
+    "admission_date": "2026-01-02",
+    "chronic_diseases": [
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "赵明",
+      "relationship": "侄子",
+      "phone": "13942344926"
+    },
+    "care_level": "一级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_053",
+    "name": "黄娟",
+    "gender": "女",
+    "age": 76,
+    "birth_year": 1950,
+    "bed_number": "419A",
+    "admission_date": "2025-10-08",
+    "chronic_diseases": [
+      "高血压",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "黄华",
+      "relationship": "侄子",
+      "phone": "13964778514"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_054",
+    "name": "陈明",
+    "gender": "男",
+    "age": 85,
+    "birth_year": 1941,
+    "bed_number": "517B",
+    "admission_date": "2025-07-15",
+    "chronic_diseases": [
+      "骨质疏松",
+      "阿尔茨海默病",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "陈明",
+      "relationship": "侄子",
+      "phone": "13964601980"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_055",
+    "name": "赵军",
+    "gender": "男",
+    "age": 92,
+    "birth_year": 1934,
+    "bed_number": "302A",
+    "admission_date": "2025-12-03",
+    "chronic_diseases": [
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "赵明",
+      "relationship": "侄子",
+      "phone": "13971154695"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_056",
+    "name": "赵娟",
+    "gender": "女",
+    "age": 84,
+    "birth_year": 1942,
+    "bed_number": "401A",
+    "admission_date": "2025-12-20",
+    "chronic_diseases": [
+      "糖尿病",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "赵华",
+      "relationship": "女儿",
+      "phone": "13973933010"
+    },
+    "care_level": "三级护理",
+    "mobility": "卧床",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_057",
+    "name": "张敏",
+    "gender": "女",
+    "age": 91,
+    "birth_year": 1935,
+    "bed_number": "413B",
+    "admission_date": "2025-08-08",
+    "chronic_diseases": [
+      "糖尿病",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "张华",
+      "relationship": "侄女",
+      "phone": "13965395301"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_058",
+    "name": "刘涛",
+    "gender": "男",
+    "age": 91,
+    "birth_year": 1935,
+    "bed_number": "219B",
+    "admission_date": "2025-10-02",
+    "chronic_diseases": [
+      "骨质疏松",
+      "糖尿病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "刘明",
+      "relationship": "儿子",
+      "phone": "13939055655"
+    },
+    "care_level": "三级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_059",
+    "name": "周志强",
+    "gender": "男",
+    "age": 77,
+    "birth_year": 1949,
+    "bed_number": "309A",
+    "admission_date": "2025-09-12",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "周明",
+      "relationship": "儿子",
+      "phone": "13992852724"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_060",
+    "name": "赵丽",
+    "gender": "女",
+    "age": 77,
+    "birth_year": 1949,
+    "bed_number": "319B",
+    "admission_date": "2026-01-15",
+    "chronic_diseases": [
+      "高血压",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "赵华",
+      "relationship": "儿子",
+      "phone": "13978939989"
+    },
+    "care_level": "三级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_061",
+    "name": "吴鹏",
+    "gender": "男",
+    "age": 90,
+    "birth_year": 1936,
+    "bed_number": "312A",
+    "admission_date": "2025-12-08",
+    "chronic_diseases": [
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "吴明",
+      "relationship": "侄女",
+      "phone": "13935151768"
+    },
+    "care_level": "三级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_062",
+    "name": "张敏",
+    "gender": "女",
+    "age": 80,
+    "birth_year": 1946,
+    "bed_number": "309A",
+    "admission_date": "2025-12-03",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "张华",
+      "relationship": "侄女",
+      "phone": "13933904166"
+    },
+    "care_level": "三级护理",
+    "mobility": "卧床",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_063",
+    "name": "杨建国",
+    "gender": "男",
+    "age": 86,
+    "birth_year": 1940,
+    "bed_number": "313B",
+    "admission_date": "2026-02-16",
+    "chronic_diseases": [
+      "糖尿病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "杨明",
+      "relationship": "侄女",
+      "phone": "13931263376"
+    },
+    "care_level": "一级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_064",
+    "name": "吴华",
+    "gender": "女",
+    "age": 83,
+    "birth_year": 1943,
+    "bed_number": "304B",
+    "admission_date": "2026-02-14",
+    "chronic_diseases": [
+      "糖尿病",
+      "阿尔茨海默病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "吴华",
+      "relationship": "侄子",
+      "phone": "13913601801"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_065",
+    "name": "王红",
+    "gender": "女",
+    "age": 85,
+    "birth_year": 1941,
+    "bed_number": "305A",
+    "admission_date": "2026-01-10",
+    "chronic_diseases": [
+      "骨质疏松",
+      "阿尔茨海默病",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "王华",
+      "relationship": "女儿",
+      "phone": "13927939282"
+    },
+    "care_level": "一级护理",
+    "mobility": "卧床",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_066",
+    "name": "杨娟",
+    "gender": "女",
+    "age": 87,
+    "birth_year": 1939,
+    "bed_number": "210B",
+    "admission_date": "2026-02-05",
+    "chronic_diseases": [
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "杨华",
+      "relationship": "侄子",
+      "phone": "13921841450"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_067",
+    "name": "黄明",
+    "gender": "男",
+    "age": 72,
+    "birth_year": 1954,
+    "bed_number": "212A",
+    "admission_date": "2026-02-24",
+    "chronic_diseases": [
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "黄明",
+      "relationship": "女儿",
+      "phone": "13960579481"
+    },
+    "care_level": "一级护理",
+    "mobility": "卧床",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_068",
+    "name": "李敏",
+    "gender": "女",
+    "age": 76,
+    "birth_year": 1950,
+    "bed_number": "320B",
+    "admission_date": "2026-04-14",
+    "chronic_diseases": [
+      "糖尿病",
+      "阿尔茨海默病",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "李华",
+      "relationship": "女儿",
+      "phone": "13919853724"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_069",
+    "name": "黄秀英",
+    "gender": "女",
+    "age": 85,
+    "birth_year": 1941,
+    "bed_number": "411A",
+    "admission_date": "2025-12-01",
+    "chronic_diseases": [
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "黄华",
+      "relationship": "女儿",
+      "phone": "13992258370"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_070",
+    "name": "黄静",
+    "gender": "女",
+    "age": 86,
+    "birth_year": 1940,
+    "bed_number": "306A",
+    "admission_date": "2025-07-21",
+    "chronic_diseases": [
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "黄华",
+      "relationship": "侄子",
+      "phone": "13932689816"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_071",
+    "name": "王秀英",
+    "gender": "女",
+    "age": 74,
+    "birth_year": 1952,
+    "bed_number": "218B",
+    "admission_date": "2026-04-17",
+    "chronic_diseases": [
+      "糖尿病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "王华",
+      "relationship": "侄子",
+      "phone": "13917817750"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_072",
+    "name": "黄磊",
+    "gender": "男",
+    "age": 71,
+    "birth_year": 1955,
+    "bed_number": "504B",
+    "admission_date": "2026-01-19",
+    "chronic_diseases": [
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "黄明",
+      "relationship": "儿子",
+      "phone": "13970651914"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_073",
+    "name": "李玲",
+    "gender": "女",
+    "age": 91,
+    "birth_year": 1935,
+    "bed_number": "519B",
+    "admission_date": "2026-01-11",
+    "chronic_diseases": [
+      "高血压",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "李华",
+      "relationship": "侄子",
+      "phone": "13944977516"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_074",
+    "name": "赵红",
+    "gender": "女",
+    "age": 95,
+    "birth_year": 1931,
+    "bed_number": "320A",
+    "admission_date": "2025-09-29",
+    "chronic_diseases": [
+      "骨质疏松",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "赵华",
+      "relationship": "侄子",
+      "phone": "13920011459"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_075",
+    "name": "李志强",
+    "gender": "男",
+    "age": 85,
+    "birth_year": 1941,
+    "bed_number": "407B",
+    "admission_date": "2025-07-28",
+    "chronic_diseases": [
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "李明",
+      "relationship": "侄女",
+      "phone": "13939670776"
+    },
+    "care_level": "三级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_076",
+    "name": "黄国强",
+    "gender": "男",
+    "age": 71,
+    "birth_year": 1955,
+    "bed_number": "405A",
+    "admission_date": "2025-07-13",
+    "chronic_diseases": [
+      "糖尿病",
+      "高血压",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "黄明",
+      "relationship": "女儿",
+      "phone": "13947825380"
+    },
+    "care_level": "一级护理",
+    "mobility": "卧床",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_077",
+    "name": "黄秀英",
+    "gender": "女",
+    "age": 78,
+    "birth_year": 1948,
+    "bed_number": "213A",
+    "admission_date": "2025-12-27",
+    "chronic_diseases": [
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "黄华",
+      "relationship": "女儿",
+      "phone": "13970368869"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_078",
+    "name": "黄芳",
+    "gender": "女",
+    "age": 92,
+    "birth_year": 1934,
+    "bed_number": "302B",
+    "admission_date": "2026-05-16",
+    "chronic_diseases": [
+      "冠心病",
+      "骨质疏松",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "黄华",
+      "relationship": "女儿",
+      "phone": "13921450130"
+    },
+    "care_level": "三级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_079",
+    "name": "杨秀英",
+    "gender": "女",
+    "age": 75,
+    "birth_year": 1951,
+    "bed_number": "502A",
+    "admission_date": "2026-05-05",
+    "chronic_diseases": [
+      "骨质疏松",
+      "高血压",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "杨华",
+      "relationship": "女儿",
+      "phone": "13961204483"
+    },
+    "care_level": "一级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_080",
+    "name": "王明",
+    "gender": "男",
+    "age": 88,
+    "birth_year": 1938,
+    "bed_number": "504A",
+    "admission_date": "2025-07-07",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "糖尿病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "王明",
+      "relationship": "侄子",
+      "phone": "13969075647"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_081",
+    "name": "赵红",
+    "gender": "女",
+    "age": 79,
+    "birth_year": 1947,
+    "bed_number": "507B",
+    "admission_date": "2026-01-30",
+    "chronic_diseases": [
+      "骨质疏松",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "赵华",
+      "relationship": "儿子",
+      "phone": "13971412698"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_082",
+    "name": "李娟",
+    "gender": "女",
+    "age": 73,
+    "birth_year": 1953,
+    "bed_number": "312A",
+    "admission_date": "2025-12-09",
+    "chronic_diseases": [
+      "糖尿病",
+      "阿尔茨海默病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "李华",
+      "relationship": "女儿",
+      "phone": "13920554169"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_083",
+    "name": "刘桂英",
+    "gender": "女",
+    "age": 84,
+    "birth_year": 1942,
+    "bed_number": "403A",
+    "admission_date": "2026-01-04",
+    "chronic_diseases": [
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "刘华",
+      "relationship": "侄子",
+      "phone": "13923154525"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_084",
+    "name": "杨桂英",
+    "gender": "女",
+    "age": 94,
+    "birth_year": 1932,
+    "bed_number": "204B",
+    "admission_date": "2025-11-13",
+    "chronic_diseases": [
+      "骨质疏松",
+      "高血压",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "杨华",
+      "relationship": "侄子",
+      "phone": "13911951606"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_085",
+    "name": "王磊",
+    "gender": "男",
+    "age": 90,
+    "birth_year": 1936,
+    "bed_number": "404A",
+    "admission_date": "2025-08-04",
+    "chronic_diseases": [
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "王明",
+      "relationship": "儿子",
+      "phone": "13956650374"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_086",
+    "name": "张志强",
+    "gender": "男",
+    "age": 74,
+    "birth_year": 1952,
+    "bed_number": "201A",
+    "admission_date": "2025-07-18",
+    "chronic_diseases": [
+      "冠心病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "磺胺类",
+    "emergency_contact": {
+      "name": "张明",
+      "relationship": "侄子",
+      "phone": "13948714452"
+    },
+    "care_level": "二级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_087",
+    "name": "陈志强",
+    "gender": "男",
+    "age": 80,
+    "birth_year": 1946,
+    "bed_number": "212B",
+    "admission_date": "2026-04-09",
+    "chronic_diseases": [
+      "阿尔茨海默病",
+      "冠心病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "陈明",
+      "relationship": "侄女",
+      "phone": "13936376379"
+    },
+    "care_level": "三级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_088",
+    "name": "王丽",
+    "gender": "女",
+    "age": 84,
+    "birth_year": 1942,
+    "bed_number": "208A",
+    "admission_date": "2026-04-02",
+    "chronic_diseases": [
+      "骨质疏松",
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "王华",
+      "relationship": "侄子",
+      "phone": "13960109192"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_089",
+    "name": "周秀英",
+    "gender": "女",
+    "age": 78,
+    "birth_year": 1948,
+    "bed_number": "306B",
+    "admission_date": "2025-09-14",
+    "chronic_diseases": [
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "周华",
+      "relationship": "侄女",
+      "phone": "13952642268"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_090",
+    "name": "周明",
+    "gender": "男",
+    "age": 95,
+    "birth_year": 1931,
+    "bed_number": "208A",
+    "admission_date": "2025-12-08",
+    "chronic_diseases": [
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "周明",
+      "relationship": "女儿",
+      "phone": "13931220196"
+    },
+    "care_level": "一级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_091",
+    "name": "李秀英",
+    "gender": "女",
+    "age": 83,
+    "birth_year": 1943,
+    "bed_number": "413A",
+    "admission_date": "2025-08-24",
+    "chronic_diseases": [
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "李华",
+      "relationship": "儿子",
+      "phone": "13937367132"
+    },
+    "care_level": "三级护理",
+    "mobility": "卧床",
+    "cognitive_status": "重度认知障碍"
+  },
+  {
+    "elder_id": "elder_092",
+    "name": "李鹏",
+    "gender": "男",
+    "age": 83,
+    "birth_year": 1943,
+    "bed_number": "305B",
+    "admission_date": "2025-09-04",
+    "chronic_diseases": [
+      "冠心病",
+      "糖尿病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "李明",
+      "relationship": "女儿",
+      "phone": "13949704053"
+    },
+    "care_level": "二级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "正常"
+  },
+  {
+    "elder_id": "elder_093",
+    "name": "李伟",
+    "gender": "男",
+    "age": 90,
+    "birth_year": 1936,
+    "bed_number": "420A",
+    "admission_date": "2026-05-09",
+    "chronic_diseases": [
+      "冠心病",
+      "阿尔茨海默病",
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "李明",
+      "relationship": "侄子",
+      "phone": "13927829196"
+    },
+    "care_level": "三级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "中度认知障碍"
+  },
+  {
+    "elder_id": "elder_094",
+    "name": "赵涛",
+    "gender": "男",
+    "age": 78,
+    "birth_year": 1948,
+    "bed_number": "504A",
+    "admission_date": "2026-02-26",
+    "chronic_diseases": [
+      "冠心病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "赵明",
+      "relationship": "儿子",
+      "phone": "13930201304"
+    },
+    "care_level": "三级护理",
+    "mobility": "卧床",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_095",
+    "name": "李丽",
+    "gender": "女",
+    "age": 76,
+    "birth_year": 1950,
+    "bed_number": "419A",
+    "admission_date": "2026-01-01",
+    "chronic_diseases": [
+      "糖尿病",
+      "高血压",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "阿司匹林",
+    "emergency_contact": {
+      "name": "李华",
+      "relationship": "侄女",
+      "phone": "13914996271"
+    },
+    "care_level": "一级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_096",
+    "name": "杨红",
+    "gender": "女",
+    "age": 87,
+    "birth_year": 1939,
+    "bed_number": "203A",
+    "admission_date": "2025-10-02",
+    "chronic_diseases": [
+      "糖尿病",
+      "冠心病",
+      "骨质疏松"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "骨质疏松",
+        "medication": "阿仑膦酸钠",
+        "dosage": "70mg",
+        "frequency": "每周一次"
+      }
+    ],
+    "allergies": "碘造影剂",
+    "emergency_contact": {
+      "name": "杨华",
+      "relationship": "侄子",
+      "phone": "13947312523"
+    },
+    "care_level": "二级护理",
+    "mobility": "卧床",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_097",
+    "name": "杨鹏",
+    "gender": "男",
+    "age": 78,
+    "birth_year": 1948,
+    "bed_number": "505A",
+    "admission_date": "2026-01-14",
+    "chronic_diseases": [
+      "高血压",
+      "糖尿病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "青霉素",
+    "emergency_contact": {
+      "name": "杨明",
+      "relationship": "儿子",
+      "phone": "13955734318"
+    },
+    "care_level": "一级护理",
+    "mobility": "卧床",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_098",
+    "name": "王丽",
+    "gender": "女",
+    "age": 89,
+    "birth_year": 1937,
+    "bed_number": "215A",
+    "admission_date": "2025-12-30",
+    "chronic_diseases": [
+      "冠心病",
+      "高血压"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "高血压",
+        "medication": "硝苯地平缓释片",
+        "dosage": "30mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "王华",
+      "relationship": "儿子",
+      "phone": "13911261921"
+    },
+    "care_level": "二级护理",
+    "mobility": "行动自如",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_099",
+    "name": "赵敏",
+    "gender": "女",
+    "age": 84,
+    "birth_year": 1942,
+    "bed_number": "502B",
+    "admission_date": "2025-11-10",
+    "chronic_diseases": [
+      "冠心病",
+      "阿尔茨海默病"
+    ],
+    "medications": [
+      {
+        "name": "冠心病",
+        "medication": "阿司匹林",
+        "dosage": "100mg",
+        "frequency": "每日一次"
+      },
+      {
+        "name": "阿尔茨海默病",
+        "medication": "多奈哌齐",
+        "dosage": "10mg",
+        "frequency": "每日一次"
+      }
+    ],
+    "allergies": "无",
+    "emergency_contact": {
+      "name": "赵华",
+      "relationship": "女儿",
+      "phone": "13976071053"
+    },
+    "care_level": "三级护理",
+    "mobility": "需要辅助器具",
+    "cognitive_status": "轻度认知障碍"
+  },
+  {
+    "elder_id": "elder_100",
+    "name": "刘芳",
+    "gender": "女",
+    "age": 92,
+    "birth_year": 1934,
+    "bed_number": "507A",
+    "admission_date": "2025-12-12",
+    "chronic_diseases": [
+      "糖尿病"
+    ],
+    "medications": [
+      {
+        "name": "糖尿病",
+        "medication": "二甲双胍",
+        "dosage": "500mg",
+        "frequency": "每日两次"
+      }
+    ],
+    "allergies": "头孢",
+    "emergency_contact": {
+      "name": "刘华",
+      "relationship": "儿子",
+      "phone": "13929396323"
+    },
+    "care_level": "三级护理",
+    "mobility": "轮椅",
+    "cognitive_status": "轻度认知障碍"
+  }
+]

@@ -1,0 +1,222 @@
+{
+  "schema_version": 2,
+  "execution_mode": "live_api",
+  "timestamp_utc": "2026-07-17T15:27:22.745789+00:00",
+  "base_url": "http://127.0.0.1:8088",
+  "run_label": "causal_ompr_calibrated_smoke",
+  "case_file": "D:\\context\\context-keeper-main\\testdata\\causal_test_cases.json",
+  "case_file_sha256": "980ee6f93f8710d771156f33d97a0097451e4eaa2eaad4fb8fde349906528adf",
+  "requested_min_confidence": 0.01,
+  "api_contract": {
+    "login_endpoint": "/api/auth/login",
+    "extraction_endpoint": "/api/v1/causal/extract",
+    "authentication": "Bearer JWT"
+  },
+  "preflight": {
+    "health": "服务正常",
+    "authentication": {
+      "http_status": 200,
+      "error_type": null
+    }
+  },
+  "scoring": {
+    "dataset": "20 annotated O-M-P-R causal test cases",
+    "matching": "NFKC/case normalization plus whole-label containment; no semantic similarity model",
+    "business_metric_denominator": "only HTTP-successful, contract-valid responses",
+    "empty_relations": "valid business response scored as an extraction miss"
+  },
+  "detailed_results": [
+    {
+      "case_id": "TC001",
+      "run_label": "causal_ompr_calibrated_smoke",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 19135.497,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "李爷爷",
+        "mediator": "服用降压药",
+        "property": "体位性低血压",
+        "result": "在洗手间滑倒",
+        "confidence": 0.9476111111111111,
+        "rule_confidence": 0.95,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.907,
+        "evidence": [
+          "李爷爷服用降压药后出现体位性低血压，在洗手间滑倒"
+        ],
+        "timestamp": "2026-07-17T23:26:21.537294996+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": true,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": true,
+      "timestamp": "2026-07-17T23:26:21.736409"
+    },
+    {
+      "case_id": "TC002",
+      "run_label": "causal_ompr_calibrated_smoke",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 16154.661,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "王奶奶",
+        "mediator": "长期卧床",
+        "property": "肌肉萎缩",
+        "result": "双腿无力难以行走",
+        "confidence": 0.9395,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.9395,
+        "evidence": [
+          "因长期卧床，导致肌肉萎缩"
+        ],
+        "timestamp": "2026-07-17T23:26:37.801555088+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": true,
+      "confidence_threshold": 0.8,
+      "confidence_threshold_met": true,
+      "timestamp": "2026-07-17T23:26:37.892771"
+    },
+    {
+      "case_id": "TC003",
+      "run_label": "causal_ompr_calibrated_smoke",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 17471.904,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "张大爷",
+        "mediator": "糖尿病",
+        "property": "末梢神经病变",
+        "result": "足部溃疡",
+        "confidence": 0.8930000000000001,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.8930000000000001,
+        "evidence": [
+          "张大爷 糖尿病 导致 足部溃疡"
+        ],
+        "timestamp": "2026-07-17T23:26:55.262518753+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": true,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": true,
+      "timestamp": "2026-07-17T23:26:55.365288"
+    },
+    {
+      "case_id": "TC004",
+      "run_label": "causal_ompr_calibrated_smoke",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 13901.636999999999,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "刘奶奶",
+        "mediator": "高血压",
+        "property": "脑血管压力增高",
+        "result": "脑卒中",
+        "confidence": 0.907,
+        "rule_confidence": 0,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.907,
+        "evidence": [
+          "刘奶奶高血压未控制，脑血管压力增高引发脑卒中"
+        ],
+        "timestamp": "2026-07-17T23:27:09.13585267+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": true,
+      "confidence_threshold": 0.9,
+      "confidence_threshold_met": true,
+      "timestamp": "2026-07-17T23:27:09.267654"
+    },
+    {
+      "case_id": "TC005",
+      "run_label": "causal_ompr_calibrated_smoke",
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 13476.4,
+      "relation_count": 1,
+      "extracted": true,
+      "best_relation": {
+        "object": "赵爷爷",
+        "mediator": "服用安眠药",
+        "property": "意识模糊",
+        "result": "夜间跌倒受伤",
+        "confidence": 0.9195277777777778,
+        "rule_confidence": 0.92,
+        "pmi_confidence": 0,
+        "llm_confidence": 0.9115,
+        "evidence": [
+          "赵爷爷服用安眠药后，出现意识模糊"
+        ],
+        "timestamp": "2026-07-17T23:27:22.615008335+08:00"
+      },
+      "field_matches": {
+        "object": true,
+        "mediator": true,
+        "property": true,
+        "result": true
+      },
+      "tuple_match": true,
+      "confidence_threshold": 0.85,
+      "confidence_threshold_met": true,
+      "timestamp": "2026-07-17T23:27:22.745222"
+    }
+  ],
+  "metrics": {
+    "run_label": "causal_ompr_calibrated_smoke",
+    "total_samples": 5,
+    "api_success_count": 5,
+    "api_error_count": 0,
+    "relation_found_count": 5,
+    "tuple_match_count": 5,
+    "tuple_and_confidence_pass_count": 5,
+    "object_match_count": 5,
+    "mediator_match_count": 5,
+    "property_match_count": 5,
+    "result_match_count": 5,
+    "relation_found_rate": 1.0,
+    "tuple_accuracy": 1.0,
+    "tuple_and_confidence_accuracy": 1.0,
+    "object_accuracy": 1.0,
+    "mediator_accuracy": 1.0,
+    "property_accuracy": 1.0,
+    "result_accuracy": 1.0,
+    "avg_best_relation_confidence": 0.9213277777777777,
+    "avg_latency_ms": 16028.019799999998
+  }
+}

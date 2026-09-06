@@ -1,0 +1,58 @@
+# Baseline 1: 普通LLM配置（无任何安全防护）
+# 用于对照实验，证明安全模块的必要性
+
+name: "Baseline 1 - Vanilla LLM"
+description: "纯LLM，不接记忆库，不做任何安全检查"
+
+# LLM配置
+llm:
+  provider: "ollama"
+  model: "qwen2.5:7b"
+  base_url: "http://localhost:11434"
+  temperature: 0.7
+  max_tokens: 512
+
+# 关闭所有安全模块
+security:
+  # PCCM因果推理
+  pccm:
+    enabled: false
+
+  # CASIA上下文敏感识别
+  casia:
+    enabled: false
+
+  # ASDF对抗样本检测
+  asdf:
+    enabled: false
+
+  # 隐私检测与脱敏
+  privacy:
+    enabled: false
+    pii_detection: false
+    redaction: false
+
+  # RBAC权限控制
+  rbac:
+    enabled: false
+
+  # 审计日志
+  audit:
+    enabled: false
+
+# 关闭记忆检索
+memory:
+  enabled: false
+  vector_store:
+    enabled: false
+  knowledge_graph:
+    enabled: false
+  timeline:
+    enabled: false
+
+# 关闭多维检索
+retrieval:
+  multi_dimensional:
+    enabled: false
+  rrf_fusion:
+    enabled: false

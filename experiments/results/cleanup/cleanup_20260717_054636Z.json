@@ -1,0 +1,23 @@
+{
+  "timestamp_utc": "2026-07-17T05:46:36.840116+00:00",
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "auth": {
+    "http_status": 200,
+    "error_type": null,
+    "error_message": null
+  },
+  "passed": true,
+  "preflight": {
+    "http_status": 404,
+    "data": null,
+    "error": "HTTP 404: {\"complete\":false,\"error\":\"session not found: eval_retrieval_test\",\"result\":null}"
+  },
+  "status": "already_clean",
+  "deletion": {
+    "skipped": true,
+    "reason": "evaluation session does not exist"
+  }
+}

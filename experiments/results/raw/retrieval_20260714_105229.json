@@ -1,0 +1,109 @@
+{
+  "execution_mode": "live_api",
+  "timestamp": "20260714_105229",
+  "total_queries": 3,
+  "configs": [
+    "full_system"
+  ],
+  "config_hashes": {
+    "full_system": "6821f0bb37af9b26b1e495602c8267d9d0b9cfecd9be143c59ff0aa7c0f805f5"
+  },
+  "detailed_results": [
+    {
+      "query_id": "temporal_001",
+      "query_text": "王明最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 12775.181999999999,
+      "retrieved_docs": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "elder_080_2026-06-06T02:10:43.194500",
+        "elder_047_2026-06-06T03:59:43.194500",
+        "elder_033_2026-06-06T03:33:43.194500",
+        "elder_084_2026-06-06T03:36:43.194500",
+        "elder_020_2026-06-06T03:43:43.194500",
+        "elder_025_2026-06-06T02:40:43.194500",
+        "elder_082_2026-06-06T03:54:43.194500",
+        "4478da2f-4931-4f2c-b743-ed7d310555fb"
+      ],
+      "response_text": "",
+      "found_ground_truth": true,
+      "reciprocal_rank": 0.5,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "timestamp": "2026-07-14T10:51:55.448617"
+    },
+    {
+      "query_id": "temporal_002",
+      "query_text": "李国强最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 15310.233999999999,
+      "retrieved_docs": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "elder_080_2026-06-06T02:10:43.194500",
+        "elder_084_2026-06-06T03:36:43.194500",
+        "elder_047_2026-06-06T03:59:43.194500",
+        "elder_082_2026-06-06T03:54:43.194500",
+        "elder_033_2026-06-06T03:33:43.194500",
+        "elder_020_2026-06-06T03:43:43.194500",
+        "elder_025_2026-06-06T02:40:43.194500",
+        "4478da2f-4931-4f2c-b743-ed7d310555fb"
+      ],
+      "response_text": "",
+      "found_ground_truth": true,
+      "reciprocal_rank": 0.125,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-07-14T10:52:10.759395"
+    },
+    {
+      "query_id": "temporal_003",
+      "query_text": "赵志强最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 18848.252,
+      "retrieved_docs": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "elder_047_2026-06-06T03:59:43.194500",
+        "elder_080_2026-06-06T02:10:43.194500",
+        "elder_084_2026-06-06T03:36:43.194500",
+        "elder_025_2026-06-06T02:40:43.194500",
+        "elder_020_2026-06-06T03:43:43.194500",
+        "elder_033_2026-06-06T03:33:43.194500",
+        "elder_082_2026-06-06T03:54:43.194500",
+        "4478da2f-4931-4f2c-b743-ed7d310555fb"
+      ],
+      "response_text": "",
+      "found_ground_truth": true,
+      "reciprocal_rank": 0.14285714285714285,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-07-14T10:52:29.607647"
+    }
+  ],
+  "aggregated_metrics": {
+    "full_system": {
+      "config_name": "full_system",
+      "total_queries": 3,
+      "api_success_count": 3,
+      "api_error_count": 0,
+      "mrr": 0.25595238095238093,
+      "precision_at_5": 0.06666666666666667,
+      "recall_at_5": 0.3333333333333333,
+      "avg_latency_ms": 15644.555999999999,
+      "temporal_mrr": 0.25595238095238093,
+      "causal_mrr": 0.0,
+      "general_mrr": 0.0
+    }
+  }
+}

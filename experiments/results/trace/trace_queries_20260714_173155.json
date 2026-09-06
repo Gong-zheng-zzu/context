@@ -1,0 +1,66 @@
+{
+  "timestamp": "20260714_173155",
+  "total_queries": 10,
+  "results": [
+    {
+      "query_id": "temporal_001",
+      "question": "王明最近的健康记录和变化趋势是什么？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    },
+    {
+      "query_id": "temporal_002",
+      "question": "李国强最近的健康记录和变化趋势是什么？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    },
+    {
+      "query_id": "temporal_003",
+      "question": "赵志强最近的健康记录和变化趋势是什么？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    },
+    {
+      "query_id": "causal_001",
+      "question": "李国强骨折是因为什么原因引起的？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    },
+    {
+      "query_id": "causal_002",
+      "question": "为什么杨桂英会有睡眠问题？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    },
+    {
+      "query_id": "causal_003",
+      "question": "陈秀兰想开心起来的原因是什么？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    },
+    {
+      "query_id": "general_001",
+      "question": "王明的基本健康状况如何？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    },
+    {
+      "query_id": "general_006",
+      "question": "李华服用的药物有哪些？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    },
+    {
+      "query_id": "general_012",
+      "question": "当前所有老人用药清单及使用频率？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    },
+    {
+      "query_id": "general_008",
+      "question": "哪些老人出现过夜间咳嗽？",
+      "success": false,
+      "error": "HTTPConnectionPool(host='localhost', port=8088): Read timed out. (read timeout=30)"
+    }
+  ]
+}

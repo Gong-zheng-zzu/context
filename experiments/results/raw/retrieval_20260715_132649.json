@@ -1,0 +1,66 @@
+{
+  "execution_mode": "live_api",
+  "evaluation_mode": "vector_contexts_only",
+  "timestamp": "20260715_132649",
+  "total_queries": 1,
+  "configs": [
+    "full_system"
+  ],
+  "config_hashes": {
+    "full_system": "6821f0bb37af9b26b1e495602c8267d9d0b9cfecd9be143c59ff0aa7c0f805f5"
+  },
+  "runtime_config": {
+    "config_name": "not_captured",
+    "config_file": "not_captured",
+    "config_hash": "not_captured",
+    "service_start_time": "not_captured"
+  },
+  "dataset": {
+    "ground_truth_file": "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_groundtruth\\query_answer_pairs.json",
+    "ground_truth_sha256": "34f1ea990f277d302444da71e5a1009e0acc632adfb6389615e373f2a25c4dad"
+  },
+  "detailed_results": [
+    {
+      "query_id": "temporal_001",
+      "query_text": "王明最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 4422.8820000000005,
+      "retrieved_docs": [
+        "elder_080_2026-06-06T02:10:43.194500",
+        "elder_047_2026-06-27T06:48:43.194500",
+        "elder_047_2026-06-06T03:59:43.194500",
+        "elder_033_2026-06-06T03:33:43.194500",
+        "elder_084_2026-06-06T03:36:43.194500"
+      ],
+      "response_text": "",
+      "is_scorable": true,
+      "unscorable_reason": "",
+      "found_ground_truth": true,
+      "reciprocal_rank": 1.0,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "timestamp": "2026-07-15T13:26:49.375700"
+    }
+  ],
+  "aggregated_metrics": {
+    "full_system": {
+      "config_name": "full_system",
+      "total_queries": 1,
+      "api_success_count": 1,
+      "api_error_count": 0,
+      "scorable_count": 1,
+      "unscorable_count": 0,
+      "mrr": 1.0,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "avg_latency_ms": 4422.8820000000005,
+      "temporal_mrr": 1.0,
+      "causal_mrr": 0.0,
+      "general_mrr": 0.0
+    }
+  }
+}

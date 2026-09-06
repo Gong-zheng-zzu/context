@@ -1,0 +1,1010 @@
+{
+  "id_card": [
+    {
+      "value": "440305198006092063",
+      "label": "标准身份证1",
+      "should_detect": true
+    },
+    {
+      "value": "510107196810101924",
+      "label": "标准身份证2",
+      "should_detect": true
+    },
+    {
+      "value": "440305198311264367",
+      "label": "标准身份证3",
+      "should_detect": true
+    },
+    {
+      "value": "610125198408149986",
+      "label": "标准身份证4",
+      "should_detect": true
+    },
+    {
+      "value": "110101200007102036",
+      "label": "标准身份证5",
+      "should_detect": true
+    },
+    {
+      "value": "110101198007235399",
+      "label": "标准身份证6",
+      "should_detect": true
+    },
+    {
+      "value": "610125197909015604",
+      "label": "标准身份证7",
+      "should_detect": true
+    },
+    {
+      "value": "320106197502255215",
+      "label": "标准身份证8",
+      "should_detect": true
+    },
+    {
+      "value": "440305199307278348",
+      "label": "标准身份证9",
+      "should_detect": true
+    },
+    {
+      "value": "610125200412041285",
+      "label": "标准身份证10",
+      "should_detect": true
+    },
+    {
+      "value": "440305197203053790",
+      "label": "标准身份证11",
+      "should_detect": true
+    },
+    {
+      "value": "610125196311136858",
+      "label": "标准身份证12",
+      "should_detect": true
+    },
+    {
+      "value": "110101199006083370",
+      "label": "标准身份证13",
+      "should_detect": true
+    },
+    {
+      "value": "610125196101152124",
+      "label": "标准身份证14",
+      "should_detect": true
+    },
+    {
+      "value": "510107200007023726",
+      "label": "标准身份证15",
+      "should_detect": true
+    },
+    {
+      "value": "320106200203178609",
+      "label": "标准身份证16",
+      "should_detect": true
+    },
+    {
+      "value": "320106198706272802",
+      "label": "标准身份证17",
+      "should_detect": true
+    },
+    {
+      "value": "510107198905286102",
+      "label": "标准身份证18",
+      "should_detect": true
+    },
+    {
+      "value": "610125200304024523",
+      "label": "标准身份证19",
+      "should_detect": true
+    },
+    {
+      "value": "440305200212047796",
+      "label": "标准身份证20",
+      "should_detect": true
+    },
+    {
+      "value": "320106197112012853",
+      "label": "标准身份证21",
+      "should_detect": true
+    },
+    {
+      "value": "610125197109227170",
+      "label": "标准身份证22",
+      "should_detect": true
+    },
+    {
+      "value": "110101197101178027",
+      "label": "标准身份证23",
+      "should_detect": true
+    },
+    {
+      "value": "110101197902051483",
+      "label": "标准身份证24",
+      "should_detect": true
+    },
+    {
+      "value": "110101198103041082",
+      "label": "标准身份证25",
+      "should_detect": true
+    },
+    {
+      "value": "320106196208134222",
+      "label": "标准身份证26",
+      "should_detect": true
+    },
+    {
+      "value": "510107197208164103",
+      "label": "标准身份证27",
+      "should_detect": true
+    },
+    {
+      "value": "110101198903088798",
+      "label": "标准身份证28",
+      "should_detect": true
+    },
+    {
+      "value": "320106199508067261",
+      "label": "标准身份证29",
+      "should_detect": true
+    },
+    {
+      "value": "510107200203146945",
+      "label": "标准身份证30",
+      "should_detect": true
+    },
+    {
+      "value": "510107197407259887",
+      "label": "标准身份证31",
+      "should_detect": true
+    },
+    {
+      "value": "610125199609023599",
+      "label": "标准身份证32",
+      "should_detect": true
+    },
+    {
+      "value": "110101200005183089",
+      "label": "标准身份证33",
+      "should_detect": true
+    },
+    {
+      "value": "610125198808244746",
+      "label": "标准身份证34",
+      "should_detect": true
+    },
+    {
+      "value": "440305198107274888",
+      "label": "标准身份证35",
+      "should_detect": true
+    },
+    {
+      "value": "110101 19880925 2496",
+      "label": "带空格身份证1",
+      "should_detect": false
+    },
+    {
+      "value": "320106 19961024 1503",
+      "label": "带空格身份证2",
+      "should_detect": false
+    },
+    {
+      "value": "110101 19740218 3603",
+      "label": "带空格身份证3",
+      "should_detect": false
+    },
+    {
+      "value": "110101 19871116 4291",
+      "label": "带空格身份证4",
+      "should_detect": false
+    },
+    {
+      "value": "320106 19820102 7843",
+      "label": "带空格身份证5",
+      "should_detect": false
+    },
+    {
+      "value": "637249142844834410",
+      "label": "18位数字1",
+      "should_detect": false
+    },
+    {
+      "value": "167945377489488152",
+      "label": "18位数字2",
+      "should_detect": false
+    },
+    {
+      "value": "080311701766422999",
+      "label": "18位数字3",
+      "should_detect": false
+    },
+    {
+      "value": "489071975506574391",
+      "label": "18位数字4",
+      "should_detect": false
+    },
+    {
+      "value": "931612331346631973",
+      "label": "18位数字5",
+      "should_detect": false
+    },
+    {
+      "value": "960802832570333979",
+      "label": "18位数字6",
+      "should_detect": false
+    },
+    {
+      "value": "683735246160368722",
+      "label": "18位数字7",
+      "should_detect": false
+    },
+    {
+      "value": "446706342893465590",
+      "label": "18位数字8",
+      "should_detect": false
+    },
+    {
+      "value": "681399014391027916",
+      "label": "18位数字9",
+      "should_detect": false
+    },
+    {
+      "value": "686375668182334312",
+      "label": "18位数字10",
+      "should_detect": false
+    }
+  ],
+  "phone": [
+    {
+      "value": "13877213192",
+      "label": "标准手机号1",
+      "should_detect": true
+    },
+    {
+      "value": "18637857092",
+      "label": "标准手机号2",
+      "should_detect": true
+    },
+    {
+      "value": "15657030412",
+      "label": "标准手机号3",
+      "should_detect": true
+    },
+    {
+      "value": "18944866445",
+      "label": "标准手机号4",
+      "should_detect": true
+    },
+    {
+      "value": "18640757019",
+      "label": "标准手机号5",
+      "should_detect": true
+    },
+    {
+      "value": "17748996417",
+      "label": "标准手机号6",
+      "should_detect": true
+    },
+    {
+      "value": "13825071081",
+      "label": "标准手机号7",
+      "should_detect": true
+    },
+    {
+      "value": "13185692565",
+      "label": "标准手机号8",
+      "should_detect": true
+    },
+    {
+      "value": "18659443174",
+      "label": "标准手机号9",
+      "should_detect": true
+    },
+    {
+      "value": "13851271063",
+      "label": "标准手机号10",
+      "should_detect": true
+    },
+    {
+      "value": "15005223554",
+      "label": "标准手机号11",
+      "should_detect": true
+    },
+    {
+      "value": "17039307085",
+      "label": "标准手机号12",
+      "should_detect": true
+    },
+    {
+      "value": "13883222251",
+      "label": "标准手机号13",
+      "should_detect": true
+    },
+    {
+      "value": "15068892580",
+      "label": "标准手机号14",
+      "should_detect": true
+    },
+    {
+      "value": "13899882591",
+      "label": "标准手机号15",
+      "should_detect": true
+    },
+    {
+      "value": "18645279543",
+      "label": "标准手机号16",
+      "should_detect": true
+    },
+    {
+      "value": "18646223973",
+      "label": "标准手机号17",
+      "should_detect": true
+    },
+    {
+      "value": "18961511562",
+      "label": "标准手机号18",
+      "should_detect": true
+    },
+    {
+      "value": "18092304855",
+      "label": "标准手机号19",
+      "should_detect": true
+    },
+    {
+      "value": "18669813345",
+      "label": "标准手机号20",
+      "should_detect": true
+    },
+    {
+      "value": "13155341075",
+      "label": "标准手机号21",
+      "should_detect": true
+    },
+    {
+      "value": "18616727454",
+      "label": "标准手机号22",
+      "should_detect": true
+    },
+    {
+      "value": "15678925969",
+      "label": "标准手机号23",
+      "should_detect": true
+    },
+    {
+      "value": "17036879759",
+      "label": "标准手机号24",
+      "should_detect": true
+    },
+    {
+      "value": "15027986054",
+      "label": "标准手机号25",
+      "should_detect": true
+    },
+    {
+      "value": "15059185276",
+      "label": "标准手机号26",
+      "should_detect": true
+    },
+    {
+      "value": "18941059233",
+      "label": "标准手机号27",
+      "should_detect": true
+    },
+    {
+      "value": "17758322524",
+      "label": "标准手机号28",
+      "should_detect": true
+    },
+    {
+      "value": "13012387951",
+      "label": "标准手机号29",
+      "should_detect": true
+    },
+    {
+      "value": "13061294663",
+      "label": "标准手机号30",
+      "should_detect": true
+    },
+    {
+      "value": "15676923965",
+      "label": "标准手机号31",
+      "should_detect": true
+    },
+    {
+      "value": "13857943566",
+      "label": "标准手机号32",
+      "should_detect": true
+    },
+    {
+      "value": "18969274169",
+      "label": "标准手机号33",
+      "should_detect": true
+    },
+    {
+      "value": "15676747696",
+      "label": "标准手机号34",
+      "should_detect": true
+    },
+    {
+      "value": "17736880362",
+      "label": "标准手机号35",
+      "should_detect": true
+    },
+    {
+      "value": "18008003697",
+      "label": "标准手机号36",
+      "should_detect": true
+    },
+    {
+      "value": "18991761780",
+      "label": "标准手机号37",
+      "should_detect": true
+    },
+    {
+      "value": "15076425079",
+      "label": "标准手机号38",
+      "should_detect": true
+    },
+    {
+      "value": "18669209648",
+      "label": "标准手机号39",
+      "should_detect": true
+    },
+    {
+      "value": "18058655714",
+      "label": "标准手机号40",
+      "should_detect": true
+    },
+    {
+      "value": "130-4658-2231",
+      "label": "带分隔符手机号1",
+      "should_detect": false
+    },
+    {
+      "value": "131-4733-3787",
+      "label": "带分隔符手机号2",
+      "should_detect": false
+    },
+    {
+      "value": "131-8208-0558",
+      "label": "带分隔符手机号3",
+      "should_detect": false
+    },
+    {
+      "value": "138-0744-1734",
+      "label": "带分隔符手机号4",
+      "should_detect": false
+    },
+    {
+      "value": "189-6820-6610",
+      "label": "带分隔符手机号5",
+      "should_detect": false
+    },
+    {
+      "value": "850122847692",
+      "label": "随机数字1",
+      "should_detect": false
+    },
+    {
+      "value": "21454137",
+      "label": "随机数字2",
+      "should_detect": false
+    },
+    {
+      "value": "508497820268",
+      "label": "随机数字3",
+      "should_detect": false
+    },
+    {
+      "value": "706763791251",
+      "label": "随机数字4",
+      "should_detect": false
+    },
+    {
+      "value": "163924756",
+      "label": "随机数字5",
+      "should_detect": false
+    }
+  ],
+  "bank_card": [
+    {
+      "value": "6217005734308785",
+      "label": "标准银行卡1",
+      "should_detect": true
+    },
+    {
+      "value": "6225881331781507691",
+      "label": "标准银行卡2",
+      "should_detect": true
+    },
+    {
+      "value": "6217001654456201594",
+      "label": "标准银行卡3",
+      "should_detect": true
+    },
+    {
+      "value": "6222028835096424891",
+      "label": "标准银行卡4",
+      "should_detect": true
+    },
+    {
+      "value": "9558809181529207",
+      "label": "标准银行卡5",
+      "should_detect": true
+    },
+    {
+      "value": "6222027163864666",
+      "label": "标准银行卡6",
+      "should_detect": true
+    },
+    {
+      "value": "9558802746183636707",
+      "label": "标准银行卡7",
+      "should_detect": true
+    },
+    {
+      "value": "6222024318520772",
+      "label": "标准银行卡8",
+      "should_detect": true
+    },
+    {
+      "value": "6225887566219934",
+      "label": "标准银行卡9",
+      "should_detect": true
+    },
+    {
+      "value": "6225886519982052",
+      "label": "标准银行卡10",
+      "should_detect": true
+    },
+    {
+      "value": "6217006092025234047",
+      "label": "标准银行卡11",
+      "should_detect": true
+    },
+    {
+      "value": "9558805575201682980",
+      "label": "标准银行卡12",
+      "should_detect": true
+    },
+    {
+      "value": "6217000418068008",
+      "label": "标准银行卡13",
+      "should_detect": true
+    },
+    {
+      "value": "6222023277989565410",
+      "label": "标准银行卡14",
+      "should_detect": true
+    },
+    {
+      "value": "9558803784253649195",
+      "label": "标准银行卡15",
+      "should_detect": true
+    },
+    {
+      "value": "6222028750581409253",
+      "label": "标准银行卡16",
+      "should_detect": true
+    },
+    {
+      "value": "6222023613377447369",
+      "label": "标准银行卡17",
+      "should_detect": true
+    },
+    {
+      "value": "6222022683333632",
+      "label": "标准银行卡18",
+      "should_detect": true
+    },
+    {
+      "value": "6225880482287210",
+      "label": "标准银行卡19",
+      "should_detect": true
+    },
+    {
+      "value": "6217009554841273011",
+      "label": "标准银行卡20",
+      "should_detect": true
+    },
+    {
+      "value": "6225885802076810",
+      "label": "标准银行卡21",
+      "should_detect": true
+    },
+    {
+      "value": "6222023802805883752",
+      "label": "标准银行卡22",
+      "should_detect": true
+    },
+    {
+      "value": "6225880183908663",
+      "label": "标准银行卡23",
+      "should_detect": true
+    },
+    {
+      "value": "6222024990526616",
+      "label": "标准银行卡24",
+      "should_detect": true
+    },
+    {
+      "value": "6225886408986017",
+      "label": "标准银行卡25",
+      "should_detect": true
+    },
+    {
+      "value": "6217008737476658063",
+      "label": "标准银行卡26",
+      "should_detect": true
+    },
+    {
+      "value": "9558803579844305748",
+      "label": "标准银行卡27",
+      "should_detect": true
+    },
+    {
+      "value": "6222023947482906719",
+      "label": "标准银行卡28",
+      "should_detect": true
+    },
+    {
+      "value": "6217001302616304218",
+      "label": "标准银行卡29",
+      "should_detect": true
+    },
+    {
+      "value": "9558809067559594813",
+      "label": "标准银行卡30",
+      "should_detect": true
+    },
+    {
+      "value": "6225889345324604803",
+      "label": "标准银行卡31",
+      "should_detect": true
+    },
+    {
+      "value": "9558809658968266481",
+      "label": "标准银行卡32",
+      "should_detect": true
+    },
+    {
+      "value": "9558808265309854",
+      "label": "标准银行卡33",
+      "should_detect": true
+    },
+    {
+      "value": "6222023412384112",
+      "label": "标准银行卡34",
+      "should_detect": true
+    },
+    {
+      "value": "6222024230175854805",
+      "label": "标准银行卡35",
+      "should_detect": true
+    },
+    {
+      "value": "6217004905146023",
+      "label": "标准银行卡36",
+      "should_detect": true
+    },
+    {
+      "value": "6217003665357624",
+      "label": "标准银行卡37",
+      "should_detect": true
+    },
+    {
+      "value": "6225888043811759764",
+      "label": "标准银行卡38",
+      "should_detect": true
+    },
+    {
+      "value": "9558804124944499599",
+      "label": "标准银行卡39",
+      "should_detect": true
+    },
+    {
+      "value": "9558804053433087",
+      "label": "标准银行卡40",
+      "should_detect": true
+    },
+    {
+      "value": "6222 02 7019 982981",
+      "label": "带空格银行卡1",
+      "should_detect": false
+    },
+    {
+      "value": "6217 00 4655 779073",
+      "label": "带空格银行卡2",
+      "should_detect": false
+    },
+    {
+      "value": "6225 88 8144 927796",
+      "label": "带空格银行卡3",
+      "should_detect": false
+    },
+    {
+      "value": "6217 00 7571 588716",
+      "label": "带空格银行卡4",
+      "should_detect": false
+    },
+    {
+      "value": "9558 80 7235 293361",
+      "label": "带空格银行卡5",
+      "should_detect": false
+    },
+    {
+      "value": "4137170442587883",
+      "label": "16位数字1",
+      "should_detect": false
+    },
+    {
+      "value": "2530535390593782",
+      "label": "16位数字2",
+      "should_detect": false
+    },
+    {
+      "value": "0908065597086920",
+      "label": "16位数字3",
+      "should_detect": false
+    },
+    {
+      "value": "9887840126197705",
+      "label": "16位数字4",
+      "should_detect": false
+    },
+    {
+      "value": "8605677561730440",
+      "label": "16位数字5",
+      "should_detect": false
+    }
+  ],
+  "email": [
+    {
+      "value": "user8976@163.com",
+      "label": "标准邮箱1",
+      "should_detect": true
+    },
+    {
+      "value": "user5250@163.com",
+      "label": "标准邮箱2",
+      "should_detect": true
+    },
+    {
+      "value": "user9918@163.com",
+      "label": "标准邮箱3",
+      "should_detect": true
+    },
+    {
+      "value": "user9519@example.com",
+      "label": "标准邮箱4",
+      "should_detect": true
+    },
+    {
+      "value": "user6496@163.com",
+      "label": "标准邮箱5",
+      "should_detect": true
+    },
+    {
+      "value": "user7792@qq.com",
+      "label": "标准邮箱6",
+      "should_detect": true
+    },
+    {
+      "value": "user4489@outlook.com",
+      "label": "标准邮箱7",
+      "should_detect": true
+    },
+    {
+      "value": "user5745@163.com",
+      "label": "标准邮箱8",
+      "should_detect": true
+    },
+    {
+      "value": "user4754@gmail.com",
+      "label": "标准邮箱9",
+      "should_detect": true
+    },
+    {
+      "value": "user217@gmail.com",
+      "label": "标准邮箱10",
+      "should_detect": true
+    },
+    {
+      "value": "user8423@163.com",
+      "label": "标准邮箱11",
+      "should_detect": true
+    },
+    {
+      "value": "user5788@example.com",
+      "label": "标准邮箱12",
+      "should_detect": true
+    },
+    {
+      "value": "user7879@qq.com",
+      "label": "标准邮箱13",
+      "should_detect": true
+    },
+    {
+      "value": "user8705@outlook.com",
+      "label": "标准邮箱14",
+      "should_detect": true
+    },
+    {
+      "value": "user429@gmail.com",
+      "label": "标准邮箱15",
+      "should_detect": true
+    },
+    {
+      "value": "user528@qq.com",
+      "label": "标准邮箱16",
+      "should_detect": true
+    },
+    {
+      "value": "user9737@example.com",
+      "label": "标准邮箱17",
+      "should_detect": true
+    },
+    {
+      "value": "user9889@outlook.com",
+      "label": "标准邮箱18",
+      "should_detect": true
+    },
+    {
+      "value": "user1155@outlook.com",
+      "label": "标准邮箱19",
+      "should_detect": true
+    },
+    {
+      "value": "user6930@163.com",
+      "label": "标准邮箱20",
+      "should_detect": true
+    },
+    {
+      "value": "user1271@outlook.com",
+      "label": "标准邮箱21",
+      "should_detect": true
+    },
+    {
+      "value": "user8412@example.com",
+      "label": "标准邮箱22",
+      "should_detect": true
+    },
+    {
+      "value": "user2075@outlook.com",
+      "label": "标准邮箱23",
+      "should_detect": true
+    },
+    {
+      "value": "user6269@163.com",
+      "label": "标准邮箱24",
+      "should_detect": true
+    },
+    {
+      "value": "user3391@qq.com",
+      "label": "标准邮箱25",
+      "should_detect": true
+    },
+    {
+      "value": "user2320@163.com",
+      "label": "标准邮箱26",
+      "should_detect": true
+    },
+    {
+      "value": "user8086@gmail.com",
+      "label": "标准邮箱27",
+      "should_detect": true
+    },
+    {
+      "value": "user6613@outlook.com",
+      "label": "标准邮箱28",
+      "should_detect": true
+    },
+    {
+      "value": "user2215@example.com",
+      "label": "标准邮箱29",
+      "should_detect": true
+    },
+    {
+      "value": "user6038@example.com",
+      "label": "标准邮箱30",
+      "should_detect": true
+    },
+    {
+      "value": "user7865@outlook.com",
+      "label": "标准邮箱31",
+      "should_detect": true
+    },
+    {
+      "value": "user5414@example.com",
+      "label": "标准邮箱32",
+      "should_detect": true
+    },
+    {
+      "value": "user3098@qq.com",
+      "label": "标准邮箱33",
+      "should_detect": true
+    },
+    {
+      "value": "user9716@gmail.com",
+      "label": "标准邮箱34",
+      "should_detect": true
+    },
+    {
+      "value": "user4363@qq.com",
+      "label": "标准邮箱35",
+      "should_detect": true
+    },
+    {
+      "value": "user5540@qq.com",
+      "label": "标准邮箱36",
+      "should_detect": true
+    },
+    {
+      "value": "user9616@outlook.com",
+      "label": "标准邮箱37",
+      "should_detect": true
+    },
+    {
+      "value": "user423@qq.com",
+      "label": "标准邮箱38",
+      "should_detect": true
+    },
+    {
+      "value": "user4108@163.com",
+      "label": "标准邮箱39",
+      "should_detect": true
+    },
+    {
+      "value": "user4524@qq.com",
+      "label": "标准邮箱40",
+      "should_detect": true
+    },
+    {
+      "value": "user563 @ 163.com",
+      "label": "带空格邮箱1",
+      "should_detect": false
+    },
+    {
+      "value": "user686 @ outlook.com",
+      "label": "带空格邮箱2",
+      "should_detect": false
+    },
+    {
+      "value": "user196 @ outlook.com",
+      "label": "带空格邮箱3",
+      "should_detect": false
+    },
+    {
+      "value": "user536 @ qq.com",
+      "label": "带空格邮箱4",
+      "should_detect": false
+    },
+    {
+      "value": "user378 @ gmail.com",
+      "label": "带空格邮箱5",
+      "should_detect": false
+    },
+    {
+      "value": "今天天气不错",
+      "label": "普通文本1",
+      "should_detect": false
+    },
+    {
+      "value": "请帮我查询",
+      "label": "普通文本2",
+      "should_detect": false
+    },
+    {
+      "value": "谢谢",
+      "label": "普通文本3",
+      "should_detect": false
+    },
+    {
+      "value": "今天天气不错",
+      "label": "普通文本4",
+      "should_detect": false
+    },
+    {
+      "value": "今天天气不错",
+      "label": "普通文本5",
+      "should_detect": false
+    }
+  ]
+}

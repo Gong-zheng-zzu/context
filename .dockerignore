@@ -1,0 +1,71 @@
+# Git 相关
+.git
+.gitignore
+.github
+
+# IDE 相关
+.vscode
+.idea
+.cursor
+*.swp
+*.swo
+*~
+
+# 构建产物
+# bin/ - 注释掉，因为需要使用预编译的二进制文件
+*.exe
+*.dll
+*.so
+*.dylib
+server.exe
+context-keeper.exe
+
+# 日志文件
+*.log
+logs/
+server.log
+server.pid
+
+# 数据文件
+data/
+*.db
+*.sqlite
+
+# 测试文件
+*_test.go
+test_*.go
+tests/
+
+# 文档
+*.md
+docs/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+
+# Node.js 相关
+node_modules/
+package.json
+package-lock.json
+
+# 配置文件（会在运行时挂载）
+config/.env
+
+# 监控配置
+monitoring/
+nginx/
+
+# 脚本（除了构建和入口脚本）
+demo*.sh
+demo*.bat
+verify*.sh
+run*.sh
+start-local.bat
+quick_start.bat
+
+# 其他
+~
+*.bak
+*.orig

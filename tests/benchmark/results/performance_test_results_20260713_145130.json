@@ -1,0 +1,48 @@
+{
+  "single_request": {
+    "test_type": "single_request",
+    "total_requests": 0,
+    "successful_requests": 0,
+    "failed_requests": 0,
+    "avg_response_time_ms": 0.0,
+    "min_response_time_ms": 0.0,
+    "max_response_time_ms": 0.0,
+    "median_response_time_ms": 0.0,
+    "p95_response_time_ms": 0.0,
+    "p99_response_time_ms": 0.0,
+    "throughput_qps": 0.0,
+    "total_duration_seconds": 0.0,
+    "error_rate": 1.0
+  },
+  "concurrent": {},
+  "batch_throughput": {
+    "test_type": "batch_throughput",
+    "total_requests": 0,
+    "successful_requests": 0,
+    "failed_requests": 0,
+    "avg_response_time_ms": 0.0,
+    "min_response_time_ms": 0.0,
+    "max_response_time_ms": 0.0,
+    "median_response_time_ms": 0.0,
+    "p95_response_time_ms": 0.0,
+    "p99_response_time_ms": 0.0,
+    "throughput_qps": 0.0,
+    "total_duration_seconds": 0.0,
+    "error_rate": 1.0
+  },
+  "inference_query": {
+    "test_type": "inference_query",
+    "total_requests": 0,
+    "successful_requests": 0,
+    "failed_requests": 0,
+    "avg_response_time_ms": 0.0,
+    "min_response_time_ms": 0.0,
+    "max_response_time_ms": 0.0,
+    "median_response_time_ms": 0.0,
+    "p95_response_time_ms": 0.0,
+    "p99_response_time_ms": 0.0,
+    "throughput_qps": 0.0,
+    "total_duration_seconds": 0.0,
+    "error_rate": 1.0
+  }
+}

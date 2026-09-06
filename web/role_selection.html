@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>忆安智护 - 身份选择</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #f3f6f8;
+            overflow: auto;
+        }
+
+        /* Decorative background is intentionally restrained for demo scanning. */
+        .bg-blob {
+            display: none;
+        }
+
+        .bg-blob:nth-child(1) {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #ff6b9d 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+            animation-duration: 25s;
+        }
+
+        .bg-blob:nth-child(2) {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, #4ecdc4 0%, transparent 70%);
+            bottom: -150px;
+            right: -150px;
+            animation-duration: 30s;
+            animation-delay: -5s;
+        }
+
+        .bg-blob:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #ffe66d 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 22s;
+            animation-delay: -10s;
+        }
+
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -80px) scale(1.1); }
+            50% { transform: translate(-30px, 60px) scale(0.95); }
+            75% { transform: translate(70px, 30px) scale(1.05); }
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: #17324d;
+        }
+
+        .header h1 {
+            font-size: 52px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: 4px;
+            text-shadow: none;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 1;
+            color: #526b7c;
+            letter-spacing: 2px;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+
+        .role-card {
+            background: #fff;
+            border: 1px solid #d8e2e8;
+            border-radius: 8px;
+            padding: 40px 24px 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            color: #17324d;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .role-card:hover::before {
+            opacity: 1;
+        }
+
+        .role-card:hover {
+            transform: translateY(-4px);
+            border-color: #7fa6ba;
+            box-shadow: 0 10px 20px rgba(23,50,77,0.10);
+        }
+
+        .role-card.caregiver:hover {
+            background: rgba(102, 187, 106, 0.3);
+            box-shadow: 0 20px 60px rgba(102, 187, 106, 0.3), 0 0 40px rgba(102, 187, 106, 0.15);
+        }
+
+        .role-card.doctor:hover {
+            background: rgba(59, 89, 152, 0.35);
+            box-shadow: 0 20px 60px rgba(59, 89, 152, 0.3), 0 0 40px rgba(59, 89, 152, 0.15);
+        }
+
+        .role-card.family:hover {
+            background: rgba(255, 167, 38, 0.3);
+            box-shadow: 0 20px 60px rgba(255, 167, 38, 0.3), 0 0 40px rgba(255, 167, 38, 0.15);
+        }
+
+        .role-card.elder:hover {
+            background: rgba(171, 71, 188, 0.3);
+            box-shadow: 0 20px 60px rgba(171, 71, 188, 0.3), 0 0 40px rgba(171, 71, 188, 0.15);
+        }
+
+        .role-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .role-card:hover .role-icon {
+            transform: scale(1.1);
+        }
+
+        .role-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        .role-icon.caregiver-icon {
+            background: linear-gradient(135deg, #66bb6a, #81c784);
+            box-shadow: 0 8px 24px rgba(102, 187, 106, 0.4);
+        }
+
+        .role-icon.doctor-icon {
+            background: linear-gradient(135deg, #3B5998, #4A6BA8);
+            box-shadow: 0 8px 24px rgba(59, 89, 152, 0.4);
+        }
+
+        .role-icon.family-icon {
+            background: linear-gradient(135deg, #ffa726, #ffb74d);
+            box-shadow: 0 8px 24px rgba(255, 167, 38, 0.4);
+        }
+
+        .role-icon.elder-icon {
+            background: linear-gradient(135deg, #ab47bc, #ba68c8);
+            box-shadow: 0 8px 24px rgba(171, 71, 188, 0.4);
+        }
+
+        .role-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .role-desc {
+            font-size: 13px;
+            opacity: 0.8;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer {
+            text-align: center;
+            color: #647b8c;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .governance-entry {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            border: 1px solid #c8dce5;
+            background: #eaf4f7;
+            padding: 18px 22px;
+            color: #17324d;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 28px;
+        }
+        .governance-entry strong { display:block; font-size:17px; margin-bottom:5px; }
+        .governance-entry span { color:#526b7c; font-size:13px; }
+        .governance-entry b { white-space:nowrap; color:#176b87; font-size:14px; }
+
+        @media (max-width: 900px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .header p {
+                font-size: 15px;
+            }
+
+            .role-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            .role-card {
+                padding: 30px 18px 24px;
+            }
+
+            .role-icon {
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+            }
+
+            .role-icon svg {
+                width: 32px;
+                height: 32px;
+            }
+
+            .role-title {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .role-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background blobs -->
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>忆安智护</h1>
+            <p>面向护理智能体的安全记忆、受控工具调用与可验证治理</p>
+        </div>
+
+        <div class="role-grid">
+            <a href="caregiver_chat.html" class="role-card caregiver">
+                <div class="role-icon caregiver-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2a7.2 7.2 0 01-6-3.22c.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08a7.2 7.2 0 01-6 3.22z"/>
+                    </svg>
+                </div>
+                <div class="role-title">护工端</div>
+                <div class="role-desc">记录生命体征、护理情况、用药信息</div>
+            </a>
+
+            <a href="doctor_chat.html" class="role-card doctor">
+                <div class="role-icon doctor-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
+                    </svg>
+                </div>
+                <div class="role-title">医生端</div>
+                <div class="role-desc">查询健康数据、趋势分析、诊断建议</div>
+            </a>
+
+            <a href="family_chat.html" class="role-card family">
+                <div class="role-icon family-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                </div>
+                <div class="role-title">家属端</div>
+                <div class="role-desc">询问老人健康状况、护理情况</div>
+            </a>
+
+            <a href="elder_voice_chat.html" class="role-card elder">
+                <div class="role-icon elder-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5z"/>
+                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                    </svg>
+                </div>
+                <div class="role-title">老人端</div>
+                <div class="role-desc">语音对话、大字显示、简单易用</div>
+            </a>
+        </div>
+
+        <a class="governance-entry" href="pccm.html">
+            <div><strong>PCCM 因果分析</strong><span>独立分析护理文本中的 O-C-P-R 因果结构；登录后调用真实接口，分析结果不写入共享图谱。</span></div>
+            <b>进入因果分析 →</b>
+        </a>
+
+        <a class="governance-entry" href="governance_verification.html">
+            <div><strong>治理验证中心</strong><span>查看受控 Agent 执行边界，以及通过验收的安全输入和因果结构化证据。</span></div>
+            <b>进入验证中心 →</b>
+        </a>
+
+        <div class="footer">
+            <p>忆安智护 · 护理智能体安全治理平台</p>
+        </div>
+    </div>
+</body>
+</html>

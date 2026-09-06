@@ -1,0 +1,55 @@
+﻿experiment,configuration_or_trial,metric,value,unit,source
+retrieval,Naive RAG,mrr,0.40533333333333327,,retrieval_20260717T112910Z_baseline_naive_rag.json
+retrieval,Naive RAG,precision_at_5,0.16800000000000007,,retrieval_20260717T112910Z_baseline_naive_rag.json
+retrieval,Naive RAG,recall_at_5,0.5652380952380952,,retrieval_20260717T112910Z_baseline_naive_rag.json
+retrieval,Naive RAG,avg_latency_ms,105.55216,ms,retrieval_20260717T112910Z_baseline_naive_rag.json
+retrieval,Naive RAG,api_success_count,50,,retrieval_20260717T112910Z_baseline_naive_rag.json
+retrieval,Naive RAG,api_error_count,0,,retrieval_20260717T112910Z_baseline_naive_rag.json
+retrieval,RAG + Filter,mrr,0.40533333333333327,,retrieval_20260717T113600Z_baseline_rag_with_filter.json
+retrieval,RAG + Filter,precision_at_5,0.16800000000000007,,retrieval_20260717T113600Z_baseline_rag_with_filter.json
+retrieval,RAG + Filter,recall_at_5,0.5652380952380952,,retrieval_20260717T113600Z_baseline_rag_with_filter.json
+retrieval,RAG + Filter,avg_latency_ms,100.06284,ms,retrieval_20260717T113600Z_baseline_rag_with_filter.json
+retrieval,RAG + Filter,api_success_count,50,,retrieval_20260717T113600Z_baseline_rag_with_filter.json
+retrieval,RAG + Filter,api_error_count,0,,retrieval_20260717T113600Z_baseline_rag_with_filter.json
+retrieval,Full System,mrr,0.4913333333333332,,retrieval_20260717_232941.json
+retrieval,Full System,precision_at_5,0.16400000000000003,,retrieval_20260717_232941.json
+retrieval,Full System,recall_at_5,0.5819047619047618,,retrieval_20260717_232941.json
+retrieval,Full System,avg_latency_ms,103.46700000000001,ms,retrieval_20260717_232941.json
+retrieval,Full System,api_success_count,50,,retrieval_20260717_232941.json
+retrieval,Full System,api_error_count,0,,retrieval_20260717_232941.json
+security,full_system,attack_success_rate,0.06666666666666667,,security_20260717_154238Z.json
+security,full_system,defense_success_rate,0.9333333333333333,,security_20260717_154238Z.json
+security,full_system,avg_latency_ms,329.96906666666683,ms,security_20260717_154238Z.json
+security,full_system,api_success_count,120,,security_20260717_154238Z.json
+security,full_system,api_error_count,0,,security_20260717_154238Z.json
+causal,full_system,relation_found_rate,0.95,,causal_20260717_153738Z.json
+causal,full_system,tuple_accuracy,0.85,,causal_20260717_153738Z.json
+causal,full_system,tuple_and_confidence_accuracy,0.85,,causal_20260717_153738Z.json
+causal,full_system,avg_best_relation_confidence,0.9241228070175439,,causal_20260717_153738Z.json
+causal,full_system,avg_latency_ms,11965.252100000002,ms,causal_20260717_153738Z.json
+causal,full_system,api_success_count,20,,causal_20260717_153738Z.json
+causal,full_system,api_error_count,0,,causal_20260717_153738Z.json
+unlearning,trial_1,qdrant_pre_count,30,count,unlearning_20260717_121746Z.json
+unlearning,trial_1,qdrant_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_1,timescaledb_pre_count,30,count,unlearning_20260717_121746Z.json
+unlearning,trial_1,timescaledb_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_1,neo4j_pre_count,349,count,unlearning_20260717_121746Z.json
+unlearning,trial_1,neo4j_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_1,session_file_cache_pre_count,3,count,unlearning_20260717_121746Z.json
+unlearning,trial_1,session_file_cache_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_2,qdrant_pre_count,30,count,unlearning_20260717_121746Z.json
+unlearning,trial_2,qdrant_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_2,timescaledb_pre_count,30,count,unlearning_20260717_121746Z.json
+unlearning,trial_2,timescaledb_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_2,neo4j_pre_count,349,count,unlearning_20260717_121746Z.json
+unlearning,trial_2,neo4j_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_2,session_file_cache_pre_count,3,count,unlearning_20260717_121746Z.json
+unlearning,trial_2,session_file_cache_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_3,qdrant_pre_count,30,count,unlearning_20260717_121746Z.json
+unlearning,trial_3,qdrant_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_3,timescaledb_pre_count,30,count,unlearning_20260717_121746Z.json
+unlearning,trial_3,timescaledb_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_3,neo4j_pre_count,349,count,unlearning_20260717_121746Z.json
+unlearning,trial_3,neo4j_post_count,0,count,unlearning_20260717_121746Z.json
+unlearning,trial_3,session_file_cache_pre_count,3,count,unlearning_20260717_121746Z.json
+unlearning,trial_3,session_file_cache_post_count,0,count,unlearning_20260717_121746Z.json

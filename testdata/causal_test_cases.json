@@ -1,0 +1,230 @@
+{
+  "version": "1.0",
+  "description": "因果关系标注测试用例 - 用于验证O→C→P→R抽取准确率",
+  "test_cases": [
+    {
+      "case_id": "TC001",
+      "input_text": "李爷爷服用降压药后出现体位性低血压，在洗手间滑倒",
+      "expected_output": {
+        "object": "李爷爷",
+        "mediator": "服用降压药",
+        "property": "体位性低血压",
+        "result": "滑倒",
+        "confidence_threshold": 0.85
+      }
+    },
+    {
+      "case_id": "TC002",
+      "input_text": "王奶奶因长期卧床导致肌肉萎缩，双腿无力难以行走",
+      "expected_output": {
+        "object": "王奶奶",
+        "mediator": "长期卧床",
+        "property": "肌肉萎缩",
+        "result": "双腿无力",
+        "confidence_threshold": 0.80
+      }
+    },
+    {
+      "case_id": "TC003",
+      "input_text": "张大爷糖尿病引起末梢神经病变，导致足部溃疡",
+      "expected_output": {
+        "object": "张大爷",
+        "mediator": "糖尿病",
+        "property": "末梢神经病变",
+        "result": "足部溃疡",
+        "confidence_threshold": 0.85
+      }
+    },
+    {
+      "case_id": "TC004",
+      "input_text": "刘奶奶高血压未控制，脑血管压力增高引发脑卒中",
+      "expected_output": {
+        "object": "刘奶奶",
+        "mediator": "高血压未控制",
+        "property": "脑血管压力增高",
+        "result": "脑卒中",
+        "confidence_threshold": 0.90
+      }
+    },
+    {
+      "case_id": "TC005",
+      "input_text": "赵爷爷服用安眠药后意识模糊，夜间跌倒受伤",
+      "expected_output": {
+        "object": "赵爷爷",
+        "mediator": "服用安眠药",
+        "property": "意识模糊",
+        "result": "跌倒",
+        "confidence_threshold": 0.85
+      }
+    },
+    {
+      "case_id": "TC006",
+      "input_text": "陈奶奶营养不良导致免疫力下降，反复感染",
+      "expected_output": {
+        "object": "陈奶奶",
+        "mediator": "营养不良",
+        "property": "免疫力下降",
+        "result": "反复感染",
+        "confidence_threshold": 0.80
+      }
+    },
+    {
+      "case_id": "TC007",
+      "input_text": "孙爷爷缺乏运动导致骨质疏松，骨折风险增加",
+      "expected_output": {
+        "object": "孙爷爷",
+        "mediator": "缺乏运动",
+        "property": "骨质疏松",
+        "result": "骨折风险增加",
+        "confidence_threshold": 0.80
+      }
+    },
+    {
+      "case_id": "TC008",
+      "input_text": "周奶奶阿尔茨海默病导致认知功能下降，外出后走失",
+      "expected_output": {
+        "object": "周奶奶",
+        "mediator": "阿尔茨海默病",
+        "property": "认知功能下降",
+        "result": "走失",
+        "confidence_threshold": 0.90
+      }
+    },
+    {
+      "case_id": "TC009",
+      "input_text": "吴爷爷慢性疼痛影响睡眠，情绪低落",
+      "expected_output": {
+        "object": "吴爷爷",
+        "mediator": "慢性疼痛",
+        "property": "睡眠障碍",
+        "result": "情绪低落",
+        "confidence_threshold": 0.75
+      }
+    },
+    {
+      "case_id": "TC010",
+      "input_text": "郑奶奶心房颤动导致血栓形成，引发脑栓塞",
+      "expected_output": {
+        "object": "郑奶奶",
+        "mediator": "心房颤动",
+        "property": "血栓形成",
+        "result": "脑栓塞",
+        "confidence_threshold": 0.90
+      }
+    },
+    {
+      "case_id": "TC011",
+      "input_text": "黄爷爷脱水导致尿液浓缩，泌尿系感染",
+      "expected_output": {
+        "object": "黄爷爷",
+        "mediator": "脱水",
+        "property": "泌尿系统防御力下降",
+        "result": "泌尿系感染",
+        "confidence_threshold": 0.75
+      }
+    },
+    {
+      "case_id": "TC012",
+      "input_text": "林奶奶视力下降导致环境感知受损，碰撞受伤",
+      "expected_output": {
+        "object": "林奶奶",
+        "mediator": "视力下降",
+        "property": "环境感知受损",
+        "result": "碰撞受伤",
+        "confidence_threshold": 0.85
+      }
+    },
+    {
+      "case_id": "TC013",
+      "input_text": "马爷爷服用镇静药导致肌肉松弛，步态不稳",
+      "expected_output": {
+        "object": "马爷爷",
+        "mediator": "服用镇静药",
+        "property": "肌肉松弛",
+        "result": "步态不稳",
+        "confidence_threshold": 0.80
+      }
+    },
+    {
+      "case_id": "TC014",
+      "input_text": "杨奶奶慢性肾病导致肾功能恶化，进展为肾衰竭",
+      "expected_output": {
+        "object": "杨奶奶",
+        "mediator": "慢性肾病",
+        "property": "肾功能进行性恶化",
+        "result": "肾衰竭",
+        "confidence_threshold": 0.85
+      }
+    },
+    {
+      "case_id": "TC015",
+      "input_text": "徐爷爷帕金森病导致肢体震颤，用餐时烫伤",
+      "expected_output": {
+        "object": "徐爷爷",
+        "mediator": "帕金森病",
+        "property": "肢体震颤",
+        "result": "烫伤",
+        "confidence_threshold": 0.85
+      }
+    },
+    {
+      "case_id": "TC016",
+      "input_text": "胡奶奶抑郁症导致神经递质失衡，睡眠食欲障碍",
+      "expected_output": {
+        "object": "胡奶奶",
+        "mediator": "抑郁症",
+        "property": "神经递质失衡",
+        "result": "睡眠食欲障碍",
+        "confidence_threshold": 0.80
+      }
+    },
+    {
+      "case_id": "TC017",
+      "input_text": "梁爷爷长期吸烟导致肺功能受损，出现呼吸困难",
+      "expected_output": {
+        "object": "梁爷爷",
+        "mediator": "长期吸烟",
+        "property": "肺功能受损",
+        "result": "呼吸困难",
+        "confidence_threshold": 0.90
+      }
+    },
+    {
+      "case_id": "TC018",
+      "input_text": "谢奶奶类风湿关节炎导致关节变形，日常活动受限",
+      "expected_output": {
+        "object": "谢奶奶",
+        "mediator": "类风湿关节炎",
+        "property": "关节变形僵硬",
+        "result": "日常活动受限",
+        "confidence_threshold": 0.85
+      }
+    },
+    {
+      "case_id": "TC019",
+      "input_text": "何爷爷前列腺增生导致夜尿频繁，睡眠质量下降",
+      "expected_output": {
+        "object": "何爷爷",
+        "mediator": "前列腺增生",
+        "property": "夜尿频繁",
+        "result": "睡眠质量下降",
+        "confidence_threshold": 0.80
+      }
+    },
+    {
+      "case_id": "TC020",
+      "input_text": "罗奶奶甲状腺功能减退导致代谢率降低，疲乏体重增加",
+      "expected_output": {
+        "object": "罗奶奶",
+        "mediator": "甲减",
+        "property": "代谢率降低",
+        "result": "疲乏体重增加",
+        "confidence_threshold": 0.85
+      }
+    }
+  ],
+  "validation_metrics": {
+    "minimum_accuracy": 0.85,
+    "description": "抽取准确率阈值：正确识别O、C、P、R四个元素，且语义匹配度>80%视为正确"
+  }
+}

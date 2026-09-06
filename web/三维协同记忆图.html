@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三维协同记忆图谱 - 智能健康管理平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .title-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #95a5a6;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            min-height: 600px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .panel-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .timeline-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .semantic-icon {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .graph-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .panel-content {
+            min-height: 400px;
+        }
+
+        /* 时间轴样式 */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 3px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            background: #e8eaf6;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+
+        .timeline-date {
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .timeline-content {
+            font-size: 14px;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .timeline-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        /* 语义云样式 */
+        .semantic-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .semantic-tag {
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .semantic-tag:nth-child(1) {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 20px;
+            animation-delay: 0s;
+        }
+
+        .semantic-tag:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 18px;
+            animation-delay: 0.5s;
+        }
+
+        .semantic-tag:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            font-size: 16px;
+            animation-delay: 1s;
+        }
+
+        .semantic-tag:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            font-size: 15px;
+            animation-delay: 1.5s;
+        }
+
+        .semantic-tag:nth-child(5) {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            font-size: 14px;
+            animation-delay: 2s;
+        }
+
+        .semantic-tag:nth-child(6) {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            color: white;
+            font-size: 13px;
+            animation-delay: 2.5s;
+        }
+
+        .semantic-tag:nth-child(7) {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #2c3e50;
+            font-size: 13px;
+            animation-delay: 3s;
+        }
+
+        .semantic-tag:nth-child(8) {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #2c3e50;
+            font-size: 12px;
+            animation-delay: 3.5s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .semantic-tag:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 知识图谱样式 */
+        .knowledge-graph {
+            position: relative;
+            height: 100%;
+            background: radial-gradient(circle at center, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .graph-node {
+            position: absolute;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .graph-node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .node-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 16px;
+            padding: 15px 25px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .node-secondary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .node-tertiary {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+
+        .node-quaternary {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .graph-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.3) 0%, rgba(102, 126, 234, 0.1) 100%);
+            transform-origin: left center;
+        }
+
+        .highlight-box {
+            position: absolute;
+            border: 2px dashed #667eea;
+            border-radius: 12px;
+            background: rgba(102, 126, 234, 0.05);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        .tech-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <div class="title-left">
+                    <div class="icon">🧠</div>
+                    <div>
+                        <h1>三维协同记忆图谱</h1>
+                        <div class="subtitle">时间线 × 语义云 × 知识图谱 - 因果关联直观呈现</div>
+                    </div>
+                </div>
+                <div class="tech-badge">三维检索系统</div>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-label">记忆条目</div>
+                    <div class="stat-value">1,247</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">检索精度</div>
+                    <div class="stat-value">87.3%</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">响应时间</div>
+                    <div class="stat-value">2.1s</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">向量维度</div>
+                    <div class="stat-value">768维</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- 时间线记忆引擎 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <div class="panel-icon timeline-icon">⏱️</div>
+                        时间线记忆引擎
+                    </div>
+                </div>
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="按时间范围查询...">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="panel-content">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">2024-05-23 09:30</div>
+                            <div class="timeline-content">
+                                体检报告：血压 145/92 mmHg，较上月升高
+                                <div class="timeline-tag">高血压</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2024-05-20 14:15</div>
+                            <div class="timeline-content">
+                                用药记录：开始服用降压药（氨氯地平 5mg）
+                                <div class="timeline-tag">用药</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2024-05-15 10:00</div>
+                            <div class="timeline-content">
+                                症状记录：头晕、乏力，持续3天
+                                <div class="timeline-tag">症状</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2024-04-28 16:45</div>
+                            <div class="timeline-content">
+                                复查结果：血压 138/88 mmHg，控制良好
+                                <div class="timeline-tag">复查</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2024-04-10 11:20</div>
+                            <div class="timeline-content">
+                                诊断记录：确诊高血压2级，建议药物治疗
+                                <div class="timeline-tag">诊断</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2024-03-25 08:30</div>
+                            <div class="timeline-content">
+                                初诊：血压 152/95 mmHg，心率 82次/分
+                                <div class="timeline-tag">初诊</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 向量语义记忆引擎 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <div class="panel-icon semantic-icon">☁️</div>
+                        向量语义记忆引擎
+                    </div>
+                </div>
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="语义相似度检索..." value="头晕">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="panel-content">
+                    <div class="semantic-cloud">
+                        <div class="semantic-tag">头晕</div>
+                        <div class="semantic-tag">眩晕</div>
+                        <div class="semantic-tag">头昏</div>
+                        <div class="semantic-tag">头部不适</div>
+                        <div class="semantic-tag">晕眩感</div>
+                        <div class="semantic-tag">平衡失调</div>
+                        <div class="semantic-tag">站立不稳</div>
+                        <div class="semantic-tag">视物旋转</div>
+                        <div class="semantic-tag">恶心</div>
+                        <div class="semantic-tag">乏力</div>
+                        <div class="semantic-tag">疲劳</div>
+                        <div class="semantic-tag">精神不振</div>
+                    </div>
+                    <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 12px; border-left: 3px solid #f093fb;">
+                        <div style="font-size: 12px; color: #95a5a6; margin-bottom: 8px;">语义相似度分析</div>
+                        <div style="font-size: 14px; color: #2c3e50; line-height: 1.8;">
+                            <div style="margin-bottom: 8px;">
+                                <span style="font-weight: 600;">头晕 ≈ 眩晕</span>
+                                <span style="float: right; color: #f093fb; font-weight: 600;">相似度: 0.94</span>
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <span style="font-weight: 600;">头晕 ≈ 头昏</span>
+                                <span style="float: right; color: #f093fb; font-weight: 600;">相似度: 0.91</span>
+                            </div>
+                            <div style="margin-bottom: 8px;">
+                                <span style="font-weight: 600;">头晕 ≈ 晕眩感</span>
+                                <span style="float: right; color: #f093fb; font-weight: 600;">相似度: 0.88</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%); border-radius: 10px;">
+                        <div style="font-size: 11px; color: #95a5a6; margin-bottom: 5px;">技术特性</div>
+                        <div style="font-size: 13px; color: #2c3e50; line-height: 1.6;">
+                            ✓ Qdrant向量数据库<br>
+                            ✓ nomic-embed-text嵌入模型<br>
+                            ✓ 768维向量空间<br>
+                            ✓ 跨语言语义检索
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 知识图谱记忆引擎 -->
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <div class="panel-icon graph-icon">🕸️</div>
+                        知识图谱记忆引擎
+                    </div>
+                </div>
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="多跳关系查询...">
+                    <button class="search-btn">🔍</button>
+                </div>
+                <div class="panel-content">
+                    <div class="knowledge-graph">
+                        <!-- 中心节点 -->
+                        <div class="graph-node node-primary">高血压</div>
+
+                        <!-- 第一层节点 -->
+                        <div class="graph-node node-secondary" style="top: 15%; left: 50%; transform: translateX(-50%);">心血管疾病</div>
+                        <div class="graph-node node-secondary" style="top: 50%; left: 15%;">头晕症状</div>
+                        <div class="graph-node node-secondary" style="top: 50%; right: 15%;">降压药物</div>
+                        <div class="graph-node node-secondary" style="bottom: 15%; left: 50%; transform: translateX(-50%);">血压监测</div>
+
+                        <!-- 第二层节点 -->
+                        <div class="graph-node node-tertiary" style="top: 8%; left: 25%;">冠心病</div>
+                        <div class="graph-node node-tertiary" style="top: 8%; right: 25%;">脑卒中</div>
+                        <div class="graph-node node-quaternary" style="top: 35%; left: 5%;">眩晕</div>
+                        <div class="graph-node node-quaternary" style="top: 65%; left: 5%;">乏力</div>
+                        <div class="graph-node node-tertiary" style="top: 35%; right: 5%;">氨氯地平</div>
+                        <div class="graph-node node-tertiary" style="top: 65%; right: 5%;">缬沙坦</div>
+                        <div class="graph-node node-quaternary" style="bottom: 8%; left: 30%;">收缩压</div>
+                        <div class="graph-node node-quaternary" style="bottom: 8%; right: 30%;">舒张压</div>
+
+                        <!-- 高亮框 -->
+                        <div class="highlight-box" style="top: 40%; left: 35%; width: 30%; height: 25%;"></div>
+
+                        <!-- 连接线 -->
+                        <div class="graph-line" style="top: 50%; left: 50%; width: 100px; transform: rotate(-45deg);"></div>
+                        <div class="graph-line" style="top: 50%; left: 50%; width: 100px; transform: rotate(45deg);"></div>
+                        <div class="graph-line" style="top: 50%; left: 50%; width: 80px; transform: rotate(-90deg);"></div>
+                        <div class="graph-line" style="top: 50%; left: 50%; width: 80px; transform: rotate(90deg);"></div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%); border-radius: 10px;">
+                        <div style="font-size: 11px; color: #95a5a6; margin-bottom: 5px;">因果推理链</div>
+                        <div style="font-size: 13px; color: #2c3e50; line-height: 1.8;">
+                            高血压 → 心血管疾病 → 需要监测血脂<br>
+                            高血压 → 降压药物 → 氨氯地平 → 可能副作用<br>
+                            高血压 → 头晕症状 → 眩晕 → 需要注意安全
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

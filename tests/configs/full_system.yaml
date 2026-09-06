@@ -1,0 +1,105 @@
+# 完整系统配置（Full System）
+# 启用所有安全模块：PCCM + CASIA + ASDF + RBAC + 审计 + 机器遗忘
+
+name: "Full System - Context-Keeper"
+description: "完整安全防护系统，启用所有创新模块"
+
+# LLM配置
+llm:
+  provider: "ollama"
+  model: "qwen2.5:7b"
+  base_url: "http://localhost:11434"
+  temperature: 0.7
+  max_tokens: 512
+
+# 多维记忆检索
+memory:
+  enabled: true
+  vector_store:
+    enabled: true
+    type: "vearch"
+    collection: "nursing_records"
+    top_k: 5
+  knowledge_graph:
+    enabled: true
+    neo4j:
+      uri: "bolt://localhost:7687"
+      username: "neo4j"
+      password: "password"
+  timeline:
+    enabled: true
+
+# 三路检索融合（RRF）
+retrieval:
+  multi_dimensional:
+    enabled: true
+    timeline_enabled: true
+    knowledge_enabled: true
+    vector_enabled: true
+  rrf_fusion:
+    enabled: true
+    rrf_parameter: 60.0
+    source_weights:
+      vector: 1.0
+      graph: 1.2
+      timeline: 0.8
+
+# 完整安全防护
+security:
+  # PCCM因果推理
+  pccm:
+    enabled: true
+    rule_weight: 0.85
+    pmi_weight: 0.10
+    llm_weight: 0.05
+    confidence_threshold: 0.5
+
+  # CASIA上下文敏感识别
+  casia:
+    enabled: true
+    context_window: 5
+    sensitivity_threshold: 0.7
+
+  # ASDF对抗样本检测
+  asdf:
+    enabled: true
+    prompt_injection_detection: true
+    memory_poisoning_detection: true
+    detection_threshold: 0.8
+
+  # 隐私检测与脱敏
+  privacy:
+    enabled: true
+    pii_detection: true
+    detection_method: "hybrid"  # 正则 + 上下文分析
+    redaction: true
+    redact_types:
+      - id_card
+      - phone
+      - address
+      - medical_record
+      - family_info
+
+  # RBAC权限控制
+  rbac:
+    enabled: true
+    enforce_user_isolation: true
+    default_policy: "deny"
+
+  # 完整审计日志
+  audit:
+    enabled: true
+    log_level: "full"  # 记录完整决策链
+    include_retrieval_details: true
+    include_security_events: true
+    hash_chain: true  # 启用哈希链防篡改
+
+# 梯度正交投影机器遗忘
+unlearning:
+  enabled: true
+  algorithm: "gradient_orthogonal_projection"
+  default_epsilon: 1.0
+  default_learning_rate: 0.001
+  max_iterations: 50
+  convergence_threshold: 0.001
+  differential_privacy: true

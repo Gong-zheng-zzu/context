@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "execution_mode": "live_session_cascade",
+  "timestamp_utc": "2026-07-26T08:16:27.519982+00:00",
+  "scope": {
+    "target_user_id": "eval_user_001",
+    "target_session_id": "eval_retrieval_test",
+    "control_session_id": "eval_unlearning_control",
+    "collection": "nursing_records",
+    "destructive_authorization": "EVAL_ALLOW_DESTRUCTIVE_UNLEARNING=true"
+  },
+  "required_sequence": "seed -> pre-count -> delete -> post-count -> retrieval probe -> verify",
+  "required_stores": [
+    "qdrant",
+    "timescaledb",
+    "neo4j",
+    "session_file_cache"
+  ],
+  "preflight": {
+    "health": "服务正常",
+    "authentication": {
+      "http_status": 200,
+      "error_type": null,
+      "error_message": null,
+      "latency_ms": 17.335
+    }
+  },
+  "trials": [
+    {
+      "trial": 1,
+      "status": "seed_failed",
+      "error": "seed command failed",
+      "seed": {
+        "command": "python experiments/scripts/prepare_unlearning_trial_seed.py --trial {trial} --base-url http://127.0.0.1:8088",
+        "returncode": 1,
+        "stdout": "manifest=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-01\\manifest.json\ntarget_doc_ids=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-01\\target_doc_ids.json\nseed_status=failed\n",
+        "stderr": ""
+      },
+      "target_pre_count": {},
+      "control_pre_count": {},
+      "delete": {},
+      "target_post_count": {},
+      "control_post_count": {},
+      "document_evidence": {},
+      "retrieval_probe": {},
+      "verification": {},
+      "timestamp_utc": "2026-07-26T08:16:26.288025+00:00"
+    },
+    {
+      "trial": 2,
+      "status": "seed_failed",
+      "error": "seed command failed",
+      "seed": {
+        "command": "python experiments/scripts/prepare_unlearning_trial_seed.py --trial {trial} --base-url http://127.0.0.1:8088",
+        "returncode": 1,
+        "stdout": "manifest=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-02\\manifest.json\ntarget_doc_ids=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-02\\target_doc_ids.json\nseed_status=failed\n",
+        "stderr": ""
+      },
+      "target_pre_count": {},
+      "control_pre_count": {},
+      "delete": {},
+      "target_post_count": {},
+      "control_post_count": {},
+      "document_evidence": {},
+      "retrieval_probe": {},
+      "verification": {},
+      "timestamp_utc": "2026-07-26T08:16:26.946448+00:00"
+    },
+    {
+      "trial": 3,
+      "status": "seed_failed",
+      "error": "seed command failed",
+      "seed": {
+        "command": "python experiments/scripts/prepare_unlearning_trial_seed.py --trial {trial} --base-url http://127.0.0.1:8088",
+        "returncode": 1,
+        "stdout": "manifest=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-03\\manifest.json\ntarget_doc_ids=D:\\context\\context-keeper-main\\experiments\\results\\unlearning_trial_seed\\trial-03\\target_doc_ids.json\nseed_status=failed\n",
+        "stderr": ""
+      },
+      "target_pre_count": {},
+      "control_pre_count": {},
+      "delete": {},
+      "target_post_count": {},
+      "control_post_count": {},
+      "document_evidence": {},
+      "retrieval_probe": {},
+      "verification": {},
+      "timestamp_utc": "2026-07-26T08:16:27.519982+00:00"
+    }
+  ],
+  "passed": false
+}

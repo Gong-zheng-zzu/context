@@ -1,0 +1,30 @@
+{
+  "execution_mode": "live_api",
+  "timestamp": "20260713_165257",
+  "total_tests": 1,
+  "config": "full_system",
+  "detailed_results": [
+    {
+      "scenario_name": "user_data_deletion",
+      "target_user_id": "elder_001",
+      "config_name": "full_system",
+      "before_hit_count": 0,
+      "before_hit_rate": 0.0,
+      "after_hit_count": 0,
+      "after_hit_rate": 0.0,
+      "unlearning_rate": 0.0,
+      "side_effect_rate": 0.0,
+      "unlearning_time_ms": 1.8672943115234375,
+      "convergence_iterations": 0,
+      "timestamp": "2026-07-13T16:52:57.609429"
+    }
+  ],
+  "aggregated_metrics": {
+    "scenario_name": "all_scenarios",
+    "config_name": "full_system",
+    "avg_unlearning_rate": 0.0,
+    "avg_side_effect_rate": 0.0,
+    "avg_unlearning_time_ms": 1.8672943115234375,
+    "avg_convergence_iterations": 0.0
+  }
+}

@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260717T103315Z_full_system_33660",
+    "started_at":  "2026-07-17T10:33:15.2533580Z",
+    "ended_at":  "2026-07-17T10:36:01.8952532Z",
+    "outcome":  "succeeded",
+    "error":  null,
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  "D:\\context\\context-keeper-main\\experiments\\results\\raw\\security_20260717_103601Z.json",
+    "command":  "python experiments/scripts/security_eval.py --config-label full_system --config-evidence $env:EVAL_RUNTIME_CONFIG_HASH",
+    "command_sha256":  "3367e08d0721379400c196507ce49f8f858074bad9741bc0eaf85cac1f41e340",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "8caa63910698aad2429ed66f99ac45aa38e84394fe0c29a10fa958ffaca82405",
+                          "overlay_env_sha256":  "76cbe83cd2babea4a3d542dcb12543f7c289174cb463c256c02190968d5c4901",
+                          "effective_env_sha256":  "47c71a53d56da78cf532d362a0f61d4b5e5e887410059a6ba1ff622e98467576"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "0f27d1535aa3ca733202e10e4fae87dd41897e718695de801b3cd7562e8202b8"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T103315Z_full_system_33660\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T103315Z_full_system_33660\\evaluation.log"
+                  }
+}

@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260717T113321Z_baseline_rag_with_filter_15664",
+    "started_at":  "2026-07-17T11:33:21.5363998Z",
+    "ended_at":  "2026-07-17T11:34:10.1870011Z",
+    "outcome":  "runner_failed",
+    "error":  "ERROR: stage verify_retrieval_evidence failed with exit code 1; see D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T113340Z_baseline_rag_with_filter\\verify_retrieval_evidence.log",
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  null,
+    "result_file":  null,
+    "command":  "python experiments\\scripts\\run_baseline_retrieval.py baseline_rag_with_filter",
+    "command_sha256":  "bdcb78fdc381ef18a963efae52bd178c4c2e3b9bbaaf6cbd4302b0a130986093",
+    "configuration":  {
+                          "name":  "baseline_rag_with_filter",
+                          "base_env_sha256":  "8caa63910698aad2429ed66f99ac45aa38e84394fe0c29a10fa958ffaca82405",
+                          "overlay_env_sha256":  "c6b7e78e7a5fa5f8c1e7e7db0fe78317daded95f3850e0a3d2d0516ff8fde666",
+                          "effective_env_sha256":  "3b80070f41a6dc84c03e0ff26612371b2e71291e8beebc9d8dbad5e4c600c2bf"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "0f27d1535aa3ca733202e10e4fae87dd41897e718695de801b3cd7562e8202b8"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T113321Z_baseline_rag_with_filter_15664\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T113321Z_baseline_rag_with_filter_15664\\evaluation.log"
+                  }
+}

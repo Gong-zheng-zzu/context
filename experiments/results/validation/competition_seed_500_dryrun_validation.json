@@ -1,0 +1,19 @@
+{
+  "schema": "structured-threeway-verification-v2",
+  "verified_at": "2026-07-22T07:14:04Z",
+  "manifest": "D:\\context\\context-keeper-main\\experiments\\results\\structured_threeway_seed_500_dryrun\\manifest.json",
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "input_audit": {
+    "status": "passed",
+    "errors": []
+  },
+  "vector": {
+    "status": "not_run"
+  },
+  "three_way": {
+    "status": "not_run"
+  }
+}

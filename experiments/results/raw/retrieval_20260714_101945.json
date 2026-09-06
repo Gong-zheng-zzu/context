@@ -1,0 +1,79 @@
+{
+  "execution_mode": "live_api",
+  "timestamp": "20260714_101945",
+  "total_queries": 3,
+  "configs": [
+    "full_system"
+  ],
+  "config_hashes": {
+    "full_system": "6821f0bb37af9b26b1e495602c8267d9d0b9cfecd9be143c59ff0aa7c0f805f5"
+  },
+  "detailed_results": [
+    {
+      "query_id": "temporal_001",
+      "query_text": "王明最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 0,
+      "error_type": "timeout",
+      "error_message": "请求超时 (>30s)",
+      "latency_ms": 30008.288,
+      "retrieved_docs": [],
+      "response_text": "",
+      "found_ground_truth": false,
+      "reciprocal_rank": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-07-14T10:18:45.094982"
+    },
+    {
+      "query_id": "temporal_002",
+      "query_text": "李国强最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 0,
+      "error_type": "timeout",
+      "error_message": "请求超时 (>30s)",
+      "latency_ms": 30012.638,
+      "retrieved_docs": [],
+      "response_text": "",
+      "found_ground_truth": false,
+      "reciprocal_rank": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-07-14T10:19:15.107620"
+    },
+    {
+      "query_id": "temporal_003",
+      "query_text": "赵志强最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 0,
+      "error_type": "timeout",
+      "error_message": "请求超时 (>30s)",
+      "latency_ms": 30008.981,
+      "retrieved_docs": [],
+      "response_text": "",
+      "found_ground_truth": false,
+      "reciprocal_rank": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-07-14T10:19:45.116601"
+    }
+  ],
+  "aggregated_metrics": {
+    "full_system": {
+      "config_name": "full_system",
+      "total_queries": 3,
+      "api_success_count": 0,
+      "api_error_count": 3,
+      "mrr": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "avg_latency_ms": 0.0,
+      "temporal_mrr": 0.0,
+      "causal_mrr": 0.0,
+      "general_mrr": 0.0
+    }
+  }
+}

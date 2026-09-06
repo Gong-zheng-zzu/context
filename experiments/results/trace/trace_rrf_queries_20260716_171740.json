@@ -1,0 +1,249 @@
+{
+  "timestamp": "20260716_171740",
+  "mode": "rrf",
+  "total_queries": 10,
+  "results": [
+    {
+      "query_id": "temporal_001",
+      "question": "王明最近的健康记录和变化趋势是什么？",
+      "success": true,
+      "result_count": 2,
+      "doc_ids": [
+        "elder_080_2026-06-06T02:10:43.194500",
+        "elder_047_2026-06-27T06:48:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 14165.621519088745
+    },
+    {
+      "query_id": "temporal_002",
+      "question": "李国强最近的健康记录和变化趋势是什么？",
+      "success": true,
+      "result_count": 4,
+      "doc_ids": [
+        "elder_028_2026-06-13T18:44:43.194500",
+        "elder_025_2026-06-06T02:40:43.194500",
+        "elder_093_2026-06-17T07:12:43.194500",
+        "elder_091_2026-06-18T11:18:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 14033.878564834595
+    },
+    {
+      "query_id": "temporal_003",
+      "question": "赵志强最近的健康记录和变化趋势是什么？",
+      "success": true,
+      "result_count": 2,
+      "doc_ids": [
+        "elder_047_2026-06-06T03:59:43.194500",
+        "elder_033_2026-06-06T03:33:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 14204.311609268188
+    },
+    {
+      "query_id": "causal_001",
+      "question": "李国强骨折是因为什么原因引起的？",
+      "success": true,
+      "result_count": 5,
+      "doc_ids": [
+        "elder_025_2026-06-06T02:40:43.194500",
+        "elder_028_2026-06-13T18:44:43.194500",
+        "elder_082_2026-06-06T03:54:43.194500",
+        "elder_091_2026-06-18T11:18:43.194500",
+        "elder_093_2026-06-17T07:12:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 13922.998666763306
+    },
+    {
+      "query_id": "causal_002",
+      "question": "为什么杨桂英会有睡眠问题？",
+      "success": true,
+      "result_count": 5,
+      "doc_ids": [
+        "elder_079_2026-07-02T07:55:43.194500",
+        "elder_084_2026-06-06T03:36:43.194500",
+        "elder_047_2026-06-06T03:59:43.194500",
+        "elder_091_2026-06-18T11:18:43.194500",
+        "elder_014_2026-06-28T03:06:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 16044.671058654785
+    },
+    {
+      "query_id": "causal_003",
+      "question": "陈秀兰想开心起来的原因是什么？",
+      "success": true,
+      "result_count": 3,
+      "doc_ids": [
+        "elder_079_2026-07-02T07:55:43.194500",
+        "elder_091_2026-06-18T11:18:43.194500",
+        "elder_079_2026-06-13T21:16:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 14708.38737487793
+    },
+    {
+      "query_id": "general_001",
+      "question": "王明的基本健康状况如何？",
+      "success": true,
+      "result_count": 2,
+      "doc_ids": [
+        "elder_080_2026-06-06T02:10:43.194500",
+        "elder_047_2026-06-27T06:48:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 14090.099811553955
+    },
+    {
+      "query_id": "general_006",
+      "question": "李华服用的药物有哪些？",
+      "success": true,
+      "result_count": 4,
+      "doc_ids": [
+        "elder_091_2026-06-18T11:18:43.194500",
+        "elder_082_2026-06-06T03:54:43.194500",
+        "elder_028_2026-06-13T18:44:43.194500",
+        "elder_025_2026-06-06T02:40:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 16984.577655792236
+    },
+    {
+      "query_id": "general_012",
+      "question": "当前所有老人用药清单及使用频率？",
+      "success": true,
+      "result_count": 1,
+      "doc_ids": [
+        "elder_047_2026-06-06T03:59:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 15755.953311920166
+    },
+    {
+      "query_id": "general_008",
+      "question": "哪些老人出现过夜间咳嗽？",
+      "success": true,
+      "result_count": 5,
+      "doc_ids": [
+        "elder_047_2026-06-06T03:59:43.194500",
+        "elder_002_2026-07-02T06:45:43.194500",
+        "elder_010_2026-07-02T07:51:43.194500",
+        "elder_smoke_2026-06-06T08:30:00",
+        "elder_081_2026-07-02T21:49:43.194500"
+      ],
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "latency_ms": 14613.775491714478
+    }
+  ]
+}

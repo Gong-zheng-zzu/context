@@ -1,0 +1,79 @@
+{
+  "execution_mode": "live_api",
+  "timestamp": "20260713_221430",
+  "total_queries": 3,
+  "configs": [
+    "baseline_rag_with_filter"
+  ],
+  "config_hashes": {
+    "baseline_rag_with_filter": "7dc47556c49aaafac843886d19225a82bfcf162720d3ab5dc472d0155e8c5466"
+  },
+  "detailed_results": [
+    {
+      "query_id": "temporal_001",
+      "query_text": "王明最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "baseline_rag_with_filter",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 17935.611999999997,
+      "retrieved_docs": [],
+      "response_text": "",
+      "found_ground_truth": false,
+      "reciprocal_rank": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-07-13T22:13:54.273389"
+    },
+    {
+      "query_id": "temporal_002",
+      "query_text": "李国强最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "baseline_rag_with_filter",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 17453.194,
+      "retrieved_docs": [],
+      "response_text": "",
+      "found_ground_truth": false,
+      "reciprocal_rank": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-07-13T22:14:11.727087"
+    },
+    {
+      "query_id": "temporal_003",
+      "query_text": "赵志强最近的健康记录和变化趋势是什么？",
+      "query_type": "temporal",
+      "config_name": "baseline_rag_with_filter",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 18776.547000000002,
+      "retrieved_docs": [],
+      "response_text": "",
+      "found_ground_truth": false,
+      "reciprocal_rank": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-07-13T22:14:30.503634"
+    }
+  ],
+  "aggregated_metrics": {
+    "baseline_rag_with_filter": {
+      "config_name": "baseline_rag_with_filter",
+      "total_queries": 3,
+      "api_success_count": 3,
+      "api_error_count": 0,
+      "mrr": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "avg_latency_ms": 18055.11766666667,
+      "temporal_mrr": 0.0,
+      "causal_mrr": 0.0,
+      "general_mrr": 0.0
+    }
+  }
+}

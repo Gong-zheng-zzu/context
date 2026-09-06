@@ -1,0 +1,32 @@
+﻿{
+    "schema_version":  1,
+    "run_id":  "20260717T061147Z_baseline_naive_rag_17180",
+    "started_at":  "2026-07-17T06:11:47.6194332Z",
+    "ended_at":  "2026-07-17T06:12:12.4355288Z",
+    "outcome":  "runner_failed",
+    "error":  "Traceback (most recent call last):",
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  null,
+    "result_file":  null,
+    "command":  "python experiments/scripts/cleanup_eval_session.py --confirm; if ($LASTEXITCODE -ne 0) { throw \"cleanup failed\" }; python experiments/scripts/seed_vector_data.py --session-id eval_retrieval_test --verify --skip-session-init; if ($LASTEXITCODE -ne 0) { throw \"seed failed\" }; python experiments/scripts/run_trace_queries.py --mode rrf --limit 10; if ($LASTEXITCODE -ne 0) { throw \"trace failed\" }; python experiments/scripts/retrieval_eval.py --queries 50 --configs baseline_naive_rag --sample-mode all --retrieval-mode rrf",
+    "command_sha256":  "fd442d31593feffef12cd52ab00c5b811cc3b7c5a33852a5a7daa475c8af8415",
+    "configuration":  {
+                          "name":  "baseline_naive_rag",
+                          "base_env_sha256":  "d35e59f8e83b2976d9686e642ae42bfeb56828795bb50c0eab47804fcadad25d",
+                          "overlay_env_sha256":  "dc4e796182d2a9d5f2cd6236629ce2996b6873d97c6ee753ad25f0abd4e1698a",
+                          "effective_env_sha256":  "e8c087af77ed5336860cd7d3bbb96ba2990f23d0cc3062a2e6a1501cea9ed6d6"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "0f27d1535aa3ca733202e10e4fae87dd41897e718695de801b3cd7562e8202b8"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T061147Z_baseline_naive_rag_17180\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260717T061147Z_baseline_naive_rag_17180\\evaluation.log"
+                  }
+}

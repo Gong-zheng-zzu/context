@@ -1,0 +1,127 @@
+{
+  "version": "1.0",
+  "description": "机器遗忘测试数据集 - 用于验证梯度正交投影算法",
+  "test_scenarios": [
+    {
+      "scenario_id": "MU001",
+      "scenario_name": "单用户完全遗忘",
+      "user_id": "user_001",
+      "user_name": "测试用户001",
+      "vector_count": 150,
+      "description": "模拟单个用户请求完全遗忘其所有数据",
+      "expected_results": {
+        "similarity_after_unlearning": 0.08,
+        "fairness_loss_change": 0.03,
+        "max_iterations": 35
+      }
+    },
+    {
+      "scenario_id": "MU002",
+      "scenario_name": "大批量向量遗忘",
+      "user_id": "user_002",
+      "user_name": "测试用户002",
+      "vector_count": 5000,
+      "description": "测试算法对大规模数据的处理能力",
+      "expected_results": {
+        "similarity_after_unlearning": 0.10,
+        "fairness_loss_change": 0.04,
+        "max_iterations": 45,
+        "processing_time_seconds": 300
+      }
+    },
+    {
+      "scenario_id": "MU003",
+      "scenario_name": "敏感医疗数据遗忘",
+      "user_id": "user_003",
+      "user_name": "李爷爷",
+      "vector_count": 80,
+      "description": "遗忘包含敏感医疗信息的向量",
+      "sensitive_keywords": ["糖尿病", "高血压", "心脏病"],
+      "expected_results": {
+        "similarity_after_unlearning": 0.05,
+        "fairness_loss_change": 0.02,
+        "privacy_budget_epsilon": 1.0
+      }
+    },
+    {
+      "scenario_id": "MU004",
+      "scenario_name": "部分数据遗忘",
+      "user_id": "user_004",
+      "user_name": "王奶奶",
+      "vector_count": 200,
+      "collections_to_forget": ["chat_history", "health_records"],
+      "collections_to_retain": ["basic_profile"],
+      "description": "只遗忘特定集合的数据，保留其他集合",
+      "expected_results": {
+        "forgotten_vector_similarity": 0.08,
+        "retained_vector_similarity": 0.95
+      }
+    },
+    {
+      "scenario_id": "MU005",
+      "scenario_name": "高隐私预算遗忘",
+      "user_id": "user_005",
+      "user_name": "张大爷",
+      "vector_count": 120,
+      "epsilon": 0.5,
+      "description": "使用更严格的隐私预算进行遗忘",
+      "expected_results": {
+        "similarity_after_unlearning": 0.03,
+        "noise_magnitude": "high",
+        "fairness_loss_change": 0.02
+      }
+    }
+  ],
+  "sample_vectors": {
+    "description": "用于测试的样本向量数据结构",
+    "examples": [
+      {
+        "vector_id": "vec_001",
+        "user_id": "user_001",
+        "collection": "chat_history",
+        "embedding_dim": 768,
+        "metadata": {
+          "content": "李爷爷今天血压正常",
+          "timestamp": "2026-07-01T08:30:00Z",
+          "sensitive": false
+        }
+      },
+      {
+        "vector_id": "vec_002",
+        "user_id": "user_003",
+        "collection": "health_records",
+        "embedding_dim": 768,
+        "metadata": {
+          "content": "患者诊断为2型糖尿病，需要胰岛素治疗",
+          "timestamp": "2026-06-15T14:20:00Z",
+          "sensitive": true
+        }
+      }
+    ]
+  },
+  "validation_criteria": {
+    "similarity_threshold": 0.1,
+    "fairness_threshold": 0.05,
+    "convergence_iterations": 50,
+    "min_privacy_epsilon": 0.5,
+    "max_privacy_epsilon": 2.0,
+    "description": "所有测试场景必须满足：遗忘后相似度<0.1，公平性损失变化<0.05，收敛迭代<50次"
+  },
+  "performance_benchmarks": {
+    "small_scale": {
+      "vector_count": "< 500",
+      "expected_time_seconds": 60,
+      "memory_usage_mb": 512
+    },
+    "medium_scale": {
+      "vector_count": "500 - 5000",
+      "expected_time_seconds": 300,
+      "memory_usage_mb": 2048
+    },
+    "large_scale": {
+      "vector_count": "> 5000",
+      "expected_time_seconds": 900,
+      "memory_usage_mb": 4096
+    }
+  }
+}

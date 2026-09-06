@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>忆安智护 | 安全输入验证</title>
+  <style>
+    body{margin:0;background:#f4f7f8;color:#17324d;font:15px "Microsoft YaHei",sans-serif}.wrap{max-width:880px;margin:0 auto;padding:32px 20px}h1{margin:0}p{color:#587080;line-height:1.65}.panel{background:#fff;border:1px solid #d8e2e8;padding:20px;margin-top:18px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}input,textarea{width:100%;padding:10px;border:1px solid #b7c7d2;font:inherit}textarea{min-height:140px;resize:vertical}button{margin-top:12px;background:#176b87;color:#fff;border:0;padding:10px 16px;font:inherit;cursor:pointer}.secondary{background:#fff;color:#176b87;border:1px solid #176b87;text-decoration:none;display:inline-block;margin-left:8px;padding:9px 14px}.result{white-space:pre-wrap;background:#f1f6f8;padding:12px;margin-top:12px;min-height:72px}.status{font-weight:700}.ok{color:#167a5a}.bad{color:#b42318}@media(max-width:620px){.row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body><main class="wrap">
+  <h1>安全输入验证</h1>
+  <p>使用当前 JWT 登录流程调用受保护的输入安全评测端点。页面不保存密码、令牌或历史输入，仅显示本次结构化判定。</p>
+  <section class="panel"><div class="row"><label>用户 ID<input id="userId" value="eval_user_001" autocomplete="username"></label><label>演示密码<input id="password" type="password" autocomplete="current-password" placeholder="请输入密码"></label></div><button id="loginButton">登录并获取临时令牌</button><span id="authStatus" class="status"></span></section>
+  <section class="panel"><label>待验证输入<textarea id="message" placeholder="输入待验证的内容"></textarea></label><button id="evaluateButton">执行输入安全验证</button><a class="secondary" href="../governance_verification.html">查看治理验证中心</a><div id="result" class="result">请先登录。</div></section>
+  <script>
+    const base = location.origin; let token = '';
+    const output = text => document.getElementById('result').textContent = text;
+    document.getElementById('loginButton').onclick = async () => {
+      const status = document.getElementById('authStatus'); status.className='status'; status.textContent='登录中...';
+      try { const r=await fetch(`${base}/api/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:document.getElementById('userId').value.trim(),password:document.getElementById('password').value,workspace_id:'default'})}); const b=await r.json(); if(!r.ok||!b.success) throw new Error(b.error||'认证失败'); token=b.data.token; status.className='status ok'; status.textContent=' 已认证（临时令牌仅保存在当前页面内存）'; document.getElementById('password').value=''; } catch(e){status.className='status bad';status.textContent=` ${e.message}`;token='';}
+    };
+    document.getElementById('evaluateButton').onclick = async () => {
+      if(!token){output('请先完成 JWT 登录。');return;} output('验证中...');
+      try { const r=await fetch(`${base}/api/v1/security/evaluate-input`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({input:document.getElementById('message').value,session_id:`ui-security-${Date.now()}`,sample_id:'ui_demo',attack_type:'interactive',name:'ui_security_demo'})}); const b=await r.json(); if(!r.ok||!b.success) throw new Error(b.error||`请求失败 (${r.status})`); const d=b.data; output(`判定：${d.decision||'unknown'}\n阶段：${d.stage||'unknown'}\n已跳过生成：${d.generation_skipped===true?'是':'否'}\n安全警告数：${d.security_warning_count??0}`); } catch(e){output(`验证失败：${e.message}`);}
+    };
+  </script>
+</main></body></html>

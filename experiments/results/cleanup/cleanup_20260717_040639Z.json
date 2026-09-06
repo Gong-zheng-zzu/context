@@ -1,0 +1,19 @@
+{
+  "timestamp_utc": "2026-07-17T04:06:39.496376+00:00",
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "auth": {
+    "http_status": 200,
+    "error_type": null,
+    "error_message": null
+  },
+  "passed": false,
+  "preflight": {
+    "http_status": 404,
+    "data": null,
+    "error": "HTTP 404: {\"complete\":false,\"error\":\"session not found: eval_retrieval_test\",\"result\":null}"
+  },
+  "failure": "preflight failed: HTTP 404: {\"complete\":false,\"error\":\"session not found: eval_retrieval_test\",\"result\":null}"
+}

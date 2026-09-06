@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "run_id": "20260717T111247Z_baseline_naive_rag",
+  "started_at": "2026-07-17T11:12:47Z",
+  "outcome": "dry_run_complete",
+  "execution_mode": "dry_run",
+  "runtime": {
+    "config_name": "baseline_naive_rag",
+    "runtime_env_file": "D:\\context\\context-keeper-main\\experiments\\runtime_env\\baseline_naive_rag.env",
+    "runtime_env_sha256": "c41382a04a1314840dcc49854f5714089582430502c162cf6a7687b9b69b2337",
+    "operator_attestation": "",
+    "docker_managed_by_runner": false
+  },
+  "evidence_requirements": {
+    "trace_query_count": 10,
+    "trace_requests_must_succeed_for_filter_baseline": false,
+    "trace_candidate_filter_required": false,
+    "retrieval_result_must_have_sourced_doc_ids": true
+  },
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "data": {
+    "corpus": "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_corpus\\retrieval_corpus_30.json",
+    "ground_truth": "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_groundtruth\\query_answer_pairs.json",
+    "expected_document_count": 30,
+    "expected_query_count": 50
+  },
+  "artifacts": {
+    "cleanup": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T111247Z_baseline_naive_rag\\cleanup.json",
+    "seed_manifest": {
+      "path": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T111247Z_baseline_naive_rag\\seed\\manifest.json",
+      "sha256": "a816322295e90d0833f63d6b6176e867c83fcc8ec6dc60578f53cd80c4bc6624"
+    },
+    "seed_verification": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T111247Z_baseline_naive_rag\\seed_verification.json",
+    "trace": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T111247Z_baseline_naive_rag\\trace.json",
+    "retrieval_result": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T111247Z_baseline_naive_rag\\retrieval_result.json"
+  },
+  "stages": [
+    {
+      "name": "validate_dataset",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\validate_retrieval_dataset.py"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T111247Z_baseline_naive_rag\\validate_dataset.log",
+      "started_at": "2026-07-17T11:12:47Z",
+      "ended_at": "2026-07-17T11:12:47Z",
+      "exit_code": 0
+    },
+    {
+      "name": "prepare_seed_dry_run",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\prepare_structured_threeway_seed.py",
+        "--dry-run",
+        "--overwrite",
+        "--output-dir",
+        "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T111247Z_baseline_naive_rag\\seed"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\baseline_runs\\20260717T111247Z_baseline_naive_rag\\prepare_seed_dry_run.log",
+      "started_at": "2026-07-17T11:12:47Z",
+      "ended_at": "2026-07-17T11:12:48Z",
+      "exit_code": 0
+    }
+  ],
+  "error": null,
+  "ended_at": "2026-07-17T11:12:48Z"
+}

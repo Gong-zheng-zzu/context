@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "run_id": "attested_20260717T135527Z_full_system_unlearning",
+  "outcome": "succeeded",
+  "execution_strategy": "post_run_attestation_of_direct_evaluator",
+  "result_file": "D:\\context\\context-keeper-main\\experiments\\results\\raw\\unlearning_20260717_121746Z.json",
+  "command": "python experiments/scripts/run_unlearning_evaluation.py (direct invocation; evaluator completed before outer runner timeout)",
+  "command_sha256": "034d53f9a3eff6b89ee7eefd05101969235ca4f6af6f0c7aaf35f4003e9c90f3",
+  "configuration": {
+    "name": "full_system",
+    "base_env_sha256": "8caa63910698aad2429ed66f99ac45aa38e84394fe0c29a10fa958ffaca82405",
+    "overlay_env_sha256": "76cbe83cd2babea4a3d542dcb12543f7c289174cb463c256c02190968d5c4901",
+    "effective_env_sha256": "8caa63910698aad2429ed66f99ac45aa38e84394fe0c29a10fa958ffaca82405"
+  },
+  "data": {
+    "datasets_tree_sha256": "39a7aa475bb4c70737e7f31815846799f0d997afe40d932f87003d8b553ad580"
+  },
+  "environment": {
+    "platform": "Windows-10-10.0.26100-SP0"
+  },
+  "attestation": {
+    "statement": "The raw result was produced by a completed direct evaluator invocation; this manifest was attached after validating all three trials.",
+    "attested_at": "2026-07-17T13:55:27.708881+00:00"
+  }
+}

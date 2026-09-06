@@ -1,0 +1,50 @@
+{
+  "timestamp": "20260717_142012",
+  "mode": "rrf",
+  "total_queries": 1,
+  "results": [
+    {
+      "query_id": "temporal_001",
+      "question": "王明最近的健康记录和变化趋势是什么？",
+      "success": true,
+      "result_count": 5,
+      "doc_ids": [
+        "elder_080_2026-06-06T02:10:43.194500",
+        "elder_047_2026-06-27T06:48:43.194500",
+        "elder_047_2026-06-06T03:59:43.194500",
+        "elder_028_2026-06-13T18:44:43.194500",
+        "elder_078_2026-06-30T10:34:43.194500"
+      ],
+      "valid_doc_ids": true,
+      "unique_doc_ids": true,
+      "sources": [
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ],
+        [
+          "vector"
+        ]
+      ],
+      "evidence": {
+        "active_sources": [
+          "vector"
+        ],
+        "empty_sources": [
+          "knowledge",
+          "timeline"
+        ],
+        "fusion_mode": "vector_only_fallback"
+      },
+      "latency_ms": 77.75259017944336
+    }
+  ]
+}

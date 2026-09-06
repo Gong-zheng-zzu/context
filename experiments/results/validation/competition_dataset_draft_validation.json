@@ -1,0 +1,30 @@
+{
+  "corpus": {
+    "path": "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_corpus\\retrieval_corpus_500.json",
+    "sha256": "adb4a958313658da2ef70a3e56dba7d7b8475859535b105d7a017569194aabf6",
+    "count": 500,
+    "expected": 500
+  },
+  "queries": {
+    "path": "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_groundtruth\\competition_queries_100_draft.json",
+    "sha256": "82333d1602dd2dd60e71e2f6625bb0584b05a43cb9d578fd0c13e2f51efe163e",
+    "count": 100,
+    "expected": 100,
+    "type_counts": {
+      "temporal": 34,
+      "causal": 33,
+      "general": 33
+    },
+    "expected_type_counts": {
+      "temporal": 34,
+      "causal": 33,
+      "general": 33
+    },
+    "annotation_status": "pending_single_reviewer",
+    "report_eligible": false,
+    "reviewed": false
+  },
+  "missing_doc_ids": [],
+  "duplicate_query_ids": [],
+  "passed": true
+}

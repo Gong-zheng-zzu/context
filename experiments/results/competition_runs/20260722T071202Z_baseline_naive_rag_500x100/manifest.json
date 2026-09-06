@@ -1,0 +1,45 @@
+{
+  "schema": "competition-retrieval-run-v1",
+  "run_id": "20260722T071202Z_baseline_naive_rag_500x100",
+  "started_at": "2026-07-22T07:12:02Z",
+  "config_name": "baseline_naive_rag",
+  "mode": "vector",
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "dataset": {
+    "corpus": "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_corpus\\retrieval_corpus_500.json",
+    "corpus_sha256": "c9faa1b3c3130a25affc84a0d81a84995291746cd0a59f7875613e3970fc0fc6",
+    "queries": "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_groundtruth\\competition_queries_100_draft.json",
+    "queries_sha256": "83312f3069ef214a7539a94ee1a95c8c14308797983f92faca65e149f9231161"
+  },
+  "stages": [
+    {
+      "name": "validate_reviewed_dataset",
+      "command": [
+        "D:\\python\\python3.10\\python.exe",
+        "D:\\context\\context-keeper-main\\experiments\\scripts\\validate_retrieval_dataset.py",
+        "--corpus",
+        "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_corpus\\retrieval_corpus_500.json",
+        "--queries",
+        "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_groundtruth\\competition_queries_100_draft.json",
+        "--expected-corpus-count",
+        "500",
+        "--expected-query-count",
+        "100",
+        "--expected-type-counts",
+        "temporal=34,causal=33,general=33",
+        "--require-reviewed"
+      ],
+      "log": "D:\\context\\context-keeper-main\\experiments\\results\\competition_runs\\20260722T071202Z_baseline_naive_rag_500x100\\validate_reviewed_dataset.log",
+      "started_at": "2026-07-22T07:12:02Z",
+      "ended_at": "2026-07-22T07:12:02Z",
+      "exit_code": 1
+    }
+  ],
+  "result": "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260722T071202Z_baseline_naive_rag_500x100.json",
+  "outcome": "failed",
+  "error": "validate_reviewed_dataset failed; see D:\\context\\context-keeper-main\\experiments\\results\\competition_runs\\20260722T071202Z_baseline_naive_rag_500x100\\validate_reviewed_dataset.log",
+  "ended_at": "2026-07-22T07:12:02Z"
+}

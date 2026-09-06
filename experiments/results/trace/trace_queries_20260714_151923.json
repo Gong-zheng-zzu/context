@@ -1,0 +1,146 @@
+{
+  "timestamp": "20260714_151923",
+  "total_queries": 10,
+  "results": [
+    {
+      "query_id": "temporal_001",
+      "question": "王明最近的健康记录和变化趋势是什么？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "5ec606bf-e13b-47a7-8d7a-24972c066777",
+        "ecbbd470-3324-47a4-b56f-bdf69eb2906d",
+        "23a61118-016c-47ed-824b-ca4d4c7f4443",
+        "90eb72e9-9868-4c46-9d65-a20e24c9efca"
+      ],
+      "latency_ms": 20046.397924423218
+    },
+    {
+      "query_id": "temporal_002",
+      "question": "李国强最近的健康记录和变化趋势是什么？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "5ec606bf-e13b-47a7-8d7a-24972c066777",
+        "ecbbd470-3324-47a4-b56f-bdf69eb2906d",
+        "23a61118-016c-47ed-824b-ca4d4c7f4443",
+        "90eb72e9-9868-4c46-9d65-a20e24c9efca"
+      ],
+      "latency_ms": 19500.218629837036
+    },
+    {
+      "query_id": "temporal_003",
+      "question": "赵志强最近的健康记录和变化趋势是什么？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "5ec606bf-e13b-47a7-8d7a-24972c066777",
+        "ecbbd470-3324-47a4-b56f-bdf69eb2906d",
+        "23a61118-016c-47ed-824b-ca4d4c7f4443",
+        "90eb72e9-9868-4c46-9d65-a20e24c9efca"
+      ],
+      "latency_ms": 17984.498739242554
+    },
+    {
+      "query_id": "causal_001",
+      "question": "李国强骨折是因为什么原因引起的？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "5ec606bf-e13b-47a7-8d7a-24972c066777",
+        "ecbbd470-3324-47a4-b56f-bdf69eb2906d",
+        "23a61118-016c-47ed-824b-ca4d4c7f4443",
+        "90eb72e9-9868-4c46-9d65-a20e24c9efca",
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8"
+      ],
+      "latency_ms": 15981.864213943481
+    },
+    {
+      "query_id": "causal_002",
+      "question": "为什么杨桂英会有睡眠问题？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "4478da2f-4931-4f2c-b743-ed7d310555fb",
+        "525ba423-9daf-4706-90c5-cebde5f0bd89",
+        "2604c244-ad3e-4e4a-89f4-de98ad2c4a4a",
+        "2c091dfc-ba41-4db9-9496-1c7468d986c5",
+        "16e32b41-a418-4c77-b650-5bb177f14e9d"
+      ],
+      "latency_ms": 15938.2803440094
+    },
+    {
+      "query_id": "causal_003",
+      "question": "陈秀兰想开心起来的原因是什么？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "5ec606bf-e13b-47a7-8d7a-24972c066777",
+        "23a61118-016c-47ed-824b-ca4d4c7f4443",
+        "ecbbd470-3324-47a4-b56f-bdf69eb2906d",
+        "90eb72e9-9868-4c46-9d65-a20e24c9efca"
+      ],
+      "latency_ms": 19408.888578414917
+    },
+    {
+      "query_id": "general_001",
+      "question": "王明的基本健康状况如何？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "5ec606bf-e13b-47a7-8d7a-24972c066777",
+        "ecbbd470-3324-47a4-b56f-bdf69eb2906d",
+        "23a61118-016c-47ed-824b-ca4d4c7f4443",
+        "90eb72e9-9868-4c46-9d65-a20e24c9efca"
+      ],
+      "latency_ms": 17052.28328704834
+    },
+    {
+      "query_id": "general_006",
+      "question": "李华服用的药物有哪些？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "90eb72e9-9868-4c46-9d65-a20e24c9efca",
+        "5ec606bf-e13b-47a7-8d7a-24972c066777",
+        "23a61118-016c-47ed-824b-ca4d4c7f4443",
+        "ecbbd470-3324-47a4-b56f-bdf69eb2906d"
+      ],
+      "latency_ms": 16959.134101867676
+    },
+    {
+      "query_id": "general_012",
+      "question": "当前所有老人用药清单及使用频率？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8",
+        "90eb72e9-9868-4c46-9d65-a20e24c9efca",
+        "5ec606bf-e13b-47a7-8d7a-24972c066777",
+        "23a61118-016c-47ed-824b-ca4d4c7f4443",
+        "ecbbd470-3324-47a4-b56f-bdf69eb2906d"
+      ],
+      "latency_ms": 17509.800910949707
+    },
+    {
+      "query_id": "general_008",
+      "question": "哪些老人出现过夜间咳嗽？",
+      "success": true,
+      "result_count": 10,
+      "doc_ids": [
+        "5ec606bf-e13b-47a7-8d7a-24972c066777",
+        "ecbbd470-3324-47a4-b56f-bdf69eb2906d",
+        "23a61118-016c-47ed-824b-ca4d4c7f4443",
+        "90eb72e9-9868-4c46-9d65-a20e24c9efca",
+        "c406d843-b285-49f7-83e2-2cb98d7c6df8"
+      ],
+      "latency_ms": 18385.578393936157
+    }
+  ]
+}

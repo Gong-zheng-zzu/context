@@ -1,0 +1,125 @@
+{
+  "timestamp": "20260717_193053",
+  "mode": "vector",
+  "base_url": "http://127.0.0.1:8088",
+  "session_id": "eval_retrieval_test",
+  "total_queries": 10,
+  "results": [
+    {
+      "query_id": "temporal_001",
+      "question": "王明最近的健康记录和变化趋势是什么？",
+      "success": true,
+      "result_count": 1,
+      "doc_ids": [
+        "elder_080_2026-06-06T02:10:43.194500"
+      ],
+      "valid_doc_ids": true,
+      "unique_doc_ids": true,
+      "sources": [
+        [
+          "vector"
+        ]
+      ],
+      "evidence": {
+        "active_sources": [],
+        "empty_sources": [],
+        "fusion_mode": "not_reported"
+      },
+      "retrieval_metadata": {
+        "candidate_filter": {
+          "enabled": true,
+          "ruleset_version": "v1",
+          "ruleset_sha256": "58149c281babc734e521fa8c6c8df13599001442bbce3fead1e8fd200562e06e",
+          "before": 30,
+          "after": 1,
+          "removal_reasons": {
+            "low_score": 29
+          }
+        }
+      },
+      "latency_ms": 81.8943977355957
+    },
+    {
+      "query_id": "temporal_002",
+      "question": "李国强最近的健康记录和变化趋势是什么？",
+      "success": false,
+      "error": "object of type 'NoneType' has no len()"
+    },
+    {
+      "query_id": "temporal_003",
+      "question": "赵志强最近的健康记录和变化趋势是什么？",
+      "success": false,
+      "error": "object of type 'NoneType' has no len()"
+    },
+    {
+      "query_id": "causal_001",
+      "question": "李国强骨折是因为什么原因引起的？",
+      "success": false,
+      "error": "object of type 'NoneType' has no len()"
+    },
+    {
+      "query_id": "causal_002",
+      "question": "为什么杨桂英会有睡眠问题？",
+      "success": false,
+      "error": "object of type 'NoneType' has no len()"
+    },
+    {
+      "query_id": "causal_003",
+      "question": "陈秀兰想开心起来的原因是什么？",
+      "success": false,
+      "error": "object of type 'NoneType' has no len()"
+    },
+    {
+      "query_id": "general_001",
+      "question": "王明的基本健康状况如何？",
+      "success": true,
+      "result_count": 1,
+      "doc_ids": [
+        "elder_080_2026-06-06T02:10:43.194500"
+      ],
+      "valid_doc_ids": true,
+      "unique_doc_ids": true,
+      "sources": [
+        [
+          "vector"
+        ]
+      ],
+      "evidence": {
+        "active_sources": [],
+        "empty_sources": [],
+        "fusion_mode": "not_reported"
+      },
+      "retrieval_metadata": {
+        "candidate_filter": {
+          "enabled": true,
+          "ruleset_version": "v1",
+          "ruleset_sha256": "58149c281babc734e521fa8c6c8df13599001442bbce3fead1e8fd200562e06e",
+          "before": 30,
+          "after": 1,
+          "removal_reasons": {
+            "low_score": 29
+          }
+        }
+      },
+      "latency_ms": 123.42000007629395
+    },
+    {
+      "query_id": "general_006",
+      "question": "李华服用的药物有哪些？",
+      "success": false,
+      "error": "object of type 'NoneType' has no len()"
+    },
+    {
+      "query_id": "general_012",
+      "question": "当前所有老人用药清单及使用频率？",
+      "success": false,
+      "error": "object of type 'NoneType' has no len()"
+    },
+    {
+      "query_id": "general_008",
+      "question": "哪些老人出现过夜间咳嗽？",
+      "success": false,
+      "error": "object of type 'NoneType' has no len()"
+    }
+  ]
+}

@@ -1,0 +1,422 @@
+[
+  {
+    "record_id": "001",
+    "text": "李国强，70岁，阿尔茨海默病中期，服用多奈哌齐10mg/日。夜班护士记录：凌晨2:13，患者独自下床，试图走出病房，称'要回家做饭'。护士劝阻时患者情绪激动，推搡护士。判断为夜间谵妄发作。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "李国强",
+      "mediator": "阿尔茨海默病",
+      "property": "夜间谵妄",
+      "result": "情绪激动推搡护士",
+      "confidence": 0.92,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "002",
+    "text": "张奶奶今早服用降压药后起身时头晕，在洗手间滑倒。护士发现后立即通知医生，测血压90/60mmHg，诊断为体位性低血压。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "张奶奶",
+      "mediator": "服用降压药",
+      "property": "体位性低血压",
+      "result": "洗手间滑倒",
+      "confidence": 0.95,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "003",
+    "text": "王爷爷长期卧床三周，骶尾部皮肤发红破溃，护士检查发现II度压疮形成。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "王爷爷",
+      "mediator": "长期卧床",
+      "property": "局部压力增加",
+      "result": "压疮形成",
+      "confidence": 0.90,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "004",
+    "text": "赵奶奶因尿路感染入院，留置导尿管第5天，尿液浑浊，尿培养显示大肠杆菌感染。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "赵奶奶",
+      "mediator": "留置导尿管",
+      "property": "细菌侵入",
+      "result": "尿路感染",
+      "confidence": 0.88,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "005",
+    "text": "李爷爷糖尿病史20年，血糖控制不佳，今日诉足部麻木疼痛，检查发现右足溃疡2cm×3cm。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "李爷爷",
+      "mediator": "糖尿病血糖控制不佳",
+      "property": "周围神经病变",
+      "result": "足部溃疡",
+      "confidence": 0.85,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "006",
+    "text": "刘奶奶高血压病史15年，今晨突然剧烈头痛、呕吐，CT检查提示脑出血。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "刘奶奶",
+      "mediator": "高血压",
+      "property": "血管破裂",
+      "result": "脑出血",
+      "confidence": 0.93,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "007",
+    "text": "孙爷爷同时服用华法林和阿司匹林，今日牙龈出血不止，凝血功能检查INR值3.5（目标2.0-3.0）。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "孙爷爷",
+      "mediator": "华法林和阿司匹林联用",
+      "property": "凝血功能过度抑制",
+      "result": "出血风险增加",
+      "confidence": 0.92,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "008",
+    "text": "陈奶奶同时服用8种药物（多重用药），昨晚如厕时跌倒，诊断为药物相互作用导致头晕。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "陈奶奶",
+      "mediator": "多重用药",
+      "property": "药物相互作用",
+      "result": "跌倒",
+      "confidence": 0.83,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "009",
+    "text": "周爷爷认知功能障碍，夜间独自外出走失，2小时后被保安找回。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "周爷爷",
+      "mediator": "认知功能障碍",
+      "property": "方向感丧失",
+      "result": "走失",
+      "confidence": 0.87,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "010",
+    "text": "马奶奶服用地高辛治疗心衰，同时服用呋塞米利尿，今日出现恶心、心律不齐，血钾2.8mmol/L（正常3.5-5.5）。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "马奶奶",
+      "mediator": "地高辛和利尿剂联用",
+      "property": "低钾血症",
+      "result": "心律失常",
+      "confidence": 0.88,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "011",
+    "text": "吴爷爷术后第3天，因疼痛使用阿片类镇痛药，出现便秘3日未解大便。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "吴爷爷",
+      "mediator": "阿片类镇痛药",
+      "property": "肠蠕动减慢",
+      "result": "便秘",
+      "confidence": 0.86,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "012",
+    "text": "林奶奶长期使用糖皮质激素治疗类风湿，今日X光检查发现骨质疏松，腰椎压缩性骨折。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "林奶奶",
+      "mediator": "长期使用糖皮质激素",
+      "property": "骨质疏松",
+      "result": "腰椎压缩性骨折",
+      "confidence": 0.89,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "013",
+    "text": "黄爷爷慢性肾功能不全，医生开具青霉素类抗生素，用药后出现药物蓄积性中毒。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "黄爷爷",
+      "mediator": "慢性肾功能不全",
+      "property": "药物代谢障碍",
+      "result": "药物蓄积性中毒",
+      "confidence": 0.91,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "014",
+    "text": "郑奶奶夜间睡眠障碍，长期服用苯二氮䓬类药物，今晨起床时步态不稳摔倒。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "郑奶奶",
+      "mediator": "苯二氮䓬类药物",
+      "property": "肌肉松弛和平衡障碍",
+      "result": "摔倒",
+      "confidence": 0.84,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "015",
+    "text": "何爷爷帕金森病，服用左旋多巴治疗，午饭后30分钟出现剧烈震颤和僵直加重。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "何爷爷",
+      "mediator": "左旋多巴药效波动",
+      "property": "多巴胺水平下降",
+      "result": "运动症状加重",
+      "confidence": 0.87,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "016",
+    "text": "谢奶奶重度营养不良，血清白蛋白25g/L（正常35-50），双下肢凹陷性水肿。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "谢奶奶",
+      "mediator": "重度营养不良",
+      "property": "低蛋白血症",
+      "result": "双下肢水肿",
+      "confidence": 0.90,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "017",
+    "text": "韩爷爷吞咽功能障碍，进食时呛咳，X光检查显示吸入性肺炎。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "韩爷爷",
+      "mediator": "吞咽功能障碍",
+      "property": "食物误吸",
+      "result": "吸入性肺炎",
+      "confidence": 0.92,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "018",
+    "text": "曾奶奶长期卧床，下肢静脉血栓形成，今日突然胸痛气促，诊断为肺栓塞。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "曾奶奶",
+      "mediator": "长期卧床血栓形成",
+      "property": "血栓脱落",
+      "result": "肺栓塞",
+      "confidence": 0.94,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "019",
+    "text": "邓爷爷术后疼痛剧烈，长期使用NSAIDs止痛药，今日呕血，胃镜检查发现胃溃疡。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "邓爷爷",
+      "mediator": "长期使用NSAIDs",
+      "property": "胃粘膜损伤",
+      "result": "胃溃疡出血",
+      "confidence": 0.89,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "020",
+    "text": "冯奶奶慢性便秘，长期用力排便，今日突然晕厥，心电图显示心律失常。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "冯奶奶",
+      "mediator": "用力排便",
+      "property": "迷走神经兴奋",
+      "result": "心律失常晕厥",
+      "confidence": 0.82,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "021",
+    "text": "胡爷爷COPD病史10年，今日呼吸困难加重，血气分析显示II型呼吸衰竭。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "胡爷爷",
+      "mediator": "COPD急性加重",
+      "property": "肺通气功能障碍",
+      "result": "II型呼吸衰竭",
+      "confidence": 0.91,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "022",
+    "text": "袁奶奶白内障手术后，长期点眼药水，今日眼压升高至35mmHg（正常10-21），诊断为激素性青光眼。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "袁奶奶",
+      "mediator": "长期使用激素眼药水",
+      "property": "房水排出障碍",
+      "result": "激素性青光眼",
+      "confidence": 0.88,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "023",
+    "text": "唐爷爷夜间低血糖发作，出冷汗、心悸，测血糖2.8mmol/L（正常3.9-6.1）。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "唐爷爷",
+      "mediator": "胰岛素剂量过大",
+      "property": "低血糖",
+      "result": "出冷汗心悸",
+      "confidence": 0.93,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "024",
+    "text": "蔡奶奶情绪低落，拒绝进食两周，体重下降8kg，诊断为老年抑郁症伴营养不良。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "蔡奶奶",
+      "mediator": "老年抑郁症",
+      "property": "食欲减退",
+      "result": "营养不良体重下降",
+      "confidence": 0.86,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "025",
+    "text": "彭爷爷房颤病史，未规律服用抗凝药，今日突然右侧肢体无力，CT显示脑梗塞。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "彭爷爷",
+      "mediator": "房颤未抗凝",
+      "property": "心源性血栓形成",
+      "result": "脑梗塞",
+      "confidence": 0.95,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "026",
+    "text": "余奶奶骨质疏松，今日在浴室滑倒，X光检查髋部骨折。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "余奶奶",
+      "mediator": "骨质疏松",
+      "property": "骨强度降低",
+      "result": "髋部骨折",
+      "confidence": 0.92,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "027",
+    "text": "潘爷爷慢性心衰，夜间平卧时气促加重，被迫坐起呼吸。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "潘爷爷",
+      "mediator": "慢性心衰",
+      "property": "肺淤血",
+      "result": "端坐呼吸",
+      "confidence": 0.90,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "028",
+    "text": "汤奶奶脱水，皮肤弹性差，尿量减少，血钠155mmol/L（正常135-145）。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "汤奶奶",
+      "mediator": "脱水",
+      "property": "高钠血症",
+      "result": "意识障碍",
+      "confidence": 0.87,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "029",
+    "text": "梁爷爷肝硬化腹水，长期利尿治疗，今日出现肝性脑病，血氨升高。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "梁爷爷",
+      "mediator": "肝硬化",
+      "property": "氨代谢障碍",
+      "result": "肝性脑病",
+      "confidence": 0.91,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  },
+  {
+    "record_id": "030",
+    "text": "石奶奶慢性阻塞性肺疾病，吸氧浓度过高（60%），出现CO2潴留，意识模糊。",
+    "has_ground_truth": true,
+    "ground_truth": {
+      "object": "石奶奶",
+      "mediator": "高浓度吸氧",
+      "property": "呼吸中枢抑制",
+      "result": "CO2潴留意识模糊",
+      "confidence": 0.89,
+      "annotator": "rule_based",
+      "annotation_date": "2026-07-13"
+    }
+  }
+]

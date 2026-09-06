@@ -1,0 +1,138 @@
+{
+  "version": "1.0",
+  "description": "医学因果规则库 - 用于PCCM因果推理的规则引擎",
+  "rules": [
+    {
+      "rule_id": "R001",
+      "pattern": {
+        "mediator": "服用降压药",
+        "property": "体位性低血压",
+        "result": "跌倒"
+      },
+      "confidence": 0.95,
+      "evidence": "降压药可导致体位性低血压，增加跌倒风险",
+      "category": "药物副作用"
+    },
+    {
+      "rule_id": "R002",
+      "pattern": {
+        "mediator": "长期卧床",
+        "property": "肌肉萎缩",
+        "result": "行动不便"
+      },
+      "confidence": 0.92,
+      "evidence": "长期卧床导致肌肉失用性萎缩",
+      "category": "生活方式"
+    },
+    {
+      "rule_id": "R003",
+      "pattern": {
+        "mediator": "糖尿病",
+        "property": "末梢神经病变",
+        "result": "足部溃疡"
+      },
+      "confidence": 0.88,
+      "evidence": "糖尿病引起的神经病变影响足部感觉",
+      "category": "慢性疾病"
+    },
+    {
+      "rule_id": "R004",
+      "pattern": {
+        "mediator": "高血压未控制",
+        "property": "脑血管压力增高",
+        "result": "脑卒中"
+      },
+      "confidence": 0.90,
+      "evidence": "持续高血压损伤脑血管",
+      "category": "慢性疾病"
+    },
+    {
+      "rule_id": "R005",
+      "pattern": {
+        "mediator": "服用安眠药",
+        "property": "意识模糊",
+        "result": "夜间跌倒"
+      },
+      "confidence": 0.87,
+      "evidence": "安眠药残余效应影响夜间清醒度",
+      "category": "药物副作用"
+    },
+    {
+      "rule_id": "R006",
+      "pattern": {
+        "mediator": "营养不良",
+        "property": "免疫力下降",
+        "result": "反复感染"
+      },
+      "confidence": 0.85,
+      "evidence": "营养状态影响免疫系统功能",
+      "category": "营养代谢"
+    },
+    {
+      "rule_id": "R007",
+      "pattern": {
+        "mediator": "缺乏运动",
+        "property": "骨质疏松",
+        "result": "骨折风险增加"
+      },
+      "confidence": 0.83,
+      "evidence": "运动促进骨密度维持",
+      "category": "生活方式"
+    },
+    {
+      "rule_id": "R008",
+      "pattern": {
+        "mediator": "阿尔茨海默病",
+        "property": "认知功能下降",
+        "result": "走失风险"
+      },
+      "confidence": 0.94,
+      "evidence": "认知障碍影响定向力和判断力",
+      "category": "神经系统疾病"
+    },
+    {
+      "rule_id": "R009",
+      "pattern": {
+        "mediator": "慢性疼痛",
+        "property": "睡眠障碍",
+        "result": "情绪低落"
+      },
+      "confidence": 0.80,
+      "evidence": "疼痛影响睡眠质量，进而影响情绪",
+      "category": "疼痛管理"
+    },
+    {
+      "rule_id": "R010",
+      "pattern": {
+        "mediator": "心房颤动",
+        "property": "血栓形成",
+        "result": "脑栓塞"
+      },
+      "confidence": 0.91,
+      "evidence": "房颤导致心腔内血流淤滞",
+      "category": "心血管疾病"
+    },
+    {
+      "rule_id": "R011",
+      "pattern": {
+        "mediator": "脱水",
+        "property": "血液浓缩",
+        "result": "泌尿系感染"
+      },
+      "confidence": 0.78,
+      "evidence": "水分不足影响泌尿系统冲刷功能",
+      "category": "体液平衡"
+    },
+    {
+      "rule_id": "R012",
+      "pattern": {
+        "mediator": "视力下降",
+        "property": "环境感知受损",
+        "result": "碰撞受伤"
+      },
+      "confidence": 0.86,
+      "evidence": "视觉障碍影响空间判断",
+      "category": "感觉器官"
+    }
+  ]
+}
