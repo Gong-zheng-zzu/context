@@ -118,9 +118,9 @@ func BroadcastRequest(request map[string]interface{}) {
 			// 使用超时机制发送
 			select {
 			case ch <- requestCopy:
-				log.Printf("[广播] 已将请求发送到SSE连接 %d, 方法: %s, ID: %s", id, method, id)
+				log.Printf("[广播] 已将请求发送到SSE连接 %d, 方法: %s, ID: %d", id, method, id)
 			case <-time.After(500 * time.Millisecond):
-				log.Printf("[广播错误] 发送请求到SSE连接 %d 超时: 通道可能已满, 方法: %s, ID: %s", id, method, id)
+				log.Printf("[广播错误] 发送请求到SSE连接 %d 超时: 通道可能已满, 方法: %s, ID: %d", id, method, id)
 			}
 		}(connID, channel)
 	}
@@ -1986,7 +1986,7 @@ func (h *Handler) HandleToolAssociateFile(ctx context.Context, params map[string
 	}
 
 	successMsg := fmt.Sprintf("成功关联文件: %s", filePath)
-	log.Printf(successMsg)
+	log.Print(successMsg)
 
 	// 构建基本响应
 	result := map[string]interface{}{
@@ -2052,7 +2052,7 @@ func (h *Handler) HandleToolRecordEdit(ctx context.Context, params map[string]in
 	}
 
 	successMsg := "成功记录编辑操作"
-	log.Printf(successMsg)
+	log.Print(successMsg)
 
 	// 构建基本响应
 	result := map[string]interface{}{

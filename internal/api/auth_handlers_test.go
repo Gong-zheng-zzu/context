@@ -38,6 +38,7 @@ func TestLoginHandlerRejectsMissingAuthConfig(t *testing.T) {
 func TestLoginHandlerAcceptsConfiguredCredentials(t *testing.T) {
 	t.Setenv("DEMO_AUTH_CREDENTIALS", "doctor_001:secret")
 	t.Setenv("DEMO_AUTH_PASSWORD", "")
+	t.Setenv("JWT_SECRET", "test-signing-secret")
 
 	gin.SetMode(gin.TestMode)
 	recorder := httptest.NewRecorder()

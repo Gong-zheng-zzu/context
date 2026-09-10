@@ -13,10 +13,15 @@ import (
 
 // JWT配置
 var (
-	// 从环境变量读取，生产环境必须设置
-	jwtSecret = []byte(getEnvOrDefault("JWT_SECRET", ""))
 	jwtExpiry = 24 * time.Hour // Token有效期24小时
 )
+
+// jwtSigningKey resolves the secret at signing and validation time. This keeps
+// the process configuration authoritative and makes credential configuration
+// testable without relying on package initialization order.
+func jwtSigningKey() []byte {
+	return []byte(getEnvOrDefault("JWT_SECRET", ""))
+}
 
 // Claims JWT声明
 type Claims struct {
@@ -33,6 +38,7 @@ func GenerateToken(userID, workspaceID string) (string, error) {
 
 // GenerateTokenWithRole 生成带角色的JWT Token
 func GenerateTokenWithRole(userID, workspaceID, role string) (string, error) {
+	jwtSecret := jwtSigningKey()
 	if len(jwtSecret) == 0 {
 		return "", fmt.Errorf("JWT_SECRET is not configured")
 	}
@@ -55,6 +61,7 @@ func GenerateTokenWithRole(userID, workspaceID, role string) (string, error) {
 
 // ParseToken 解析JWT Token
 func ParseToken(tokenString string) (*Claims, error) {
+	jwtSecret := jwtSigningKey()
 	if len(jwtSecret) == 0 {
 		return nil, fmt.Errorf("JWT_SECRET is not configured")
 	}
