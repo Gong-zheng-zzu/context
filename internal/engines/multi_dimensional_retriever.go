@@ -76,6 +76,7 @@ type RetrievalResults struct {
 	TimelineLatencyMs  int64                   `json:"timeline_latency_ms"`
 	KnowledgeLatencyMs int64                   `json:"knowledge_latency_ms"`
 	VectorLatencyMs    int64                   `json:"vector_latency_ms"`
+	SourceStatuses     map[string]string       `json:"source_statuses"`
 	Results            []interface{}           `json:"results"` // 兼容性字段
 }
 
@@ -116,6 +117,7 @@ func NewMultiDimensionalRetriever(timelineStore TimelineStore, knowledgeStore Kn
 // ParallelRetrieve 并行检索（直接复制WideRecallService.executeParallelRetrieval的逻辑）
 func (mdr *MultiDimensionalRetrieverImpl) ParallelRetrieve(ctx context.Context, queries *models.MultiDimensionalQuery) (*RetrievalResults, error) {
 	log.Printf("🔍 [多维度检索] 开始并行检索...")
+	startedAt := time.Now()
 
 	// 创建结果通道
 	timelineResultChan := make(chan *TimelineRetrievalResult, 1)
@@ -159,22 +161,30 @@ func (mdr *MultiDimensionalRetrieverImpl) ParallelRetrieve(ctx context.Context, 
 	timelineResult := <-timelineResultChan
 	knowledgeResult := <-knowledgeResultChan
 	vectorResult := <-vectorResultChan
+	wallClockDuration := time.Since(startedAt).Milliseconds()
 
 	// 构建汇总结果（与WideRecallService保持一致）
 	retrievalResults := &RetrievalResults{
-		TimelineResults:    timelineResult.Results,
-		TimelineCount:      len(timelineResult.Results),
-		KnowledgeResults:   knowledgeResult.Results,
-		KnowledgeCount:     len(knowledgeResult.Results),
-		VectorResults:      vectorResult.Results,
-		VectorCount:        len(vectorResult.Results),
-		TotalResults:       len(timelineResult.Results) + len(knowledgeResult.Results) + len(vectorResult.Results),
-		OverallQuality:     mdr.calculateOverallQuality(timelineResult, knowledgeResult, vectorResult),
-		RetrievalTime:      timelineResult.Duration + knowledgeResult.Duration + vectorResult.Duration,
+		TimelineResults:  timelineResult.Results,
+		TimelineCount:    len(timelineResult.Results),
+		KnowledgeResults: knowledgeResult.Results,
+		KnowledgeCount:   len(knowledgeResult.Results),
+		VectorResults:    vectorResult.Results,
+		VectorCount:      len(vectorResult.Results),
+		TotalResults:     len(timelineResult.Results) + len(knowledgeResult.Results) + len(vectorResult.Results),
+		OverallQuality:   mdr.calculateOverallQuality(timelineResult, knowledgeResult, vectorResult),
+		// The three lanes execute concurrently. This is end-to-end elapsed time,
+		// while the individual fields below retain the per-source durations.
+		RetrievalTime:      wallClockDuration,
 		TimelineLatencyMs:  timelineResult.Duration,
 		KnowledgeLatencyMs: knowledgeResult.Duration,
 		VectorLatencyMs:    vectorResult.Duration,
-		Results:            []interface{}{}, // 兼容性字段
+		SourceStatuses: map[string]string{
+			"timeline":  timelineResult.Status,
+			"knowledge": knowledgeResult.Status,
+			"vector":    vectorResult.Status,
+		},
+		Results: []interface{}{}, // 兼容性字段
 	}
 
 	log.Printf("✅ [多维度检索] 并行检索完成，总结果: %d, 耗时: %dms",

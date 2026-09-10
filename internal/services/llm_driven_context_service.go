@@ -134,10 +134,11 @@ type SemanticAnalysisResult struct {
 type RetrievalQueries = models.MultiDimensionalQuery
 
 type RetrievalResults struct {
-	Results         []interface{}    `json:"results"`
-	Sources         []string         `json:"sources"`
-	SourceCounts    map[string]int   `json:"source_counts"`
-	SourceLatencyMs map[string]int64 `json:"source_latency_ms"`
+	Results         []interface{}     `json:"results"`
+	Sources         []string          `json:"sources"`
+	SourceCounts    map[string]int    `json:"source_counts"`
+	SourceLatencyMs map[string]int64  `json:"source_latency_ms"`
+	SourceStatuses  map[string]string `json:"source_statuses"`
 }
 
 // MultiDimensionalRetrieverAdapter 多维度检索器适配器
@@ -287,6 +288,7 @@ func (adapter *MultiDimensionalRetrieverAdapter) ParallelRetrieve(ctx context.Co
 			"knowledge": engineResults.KnowledgeLatencyMs,
 			"vector":    engineResults.VectorLatencyMs,
 		},
+		SourceStatuses: engineResults.SourceStatuses,
 	}
 
 	// 添加时间线结果
@@ -744,6 +746,7 @@ func (lds *LLMDrivenContextService) retrieveEvaluationRRF(ctx context.Context, r
 	}
 	response.RetrievalMetadata["source_candidate_counts"] = retrievalResults.SourceCounts
 	response.RetrievalMetadata["source_latency_ms"] = retrievalResults.SourceLatencyMs
+	response.RetrievalMetadata["source_statuses"] = retrievalResults.SourceStatuses
 	return response, nil
 }
 
@@ -1150,6 +1153,7 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 		metadata["retrieval_active_sources"] = activeSources
 		metadata["retrieval_empty_sources"] = emptySources
 		metadata["retrieval_fusion_mode"] = fusionMode
+		metadata["retrieval_source_statuses"] = retrieval.SourceStatuses
 		contextSource := "rrf"
 		if len(activeSources) == 1 {
 			contextSource = activeSources[0]
@@ -1173,6 +1177,7 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 			"retrieval_active_sources": activeSources,
 			"retrieval_empty_sources":  emptySources,
 			"retrieval_fusion_mode":    fusionMode,
+			"source_statuses":          retrieval.SourceStatuses,
 			"candidate_output_limit":   limit,
 		},
 	}

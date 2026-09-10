@@ -28,6 +28,9 @@ func (r *evaluationFastPathRetriever) ParallelRetrieve(_ context.Context, querie
 			&models.TimelineEvent{ID: "event-1", SourceDocID: "doc-1", Content: "timeline content", RelevanceScore: 0.7},
 		},
 		Sources: []string{"vector", "knowledge", "timeline"},
+		SourceStatuses: map[string]string{
+			"vector": "success", "knowledge": "success", "timeline": "success",
+		},
 	}, nil
 }
 
@@ -79,5 +82,8 @@ func TestEvaluationRetrievalOnlyUsesDirectRRFPath(t *testing.T) {
 	}
 	if got, want := contextItem.Metadata["rrf_sources"], []string{"knowledge", "timeline", "vector"}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("rrf_sources = %#v, want %#v", got, want)
+	}
+	if got, want := response.RetrievalMetadata["source_statuses"], map[string]string{"vector": "success", "knowledge": "success", "timeline": "success"}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("source_statuses = %#v, want %#v", got, want)
 	}
 }
