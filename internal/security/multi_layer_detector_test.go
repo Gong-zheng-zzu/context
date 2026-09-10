@@ -24,11 +24,11 @@ func TestMultiLayerDetector(t *testing.T) {
 	t.Log("╚══════════════════════════════════════════════════════════╝")
 
 	testCases := []struct {
-		name           string
-		text           string
-		expectedTypes  []SensitiveType
-		minConfidence  float64
-		maxLayers      int
+		name          string
+		text          string
+		expectedTypes []SensitiveType
+		minConfidence float64
+		maxLayers     int
 	}{
 		{
 			name:          "测试1: 手机号检测",
@@ -100,6 +100,30 @@ func TestMultiLayerDetector(t *testing.T) {
 				t.Logf("  └─ PASS ✓")
 			}
 		})
+	}
+}
+
+func TestMultiLayerConfigurationReflectsAlgorithmSwitches(t *testing.T) {
+	detector := NewMultiLayerDetector("http://localhost:11434", "qwen2.5:7b")
+	if configuration := detector.GetConfiguration(); !configuration.PCCMEnabled || !configuration.CASIAEnabled || !configuration.EarlyStop {
+		t.Fatalf("default configuration = %+v", configuration)
+	}
+
+	detector.DisablePCCM()
+	detector.DisableCASIA()
+	detector.DisableEarlyStop()
+	configuration := detector.GetConfiguration()
+	if configuration.PCCMEnabled || configuration.CASIAEnabled || configuration.EarlyStop {
+		t.Fatalf("disabled configuration = %+v", configuration)
+	}
+}
+
+func TestConfigureMultiLayerAlgorithmsUsesConfiguredSwitches(t *testing.T) {
+	detector := NewMultiLayerDetector("http://localhost:11434", "qwen2.5:7b")
+	configureMultiLayerAlgorithms(detector, false, true)
+	configuration := detector.GetConfiguration()
+	if configuration.PCCMEnabled || !configuration.CASIAEnabled {
+		t.Fatalf("configuration after applying switches = %+v", configuration)
 	}
 }
 

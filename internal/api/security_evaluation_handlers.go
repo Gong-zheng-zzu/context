@@ -71,6 +71,13 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 	originalMessage := message
 	redactedMessage := message
 	sensitiveTypes := make([]string, 0)
+	securityExecution := gin.H{
+		"asdf_checked":     securityService != nil,
+		"input_normalized": false,
+		"multi_layer_used": false,
+		"pccm_enabled":     false,
+		"casia_enabled":    false,
+	}
 
 	// Match ChatHandler's pre-generation order without persisting a message,
 	// retrieving memory, or invoking the language model.
@@ -85,6 +92,7 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 			attackTypes = append(attackTypes, types...)
 			warnings = append(warnings, "asdf_normalized")
 			inputNormalized = normalized != originalMessage
+			securityExecution["input_normalized"] = inputNormalized
 		}
 	}
 
@@ -116,10 +124,21 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 		scan, err := securityService.ScanContent(context.Background(), req.SessionID, userIDValue, originalMessage)
 		if err != nil {
 			log.Printf("[security evaluation] sensitive input scan failed: %v", err)
-		} else if len(scan.SensitiveInfos) > 0 {
-			redactedMessage = scan.RedactedContent
-			for _, info := range scan.SensitiveInfos {
-				sensitiveTypes = append(sensitiveTypes, string(info.Type))
+		} else {
+			if scan.Metadata != nil {
+				if used, ok := scan.Metadata["multi_layer_used"].(bool); ok {
+					securityExecution["multi_layer_used"] = used
+				}
+				if configuration, ok := scan.Metadata["configuration"].(security.MultiLayerConfiguration); ok {
+					securityExecution["pccm_enabled"] = configuration.PCCMEnabled
+					securityExecution["casia_enabled"] = configuration.CASIAEnabled
+				}
+			}
+			if len(scan.SensitiveInfos) > 0 {
+				redactedMessage = scan.RedactedContent
+				for _, info := range scan.SensitiveInfos {
+					sensitiveTypes = append(sensitiveTypes, string(info.Type))
+				}
 			}
 		}
 	}
@@ -137,6 +156,7 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 		"redacted":              redactedMessage != originalMessage,
 		"latency_ms":            float64(time.Since(started).Microseconds()) / 1000.0,
 		"pipeline_version":      "input-security-v1",
+		"security_execution":    securityExecution,
 		"generation_skipped":    true,
 		"authenticated_user_id": userIDValue,
 		"sample_id":             req.SampleID,

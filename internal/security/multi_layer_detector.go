@@ -10,45 +10,45 @@ import (
 // MultiLayerDetector 多层检测器
 type MultiLayerDetector struct {
 	// 各层检测器
-	regexDetector   *Detector              // Layer 1: 正则
-	dictMatcher     *DictionaryMatcher     // Layer 2: 词典
-	nerDetector     interface{}            // Layer 3: NER (待实现)
-	contextEngine   *ContextRuleEngine     // Layer 4: 上下文规则
-	llmDetector     *LLMDetector           // Layer 5: LLM
+	regexDetector *Detector          // Layer 1: 正则
+	dictMatcher   *DictionaryMatcher // Layer 2: 词典
+	nerDetector   interface{}        // Layer 3: NER (待实现)
+	contextEngine *ContextRuleEngine // Layer 4: 上下文规则
+	llmDetector   *LLMDetector       // Layer 5: LLM
 
 	// 🆕 理论创新模型
-	pccmModel       *ProgressiveConfidenceModel           // PCCM渐进式置信度累积模型
-	casiaAlgorithm  *ContextAwareSensitiveInfoAlgorithm   // CASIA上下文感知算法
+	pccmModel      *ProgressiveConfidenceModel         // PCCM渐进式置信度累积模型
+	casiaAlgorithm *ContextAwareSensitiveInfoAlgorithm // CASIA上下文感知算法
 
 	// 配置
-	weights         map[int]float64        // 各层权重
-	threshold       float64                // 置信度阈值
-	earlyStop       bool                   // 是否提前终止
-	parallelLayers  []int                  // 可并行执行的层
-	usePCCM         bool                   // 🆕 是否使用PCCM模型
-	useCASIA        bool                   // 🆕 是否使用CASIA算法
+	weights        map[int]float64 // 各层权重
+	threshold      float64         // 置信度阈值
+	earlyStop      bool            // 是否提前终止
+	parallelLayers []int           // 可并行执行的层
+	usePCCM        bool            // 🆕 是否使用PCCM模型
+	useCASIA       bool            // 🆕 是否使用CASIA算法
 
 	// 统计
-	stats           *DetectionStats
-	mu              sync.RWMutex
+	stats *DetectionStats
+	mu    sync.RWMutex
 }
 
 // DetectionStats 检测统计
 type DetectionStats struct {
-	TotalDetections   int64
-	LayerUsage        map[int]int64
-	AverageLatency    time.Duration
-	EarlyStopCount    int64
-	ConflictCount     int64
+	TotalDetections int64
+	LayerUsage      map[int]int64
+	AverageLatency  time.Duration
+	EarlyStopCount  int64
+	ConflictCount   int64
 }
 
 // LayerResult 单层检测结果
 type LayerResult struct {
-	LayerID      int
-	Items        []SensitiveInfo
-	Confidence   float64
-	ProcessTime  time.Duration
-	Error        error
+	LayerID     int
+	Items       []SensitiveInfo
+	Confidence  float64
+	ProcessTime time.Duration
+	Error       error
 }
 
 // FusionResult 融合结果
@@ -61,13 +61,21 @@ type FusionResult struct {
 	Details           map[int]*LayerResult
 }
 
+// MultiLayerConfiguration is emitted with a scan result so an experiment can
+// prove which detection path actually produced its outcome.
+type MultiLayerConfiguration struct {
+	PCCMEnabled  bool `json:"pccm_enabled"`
+	CASIAEnabled bool `json:"casia_enabled"`
+	EarlyStop    bool `json:"early_stop"`
+}
+
 // NewMultiLayerDetector 创建多层检测器
 func NewMultiLayerDetector(ollamaURL, llmModel string) *MultiLayerDetector {
 	return &MultiLayerDetector{
-		regexDetector:  NewDetector(),
-		dictMatcher:    NewDictionaryMatcher(),
-		contextEngine:  NewContextRuleEngine(),
-		llmDetector:    NewLLMDetector(ollamaURL, llmModel, 500*time.Millisecond),
+		regexDetector: NewDetector(),
+		dictMatcher:   NewDictionaryMatcher(),
+		contextEngine: NewContextRuleEngine(),
+		llmDetector:   NewLLMDetector(ollamaURL, llmModel, 500*time.Millisecond),
 
 		// 🆕 初始化理论创新模型
 		pccmModel:      NewProgressiveConfidenceModel(),
@@ -80,11 +88,11 @@ func NewMultiLayerDetector(ollamaURL, llmModel string) *MultiLayerDetector {
 			4: 0.15, // 上下文
 			5: 0.40, // LLM
 		},
-		threshold:      0.45,  // 平衡精确率和召回率的最优阈值
+		threshold:      0.45, // 平衡精确率和召回率的最优阈值
 		earlyStop:      true,
 		parallelLayers: []int{1, 2, 4}, // L1, L2, L4可并行
-		usePCCM:        true,  // 🆕 默认启用PCCM
-		useCASIA:       true,  // 🆕 默认启用CASIA
+		usePCCM:        true,           // 🆕 默认启用PCCM
+		useCASIA:       true,           // 🆕 默认启用CASIA
 		stats: &DetectionStats{
 			LayerUsage: make(map[int]int64),
 		},
@@ -96,9 +104,9 @@ func (mld *MultiLayerDetector) Detect(ctx context.Context, text string) (*Fusion
 	startTime := time.Now()
 
 	result := &FusionResult{
-		FinalItems:      make([]SensitiveInfo, 0),
-		LayersUsed:      make([]int, 0),
-		Details:         make(map[int]*LayerResult),
+		FinalItems: make([]SensitiveInfo, 0),
+		LayersUsed: make([]int, 0),
+		Details:    make(map[int]*LayerResult),
 	}
 
 	// Layer 1: 正则检测（必须执行）
@@ -417,10 +425,18 @@ func (mld *MultiLayerDetector) calculateConfidenceWithPCCM(results []LayerResult
 
 	// 非线性增强：多层协同提升
 	layerCount := 0
-	if regexConf > 0.3 { layerCount++ }
-	if trieConf > 0.3 { layerCount++ }
-	if llmConf > 0.3 { layerCount++ }
-	if contextConf > 0.3 { layerCount++ }
+	if regexConf > 0.3 {
+		layerCount++
+	}
+	if trieConf > 0.3 {
+		layerCount++
+	}
+	if llmConf > 0.3 {
+		layerCount++
+	}
+	if contextConf > 0.3 {
+		layerCount++
+	}
 	if layerCount > 1 {
 		finalConfidence *= 1.0 + float64(layerCount-1)*0.05
 	}
@@ -609,6 +625,17 @@ func (mld *MultiLayerDetector) DisableCASIA() {
 	mld.mu.Lock()
 	defer mld.mu.Unlock()
 	mld.useCASIA = false
+}
+
+// GetConfiguration returns a stable snapshot for audit and evaluation output.
+func (mld *MultiLayerDetector) GetConfiguration() MultiLayerConfiguration {
+	mld.mu.RLock()
+	defer mld.mu.RUnlock()
+	return MultiLayerConfiguration{
+		PCCMEnabled:  mld.usePCCM,
+		CASIAEnabled: mld.useCASIA,
+		EarlyStop:    mld.earlyStop,
+	}
 }
 
 // 🆕 GetPCCMModel 获取PCCM模型（用于调优）

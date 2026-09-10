@@ -109,6 +109,11 @@ func NewSecurityService(configPath string, auditLogPath string) (*SecurityServic
 	}
 	multiLayerDetector := NewMultiLayerDetector(ollamaHost, ollamaModel)
 	multiLayerDetector.dictMatcher.LoadDefaultDictionary()
+	configureMultiLayerAlgorithms(
+		multiLayerDetector,
+		getSecurityEnvAsBool("SECURITY_ENABLE_PCCM", true),
+		getSecurityEnvAsBool("SECURITY_ENABLE_CASIA", true),
+	)
 
 	// 🆕 创建ASDF对抗样本防御框架
 	asdfFramework := NewAdversarialSampleDefenseFramework()
@@ -142,6 +147,22 @@ func getSecurityEnvAsBool(key string, defaultValue bool) bool {
 	}
 
 	return parsed
+}
+
+func configureMultiLayerAlgorithms(detector *MultiLayerDetector, pccmEnabled, casiaEnabled bool) {
+	if detector == nil {
+		return
+	}
+	if pccmEnabled {
+		detector.EnablePCCM()
+	} else {
+		detector.DisablePCCM()
+	}
+	if casiaEnabled {
+		detector.EnableCASIA()
+	} else {
+		detector.DisableCASIA()
+	}
 }
 
 // RegisterAlertHandler 注册告警处理器
@@ -210,6 +231,7 @@ func (s *SecurityService) ScanContent(ctx context.Context, sessionID, userID, co
 				"final_confidence":   fusionResult.FinalConfidence,
 				"conflicts_resolved": fusionResult.ConflictsResolved,
 				"total_time":         fusionResult.TotalTime.String(),
+				"configuration":      s.multiLayerDetector.GetConfiguration(),
 			}
 		}
 	} else {
