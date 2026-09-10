@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"net/http"
 	"time"
 
@@ -17,14 +18,23 @@ type CausalReasoningHandler struct {
 	extractor       *causal_reasoning.EntityExtractor
 	inferenceEngine *causal_reasoning.InferenceEngine
 	graphBuilder    *causal_reasoning.GraphBuilder
+	graphWriter     causalGraphWriter
+}
+
+// causalGraphWriter keeps the persistence boundary testable without changing
+// the graph implementation used by inference and statistics endpoints.
+type causalGraphWriter interface {
+	BuildCausalGraph(ctx context.Context, relations []causal_reasoning.CausalRelation) error
 }
 
 // NewCausalReasoningHandler 创建因果推理处理器
 func NewCausalReasoningHandler(llmClient *llm.OllamaLocalClient, kgEngine *knowledge.Neo4jEngine, securityService *security.SecurityService) *CausalReasoningHandler {
+	graphBuilder := causal_reasoning.NewGraphBuilder(kgEngine)
 	return &CausalReasoningHandler{
 		extractor:       causal_reasoning.NewEntityExtractor(llmClient),
 		inferenceEngine: causal_reasoning.NewInferenceEngine(kgEngine),
-		graphBuilder:    causal_reasoning.NewGraphBuilder(kgEngine),
+		graphBuilder:    graphBuilder,
+		graphWriter:     graphBuilder,
 		securityService: securityService,
 	}
 }
@@ -77,19 +87,26 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 	// 过滤低置信度
 	relations = h.extractor.FilterByConfidence(relations, req.MinConfidence)
 
-	// 构建图谱
-	if false && req.Persist && len(relations) > 0 {
-		if err := h.graphBuilder.BuildCausalGraph(c.Request.Context(), relations); err != nil {
+	// The caller must explicitly request persistence. Analysis-only requests
+	// remain side-effect free so they can be used safely in the live demo.
+	graphPersisted := false
+	if req.Persist && len(relations) > 0 {
+		if h.graphWriter == nil {
+			c.JSON(http.StatusServiceUnavailable, gin.H{"error": "因果图谱存储不可用"})
+			return
+		}
+		if err := h.graphWriter.BuildCausalGraph(c.Request.Context(), relations); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "构建因果图谱失败", "details": err.Error()})
 			return
 		}
+		graphPersisted = true
 	}
 
 	processTime := time.Since(startTime).Milliseconds()
 
 	c.JSON(http.StatusOK, causal_reasoning.ExtractResponse{
-		AnalysisOnly:      true,
-		GraphPersisted:    false,
+		AnalysisOnly:      !graphPersisted,
+		GraphPersisted:    graphPersisted,
 		SecurityExecution: securityExecution,
 		Relations:         relations,
 		Count:             len(relations),

@@ -3,23 +3,36 @@ package services
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 
-	"github.com/otiai10/gosseract/v2"
 	"github.com/sirupsen/logrus"
 )
 
 // OCRService OCR文字识别服务
 type OCRService struct {
-	logger *logrus.Logger
+	logger  *logrus.Logger
+	binary  string
+	execute func(string, ...string) ([]byte, error)
 }
 
 // NewOCRService 创建OCR服务实例
 func NewOCRService(logger *logrus.Logger) *OCRService {
-	return &OCRService{
-		logger: logger,
+	binary := strings.TrimSpace(os.Getenv("TESSERACT_BIN"))
+	if binary == "" {
+		binary = "tesseract"
 	}
+	return &OCRService{
+		logger:  logger,
+		binary:  binary,
+		execute: runOCRCommand,
+	}
+}
+
+func runOCRCommand(binary string, args ...string) ([]byte, error) {
+	return exec.Command(binary, args...).CombinedOutput()
 }
 
 // OCRRequest OCR识别请求
@@ -45,17 +58,11 @@ func (s *OCRService) RecognizeText(req OCRRequest) (*OCRResult, error) {
 
 	s.logger.Printf("🔍 [OCR] 开始识别图片: %s", filepath.Base(req.ImagePath))
 
-	// 创建Tesseract客户端
-	client := gosseract.NewClient()
-	defer client.Close()
-
 	// 设置语言（默认中英文混合）
 	languages := req.Languages
 	if len(languages) == 0 {
 		languages = []string{"chi_sim", "eng"}
 	}
-	client.SetLanguage(strings.Join(languages, "+"))
-
 	// 设置页面分割模式
 	// PSM 3: 全自动页面分割（默认）
 	// PSM 6: 假设单个统一文本块
@@ -64,31 +71,25 @@ func (s *OCRService) RecognizeText(req OCRRequest) (*OCRResult, error) {
 	if psm == 0 {
 		psm = 3 // 默认自动分割
 	}
-	client.SetPageSegMode(gosseract.PageSegMode(psm))
-
-	// 设置图片路径
-	if err := client.SetImage(req.ImagePath); err != nil {
-		s.logger.WithError(err).Error("❌ [OCR] 设置图片失败")
-		return nil, fmt.Errorf("设置图片失败: %w", err)
+	if s.execute == nil {
+		s.execute = runOCRCommand
 	}
-
-	// 执行识别
-	text, err := client.Text()
+	output, err := s.execute(s.binary, req.ImagePath, "stdout", "-l", strings.Join(languages, "+"), "--psm", strconv.Itoa(psm))
 	if err != nil {
-		s.logger.WithError(err).Error("❌ [OCR] 识别失败")
-		return nil, fmt.Errorf("OCR识别失败: %w", err)
+		message := strings.TrimSpace(string(output))
+		if message == "" {
+			message = err.Error()
+		}
+		s.logger.WithError(err).Error("OCR识别失败")
+		return nil, fmt.Errorf("OCR识别失败（请安装 Tesseract 或设置 TESSERACT_BIN）: %s", message)
 	}
 
-	// 获取置信度（gosseract v2没有GetMeanConfidence方法）
-	// confidence, err := client.GetMeanConfidence()
-	// if err != nil {
-	// 	s.logger.WithError(err).Warn("⚠️ [OCR] 获取置信度失败，使用默认值")
-	// 	confidence = 0
-	// }
-	confidence := 0.0 // 默认置信度
+	// Tesseract's plain-text mode does not expose a stable document-level
+	// confidence. Returning zero makes that limitation explicit to callers.
+	confidence := 0.0
 
 	result := &OCRResult{
-		Text:       strings.TrimSpace(text),
+		Text:       strings.TrimSpace(string(output)),
 		Confidence: float64(confidence),
 		Language:   strings.Join(languages, "+"),
 	}
@@ -114,17 +115,26 @@ func (s *OCRService) RecognizeMedicalReport(imagePath string) (*OCRResult, error
 
 // GetSupportedLanguages 获取支持的语言列表
 func (s *OCRService) GetSupportedLanguages() ([]string, error) {
-	client := gosseract.NewClient()
-	defer client.Close()
+	if s.execute == nil {
+		s.execute = runOCRCommand
+	}
+	output, err := s.execute(s.binary, "--list-langs")
+	if err != nil {
+		message := strings.TrimSpace(string(output))
+		if message == "" {
+			message = err.Error()
+		}
+		return nil, fmt.Errorf("无法读取 Tesseract 语言包: %s", message)
+	}
 
-	// gosseract v2没有GetAvailableLanguages方法，返回默认语言列表
-	// langs, err := client.GetAvailableLanguages()
-	// if err != nil {
-	// 	return nil, fmt.Errorf("获取语言列表失败: %w", err)
-	// }
-
-	// 返回常用语言列表
-	langs := []string{"eng", "chi_sim", "chi_tra", "jpn", "kor"}
-
-	return langs, nil
+	lines := strings.Split(string(output), "\n")
+	languages := make([]string, 0, len(lines))
+	for _, line := range lines {
+		language := strings.TrimSpace(line)
+		if language == "" || strings.Contains(language, "List of available languages") {
+			continue
+		}
+		languages = append(languages, language)
+	}
+	return languages, nil
 }
