@@ -30,6 +30,7 @@ debug
 .env
 .env.local
 .env.production
+*.env.backup
 
 # IDE文件
 .idea/
