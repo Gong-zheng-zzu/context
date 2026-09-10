@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/contextkeeper/service/internal/engines/causal_reasoning"
@@ -121,6 +122,17 @@ func causalUserID(c *gin.Context) string {
 		}
 	}
 	return ""
+}
+
+func causalResultLimit(raw string) (int, error) {
+	if raw == "" {
+		return 10, nil
+	}
+	limit, err := strconv.Atoi(raw)
+	if err != nil || limit < 1 || limit > 100 {
+		return 0, strconv.ErrSyntax
+	}
+	return limit, nil
 }
 
 // InferCausal 因果推理查询
@@ -252,11 +264,10 @@ func (h *CausalReasoningHandler) GetRelatedCauses(c *gin.Context) {
 		return
 	}
 
-	limit := 10
-	if limitStr := c.Query("limit"); limitStr != "" {
-		if _, err := c.GetQuery("limit"); err {
-			limit = 10
-		}
+	limit, err := causalResultLimit(c.Query("limit"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的limit参数", "details": "limit必须是1到100之间的整数"})
+		return
 	}
 
 	causes, err := h.inferenceEngine.GetRelatedCauses(c.Request.Context(), entity, limit)
@@ -281,11 +292,10 @@ func (h *CausalReasoningHandler) GetRelatedEffects(c *gin.Context) {
 		return
 	}
 
-	limit := 10
-	if limitStr := c.Query("limit"); limitStr != "" {
-		if _, err := c.GetQuery("limit"); err {
-			limit = 10
-		}
+	limit, err := causalResultLimit(c.Query("limit"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的limit参数", "details": "limit必须是1到100之间的整数"})
+		return
 	}
 
 	effects, err := h.inferenceEngine.GetRelatedEffects(c.Request.Context(), entity, limit)

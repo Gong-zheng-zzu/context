@@ -57,6 +57,87 @@ func TestExtractCausalRelationsPersistsOnlyWhenRequested(t *testing.T) {
 	}
 }
 
+func TestExtractCausalRelationsIsAnalysisOnlyWithoutPersistFlag(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	writer := &recordingCausalGraphWriter{}
+	handler := &CausalReasoningHandler{
+		extractor:   causal_reasoning.NewEntityExtractor(nil),
+		graphWriter: writer,
+	}
+
+	request := httptest.NewRequest(http.MethodPost, "/causal/extract", strings.NewReader(`{"text":"患者服用降压药后出现体位性低血压","use_rules":true}`))
+	request.Header.Set("Content-Type", "application/json")
+	response := httptest.NewRecorder()
+	router := gin.New()
+	router.POST("/causal/extract", handler.ExtractCausalRelations)
+
+	router.ServeHTTP(response, request)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("status = %d, body = %s", response.Code, response.Body.String())
+	}
+	if writer.calls != 0 {
+		t.Fatalf("persistence calls = %d; want no write for analysis-only request", writer.calls)
+	}
+
+	var body causal_reasoning.ExtractResponse
+	if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil {
+		t.Fatalf("decode response: %v", err)
+	}
+	if !body.AnalysisOnly || body.GraphPersisted {
+		t.Fatalf("response persistence flags = persisted:%t analysis_only:%t", body.GraphPersisted, body.AnalysisOnly)
+	}
+}
+
+func TestCausalResultLimit(t *testing.T) {
+	testCases := []struct {
+		name    string
+		raw     string
+		want    int
+		wantErr bool
+	}{
+		{name: "default", raw: "", want: 10},
+		{name: "custom", raw: "25", want: 25},
+		{name: "zero", raw: "0", wantErr: true},
+		{name: "negative", raw: "-1", wantErr: true},
+		{name: "too large", raw: "101", wantErr: true},
+		{name: "not a number", raw: "many", wantErr: true},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			got, err := causalResultLimit(testCase.raw)
+			if (err != nil) != testCase.wantErr {
+				t.Fatalf("causalResultLimit(%q) error = %v, wantErr %t", testCase.raw, err, testCase.wantErr)
+			}
+			if got != testCase.want {
+				t.Fatalf("causalResultLimit(%q) = %d, want %d", testCase.raw, got, testCase.want)
+			}
+		})
+	}
+}
+
+func TestRelatedCausalEndpointsRejectInvalidLimit(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	handler := &CausalReasoningHandler{}
+	router := gin.New()
+	router.GET("/causal/causes/:entity", handler.GetRelatedCauses)
+	router.GET("/causal/effects/:entity", handler.GetRelatedEffects)
+
+	for _, path := range []string{
+		"/causal/causes/hypotension?limit=many",
+		"/causal/effects/hypotension?limit=0",
+	} {
+		t.Run(path, func(t *testing.T) {
+			response := httptest.NewRecorder()
+			router.ServeHTTP(response, httptest.NewRequest(http.MethodGet, path, nil))
+			if response.Code != http.StatusBadRequest {
+				t.Fatalf("status = %d, body = %s", response.Code, response.Body.String())
+			}
+		})
+	}
+}
+
 func TestExtractCausalRelationsReportsPersistenceFailure(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	handler := &CausalReasoningHandler{
