@@ -12,6 +12,9 @@ class ExperimentContractTest(unittest.TestCase):
     def test_full_runner_meets_report_builder_retrieval_denominator(self):
         runner = (EXPERIMENTS / "scripts" / "run_all.sh").read_text(encoding="utf-8")
         self.assertIn("retrieval_eval.py --queries 50", runner)
+        self.assertIn('if [[ "$config" == "full_system" ]]', runner)
+        self.assertIn('retrieval_mode="rrf"', runner)
+        self.assertIn('--retrieval-mode $retrieval_mode', runner)
         self.assertIn("EVAL_ALLOW_RETRIEVAL_COMPARISON", runner)
         self.assertIn("--require security causal retrieval unlearning", runner)
 

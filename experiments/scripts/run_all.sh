@@ -29,7 +29,11 @@ fi
 for config in "${CONFIGS[@]}"; do
     "$RUNNER" "$config" "python3 security_eval.py --samples 600 --config-label $config --config-evidence \$EVAL_RUNTIME_CONFIG_HASH"
     "$RUNNER" "$config" "python3 causal_eval.py --samples 20 --run-label $config"
-    "$RUNNER" "$config" "python3 retrieval_eval.py --queries 50 --configs $config --sample-mode all"
+    retrieval_mode="vector"
+    if [[ "$config" == "full_system" ]]; then
+        retrieval_mode="rrf"
+    fi
+    "$RUNNER" "$config" "python3 retrieval_eval.py --queries 50 --configs $config --sample-mode all --retrieval-mode $retrieval_mode"
 done
 
 "$RUNNER" "full_system" "python3 unlearning_eval.py --runtime-label full_system"
