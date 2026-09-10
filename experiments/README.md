@@ -1,264 +1,112 @@
-# Context-Keeper 比赛实验体系
+# Context-Keeper Experiment System
 
-本目录包含Context-Keeper项目的完整实验体系，支持3个使用场景：
+This directory contains the reproducible experiment tooling for Context-Keeper.
+The scripts preserve raw rows, configuration identity, dataset hashes, smoke-test
+outcomes, and evaluator logs. A chart or HTML report is not evidence by itself.
 
-1. **赛前完整跑分**（20-40分钟）：生成正式实验报告和数据
-2. **答辩现场快速演示**（3-5分钟）：展示核心能力
-3. **评委交互验证**（即时响应）：证明系统非预设
+Chinese execution status and presentation boundaries are maintained in
+[`EXPERIMENT_EXECUTION_STATUS_20260717.md`](EXPERIMENT_EXECUTION_STATUS_20260717.md).
+The full measurement contract is in
+[`EXPERIMENT_MASTER_PLAN.md`](EXPERIMENT_MASTER_PLAN.md).
 
----
+## Evidence Gate
 
-## 目录结构
+`scripts/run_configured_eval.sh` is the only entry point that may mark a newly
+generated raw result as report-eligible. It records:
 
-```
-experiments/
-├── configs/           # 4个对比配置（vanilla_llm、naive_rag、rag_with_filter、full_system）
-├── datasets/          # 测试数据集（软链接到tests/datasets/）
-├── scripts/           # 实验脚本
-│   ├── security_eval.py        # 安全防护实验
-│   ├── causal_eval.py         # 因果推理实验
-│   ├── retrieval_eval.py      # 检索融合实验
-│   ├── unlearning_eval.py     # 机器遗忘实验
-│   ├── report_builder.py      # 报告生成器
-│   ├── run_all.sh             # 完整实验入口
-│   ├── run_demo.sh            # 快速演示入口
-│   └── interactive_demo.sh    # 交互验证入口
-├── results/           # 实验结果输出
-│   ├── raw/          # 原始JSON数据
-│   ├── figures/      # 对比图表
-│   └── reports/      # HTML报告
-└── README.md
-```
+- base, overlay, and effective configuration SHA-256 values;
+- a dataset-tree hash and sanitized environment fingerprint;
+- a passed smoke test, evaluator exit code, and immutable run manifest;
+- one new raw JSON result for the configured evaluator.
 
----
+`scripts/report_builder.py` rejects an artifact without this provenance. It
+also requires 50 complete retrieval queries, 120 complete security requests,
+20 complete causal records, and three passing unlearning trials before it
+publishes the corresponding formal report section.
 
-## 快速开始
+## Current Verified Material
 
-### 前置条件
+Only the following historical observations are safe to cite until fresh
+same-configuration evaluations complete:
 
-1. **服务运行**：确保Context-Keeper服务运行在 `http://localhost:8088`
-   ```bash
-   cd /d/context/context-keeper-main
-   docker-compose up -d
-   ```
+| Capability | Verified observation | Boundary |
+|---|---|---|
+| Causal extraction | 20/20 API responses; strict O-M-P-R tuple accuracy 2/20 (10.0%) | Baseline only; not a high-accuracy PCCM claim. |
+| Retrieval | Naive RAG 50-query baseline: MRR 0.405, P@5 0.168, R@5 0.565 | This is not a three-source RRF comparison. |
+| Three-source trace | Ten authenticated queries include `rrf_3_sources` when all lanes return scoped `doc_id` values | Other rows may be two-source or vector-only fallback. |
+| User unlearning | Isolated Qdrant target count changed from 30 to 0 and retrieval probe passed | This validates user-level deletion, not gradient-projection model unlearning. |
+| Security | Six representative requests reached the protected path | It is a preflight, not a 600-sample attack-success metric. |
 
-2. **Python环境**：Python 3.8+ 已安装
-   ```bash
-   pip install requests pyyaml matplotlib plotly pandas
-   ```
+## Prerequisites
 
-### 使用方式
+1. Start the stack and verify `http://127.0.0.1:8088/health`.
+2. Set the protected evaluator credentials and only the isolated destructive
+   target required by the script.
+3. Confirm the appropriate dataset-review and release gates in the master
+   plan before enabling a full run.
 
-#### 1. 完整实验（赛前跑分）
+Do not put production passwords, API keys, or copied `.env` files under
+`experiments/results/`. The repository ignores `*.env.backup` by design.
 
-```bash
-cd /d/context/context-keeper-main/experiments
-bash scripts/run_all.sh
-```
+## Commands
 
-**耗时**：20-40分钟  
-**输出**：`results/reports/full_report.html`（5章节完整报告 + 4张关键图表）
-
-**包含内容**：
-- 安全防护：600个攻击样本 × 4配置
-- 因果推理：100条样本 × 4配置
-- 检索融合：50对查询 × 4配置
-- 机器遗忘：5个场景 × full_system配置
-
----
-
-#### 2. 快速演示（答辩现场）
+### Formal evaluation
 
 ```bash
-cd /d/context/context-keeper-main/experiments
-bash scripts/run_demo.sh
+export EVAL_ALLOW_FULL_RUN=true
+export EVAL_ALLOW_RETRIEVAL_COMPARISON=true
+export EVAL_ALLOW_DESTRUCTIVE_UNLEARNING=true
+export EVAL_UNLEARNING_USER_ID=eval_user_001
+bash experiments/scripts/run_all.sh
 ```
 
-**耗时**：3-5分钟  
-**输出**：`results/reports/demo_slides.html`（4页答辩slides）
+The full runner executes 50 retrieval queries per configuration. It exits on a
+failed smoke test, failed evaluator, invalid artifact count, or missing formal
+report evidence; it does not manufacture a comparison from partial data.
 
-**包含内容**：
-- 安全防护：6类攻击各1条样本
-- 因果推理：10条典型样本
-- 检索融合：10对查询
-- 机器遗忘：1个场景演示
+### Competition demonstration
 
----
+Use the PowerShell entry point for a bounded, interactive proof of execution:
 
-#### 3. 交互验证（评委提问）
+```powershell
+$env:EVAL_USER_ID = 'eval_user_001'
+$env:EVAL_PASSWORD = '<demo password>'
+cd D:\context\context-keeper-main\experiments\scripts
+.\run_competition_demo.ps1
+```
+
+It performs a health check, one source-traced retrieval, a latency gate, and a
+representative security check. Destructive unlearning is off by default and
+requires both `-RunIsolatedUnlearning` and
+`EVAL_DEMO_ALLOW_UNLEARNING=true`.
+
+### Report generation
 
 ```bash
-cd /d/context/context-keeper-main/experiments
-bash scripts/interactive_demo.sh
+python3 experiments/scripts/report_builder.py \
+  --mode full \
+  --require security causal retrieval unlearning \
+  --output experiments/results/reports/full_report.html
 ```
 
-**支持3类交互**：
-1. **自定义查询**：输入任意查询，展示三路检索过程（向量+图谱+时序）
-2. **攻击测试**：输入攻击文本，展示安全防护决策链（ASDF→CASIA→PCCM）
-3. **数据遗忘**：输入user_id，展示遗忘前后对比
+The command intentionally fails when any requested section lacks eligible raw
+evidence. Preserve that failure rather than replacing it with a template or an
+old result.
 
----
+## Supporting Utilities
 
-## 四类实验说明
+- `verify_retrieval_evidence.py`: validates result-level retrieval provenance.
+- `validate_retrieval_dataset.py`: validates corpus/query counts and review
+  metadata.
+- `run_trace_queries.py`: produces source and fallback traces; it is not a
+  metric evaluator.
+- `unlearning_eval.py`: performs a scoped before/delete/after verification.
+- `interactive_demo.sh`: supports manual inspection but is not a benchmark
+  runner.
 
-### 1. 安全防护实验（security_eval.py）
-
-**目标**：验证多层安全防护能力
-
-**测试内容**：
-- 6类攻击：提示注入、记忆投毒、权限提升、隐私泄露、幻觉诱导、遗忘绕过
-- 4配置对比：vanilla_llm、naive_rag、rag_with_filter、full_system
-
-**关键指标**：
-- ASR（攻击成功率）：越低越好，目标 <10%
-- 防御成功率：越高越好，目标 >90%
-- 分类ASR：6类攻击的单独成功率
-- 平均延迟：<2000ms
-
-**基线对比预期**：
-| 配置 | ASR | 防御成功率 |
-|------|-----|-----------|
-| vanilla_llm | 85-90% | 10-15% |
-| naive_rag | 75-80% | 20-25% |
-| rag_with_filter | 45-55% | 45-55% |
-| full_system | <10% | >90% |
-
----
-
-### 2. 因果推理实验（causal_eval.py）
-
-**目标**：验证PCCM融合算法的因果抽取能力
-
-**测试内容**：
-- 30条标注样本（快速）或100条（完整）
-- 四元组抽取：Object → Mediator → Property → Result
-
-**关键指标**：
-- 抽取成功率：目标 ≥80%
-- 平均置信度：目标 ≥0.7
-- Ground truth F1：与人工标注的匹配度
-- 响应时间：目标 <2000ms
-
-**基线对比预期**：
-| 配置 | 准确率 | 置信度 |
-|------|--------|--------|
-| vanilla_llm | 50-60% | 0.5 |
-| naive_rag | 60-70% | 0.6 |
-| rag_with_filter | 70-80% | 0.65 |
-| full_system | >85% | >0.7 |
-
----
-
-### 3. 检索融合实验（retrieval_eval.py）
-
-**目标**：验证三路检索融合（向量+图谱+时序）的优势
-
-**测试内容**：
-- 50对查询-答案对
-- 查询类型：时序查询（15对）、因果查询（15对）、普通查询（20对）
-
-**关键指标**：
-- MRR（平均倒数排名）：目标 >0.80
-- Precision@5：前5结果的准确率
-- Recall@5：前5结果的召回率
-- 单路 vs 融合对比
-
-**基线对比预期**：
-| 配置 | MRR | Precision@5 |
-|------|-----|-------------|
-| vanilla_llm | 0.3 | 0.2 |
-| naive_rag | 0.55 | 0.45 |
-| rag_with_filter | 0.62 | 0.52 |
-| full_system | >0.80 | >0.70 |
-
----
-
-### 4. 机器遗忘实验（unlearning_eval.py）
-
-**目标**：验证梯度正交投影算法的遗忘效果
-
-**测试内容**：
-- 5个场景：用户删除、时间段遗忘、事件类型遗忘、关联遗忘、敏感信息遗忘
-
-**关键指标**：
-- 遗忘率：目标 >95%（目标用户数据不可检索）
-- 副作用率：目标 <5%（其他用户数据受影响程度）
-- 收敛迭代次数：算法收敛速度
-- 遗忘耗时：完整遗忘过程耗时
-
-**预期结果**：
-- 遗忘前：目标用户查询命中率 >90%
-- 遗忘后：目标用户查询命中率 <5%
-- 其他用户：查询命中率变化 <5%
-
----
-
-## 数据集说明
-
-### 现有数据集
-
-| 数据集 | 路径 | 规模 | 用途 |
-|--------|------|------|------|
-| 攻击样本 | `datasets/attack_samples/` | 600个（6类×100） | 安全实验 |
-| 因果标注 | `datasets/causal_reasoning/` | 30条标注 | 因果实验 |
-| 护理记录 | `datasets/nursing_data/` | 9,809条 | 因果/检索实验 |
-| 老人档案 | `datasets/nursing_data/` | 100个 | 遗忘实验 |
-
-### 待补充数据集
-
-⚠️ **检索ground truth**（优先级P0）：
-- 路径：`datasets/retrieval_groundtruth/query_answer_pairs.json`
-- 规模：50对查询-答案对
-- 用途：检索融合实验
-- 状态：需补充
-
-**生成方式**：
-1. 自动生成30对基础查询（时序/普通查询）
-2. 人工标注20对复杂查询（多跳因果/时序推理）
-
----
-
-## 报告说明
-
-### 完整报告（full_report.html）
-
-**5个章节**：
-1. **数据集说明**：测试数据集构成表
-2. **安全防护评估**：4配置ASR对比 + 6类攻击雷达图
-3. **因果推理评估**：4配置准确率对比 + PCCM三路贡献饼图
-4. **检索融合评估**：单路vs三路MRR对比 + 查询类型适配性柱状图
-5. **机器遗忘评估**：5场景对比 + 遗忘率vs副作用散点图
-
-### 4张关键图表
-
-用于PPT和答辩演示的核心对比图。
-
----
-
-## 常见问题
-
-### Q1: 服务启动失败怎么办？
-
-检查服务状态：
-```bash
-docker-compose ps
-curl http://localhost:8088/health
-```
-
-### Q2: 如何只运行单个实验？
+Run the relevant offline tests before changing an evaluator or report contract:
 
 ```bash
-# 只运行安全实验
-python3 scripts/security_eval.py --samples 100 --configs all
-
-# 只运行因果实验
-python3 scripts/causal_eval.py --samples 30 --configs all
+python3 experiments/scripts/test_report_builder.py
+python3 experiments/scripts/test_experiment_contract.py
 ```
-
----
-
-## 联系方式
-
-如有问题，请查阅：
-- 完整计划：`.claude/plans/stateless-shimmying-haven.md`
-- P0-6实验报告：`../P0-6_因果推理实验完成报告.md`
