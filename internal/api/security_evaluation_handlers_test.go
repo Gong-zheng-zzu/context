@@ -25,3 +25,15 @@ func TestInputSecurityDecisionMatchesChatPreGenerationSemantics(t *testing.T) {
 		})
 	}
 }
+
+func TestSecurityExecutionEvidenceReportsUnavailableSecurityService(t *testing.T) {
+	evidence := newSecurityExecutionEvidence(nil)
+	if got, ok := evidence["asdf_checked"].(bool); !ok || got {
+		t.Fatalf("asdf_checked = %#v, want false when security service is unavailable", evidence["asdf_checked"])
+	}
+	for _, field := range []string{"input_normalized", "multi_layer_used", "pccm_enabled", "casia_enabled"} {
+		if got, ok := evidence[field].(bool); !ok || got {
+			t.Fatalf("%s = %#v, want false initial state", field, evidence[field])
+		}
+	}
+}

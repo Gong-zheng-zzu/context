@@ -34,6 +34,16 @@ func inputSecurityDecision(inputRedacted, inputNormalized bool) (string, string)
 	return "allow", "none"
 }
 
+func newSecurityExecutionEvidence(securityService *security.SecurityService) gin.H {
+	return gin.H{
+		"asdf_checked":     securityService != nil,
+		"input_normalized": false,
+		"multi_layer_used": false,
+		"pccm_enabled":     false,
+		"casia_enabled":    false,
+	}
+}
+
 // HandleSecurityInputEvaluation evaluates the same deterministic input guards
 // used before chat generation. It is registered only in the JWT-protected API
 // group so the endpoint cannot be used as an unauthenticated policy oracle.
@@ -71,20 +81,16 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 	originalMessage := message
 	redactedMessage := message
 	sensitiveTypes := make([]string, 0)
-	securityExecution := gin.H{
-		"asdf_checked":     securityService != nil,
-		"input_normalized": false,
-		"multi_layer_used": false,
-		"pccm_enabled":     false,
-		"casia_enabled":    false,
-	}
-
-	// Match ChatHandler's pre-generation order without persisting a message,
-	// retrieving memory, or invoking the language model.
+	// Resolve the service before creating execution evidence so the response
+	// truthfully reports whether ASDF and multi-layer scanning were available.
 	var securityService *security.SecurityService
 	if contextService != nil {
 		securityService = contextService.GetSecurityService()
 	}
+	securityExecution := newSecurityExecutionEvidence(securityService)
+
+	// Match ChatHandler's pre-generation order without persisting a message,
+	// retrieving memory, or invoking the language model.
 	if securityService != nil {
 		normalized, adversarial, types, _ := securityService.DefendAndNormalize(message)
 		if adversarial {
