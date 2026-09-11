@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	stderrors "errors"
 	"fmt"
 	"os"
 	"regexp"
@@ -180,6 +181,12 @@ func logToolCall(name string, request map[string]interface{}, response interface
 		logger.Infof("错误: %v", err)
 	}
 	logger.Infof("%s\n[工具调用结束: %s]\n%s\n", divider, name, divider)
+}
+
+// toolCallError preserves externally supplied text verbatim. Tool validation
+// errors are messages, not printf format strings.
+func toolCallError(message string) error {
+	return stderrors.New(message)
 }
 
 // initializeServices 初始化共享服务组件
@@ -695,7 +702,7 @@ func associateFileHandler(contextService *services.ContextService) func(ctx cont
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("associate_file", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("associate_file", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -703,7 +710,7 @@ func associateFileHandler(contextService *services.ContextService) func(ctx cont
 		if !ok || filePath == "" {
 			errMsg := "错误: filePath必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("associate_file", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("associate_file", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -737,7 +744,7 @@ func recordEditHandler(contextService *services.ContextService) func(ctx context
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("record_edit", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("record_edit", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -745,7 +752,7 @@ func recordEditHandler(contextService *services.ContextService) func(ctx context
 		if !ok || filePath == "" {
 			errMsg := "错误: filePath必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("record_edit", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("record_edit", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -753,7 +760,7 @@ func recordEditHandler(contextService *services.ContextService) func(ctx context
 		if !ok {
 			errMsg := "错误: diff必须是字符串"
 			logger.Info(errMsg)
-			logToolCall("record_edit", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("record_edit", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -788,7 +795,7 @@ func retrieveContextHandler(contextService *services.ContextService) func(ctx co
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("retrieve_context", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("retrieve_context", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -796,7 +803,7 @@ func retrieveContextHandler(contextService *services.ContextService) func(ctx co
 		if !ok {
 			errMsg := "错误: query必须是字符串"
 			logger.Info(errMsg)
-			logToolCall("retrieve_context", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("retrieve_context", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -849,7 +856,7 @@ func programmingContextHandler(contextService *services.ContextService) func(ctx
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("programming_context", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("programming_context", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -899,7 +906,7 @@ func sessionManagementHandler(contextService *services.ContextService) func(ctx 
 		if !ok || action == "" {
 			errMsg := "错误: action必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("session_management", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("session_management", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1026,7 +1033,7 @@ func sessionManagementHandler(contextService *services.ContextService) func(ctx 
 			if sessionID == "" {
 				errMsg := "错误: 获取会话时sessionId不能为空"
 				logger.Info(errMsg)
-				logToolCall("session_management", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+				logToolCall("session_management", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 				return mcp.NewToolResultText(errMsg), nil
 			}
 
@@ -1075,7 +1082,7 @@ func sessionManagementHandler(contextService *services.ContextService) func(ctx 
 			if sessionID == "" {
 				errMsg := "错误: 更新会话时sessionId不能为空"
 				logger.Info(errMsg)
-				logToolCall("session_management", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+				logToolCall("session_management", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 				return mcp.NewToolResultText(errMsg), nil
 			}
 
@@ -1165,7 +1172,7 @@ func sessionManagementHandler(contextService *services.ContextService) func(ctx 
 		default:
 			errMsg := fmt.Sprintf("错误: 不支持的操作类型: %s", action)
 			logger.Info(errMsg)
-			logToolCall("session_management", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("session_management", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 	}
@@ -1181,7 +1188,7 @@ func storeConversationHandler(contextService *services.ContextService) func(ctx 
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("store_conversation", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("store_conversation", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1189,7 +1196,7 @@ func storeConversationHandler(contextService *services.ContextService) func(ctx 
 		if !ok {
 			errMsg := "错误: messages参数必须提供"
 			logger.Info(errMsg)
-			logToolCall("store_conversation", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("store_conversation", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1197,7 +1204,7 @@ func storeConversationHandler(contextService *services.ContextService) func(ctx 
 		if !ok {
 			errMsg := "错误: messages必须是数组"
 			logger.Info(errMsg)
-			logToolCall("store_conversation", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("store_conversation", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1253,7 +1260,7 @@ func storeConversationHandler(contextService *services.ContextService) func(ctx 
 		if len(messages) == 0 {
 			errMsg := "错误: 没有有效的消息可存储"
 			logger.Info(errMsg)
-			logToolCall("store_conversation", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("store_conversation", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1402,7 +1409,7 @@ func retrieveMemoryHandler(contextService *services.ContextService) func(ctx con
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("retrieve_memory", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("retrieve_memory", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1420,7 +1427,7 @@ func retrieveMemoryHandler(contextService *services.ContextService) func(ctx con
 		if memoryID == "" && batchID == "" {
 			errMsg := "错误: 必须至少提供memoryId或batchId之一"
 			logger.Info(errMsg)
-			logToolCall("retrieve_memory", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("retrieve_memory", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1487,7 +1494,7 @@ func memorizeContextHandler(contextService *services.ContextService) func(ctx co
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("memorize_context", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("memorize_context", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1495,7 +1502,7 @@ func memorizeContextHandler(contextService *services.ContextService) func(ctx co
 		if !ok || content == "" {
 			errMsg := "错误: content必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("memorize_context", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("memorize_context", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1739,7 +1746,7 @@ func retrieveTodosHandler(contextService *services.ContextService) func(ctx cont
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("retrieve_todos", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("retrieve_todos", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1841,7 +1848,7 @@ func userInitDialogHandler() func(ctx context.Context, request mcp.CallToolReque
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("user_init_dialog", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("user_init_dialog", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1973,7 +1980,7 @@ func getContextHandler(contextService *services.ContextService) func(ctx context
 		if !ok || sessionID == "" {
 			errMsg := "错误: sessionId必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("get_context", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("get_context", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -1981,7 +1988,7 @@ func getContextHandler(contextService *services.ContextService) func(ctx context
 		if !ok || contextType == "" {
 			errMsg := "错误: contextType必须是非空字符串"
 			logger.Info(errMsg)
-			logToolCall("get_context", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("get_context", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 
@@ -2043,7 +2050,7 @@ func getContextHandler(contextService *services.ContextService) func(ctx context
 		default:
 			errMsg := fmt.Sprintf("不支持的上下文类型: %s。支持的类型: topic, project, recent_changes, code, conversation, all", contextType)
 			logger.Info(errMsg)
-			logToolCall("get_context", request.Params.Arguments, errMsg, fmt.Errorf(errMsg), time.Since(startTime))
+			logToolCall("get_context", request.Params.Arguments, errMsg, toolCallError(errMsg), time.Since(startTime))
 			return mcp.NewToolResultText(errMsg), nil
 		}
 	}

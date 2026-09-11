@@ -7,6 +7,13 @@ import (
 	"time"
 )
 
+func TestToolCallErrorKeepsPercentSignsLiteral(t *testing.T) {
+	err := toolCallError("invalid value: 100% complete")
+	if err.Error() != "invalid value: 100% complete" {
+		t.Fatalf("toolCallError() = %q", err.Error())
+	}
+}
+
 func TestNeo4jEngineConfigReadsConnectionSettings(t *testing.T) {
 	t.Setenv("NEO4J_URI", "bolt://graph:7687")
 	t.Setenv("NEO4J_USERNAME", "graph-user")

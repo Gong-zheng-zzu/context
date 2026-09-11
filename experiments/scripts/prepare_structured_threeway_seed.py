@@ -141,6 +141,7 @@ def build_requests(corpus_file: Path, session_id: str) -> Tuple[Dict[str, Any], 
             "corpus_metadata": corpus.get("metadata", {}),
         },
         "three_way_contract": {
+            "ingestion_mode": "deterministic_preannotated_no_llm",
             "write_endpoint": "/mcp/tools/create_context",
             "authentication": "JWT Bearer token from /api/auth/login",
             "vector": "submitted through unified ingestion; retrieval can be independently checked",
