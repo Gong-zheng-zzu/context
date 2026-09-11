@@ -10,7 +10,12 @@ import (
 	"github.com/contextkeeper/service/internal/utils"
 )
 
-// MultiDimensionalRetrievalEngine 多维度检索引擎
+// MultiDimensionalRetrievalEngine is a deprecated legacy prototype.
+//
+// Deprecated: the HTTP service must use engines.MultiDimensionalRetrieverImpl
+// through services.MultiDimensionalRetrieverAdapter. This package remains only
+// for legacy callers and its simulated vector retrieval must not be used for
+// production, competition, or evaluation evidence.
 type MultiDimensionalRetrievalEngine struct {
 	config *MultiDimensionalRetrievalConfig
 

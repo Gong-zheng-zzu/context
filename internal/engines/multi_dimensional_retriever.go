@@ -300,6 +300,8 @@ func (mdr *MultiDimensionalRetrieverImpl) executeTimelineRetrieval(ctx context.C
 	// 如果没有任何结果且发生错误，标记为失败
 	if len(allResults) == 0 && status == "partial_failure" {
 		status = "failure"
+	} else if len(allResults) == 0 && status == "success" {
+		status = "empty"
 	}
 
 	duration := time.Since(startTime).Milliseconds()
@@ -387,6 +389,8 @@ func (mdr *MultiDimensionalRetrieverImpl) executeKnowledgeRetrieval(ctx context.
 	// 如果没有任何结果且发生错误，标记为失败
 	if len(allResults) == 0 && status == "partial_failure" {
 		status = "failure"
+	} else if len(allResults) == 0 && status == "success" {
+		status = "empty"
 	}
 
 	duration := time.Since(startTime).Milliseconds()
@@ -465,6 +469,8 @@ func (mdr *MultiDimensionalRetrieverImpl) executeVectorRetrieval(ctx context.Con
 	// 如果没有任何结果且发生错误，标记为失败（复用WideRecallService的状态判断逻辑）
 	if len(allResults) == 0 && status == "partial_failure" {
 		status = "failure"
+	} else if len(allResults) == 0 && status == "success" {
+		status = "empty"
 	}
 
 	duration := time.Since(startTime).Milliseconds()

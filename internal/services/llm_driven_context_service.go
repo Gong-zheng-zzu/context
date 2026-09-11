@@ -139,6 +139,9 @@ type RetrievalResults struct {
 	SourceCounts    map[string]int    `json:"source_counts"`
 	SourceLatencyMs map[string]int64  `json:"source_latency_ms"`
 	SourceStatuses  map[string]string `json:"source_statuses"`
+	// WallClockLatencyMs is the elapsed time for the parallel retrieval fan-out,
+	// rather than the sum of individual source latencies.
+	WallClockLatencyMs int64 `json:"wall_clock_latency_ms"`
 }
 
 // MultiDimensionalRetrieverAdapter 多维度检索器适配器
@@ -288,7 +291,8 @@ func (adapter *MultiDimensionalRetrieverAdapter) ParallelRetrieve(ctx context.Co
 			"knowledge": engineResults.KnowledgeLatencyMs,
 			"vector":    engineResults.VectorLatencyMs,
 		},
-		SourceStatuses: engineResults.SourceStatuses,
+		SourceStatuses:     engineResults.SourceStatuses,
+		WallClockLatencyMs: engineResults.RetrievalTime,
 	}
 
 	// 添加时间线结果
@@ -745,8 +749,9 @@ func (lds *LLMDrivenContextService) retrieveEvaluationRRF(ctx context.Context, r
 		"timeline":  20,
 	}
 	response.RetrievalMetadata["source_candidate_counts"] = retrievalResults.SourceCounts
-	response.RetrievalMetadata["source_latency_ms"] = retrievalResults.SourceLatencyMs
-	response.RetrievalMetadata["source_statuses"] = retrievalResults.SourceStatuses
+	response.RetrievalMetadata["source_latency_ms"] = evaluationSourceLatencies(retrievalResults.SourceLatencyMs)
+	response.RetrievalMetadata["source_statuses"] = evaluationSourceStatuses(retrievalResults.SourceStatuses)
+	response.RetrievalMetadata["wall_clock_latency_ms"] = retrievalResults.WallClockLatencyMs
 	return response, nil
 }
 
@@ -754,6 +759,23 @@ func markEvaluationVectorFallback(response models.ContextResponse) models.Contex
 	contexts := response.Contexts
 	if len(contexts) == 0 {
 		contexts = response.RetrievedContexts
+	}
+	vectorStatus := "success"
+	if len(contexts) == 0 {
+		vectorStatus = "empty"
+	}
+	if response.RetrievalMetadata == nil {
+		response.RetrievalMetadata = make(map[string]interface{})
+	}
+	response.RetrievalMetadata["retrieval_execution_path"] = "vector_fallback"
+	response.RetrievalMetadata["retrieval_active_sources"] = []string{"vector"}
+	response.RetrievalMetadata["retrieval_empty_sources"] = []string{"knowledge", "timeline"}
+	response.RetrievalMetadata["retrieval_fusion_mode"] = "vector_only_fallback"
+	response.RetrievalMetadata["source_statuses"] = map[string]string{
+		"vector": vectorStatus, "knowledge": "skipped", "timeline": "skipped",
+	}
+	response.RetrievalMetadata["source_candidate_counts"] = map[string]int{
+		"vector": len(contexts), "knowledge": 0, "timeline": 0,
 	}
 	if len(contexts) == 0 {
 		return response
@@ -765,9 +787,20 @@ func markEvaluationVectorFallback(response models.ContextResponse) models.Contex
 			metadata[key] = value
 		}
 		metadata["rrf_sources"] = []string{"vector"}
+		metadata["rrf_ranks"] = map[string]int{"vector": index + 1}
 		metadata["retrieval_active_sources"] = []string{"vector"}
 		metadata["retrieval_empty_sources"] = []string{"knowledge", "timeline"}
 		metadata["retrieval_fusion_mode"] = "vector_only_fallback"
+		metadata["retrieval_source_statuses"] = map[string]string{
+			"vector": vectorStatus, "knowledge": "skipped", "timeline": "skipped",
+		}
+		if contexts[index].DocID == "" {
+			contexts[index].DocID = contexts[index].ID
+		}
+		if contexts[index].ID == "" {
+			contexts[index].ID = contexts[index].DocID
+		}
+		metadata["doc_id"] = contexts[index].DocID
 		contexts[index].Metadata = metadata
 		if contexts[index].Source == "" {
 			contexts[index].Source = "vector"
@@ -1047,6 +1080,11 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 	if limit <= 0 {
 		limit = 5
 	}
+	if retrieval == nil {
+		retrieval = &RetrievalResults{}
+	}
+	sourceStatuses := evaluationSourceStatuses(retrieval.SourceStatuses)
+	sourceLatencies := evaluationSourceLatencies(retrieval.SourceLatencyMs)
 
 	bySource := make(map[string]map[string]evaluationRetrievalCandidate)
 	for index, result := range retrieval.Results {
@@ -1143,17 +1181,20 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 			sources = append(sources, source)
 		}
 		sort.Strings(sources)
-		metadata := make(map[string]interface{}, len(candidate.Metadata)+6)
+		metadata := make(map[string]interface{}, len(candidate.Metadata)+8)
 		for key, value := range candidate.Metadata {
 			metadata[key] = value
 		}
 		metadata["rrf_score"] = candidate.Score
 		metadata["rrf_sources"] = sources
 		metadata["rrf_ranks"] = candidate.SourceRanks
+		metadata["doc_id"] = candidate.DocID
 		metadata["retrieval_active_sources"] = activeSources
 		metadata["retrieval_empty_sources"] = emptySources
 		metadata["retrieval_fusion_mode"] = fusionMode
-		metadata["retrieval_source_statuses"] = retrieval.SourceStatuses
+		metadata["retrieval_source_statuses"] = sourceStatuses
+		metadata["retrieval_source_latency_ms"] = sourceLatencies
+		metadata["retrieval_wall_clock_latency_ms"] = retrieval.WallClockLatencyMs
 		contextSource := "rrf"
 		if len(activeSources) == 1 {
 			contextSource = activeSources[0]
@@ -1177,10 +1218,37 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 			"retrieval_active_sources": activeSources,
 			"retrieval_empty_sources":  emptySources,
 			"retrieval_fusion_mode":    fusionMode,
-			"source_statuses":          retrieval.SourceStatuses,
+			"source_statuses":          sourceStatuses,
+			"source_latency_ms":        sourceLatencies,
+			"wall_clock_latency_ms":    retrieval.WallClockLatencyMs,
 			"candidate_output_limit":   limit,
 		},
 	}
+}
+
+// evaluationSourceStatuses keeps the evidence contract stable even when an
+// adapter omits a source status. Missing statuses are explicitly unknown, not
+// silently treated as successful retrieval.
+func evaluationSourceStatuses(statuses map[string]string) map[string]string {
+	result := map[string]string{
+		"vector": "unknown", "knowledge": "unknown", "timeline": "unknown",
+	}
+	for _, source := range []string{"vector", "knowledge", "timeline"} {
+		if status := strings.TrimSpace(statuses[source]); status != "" {
+			result[source] = status
+		}
+	}
+	return result
+}
+
+func evaluationSourceLatencies(latencies map[string]int64) map[string]int64 {
+	result := map[string]int64{"vector": 0, "knowledge": 0, "timeline": 0}
+	for _, source := range []string{"vector", "knowledge", "timeline"} {
+		if latency, exists := latencies[source]; exists && latency >= 0 {
+			result[source] = latency
+		}
+	}
+	return result
 }
 
 func evaluationCandidatesFromResult(source string, result interface{}) []evaluationRetrievalCandidate {
@@ -1189,16 +1257,24 @@ func evaluationCandidatesFromResult(source string, result interface{}) []evaluat
 		if value == nil {
 			return nil
 		}
-		return evaluationCandidatesFromDocIDs(source, evaluationDocIDs(value.Metadata, "doc_id", "id"), value.Content, value.Score, value.Metadata)
+		docIDs := evaluationDocIDs(value.Metadata, "doc_id", "id")
+		if len(docIDs) == 0 {
+			docIDs = []string{value.ID}
+		}
+		return evaluationCandidatesFromDocIDs(source, docIDs, value.Content, value.Score, value.Metadata)
 	case *models.TimelineEvent:
-		if value == nil || value.SourceDocID == "" {
+		if value == nil {
 			return nil
 		}
 		score := value.RelevanceScore
 		if score == 0 {
 			score = value.ImportanceScore
 		}
-		return evaluationCandidatesFromDocIDs(source, []string{value.SourceDocID}, value.Content, score, map[string]interface{}{
+		docID := value.SourceDocID
+		if docID == "" {
+			docID = value.ID
+		}
+		return evaluationCandidatesFromDocIDs(source, []string{docID}, value.Content, score, map[string]interface{}{
 			"timeline_event_id": value.ID,
 		})
 	case *models.KnowledgeNode:
@@ -1212,7 +1288,11 @@ func evaluationCandidatesFromResult(source string, result interface{}) []evaluat
 		if content == "" {
 			content = value.Name
 		}
-		return evaluationCandidatesFromDocIDs(source, evaluationDocIDs(value.Properties, "doc_ids", "doc_id"), content, value.Score, value.Properties)
+		docIDs := evaluationDocIDs(value.Properties, "doc_ids", "doc_id")
+		if len(docIDs) == 0 {
+			docIDs = []string{value.ID}
+		}
+		return evaluationCandidatesFromDocIDs(source, docIDs, content, value.Score, value.Properties)
 	default:
 		return nil
 	}
