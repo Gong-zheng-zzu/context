@@ -652,26 +652,35 @@ func initOllamaClient(cfg *config.Config) (llm.LLMClient, error) {
 
 // initNeo4jEngine 初始化Neo4j知识图谱引擎
 func initNeo4jEngine(cfg *config.Config) (*knowledge.Neo4jEngine, error) {
-	neo4jURI := getEnv("NEO4J_URI", "bolt://localhost:7687")
-	neo4jUsername := getEnv("NEO4J_USERNAME", "neo4j")
-	neo4jPassword := getEnv("NEO4J_PASSWORD", "neo4j_password")
-
-	knowledgeConfig := &knowledge.Neo4jConfig{
-		URI:                   neo4jURI,
-		Username:              neo4jUsername,
-		Password:              neo4jPassword,
-		Database:              "neo4j",
-		MaxConnectionPoolSize: 50,
-		ConnectionTimeout:     30 * time.Second,
-	}
+	knowledgeConfig := neo4jEngineConfigFromEnv()
 
 	engine, err := knowledge.NewNeo4jEngine(knowledgeConfig)
 	if err != nil {
 		return nil, fmt.Errorf("Neo4j引擎创建失败: %w", err)
 	}
 
-	log.Printf("✅ Neo4j引擎配置: URI=%s, Username=%s", neo4jURI, neo4jUsername)
+	log.Printf("✅ Neo4j引擎配置: URI=%s, Username=%s", knowledgeConfig.URI, knowledgeConfig.Username)
 	return engine, nil
+}
+
+func neo4jEngineConfigFromEnv() *knowledge.Neo4jConfig {
+	return &knowledge.Neo4jConfig{
+		URI:                     getEnv("NEO4J_URI", "bolt://localhost:7687"),
+		Username:                getEnv("NEO4J_USERNAME", "neo4j"),
+		Password:                getEnv("NEO4J_PASSWORD", "neo4j_password"),
+		Database:                getEnv("NEO4J_DATABASE", "neo4j"),
+		MaxConnectionPoolSize:   getIntEnv("NEO4J_MAX_CONNECTION_POOL_SIZE", 50),
+		ConnectionTimeout:       getDurationEnv("NEO4J_CONNECTION_TIMEOUT", 30*time.Second),
+		MaxTransactionRetryTime: getDurationEnv("NEO4J_MAX_TRANSACTION_RETRY_TIME", 15*time.Second),
+	}
+}
+
+func getDurationEnv(key string, defaultValue time.Duration) time.Duration {
+	value := getEnv(key, "")
+	if parsed, err := time.ParseDuration(value); err == nil && parsed > 0 {
+		return parsed
+	}
+	return defaultValue
 }
 
 // initVectorStore 初始化向量存储
