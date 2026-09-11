@@ -159,3 +159,97 @@ func TestExtractCausalRelationsReportsPersistenceFailure(t *testing.T) {
 		t.Fatalf("status = %d, body = %s", response.Code, response.Body.String())
 	}
 }
+
+func TestExtractCausalRelationsExposesRuleAndPCCMAuditEvidence(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	handler := &CausalReasoningHandler{
+		extractor: causal_reasoning.NewEntityExtractor(nil),
+	}
+
+	request := httptest.NewRequest(http.MethodPost, "/causal/extract", strings.NewReader(`{"text":"患者服用降压药后出现体位性低血压并有跌倒风险","use_rules":true}`))
+	request.Header.Set("Content-Type", "application/json")
+	response := httptest.NewRecorder()
+	router := gin.New()
+	router.POST("/causal/extract", handler.ExtractCausalRelations)
+	router.ServeHTTP(response, request)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("status = %d, body = %s", response.Code, response.Body.String())
+	}
+	var body causal_reasoning.ExtractResponse
+	if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil {
+		t.Fatalf("decode response: %v", err)
+	}
+	if body.Execution == nil || body.Execution.Mode != "rules" || body.Execution.ModelStatus != "not_requested" {
+		t.Fatalf("execution = %#v, want rule-only audit state", body.Execution)
+	}
+	if len(body.Execution.MatchedRules) < 2 || body.Execution.MatchedRules[0].ID != "rule_001" {
+		t.Fatalf("matched rules = %#v, want sorted rule provenance", body.Execution.MatchedRules)
+	}
+	if len(body.Relations) == 0 || body.Relations[0].PCCMEvidence == nil {
+		t.Fatalf("relations = %#v, want relation PCCM evidence", body.Relations)
+	}
+	pccm := body.Relations[0].PCCMEvidence
+	if len(pccm.ActiveSources) != 1 || pccm.ActiveSources[0] != "rule" || pccm.FinalConfidence != body.Relations[0].Confidence {
+		t.Fatalf("PCCM evidence = %#v, relation = %#v", pccm, body.Relations[0])
+	}
+	if body.Persistence.Status != "analysis_only" || body.Persistence.Requested || body.GraphPersisted {
+		t.Fatalf("persistence = %#v, want analysis-only outcome", body.Persistence)
+	}
+}
+
+func TestExtractCausalRelationsReportsUnavailableModelWithoutFabricatingOutput(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	handler := &CausalReasoningHandler{
+		extractor: causal_reasoning.NewEntityExtractor(nil),
+	}
+
+	request := httptest.NewRequest(http.MethodPost, "/causal/extract", strings.NewReader(`{"text":"任意未见于规则库的护理描述","use_llm":true}`))
+	request.Header.Set("Content-Type", "application/json")
+	response := httptest.NewRecorder()
+	router := gin.New()
+	router.POST("/causal/extract", handler.ExtractCausalRelations)
+	router.ServeHTTP(response, request)
+
+	if response.Code != http.StatusServiceUnavailable {
+		t.Fatalf("status = %d, body = %s", response.Code, response.Body.String())
+	}
+	var body causal_reasoning.ExtractResponse
+	if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil {
+		t.Fatalf("decode response: %v", err)
+	}
+	if body.Execution == nil || body.Execution.Mode != "model_unavailable" || body.Execution.LLMAvailable || body.Execution.ModelStatus != "unavailable" {
+		t.Fatalf("execution = %#v, want unavailable model state", body.Execution)
+	}
+	if len(body.Relations) != 0 || body.Error == "" {
+		t.Fatalf("relations = %#v, error = %q; arbitrary input must not receive fabricated output", body.Relations, body.Error)
+	}
+}
+
+func TestExtractCausalRelationsReportsRulesFallbackWhenModelUnavailable(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	handler := &CausalReasoningHandler{
+		extractor: causal_reasoning.NewEntityExtractor(nil),
+	}
+
+	request := httptest.NewRequest(http.MethodPost, "/causal/extract", strings.NewReader(`{"text":"患者服用降压药后出现体位性低血压","use_rules":true,"use_llm":true}`))
+	request.Header.Set("Content-Type", "application/json")
+	response := httptest.NewRecorder()
+	router := gin.New()
+	router.POST("/causal/extract", handler.ExtractCausalRelations)
+	router.ServeHTTP(response, request)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("status = %d, body = %s", response.Code, response.Body.String())
+	}
+	var body causal_reasoning.ExtractResponse
+	if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil {
+		t.Fatalf("decode response: %v", err)
+	}
+	if body.Execution == nil || body.Execution.Mode != "rules_fallback" || body.Execution.FallbackReason == "" || body.Execution.ModelStatus != "unavailable" {
+		t.Fatalf("execution = %#v, want rules fallback audit state", body.Execution)
+	}
+	if len(body.Relations) == 0 || len(body.Relations[0].RuleMatches) == 0 {
+		t.Fatalf("relations = %#v, want rule-backed fallback output", body.Relations)
+	}
+}

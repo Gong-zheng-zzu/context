@@ -3,14 +3,21 @@ package causal_reasoning
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/contextkeeper/service/internal/llm"
 )
+
+// ErrLLMUnavailable means no Ollama client was configured for this process.
+// It is intentionally distinct from a model response failure so HTTP callers
+// can present an honest offline-mode state.
+var ErrLLMUnavailable = errors.New("ollama client is not configured")
 
 // EntityExtractor 因果实体抽取器
 type EntityExtractor struct {
@@ -42,6 +49,14 @@ type LLMExtractionResult struct {
 
 // Extract 从文本中抽取因果关系
 func (ee *EntityExtractor) Extract(ctx context.Context, text string, useRules, usePMI, useLLM bool) ([]CausalRelation, error) {
+	relations, _, err := ee.ExtractWithExecution(ctx, text, useRules, usePMI, useLLM)
+	return relations, err
+}
+
+// ExtractWithExecution is the audited extraction entrypoint used by the HTTP
+// API. It records the actual fallback path instead of inferring it from output.
+func (ee *EntityExtractor) ExtractWithExecution(ctx context.Context, text string, useRules, usePMI, useLLM bool) ([]CausalRelation, *ExtractionExecution, error) {
+	execution := ee.ExecutionEvidence(text, useRules, usePMI, useLLM)
 	var relations []CausalRelation
 
 	// 使用LLM抽取O→C→P→R四元组
@@ -50,9 +65,20 @@ func (ee *EntityExtractor) Extract(ctx context.Context, text string, useRules, u
 		if err != nil {
 			// LLM失败时降级到规则引擎
 			if useRules {
-				return ee.extractWithRules(text)
+				relations, ruleErr := ee.extractWithRules(text)
+				if ruleErr != nil {
+					return nil, execution, ruleErr
+				}
+				execution.Mode = "rules_fallback"
+				execution.FallbackReason = extractionFallbackReason(err)
+				execution.ModelStatus = "unavailable"
+				ee.AttachAuditEvidence(relations, execution)
+				return relations, execution, nil
 			}
-			return nil, fmt.Errorf("LLM extraction failed: %w", err)
+			execution.Mode = "model_unavailable"
+			execution.FallbackReason = extractionFallbackReason(err)
+			execution.ModelStatus = "unavailable"
+			return nil, execution, fmt.Errorf("LLM extraction failed: %w", err)
 		}
 
 		for _, llmRel := range llmRelations {
@@ -88,16 +114,112 @@ func (ee *EntityExtractor) Extract(ctx context.Context, text string, useRules, u
 
 			relations = append(relations, relation)
 		}
+		execution.Mode = "llm"
 	} else if useRules {
 		// 仅使用规则引擎
-		return ee.extractWithRules(text)
+		ruleRelations, err := ee.extractWithRules(text)
+		if err != nil {
+			return nil, execution, err
+		}
+		relations = ruleRelations
+		execution.Mode = "rules"
+	} else {
+		execution.Mode = "no_extractor_requested"
 	}
 
-	return relations, nil
+	ee.AttachAuditEvidence(relations, execution)
+	return relations, execution, nil
+}
+
+func extractionFallbackReason(err error) string {
+	if errors.Is(err, ErrLLMUnavailable) {
+		return "ollama_unavailable"
+	}
+	return "model_request_failed"
+}
+
+// ExecutionEvidence builds browser-safe provenance for a completed extraction.
+// It performs no I/O and can therefore be used for both model and rule paths.
+func (ee *EntityExtractor) ExecutionEvidence(text string, useRules, usePMI, useLLM bool) *ExtractionExecution {
+	evidence := &ExtractionExecution{
+		UseRules:    useRules,
+		UsePMI:      usePMI,
+		UseLLM:      useLLM,
+		PCCMWeights: ee.pcccmEngine.GetWeights(),
+	}
+	if useRules {
+		evidence.MatchedRules = ruleEvidence(ee.ruleEngine.MatchRules(text))
+	}
+	if useLLM {
+		if ee.llmClient == nil {
+			evidence.LLMAvailable = false
+			evidence.ModelStatus = "unavailable"
+		} else {
+			evidence.LLMAvailable = true
+			evidence.ModelStatus = "configured"
+			evidence.Model = ee.llmClient.GetModel()
+		}
+	} else {
+		evidence.ModelStatus = "not_requested"
+	}
+	return evidence
+}
+
+// AttachAuditEvidence copies observable rule and PCCM components onto every
+// relation after extraction. Existing confidence fields remain unchanged.
+func (ee *EntityExtractor) AttachAuditEvidence(relations []CausalRelation, execution *ExtractionExecution) {
+	for i := range relations {
+		relation := &relations[i]
+		relation.RuleMatches = matchingRuleEvidence(*relation, execution.MatchedRules)
+		active := make([]string, 0, 3)
+		if relation.RuleConfidence > 0 {
+			active = append(active, "rule")
+		}
+		if relation.PMIConfidence > 0 {
+			active = append(active, "pmi")
+		}
+		if relation.LLMConfidence > 0 {
+			active = append(active, "llm")
+		}
+		evidenceCount := len(relation.Evidence)
+		if evidenceCount == 0 {
+			evidenceCount = 1
+		}
+		relation.PCCMEvidence = &PCCMEvidence{
+			RuleConfidence:  relation.RuleConfidence,
+			PMIConfidence:   relation.PMIConfidence,
+			LLMConfidence:   relation.LLMConfidence,
+			Weights:         execution.PCCMWeights,
+			ActiveSources:   active,
+			EvidenceCount:   evidenceCount,
+			FinalConfidence: relation.Confidence,
+		}
+	}
+}
+
+func matchingRuleEvidence(relation CausalRelation, rules []RuleEvidence) []RuleEvidence {
+	matched := make([]RuleEvidence, 0, len(rules))
+	condition := strings.ToLower(relation.Mediator)
+	if condition == "" {
+		condition = strings.ToLower(relation.Property)
+	}
+	effect := strings.ToLower(relation.Property)
+	if effect == "" {
+		effect = strings.ToLower(relation.Result)
+	}
+	for _, rule := range rules {
+		if strings.Contains(condition, strings.ToLower(rule.Condition)) && strings.Contains(effect+strings.ToLower(relation.Result), strings.ToLower(rule.Effect)) {
+			matched = append(matched, rule)
+		}
+	}
+	return matched
 }
 
 // extractWithLLM 使用LLM抽取因果关系
 func (ee *EntityExtractor) extractWithLLM(ctx context.Context, text string) ([]LLMExtractionResult, error) {
+	if ee.llmClient == nil {
+		return nil, ErrLLMUnavailable
+	}
 	prompt := ee.buildStructuredExtractionPrompt(text)
 
 	req := &llm.LLMRequest{
@@ -128,6 +250,18 @@ func (ee *EntityExtractor) extractWithLLM(ctx context.Context, text string) ([]L
 	}
 
 	return results, nil
+}
+
+func ruleEvidence(rules []*MedicalRule) []RuleEvidence {
+	evidence := make([]RuleEvidence, 0, len(rules))
+	for _, rule := range rules {
+		evidence = append(evidence, RuleEvidence{
+			ID: rule.ID, Condition: rule.Condition, Effect: rule.Effect,
+			Confidence: rule.Confidence, Category: rule.Category, Source: rule.Source,
+		})
+	}
+	sort.Slice(evidence, func(i, j int) bool { return evidence[i].ID < evidence[j].ID })
+	return evidence
 }
 
 // buildExtractionPrompt 构建因果关系抽取提示词

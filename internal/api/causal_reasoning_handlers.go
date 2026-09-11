@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strconv"
 	"time"
@@ -78,10 +79,25 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 		}
 	}
 
-	// 抽取因果关系
-	relations, err := h.extractor.Extract(c.Request.Context(), req.Text, req.UseRules, req.UsePMI, req.UseLLM)
+	// 抽取因果关系。该入口保留实际执行路径，避免客户端从关系内容猜测
+	// 是模型、规则还是降级路径。
+	relations, execution, err := h.extractor.ExtractWithExecution(c.Request.Context(), req.Text, req.UseRules, req.UsePMI, req.UseLLM)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "因果关系抽取失败", "details": err.Error()})
+		status := http.StatusInternalServerError
+		if errors.Is(err, causal_reasoning.ErrLLMUnavailable) {
+			status = http.StatusServiceUnavailable
+		}
+		c.JSON(status, causal_reasoning.ExtractResponse{
+			AnalysisOnly:      true,
+			SecurityExecution: securityExecution,
+			Execution:         execution,
+			Persistence: causal_reasoning.PersistenceExecution{
+				Requested: req.Persist,
+				Status:    "not_attempted",
+			},
+			Relations: []causal_reasoning.CausalRelation{},
+			Error:     "因果关系抽取失败：真实模型不可用且没有启用规则回退",
+		})
 		return
 	}
 
@@ -91,16 +107,32 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 	// The caller must explicitly request persistence. Analysis-only requests
 	// remain side-effect free so they can be used safely in the live demo.
 	graphPersisted := false
+	persistence := causal_reasoning.PersistenceExecution{Requested: req.Persist, Status: "analysis_only"}
 	if req.Persist && len(relations) > 0 {
+		persistence.Attempted = true
 		if h.graphWriter == nil {
-			c.JSON(http.StatusServiceUnavailable, gin.H{"error": "因果图谱存储不可用"})
+			persistence.Status = "unavailable"
+			c.JSON(http.StatusServiceUnavailable, causal_reasoning.ExtractResponse{
+				AnalysisOnly: true, SecurityExecution: securityExecution, Execution: execution,
+				Persistence: persistence, Relations: relations, Count: len(relations),
+				Error: "因果图谱存储不可用",
+			})
 			return
 		}
 		if err := h.graphWriter.BuildCausalGraph(c.Request.Context(), relations); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "构建因果图谱失败", "details": err.Error()})
+			persistence.Status = "failed"
+			c.JSON(http.StatusInternalServerError, causal_reasoning.ExtractResponse{
+				AnalysisOnly: true, SecurityExecution: securityExecution, Execution: execution,
+				Persistence: persistence, Relations: relations, Count: len(relations),
+				Error: "构建因果图谱失败",
+			})
 			return
 		}
 		graphPersisted = true
+		persistence.Succeeded = true
+		persistence.Status = "persisted"
+	} else if req.Persist {
+		persistence.Status = "no_relations"
 	}
 
 	processTime := time.Since(startTime).Milliseconds()
@@ -109,6 +141,8 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 		AnalysisOnly:      !graphPersisted,
 		GraphPersisted:    graphPersisted,
 		SecurityExecution: securityExecution,
+		Execution:         execution,
+		Persistence:       persistence,
 		Relations:         relations,
 		Count:             len(relations),
 		ProcessTimeMs:     processTime,

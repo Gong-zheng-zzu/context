@@ -1,9 +1,39 @@
 package causal_reasoning
 
 import (
+	"context"
+	"errors"
 	"math"
 	"testing"
 )
+
+func TestExtractWithExecutionRejectsLLMWithoutClient(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, execution, err := extractor.ExtractWithExecution(context.Background(), "任意文本", false, false, true)
+	if !errors.Is(err, ErrLLMUnavailable) {
+		t.Fatalf("error = %v, want ErrLLMUnavailable", err)
+	}
+	if relations != nil {
+		t.Fatalf("relations = %#v, want no fabricated output", relations)
+	}
+	if execution.Mode != "model_unavailable" || execution.LLMAvailable || execution.ModelStatus != "unavailable" {
+		t.Fatalf("execution = %#v, want unavailable model state", execution)
+	}
+}
+
+func TestExtractWithExecutionRecordsRulesFallback(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, execution, err := extractor.ExtractWithExecution(context.Background(), "患者服用降压药后出现体位性低血压", true, false, true)
+	if err != nil {
+		t.Fatalf("ExtractWithExecution() error = %v", err)
+	}
+	if execution.Mode != "rules_fallback" || execution.FallbackReason == "" || execution.ModelStatus != "unavailable" {
+		t.Fatalf("execution = %#v, want explicit fallback state", execution)
+	}
+	if len(relations) == 0 || len(relations[0].RuleMatches) == 0 || relations[0].PCCMEvidence == nil {
+		t.Fatalf("relations = %#v, want rule and PCCM evidence", relations)
+	}
+}
 
 func TestParseLLMExtractionResultsAcceptsFencedEnvelopeAndAliases(t *testing.T) {
 	results, err := parseLLMExtractionResults("```json\n{\"relations\":[{\"O\":\"张奶奶\",\"C\":\"服用降压药后\",\"P\":\"体位性低血压\",\"R\":\"滑倒\",\"confidence\":\"0.87\",\"evidence\":\"服药后出现低血压并滑倒\"}]}\n```")
