@@ -55,6 +55,18 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertNotIn("EVAL_PASSWORD", manifest)
         self.assertNotIn("token =", manifest)
 
+    def test_launcher_fixture_mode_is_truly_offline(self):
+        """The offline fallback must not require a service or protected credentials."""
+        self.assertIn('$isFixture = $Mode -eq "fixture"', self.launcher)
+        self.assertIn("Offline fixture mode: no service, credentials, model, or evaluation API required", self.launcher)
+        self.assertIn('if ($isFixture) {', self.launcher)
+        self.assertIn('if (-not $isFixture) {', self.launcher)
+        self.assertIn('if ($RunIsolatedUnlearning -and $isFixture)', self.launcher)
+        # The credential guard is inside the live-mode branch, not at script scope.
+        credential_guard = 'if (-not $env:EVAL_USER_ID -or -not $env:EVAL_PASSWORD)'
+        self.assertEqual(self.launcher.count(credential_guard), 1)
+        self.assertLess(self.launcher.index(credential_guard), self.launcher.index('\n}\n\n$manifest'))
+
     def test_embedded_javascript_has_valid_syntax_when_node_is_available(self):
         node = shutil.which("node")
         if not node:
