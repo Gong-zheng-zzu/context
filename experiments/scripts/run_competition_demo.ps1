@@ -62,7 +62,7 @@ $manifest = [ordered]@{
     authentication = $authCheck
     model = $modelCheck
     isolated_unlearning_requested = [bool]$RunIsolatedUnlearning
-    artifacts = $(if ($isFixture) { @("run_manifest.json") } else { @("run_manifest.json", "retrieval_trace.json", "retrieval_latency.json", "security.log") })
+    artifacts = $(if ($isFixture) { ,@("run_manifest.json") } else { ,@("run_manifest.json", "retrieval_trace.json", "retrieval_latency.json", "security.log") })
 }
 $manifest | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $RunDir "run_manifest.json")
 
