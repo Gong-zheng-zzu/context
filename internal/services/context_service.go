@@ -834,7 +834,7 @@ func (s *ContextService) executeEnhancedPromptAnalysis(contextData *models.LLMDr
 
 // buildSmartAnalysisPrompt 构建智能分析的prompt（替换buildStorageAnalysisPrompt）
 func (s *ContextService) buildSmartAnalysisPrompt(contextData *models.LLMDrivenContextModel, content string) string {
-	prompt := fmt.Sprintf(`你是一个专业的语义意图识别专家，专门负责从用户查询中进行意图拆分和语义关键词提取。
+	prompt := `你是一个专业的语义意图识别专家，专门负责从用户查询中进行意图拆分和语义关键词提取。
 
 ## 🎯 核心任务
 1. **意图拆分**: 识别用户查询中的多个语义意图（可能包含多个步骤、动作或关注点）
@@ -1075,12 +1075,18 @@ func (s *ContextService) buildSmartAnalysisPrompt(contextData *models.LLMDrivenC
 - 用途: 兜底分类，当无法明确归类到上述类型时使用
 - 示例: 复杂的业务流程描述、多维度技术分析
 
-现在请分析以上用户查询。`,
+现在请分析以上用户查询。`
+	// Replace only the five documented placeholders. A format function is
+	// intentionally avoided because the prompt contains literal percentages.
+	for _, value := range []string{
 		contextData.SessionID,
 		contextData.Core.CurrentFocus,
 		string(contextData.Core.IntentCategory),
 		contextData.Core.Complexity,
-		content)
+		content,
+	} {
+		prompt = strings.Replace(prompt, "%s", value, 1)
+	}
 
 	return prompt
 }
