@@ -19,6 +19,12 @@ class ExperimentContractTest(unittest.TestCase):
         self.assertIsNotNone(builder)
         self.assertEqual(builder.group(1), declared.group(1))
 
+    def test_compose_healthcheck_defers_runtime_variables_to_container(self):
+        compose = (EXPERIMENTS.parent / "docker-compose.yml").read_text(encoding="utf-8")
+        self.assertNotIn("version: '3.8'", compose)
+        self.assertIn('[ "$$RUN_MODE" = "http" ]', compose)
+        self.assertIn("localhost:$${HTTP_SERVER_PORT:-8088}/health", compose)
+
     def test_full_runner_meets_report_builder_retrieval_denominator(self):
         runner = (EXPERIMENTS / "scripts" / "run_all.sh").read_text(encoding="utf-8")
         self.assertIn("retrieval_eval.py --queries 50", runner)
