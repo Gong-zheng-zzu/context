@@ -9,6 +9,14 @@ import (
 	"github.com/contextkeeper/service/internal/store"
 )
 
+func testContextForRequest(req *models.ContextUpdateRequest) *models.UnifiedContextModel {
+	return &models.UnifiedContextModel{
+		SessionID: req.SessionID, UserID: req.UserID, WorkspaceID: req.WorkspaceID,
+		CurrentTopic: &models.TopicContext{MainTopic: req.UserQuery, ConfidenceLevel: 0.8},
+		CreatedAt:    req.StartTime, UpdatedAt: req.StartTime,
+	}
+}
+
 // TestUnifiedContextManager 测试统一上下文管理器
 func TestUnifiedContextManager(t *testing.T) {
 	// 创建模拟依赖
@@ -31,7 +39,7 @@ func TestUnifiedContextManager(t *testing.T) {
 			StartTime:   time.Now(),
 		}
 
-		resp, err := ucm.UpdateContext(req)
+		resp, err := ucm.UpdateContext(req.SessionID, testContextForRequest(req), &models.ContextChanges{HasChanges: true, ChangeSummary: "首次创建"})
 		if err != nil {
 			t.Fatalf("初始化上下文失败: %v", err)
 		}
@@ -62,7 +70,7 @@ func TestUnifiedContextManager(t *testing.T) {
 			StartTime:   time.Now(),
 		}
 
-		resp, err := ucm.UpdateContext(req)
+		resp, err := ucm.UpdateContext(req.SessionID, testContextForRequest(req), &models.ContextChanges{HasChanges: true, ChangeSummary: "主题细化"})
 		if err != nil {
 			t.Fatalf("更新上下文失败: %v", err)
 		}
@@ -178,7 +186,7 @@ func BenchmarkContextUpdate(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		req.SessionID = "bench-session-" + string(rune(i))
-		_, err := ucm.UpdateContext(req)
+		_, err := ucm.UpdateContext(req.SessionID, testContextForRequest(req), &models.ContextChanges{HasChanges: true})
 		if err != nil {
 			b.Fatalf("上下文更新失败: %v", err)
 		}
@@ -213,7 +221,7 @@ func TestContextManagerConcurrency(t *testing.T) {
 					StartTime:   time.Now(),
 				}
 
-				_, err := ucm.UpdateContext(req)
+				_, err := ucm.UpdateContext(req.SessionID, testContextForRequest(req), &models.ContextChanges{HasChanges: true})
 				if err != nil {
 					t.Errorf("并发上下文更新失败: %v", err)
 					return

@@ -211,6 +211,10 @@ func (m *MockVectorStore) SearchSimilar(ctx context.Context, req *VectorSearchRe
 // MockLLMService 模拟LLM服务
 type MockLLMService struct{}
 
+// NewMockLLMService returns the deterministic test implementation used by
+// context-manager tests. It never performs network calls.
+func NewMockLLMService() *MockLLMService { return &MockLLMService{} }
+
 func (m *MockLLMService) GenerateResponse(ctx context.Context, req *GenerateRequest) (*GenerateResponse, error) {
 	// 添加调试信息
 	promptPreview := req.Prompt
@@ -330,6 +334,12 @@ func (m *MockLLMService) SynthesizeAndEvaluateContext(
 	retrievalResults *models.ParallelRetrievalResult,
 	intentAnalysis *models.IntentAnalysisResult,
 ) (*models.ContextSynthesisResult, error) {
+	if currentContext == nil {
+		currentContext = &models.UnifiedContextModel{
+			SessionID: "mock-session", UserID: "mock-user", WorkspaceID: "mock-workspace",
+			CurrentTopic: &models.TopicContext{MainTopic: userQuery, ConfidenceLevel: 0.8},
+		}
+	}
 	return &models.ContextSynthesisResult{
 		ShouldUpdate:     true,
 		UpdateConfidence: 0.8,

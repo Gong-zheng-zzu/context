@@ -1,7 +1,6 @@
 package services
 
 import (
-	"context"
 	"encoding/json"
 	"log"
 	"os"
@@ -32,8 +31,8 @@ func TestRealDeepSeekR1Model(t *testing.T) {
 		t.Fatalf("创建真实LLM服务失败: %v", err)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Second) // 5分钟超时
-	defer cancel()
+	// Synthesis API manages its own request timeout; the test remains opt-in via
+	// RUN_REAL_API_TEST so ordinary package tests never contact DeepSeek.
 
 	t.Run("R1模型复杂JSON生成能力测试", func(t *testing.T) {
 		log.Printf("📤 [真实R1测试] 测试DeepSeek-R1模型的上下文合成能力")
@@ -45,9 +44,9 @@ func TestRealDeepSeekR1Model(t *testing.T) {
 
 		// 模拟检索结果
 		retrievalResults := &models.ParallelRetrievalResult{
-			TimelineResults: []models.TimelineResult{
+			TimelineResults: []*models.TimelineEvent{
 				{
-					EventID:         "test_event_1",
+					ID:              "test_event_1",
 					EventType:       "code_change",
 					Title:           "微服务架构优化",
 					Content:         "重构了微服务间的通信机制，提升了系统性能",
@@ -55,22 +54,21 @@ func TestRealDeepSeekR1Model(t *testing.T) {
 					RelevanceScore:  0.85,
 				},
 			},
-			KnowledgeResults: []models.KnowledgeResult{
+			KnowledgeResults: []*models.KnowledgeNode{
 				{
-					ConceptID:       "concept_microservice",
-					ConceptName:     "微服务架构",
-					ConceptType:     "技术概念",
-					Description:     "一种将应用程序构建为一组小型、独立服务的架构模式",
-					RelevanceScore:  0.95,
-					ConfidenceScore: 0.9,
+					ID:          "concept_microservice",
+					Name:        "微服务架构",
+					Type:        "技术概念",
+					Description: "一种将应用程序构建为一组小型、独立服务的架构模式",
+					Score:       0.95,
+					Confidence:  0.9,
 				},
 			},
-			VectorResults: []models.VectorResult{
+			VectorResults: []*models.VectorMatch{
 				{
-					DocumentID:     "doc_architecture",
-					Content:        "高并发系统设计需要考虑缓存策略、数据库分片、消息队列等关键组件",
-					Similarity:     0.88,
-					RelevanceScore: 0.85,
+					ID:      "doc_architecture",
+					Content: "高并发系统设计需要考虑缓存策略、数据库分片、消息队列等关键组件",
+					Score:   0.88,
 				},
 			},
 		}
@@ -102,26 +100,25 @@ func TestRealDeepSeekR1Model(t *testing.T) {
 			t.Fatalf("DeepSeek-R1 API调用失败: %v", err)
 		}
 
-		log.Printf("📥 [真实R1测试] 收到DeepSeek-R1响应")
-		log.Printf("   - 响应长度: %d字符", len(response.Content))
-		log.Printf("   - Token使用: Prompt=%d, Completion=%d, Total=%d",
-			response.Usage.PromptTokens, response.Usage.CompletionTokens, response.Usage.TotalTokens)
+		log.Printf("📥 [真实R1测试] 收到DeepSeek-R1上下文合成结果")
 		log.Printf("   - 耗时: %v", duration)
-		log.Printf("   - 平均生成速度: %.1f tokens/秒",
-			float64(response.Usage.CompletionTokens)/duration.Seconds())
+		log.Printf("   - 是否更新: %t", result.ShouldUpdate)
+		log.Printf("   - 更新置信度: %.3f", result.UpdateConfidence)
 
-		// 显示响应内容的前1000字符
-		responsePreview := response.Content
-		if len(responsePreview) > 1000 {
-			responsePreview = responsePreview[:1000] + "..."
+		if result.UpdatedContext == nil {
+			t.Errorf("R1模型未返回UpdatedContext")
+			return
 		}
-		log.Printf("📄 [真实R1测试] 响应内容预览:\n%s", responsePreview)
 
-		// 尝试解析为UnifiedContextModel
-		log.Printf("🔍 [真实R1测试] 开始解析JSON为UnifiedContextModel")
+		// 合成接口已返回结果结构，将上下文序列化后做结构校验。
+		encodedContext, marshalErr := json.Marshal(result.UpdatedContext)
+		if marshalErr != nil {
+			t.Fatalf("序列化UpdatedContext失败: %v", marshalErr)
+		}
+		log.Printf("   - 更新上下文长度: %d字符", len(encodedContext))
 
 		var unifiedContext models.UnifiedContextModel
-		err = json.Unmarshal([]byte(response.Content), &unifiedContext)
+		err = json.Unmarshal(encodedContext, &unifiedContext)
 
 		if err != nil {
 			log.Printf("❌ [真实R1测试] JSON解析失败: %v", err)
@@ -129,7 +126,7 @@ func TestRealDeepSeekR1Model(t *testing.T) {
 
 			// 尝试解析为通用JSON来分析结构
 			var genericJSON map[string]interface{}
-			if jsonErr := json.Unmarshal([]byte(response.Content), &genericJSON); jsonErr != nil {
+			if jsonErr := json.Unmarshal(encodedContext, &genericJSON); jsonErr != nil {
 				log.Printf("   - 不是有效的JSON格式")
 				log.Printf("   - JSON语法错误: %v", jsonErr)
 			} else {
@@ -188,11 +185,11 @@ func TestRealDeepSeekR1Model(t *testing.T) {
 				log.Printf("   ❌ Code: nil")
 			}
 
-			if unifiedContext.RecentChanges != nil {
-				fieldCount += 20 // 估算RecentChangesContext的字段数
-				log.Printf("   ✅ RecentChanges: 最近提交数=%d", len(unifiedContext.RecentChanges.RecentCommits))
+			if unifiedContext.RecentChangesSummary != "" {
+				fieldCount += 1
+				log.Printf("   ✅ RecentChangesSummary: %s", unifiedContext.RecentChangesSummary)
 			} else {
-				log.Printf("   ❌ RecentChanges: nil")
+				log.Printf("   ❌ RecentChangesSummary: empty")
 			}
 
 			if unifiedContext.Conversation != nil {
@@ -223,8 +220,8 @@ func TestRealDeepSeekR1Model(t *testing.T) {
 	})
 }
 
-// buildComplexUnifiedContextPrompt 构建复杂的UnifiedContextModel生成prompt
-func buildComplexUnifiedContextPrompt() string {
+// buildDeepSeekUnifiedContextPrompt 构建复杂的UnifiedContextModel生成prompt
+func buildDeepSeekUnifiedContextPrompt() string {
 	return `## 复杂上下文模型生成任务
 
 你是一个专业的上下文建模专家，需要生成一个完整的UnifiedContextModel JSON结构。

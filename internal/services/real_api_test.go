@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -48,7 +47,7 @@ func testDeepSeekModel(t *testing.T, ctx context.Context, apiKey, model, modelNa
 
 	// 创建LLM配置
 	config := &llm.LLMConfig{
-		Provider:   llm.DeepSeek,
+		Provider:   llm.ProviderDeepSeek,
 		APIKey:     apiKey,
 		Model:      model,
 		MaxRetries: 3,
@@ -57,7 +56,7 @@ func testDeepSeekModel(t *testing.T, ctx context.Context, apiKey, model, modelNa
 	}
 
 	// 创建DeepSeek客户端
-	client, err := llm.NewLLMClient(config)
+	client, err := llm.NewDeepSeekClient(config)
 	if err != nil {
 		t.Fatalf("创建%s客户端失败: %v", modelName, err)
 	}
@@ -81,23 +80,17 @@ func testDeepSeekModel(t *testing.T, ctx context.Context, apiKey, model, modelNa
 
 	// 构建请求
 	request := &llm.LLMRequest{
-		Messages: []llm.Message{
-			{
-				Role:    "user",
-				Content: prompt,
-			},
-		},
+		Prompt:      prompt,
 		MaxTokens:   8000,
 		Temperature: 0.1,
-		TopP:        0.9,
-		Stream:      false,
+		Format:      "json",
 	}
 
 	startTime := time.Now()
 
 	// 调用真实的DeepSeek API
 	log.Printf("⏳ [%s测试] 正在调用真实的DeepSeek API...", modelName)
-	response, err := client.GenerateResponse(ctx, request)
+	response, err := client.Complete(ctx, request)
 	duration := time.Since(startTime)
 
 	if err != nil {
@@ -111,10 +104,10 @@ func testDeepSeekModel(t *testing.T, ctx context.Context, apiKey, model, modelNa
 	log.Printf("   ✅ 调用成功")
 	log.Printf("   📊 响应长度: %d字符", len(response.Content))
 	log.Printf("   🔢 Token使用: Prompt=%d, Completion=%d, Total=%d",
-		response.Usage.PromptTokens, response.Usage.CompletionTokens, response.Usage.TotalTokens)
+		response.TokensUsed, response.TokensUsed, response.TokensUsed)
 	log.Printf("   ⏱️  总耗时: %v", duration)
 	log.Printf("   🚀 生成速度: %.1f tokens/秒",
-		float64(response.Usage.CompletionTokens)/duration.Seconds())
+		float64(response.TokensUsed)/duration.Seconds())
 
 	// 显示完整的响应内容
 	log.Printf("📄 [%s测试] 完整响应内容:", modelName)
@@ -323,11 +316,11 @@ func analyzeUnifiedContextModel(ctx *models.UnifiedContextModel, modelName strin
 		log.Printf("   📋 代码上下文: ❌ nil")
 	}
 
-	if ctx.RecentChanges != nil {
+	if ctx.RecentChangesSummary != "" {
 		log.Printf("   📋 变更上下文: ✅")
-		log.Printf("      最近提交数: %d", len(ctx.RecentChanges.RecentCommits))
+		log.Printf("      摘要: %s", ctx.RecentChangesSummary)
 	} else {
-		log.Printf("   📋 变更上下文: ❌ nil")
+		log.Printf("   📋 变更上下文: ❌ 无摘要")
 	}
 }
 
@@ -368,8 +361,8 @@ func calculateFieldCompleteness(ctx *models.UnifiedContextModel) float64 {
 		completedFields += 30
 	}
 
-	// 变更上下文 (约30个字段)
-	if ctx.RecentChanges != nil {
+	// 变更摘要
+	if ctx.RecentChangesSummary != "" {
 		completedFields += 30
 	}
 
