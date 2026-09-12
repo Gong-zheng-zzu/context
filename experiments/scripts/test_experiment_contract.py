@@ -25,6 +25,12 @@ class ExperimentContractTest(unittest.TestCase):
         self.assertIn('[ "$$RUN_MODE" = "http" ]', compose)
         self.assertIn("localhost:$${HTTP_SERVER_PORT:-8088}/health", compose)
 
+    def test_docker_shell_entrypoints_use_lf_line_endings(self):
+        for relative in ("scripts/docker-entrypoint.sh", "scripts/manage.sh", "scripts/docker-log-monitor.sh"):
+            payload = (EXPERIMENTS.parent / relative).read_bytes()
+            self.assertNotIn(b"\r\n", payload, relative)
+            self.assertTrue(payload.startswith(b"#!"), relative)
+
     def test_full_runner_meets_report_builder_retrieval_denominator(self):
         runner = (EXPERIMENTS / "scripts" / "run_all.sh").read_text(encoding="utf-8")
         self.assertIn("retrieval_eval.py --queries 50", runner)
