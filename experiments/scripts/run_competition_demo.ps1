@@ -26,6 +26,9 @@ $authCheck = [ordered]@{ checked = $false; credential_source = "none_fixture"; t
 if ($isFixture) {
     Write-Host "[1/6] Offline fixture mode: no service, credentials, model, or evaluation API required"
     $modelCheck = [ordered]@{ mode = "fixture"; status = "fixed_sample_only"; model = $null; host = $null }
+    Write-Host "[2/6] Offline console contract smoke check"
+    python (Join-Path $PSScriptRoot "smoke_test.py") --mode fixture --json-output (Join-Path $RunDir "smoke.json")
+    if ($LASTEXITCODE -ne 0) { throw "Offline console contract smoke check failed" }
 } else {
     if (-not $env:EVAL_USER_ID -or -not $env:EVAL_PASSWORD) {
         throw "Set EVAL_USER_ID and EVAL_PASSWORD before the protected demo."
@@ -67,7 +70,7 @@ $manifest = [ordered]@{
     authentication = $authCheck
     model = $modelCheck
     isolated_unlearning_requested = [bool]$RunIsolatedUnlearning
-    artifacts = $(if ($isFixture) { ,@("run_manifest.json") } else { ,@("run_manifest.json", "retrieval_trace.json", "retrieval_latency.json", "security.log") })
+    artifacts = $(if ($isFixture) { ,@("run_manifest.json", "smoke.json") } else { ,@("run_manifest.json", "retrieval_trace.json", "retrieval_latency.json", "security.log") })
 }
 $manifest | ConvertTo-Json -Depth 8 | Set-Content -Encoding UTF8 (Join-Path $RunDir "run_manifest.json")
 
