@@ -35,12 +35,17 @@ class CompetitionConsoleContractTests(unittest.TestCase):
 
     def test_console_defaults_to_analysis_and_fences_destructive_scope(self):
         self.assertIn('id="persist" type="checkbox"', self.console)
-        self.assertIn("persist && $('persistPhrase').value !== 'PERSIST'", self.console)
+        self.assertIn("persist && $('persistPhrase').value.trim() !== 'PERSIST'", self.console)
         self.assertIn("const EVAL_USER = 'eval_user_001'", self.console)
         self.assertIn("const EVAL_SESSION = 'eval_retrieval_test'", self.console)
         self.assertIn("DELETE ${EVAL_SESSION}", self.console)
         self.assertIn("sessionDelete(true)", self.console)
         self.assertIn("sessionDelete(false)", self.console)
+        self.assertIn("$('deletePhrase').value.trim() !== `DELETE ${EVAL_SESSION}`", self.console)
+
+    def test_console_reports_request_errors_as_failed_actions(self):
+        self.assertIn("请求失败：${now()}", self.console)
+        self.assertIn("请求未执行", self.console)
 
     def test_console_does_not_persist_password_or_token(self):
         self.assertIsNone(re.search(r"(?:localStorage|sessionStorage)\s*\.", self.console))
