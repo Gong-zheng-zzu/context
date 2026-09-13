@@ -47,6 +47,8 @@ class CausalResult:
     expected_tuple: List[str]
     predicted_tuples: List[List[str]]
     input_sha256: str
+    quality: Dict[str, Any]
+    execution: Dict[str, Any]
     timestamp: str
 
 
@@ -235,6 +237,8 @@ class CausalEvaluator(BaseEvaluator):
             expected_tuple=list(self._strict_tuple(expected)),
             predicted_tuples=[],
             input_sha256=normalized_text_hash(case["input_text"]),
+            quality={},
+            execution={},
             timestamp=datetime.now().isoformat(),
         )
 
@@ -249,6 +253,13 @@ class CausalEvaluator(BaseEvaluator):
 
         result.relation_count = len(relations)
         result.extracted = bool(relations)
+        if isinstance(response.data, dict):
+            quality = response.data.get("quality")
+            execution = response.data.get("execution")
+            if isinstance(quality, dict):
+                result.quality = quality
+            if isinstance(execution, dict):
+                result.execution = execution
         result.predicted_tuples = [list(item) for item in sorted({self._strict_tuple(relation) for relation in relations})]
         best_relation, field_matches = self._score_relations(relations, expected)
         result.best_relation = best_relation
