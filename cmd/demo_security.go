@@ -24,14 +24,15 @@ func main() {
 	for i, text := range testCases {
 		fmt.Printf("【测试 %d】原始输入:\n  %s\n", i+1, text)
 
-		isSensitive, types, summary := detector.ScanContent(text)
+		isSensitive, _, summary := detector.ScanContent(text)
 		if isSensitive {
 			redacted, infos := detector.DetectAndRedact(text)
 			fmt.Printf("  ✓ 检测到敏感信息: %s\n", summary)
 			fmt.Printf("  ✗ 脱敏后输出: %s\n", redacted)
 			fmt.Printf("  类型详情:\n")
 			for _, info := range infos {
-				fmt.Printf("    - %s: %s\n", info.Label, info.Value[:min(8, len(info.Value))+"***")
+				preview := info.Value[:min(8, len(info.Value))]
+				fmt.Printf("    - %s: %s***\n", info.Label, preview)
 			}
 		} else {
 			fmt.Printf("  ○ 无敏感信息，正常存储\n")
