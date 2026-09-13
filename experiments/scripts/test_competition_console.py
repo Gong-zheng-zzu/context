@@ -32,6 +32,9 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn("/api/mcp/tools/retrieve_context", self.console)
         self.assertIn("evaluationRetrievalOnly:true", self.console)
         self.assertIn("/api/sessions/${EVAL_SESSION}?dry_run=${dryRun}", self.console)
+        self.assertIn("/mcp/tools/create_context", self.console)
+        self.assertIn("live-${Date.now()}", self.console)
+        self.assertIn("现场新增护理记录", self.console)
 
     def test_console_defaults_to_analysis_and_fences_destructive_scope(self):
         self.assertIn('id="persist" type="checkbox"', self.console)
