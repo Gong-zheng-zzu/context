@@ -140,6 +140,13 @@ func (q *QdrantVectorStore) EnsureCollection(collectionName string) error {
 
 // GenerateEmbedding 生成文本嵌入向量（使用Ollama）
 func (q *QdrantVectorStore) GenerateEmbedding(text string) ([]float32, error) {
+	return q.GenerateEmbeddingContext(context.Background(), text)
+}
+
+// GenerateEmbeddingContext generates an embedding while honoring caller
+// cancellation. Retrieval requests use this variant so an unavailable Ollama
+// endpoint cannot hold the whole multi-source query past its deadline.
+func (q *QdrantVectorStore) GenerateEmbeddingContext(ctx context.Context, text string) ([]float32, error) {
 	log.Printf("[Qdrant向量存储] 生成嵌入向量，文本长度: %d", len(text))
 
 	payload := map[string]interface{}{
@@ -154,7 +161,7 @@ func (q *QdrantVectorStore) GenerateEmbedding(text string) ([]float32, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", q.config.EmbeddingConfig.APIEndpoint, &buf)
+	req, err := http.NewRequestWithContext(ctx, "POST", q.config.EmbeddingConfig.APIEndpoint, &buf)
 	if err != nil {
 		return nil, err
 	}
@@ -449,7 +456,7 @@ func (q *QdrantVectorStore) SearchByTextInCollection(ctx context.Context, collec
 	log.Printf("[Qdrant向量存储] 文本搜索: %s", query)
 
 	// 生成查询向量
-	vector, err := q.GenerateEmbedding(query)
+	vector, err := q.GenerateEmbeddingContext(ctx, query)
 	if err != nil {
 		return nil, err
 	}

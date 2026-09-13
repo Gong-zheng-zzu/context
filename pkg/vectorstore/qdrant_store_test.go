@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/contextkeeper/service/internal/models"
 )
@@ -69,6 +70,34 @@ func TestQdrantUnlearningOperationsUseRequestedCollection(t *testing.T) {
 	}
 	if !reflect.DeepEqual(paths, wantPaths) {
 		t.Fatalf("paths = %v, want %v", paths, wantPaths)
+	}
+}
+
+func TestGenerateEmbeddingContextHonorsCancellation(t *testing.T) {
+	release := make(chan struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case <-r.Context().Done():
+		case <-release:
+		}
+	}))
+	defer func() {
+		close(release)
+		server.Close()
+	}()
+
+	store := newQdrantTestStore(server.URL)
+	store.config.EmbeddingConfig.APIEndpoint = server.URL + "/embedding"
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+	defer cancel()
+
+	started := time.Now()
+	_, err := store.GenerateEmbeddingContext(ctx, "cancel me")
+	if err == nil {
+		t.Fatal("GenerateEmbeddingContext() error = nil, want cancellation error")
+	}
+	if elapsed := time.Since(started); elapsed > time.Second {
+		t.Fatalf("cancellation took %v, want under 1s", elapsed)
 	}
 }
 
