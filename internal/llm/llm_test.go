@@ -19,8 +19,14 @@ func TestLLMFactory(t *testing.T) {
 	providers := factory.ListProviders()
 	expectedProviders := []LLMProvider{ProviderOpenAI, ProviderClaude, ProviderQianwen, ProviderDeepSeek}
 
-	if len(providers) != len(expectedProviders) {
-		t.Errorf("Expected %d providers, got %d", len(expectedProviders), len(providers))
+	providerSet := make(map[LLMProvider]bool, len(providers))
+	for _, provider := range providers {
+		providerSet[provider] = true
+	}
+	for _, expected := range expectedProviders {
+		if !providerSet[expected] {
+			t.Errorf("Expected provider %s to be registered", expected)
+		}
 	}
 
 	// 测试配置设置
