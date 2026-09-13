@@ -11,6 +11,12 @@ RUNBOOK = ROOT / "experiments" / "COMPETITION_DEMO_RUNBOOK.md"
 INTERACTIVE = ROOT / "experiments" / "scripts" / "interactive_demo.sh"
 DEMO_GUIDE = ROOT / "docs" / "DEMO_GUIDE.md"
 MEMORY_GRAPH = ROOT / "web" / "三维协同记忆图.html"
+LEGACY_COMPETITION_COPY = (
+    ROOT / "docs" / "competition" / "核心创新点总结.md",
+    ROOT / "docs" / "competition" / "策划书-核心技术清单.md",
+    ROOT / "docs" / "competition" / "对比实验报告.md",
+    ROOT / "web" / "隐私保护.html",
+)
 
 
 class CompetitionPositioningTests(unittest.TestCase):
@@ -47,6 +53,18 @@ class CompetitionPositioningTests(unittest.TestCase):
     def test_memory_graph_does_not_show_unverified_accuracy_target(self):
         self.assertIn("来源可审计", self.memory_graph)
         self.assertNotIn("87.3%", self.memory_graph)
+
+    def test_competition_copy_does_not_publish_legacy_metrics(self):
+        forbidden = ("67.3%", "62.4%", "85.4%", "防御成功率95%", "准确率提升40%")
+        for path in LEGACY_COMPETITION_COPY:
+            text = path.read_text(encoding="utf-8")
+            for phrase in forbidden:
+                self.assertNotIn(phrase, text, f"legacy metric {phrase!r} remains in {path}")
+
+    def test_competition_copy_qualifies_unlearning_claims(self):
+        text = (ROOT / "docs" / "competition" / "对比实验报告.md").read_text(encoding="utf-8")
+        self.assertIn("Qdrant/副本向量删除验证", text)
+        self.assertIn("不称作梯度投影式模型遗忘", text)
 
 
 if __name__ == "__main__":
