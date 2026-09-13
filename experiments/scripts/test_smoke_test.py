@@ -3,6 +3,9 @@
 import unittest
 import sys
 from pathlib import Path
+import json
+import subprocess
+import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -65,6 +68,21 @@ class SmokeContractTests(unittest.TestCase):
         ok, detail = validate_contract("retrieval", failed)
         self.assertFalse(ok)
         self.assertIn("service unavailable", detail)
+
+    def test_cli_writes_failure_report_when_service_is_unavailable(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "smoke.json"
+            completed = subprocess.run(
+                [sys.executable, str(Path(__file__).with_name("smoke_test.py")), "--base-url", "http://127.0.0.1:1", "--json-output", str(output)],
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=10,
+            )
+            self.assertNotEqual(completed.returncode, 0)
+            report = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(report["failure"], "health")
+            self.assertFalse(report["passed"])
 
 
 if __name__ == "__main__":
