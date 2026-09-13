@@ -9,6 +9,8 @@ ROOT = Path(__file__).resolve().parents[2]
 POSITIONING = ROOT / "docs" / "competition" / "比赛定位与可信边界.md"
 RUNBOOK = ROOT / "experiments" / "COMPETITION_DEMO_RUNBOOK.md"
 INTERACTIVE = ROOT / "experiments" / "scripts" / "interactive_demo.sh"
+DEMO_GUIDE = ROOT / "docs" / "DEMO_GUIDE.md"
+MEMORY_GRAPH = ROOT / "web" / "三维协同记忆图.html"
 
 
 class CompetitionPositioningTests(unittest.TestCase):
@@ -17,6 +19,8 @@ class CompetitionPositioningTests(unittest.TestCase):
         cls.positioning = POSITIONING.read_text(encoding="utf-8")
         cls.runbook = RUNBOOK.read_text(encoding="utf-8")
         cls.interactive = INTERACTIVE.read_text(encoding="utf-8")
+        cls.demo_guide = DEMO_GUIDE.read_text(encoding="utf-8")
+        cls.memory_graph = MEMORY_GRAPH.read_text(encoding="utf-8")
 
     def test_governance_first_title_and_boundaries_are_present(self):
         self.assertIn("护理数据智能治理与可信辅助决策平台", self.positioning)
@@ -34,6 +38,15 @@ class CompetitionPositioningTests(unittest.TestCase):
         self.assertIn("用户级删除", self.interactive)
         self.assertIn("Qdrant 用户级向量删除", self.interactive)
         self.assertNotIn("梯度正交投影", self.interactive)
+
+    def test_legacy_demo_material_uses_verified_deletion_boundary(self):
+        self.assertIn("用户级向量删除验证", self.demo_guide)
+        self.assertNotIn("梯度正交投影遗忘", self.demo_guide)
+        self.assertNotIn("final_fairness_loss", self.demo_guide)
+
+    def test_memory_graph_does_not_show_unverified_accuracy_target(self):
+        self.assertIn("来源可审计", self.memory_graph)
+        self.assertNotIn("87.3%", self.memory_graph)
 
 
 if __name__ == "__main__":
