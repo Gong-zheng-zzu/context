@@ -68,7 +68,18 @@ type AgenticPerformanceRecord struct {
 
 // NewAgenticContextService 创建Agentic上下文服务
 // 🔥 重构：直接基于ContextService创建完整的智能上下文服务
-func NewAgenticContextService(contextService *services.ContextService) *AgenticContextService {
+func NewAgenticContextService(serviceInput interface{}) *AgenticContextService {
+	var contextService *services.ContextService
+	switch service := serviceInput.(type) {
+	case *services.ContextService:
+		contextService = service
+	case interface {
+		GetContextService() *services.ContextService
+	}:
+		contextService = service.GetContextService()
+	default:
+		panic("NewAgenticContextService requires a ContextService or compatible smart service")
+	}
 	// 🔍 创建意图分析器
 	analyzer := components.NewBasicQueryIntentAnalyzer()
 
@@ -150,11 +161,11 @@ func (acs *AgenticContextService) RetrieveContext(ctx context.Context, req model
 
 	// 记录原始查询
 	originalQuery := req.Query
-	log.Printf("\n" + strings.Repeat("=", 100))
+	log.Print("\n" + strings.Repeat("=", 100))
 	log.Printf("【AgenticContextService】🚀 智能检索流程启动")
 	log.Printf("【AgenticContextService】📝 原始查询: \"%s\"", originalQuery)
 	log.Printf("【AgenticContextService】📅 开始时间: %s", startTime.Format("15:04:05.000"))
-	log.Printf(strings.Repeat("=", 100))
+	log.Print(strings.Repeat("=", 100))
 
 	// 如果Agentic功能禁用，直接使用基础ContextService
 	if !acs.smartEnabled {
@@ -171,7 +182,7 @@ func (acs *AgenticContextService) RetrieveContext(ctx context.Context, req model
 	acs.stats.AgenticEnhanced++
 
 	// ==================== 🔍 阶段A：查询意图分析 ====================
-	log.Printf("\n" + strings.Repeat("-", 100))
+	log.Print("\n" + strings.Repeat("-", 100))
 	log.Printf("【AgenticContextService】【意图分析】🔵 进入黑盒")
 	log.Printf("【AgenticContextService】【意图分析】📥 输入查询: \"%s\"", originalQuery)
 	log.Printf("【AgenticContextService】【意图分析】⏰ 开始时间: %s", time.Now().Format("15:04:05.000"))
@@ -203,7 +214,7 @@ func (acs *AgenticContextService) RetrieveContext(ctx context.Context, req model
 	log.Printf("【AgenticContextService】【意图分析】⏱️ 耗时: %v", intentAnalysisTime)
 
 	// ==================== 🧠 阶段B：智能决策制定 ====================
-	log.Printf("\n" + strings.Repeat("-", 100))
+	log.Print("\n" + strings.Repeat("-", 100))
 	log.Printf("【AgenticContextService】【智能决策】🔵 进入黑盒")
 	log.Printf("【AgenticContextService】【智能决策】📥 输入意图:")
 	log.Printf("【AgenticContextService】【智能决策】   ├── 类型: %s", intent.IntentType)
@@ -237,7 +248,7 @@ func (acs *AgenticContextService) RetrieveContext(ctx context.Context, req model
 	log.Printf("【AgenticContextService】【智能决策】⏱️ 耗时: %v", decisionMakingTime)
 
 	// ==================== 🚀 阶段C：增强检索执行 ====================
-	log.Printf("\n" + strings.Repeat("-", 100))
+	log.Print("\n" + strings.Repeat("-", 100))
 	log.Printf("【AgenticContextService】【增强检索】🔵 进入黑盒")
 	log.Printf("【AgenticContextService】【增强检索】📥 输入参数:")
 	log.Printf("【AgenticContextService】【增强检索】   ├── 原始查询: \"%s\"", originalQuery)
@@ -269,7 +280,7 @@ func (acs *AgenticContextService) RetrieveContext(ctx context.Context, req model
 	// ==================== 📊 流程总结 ====================
 	totalTime := time.Since(startTime)
 
-	log.Printf("\n" + strings.Repeat("=", 100))
+	log.Print("\n" + strings.Repeat("=", 100))
 	log.Printf("【AgenticContextService】🎉 智能检索流程完成")
 	log.Printf("【AgenticContextService】📊 性能统计:")
 	log.Printf("【AgenticContextService】   ├── A阶段-意图分析: %v (%.1f%%)", intentAnalysisTime, float64(intentAnalysisTime)/float64(totalTime)*100)
@@ -277,7 +288,7 @@ func (acs *AgenticContextService) RetrieveContext(ctx context.Context, req model
 	log.Printf("【AgenticContextService】   ├── C阶段-增强检索: %v (%.1f%%)", retrievalTime, float64(retrievalTime)/float64(totalTime)*100)
 	log.Printf("【AgenticContextService】   └── 总耗时: %v", totalTime)
 	log.Printf("【AgenticContextService】✅ 返回最终结果")
-	log.Printf(strings.Repeat("=", 100))
+	log.Print(strings.Repeat("=", 100))
 
 	return response, nil
 }
@@ -300,14 +311,14 @@ func (acs *AgenticContextService) smartRetrieveContext(ctx context.Context, req 
 	originalQuery := req.Query
 
 	// ==================== 🧠 智能查询优化模式 ====================
-	log.Printf("\n" + strings.Repeat("=", 100))
+	log.Print("\n" + strings.Repeat("=", 100))
 	log.Printf("【AgenticContextService】🧠 智能查询优化模式启动")
 	log.Printf("【AgenticContextService】📝 原始查询: \"%s\"", originalQuery)
 	log.Printf("【AgenticContextService】📅 开始时间: %s", time.Now().Format("15:04:05.000"))
-	log.Printf(strings.Repeat("=", 100))
+	log.Print(strings.Repeat("=", 100))
 
 	// ==================== 🔧 查询优化处理 ====================
-	log.Printf("\n" + strings.Repeat("-", 100))
+	log.Print("\n" + strings.Repeat("-", 100))
 	log.Printf("【AgenticContextService】【查询优化】🔵 进入黑盒")
 	log.Printf("【AgenticContextService】【查询优化】📥 输入查询: \"%s\"", originalQuery)
 	log.Printf("【AgenticContextService】【查询优化】⏰ 开始时间: %s", time.Now().Format("15:04:05.000"))
@@ -337,7 +348,7 @@ func (acs *AgenticContextService) smartRetrieveContext(ctx context.Context, req 
 	acs.printSmartQueryRewriteComparison(originalQuery, optimizedQuery)
 
 	// ==================== 🔍 基础检索执行 ====================
-	log.Printf("\n" + strings.Repeat("-", 100))
+	log.Print("\n" + strings.Repeat("-", 100))
 	log.Printf("【AgenticContextService】【基础检索】🔵 进入黑盒")
 	log.Printf("【AgenticContextService】【基础检索】📥 输入参数:")
 	log.Printf("【AgenticContextService】【基础检索】   ├── 查询内容: \"%s\"", req.Query)
@@ -370,14 +381,14 @@ func (acs *AgenticContextService) smartRetrieveContext(ctx context.Context, req 
 	// ==================== 📊 智能优化总结 ====================
 	totalTime := time.Since(startTime)
 
-	log.Printf("\n" + strings.Repeat("=", 100))
+	log.Print("\n" + strings.Repeat("=", 100))
 	log.Printf("【AgenticContextService】🎉 智能查询优化完成")
 	log.Printf("【AgenticContextService】📊 性能统计:")
 	log.Printf("【AgenticContextService】   ├── 查询优化: %v (%.1f%%)", optimizeTime, float64(optimizeTime)/float64(totalTime)*100)
 	log.Printf("【AgenticContextService】   ├── 基础检索: %v (%.1f%%)", retrievalTime, float64(retrievalTime)/float64(totalTime)*100)
 	log.Printf("【AgenticContextService】   └── 总耗时: %v", totalTime)
 	log.Printf("【AgenticContextService】✅ 返回智能优化结果")
-	log.Printf(strings.Repeat("=", 100))
+	log.Print(strings.Repeat("=", 100))
 
 	return response, nil
 }
@@ -461,7 +472,7 @@ func (acs *AgenticContextService) enhanceSmartResponse(response models.ContextRe
 // printSmartQueryRewriteComparison 打印智能查询改写对比日志（从SmartContextService移植）
 func (acs *AgenticContextService) printSmartQueryRewriteComparison(originalQuery, optimizedQuery string) {
 	// ==================== 📊 查询改写分析 ====================
-	log.Printf("\n" + strings.Repeat("-", 100))
+	log.Print("\n" + strings.Repeat("-", 100))
 	log.Printf("【AgenticContextService】【查询分析】🔵 进入黑盒")
 	log.Printf("【AgenticContextService】【查询分析】📥 输入参数:")
 	log.Printf("【AgenticContextService】【查询分析】   ├── 原始查询: \"%s\"", originalQuery)
@@ -899,13 +910,13 @@ func (acs *AgenticContextService) removeNoiseWords(query string) string {
 
 // printAgenticQueryRewriteComparison 打印Agentic查询改写对比日志（增强版）
 func (acs *AgenticContextService) printAgenticQueryRewriteComparison(originalQuery, optimizedQuery string, intent *interfaces.QueryIntent, decision *interfaces.ProcessingDecision) {
-	log.Printf("\n" + strings.Repeat("=", 80))
+	log.Print("\n" + strings.Repeat("=", 80))
 	log.Printf("🤖 AGENTIC QUERY REWRITE ANALYSIS - Agentic查询改写优化分析")
-	log.Printf(strings.Repeat("=", 80))
+	log.Print(strings.Repeat("=", 80))
 
 	// 1. 原始查询分析
 	log.Printf("\n📝 1. ORIGINAL QUERY - 用户原始提问")
-	log.Printf(strings.Repeat("-", 80))
+	log.Print(strings.Repeat("-", 80))
 	log.Printf("原始查询: %s", originalQuery)
 	log.Printf("查询长度: %d 字符", len(originalQuery))
 	log.Printf("🔎 原始查询特征分析:")
@@ -916,7 +927,7 @@ func (acs *AgenticContextService) printAgenticQueryRewriteComparison(originalQue
 
 	// 2. Agentic意图分析结果
 	log.Printf("\n🧠 2. AGENTIC INTENT ANALYSIS - Agentic意图分析结果")
-	log.Printf(strings.Repeat("-", 80))
+	log.Print(strings.Repeat("-", 80))
 	log.Printf("📊 意图类型: %s", intent.IntentType)
 	log.Printf("🏗️ 技术领域: %s", intent.Domain)
 	log.Printf("🔬 复杂度: %.2f", intent.Complexity)
@@ -926,7 +937,7 @@ func (acs *AgenticContextService) printAgenticQueryRewriteComparison(originalQue
 
 	// 3. 智能决策信息
 	log.Printf("\n🎮 3. INTELLIGENT DECISION - 智能决策信息")
-	log.Printf(strings.Repeat("-", 80))
+	log.Print(strings.Repeat("-", 80))
 	if decision != nil {
 		log.Printf("🎮 决策ID: %s", decision.DecisionID)
 		log.Printf("📋 任务数量: %d", len(decision.TaskPlan.Tasks))
@@ -939,7 +950,7 @@ func (acs *AgenticContextService) printAgenticQueryRewriteComparison(originalQue
 
 	// 4. 改写过程详情
 	log.Printf("\n⚙️ 4. AGENTIC REWRITE PROCESS - Agentic改写过程详情")
-	log.Printf(strings.Repeat("-", 80))
+	log.Print(strings.Repeat("-", 80))
 
 	if originalQuery != optimizedQuery {
 		changes := acs.analyzeAgenticChanges(originalQuery, optimizedQuery, intent, decision)
@@ -954,13 +965,13 @@ func (acs *AgenticContextService) printAgenticQueryRewriteComparison(originalQue
 
 	// 5. 最终改写结果
 	log.Printf("\n🎯 5. FINAL AGENTIC REWRITTEN QUERY - 最终Agentic改写结果")
-	log.Printf(strings.Repeat("-", 80))
+	log.Print(strings.Repeat("-", 80))
 	log.Printf("最终查询: %s", optimizedQuery)
 	log.Printf("查询长度: %d 字符", len(optimizedQuery))
 
 	// 6. 对比分析
 	log.Printf("\n📊 6. AGENTIC COMPARISON ANALYSIS - Agentic对比分析")
-	log.Printf(strings.Repeat("-", 80))
+	log.Print(strings.Repeat("-", 80))
 	lengthChange := len(optimizedQuery) - len(originalQuery)
 	if lengthChange > 0 {
 		log.Printf("长度变化: +%d 字符 (智能扩展)", lengthChange)
@@ -981,7 +992,7 @@ func (acs *AgenticContextService) printAgenticQueryRewriteComparison(originalQue
 
 	// 7. Agentic改写效果总结
 	log.Printf("\n📋 7. AGENTIC REWRITE EFFECTIVENESS - Agentic改写效果总结")
-	log.Printf(strings.Repeat("-", 80))
+	log.Print(strings.Repeat("-", 80))
 	effectiveness := acs.evaluateAgenticRewriteEffectiveness(originalQuery, optimizedQuery, intent, decision)
 	log.Printf("整体评价: %s", effectiveness.Overall)
 	log.Printf("意图匹配: %s", effectiveness.IntentMatching)
@@ -995,9 +1006,9 @@ func (acs *AgenticContextService) printAgenticQueryRewriteComparison(originalQue
 		}
 	}
 
-	log.Printf("\n" + strings.Repeat("=", 80))
+	log.Print("\n" + strings.Repeat("=", 80))
 	log.Printf("🤖 AGENTIC QUERY REWRITE ANALYSIS COMPLETED - Agentic查询改写分析完成")
-	log.Printf(strings.Repeat("=", 80) + "\n")
+	log.Print(strings.Repeat("=", 80) + "\n")
 }
 
 // AgenticRewriteEffectiveness Agentic改写效果评估结果

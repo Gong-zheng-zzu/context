@@ -1701,9 +1701,18 @@ func generateExpiredTokenHelper(t *testing.T) string {
 	return tokenString
 }
 
+// generateExpiredToken preserves the helper name used by the integration cases.
+func generateExpiredToken(t *testing.T) string {
+	return generateExpiredTokenHelper(t)
+}
+
 // isLocalhostHelper 检查IP是否为本地地址
 func isLocalhostHelper(ip string) bool {
 	return ip == "127.0.0.1" || ip == "::1" || ip == "localhost" ||
 		strings.HasPrefix(ip, "192.168.") || strings.HasPrefix(ip, "10.") ||
 		strings.HasPrefix(ip, "172.16.") || ip == ""
+}
+
+func isLocalhost(ip string) bool {
+	return isLocalhostHelper(ip)
 }

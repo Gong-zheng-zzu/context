@@ -363,6 +363,10 @@ func (m *MockLLMClient) GetProvider() LLMProvider {
 	return m.provider
 }
 
+func (m *MockLLMClient) GetModel() string {
+	return "mock-model"
+}
+
 func (m *MockLLMClient) GetCapabilities() *LLMCapabilities {
 	return &LLMCapabilities{
 		MaxTokens:         4096,
