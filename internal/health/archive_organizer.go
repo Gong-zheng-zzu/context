@@ -251,8 +251,7 @@ func (ao *ArchiveOrganizer) sanitizeRecords(records []HealthRecord) ([]HealthRec
 func (ao *ArchiveOrganizer) extractBriefDescription(content string) string {
 	// 移除多余的空白字符
 	content = strings.TrimSpace(content)
-	content = strings.ReplaceAll(content, "\n", " ")
-	content = strings.ReplaceAll(content, "\r", " ")
+	content = strings.NewReplacer("\r\n", " ", "\n", " ", "\r", " ").Replace(content)
 
 	// 限制长度
 	maxLen := 100

@@ -680,12 +680,17 @@ func timelineSearchTerms(searchText string, keywords []string) []string {
 			extracted++
 		}
 	}
-	for _, fragment := range chineseSearchFragments(searchText) {
-		if extracted >= maxTimelineExtractedTerms {
-			break
-		}
-		if add(fragment) {
-			extracted++
+	// Extract short Han fragments only when callers did not provide explicit
+	// keywords. When keywords are present, preserving the caller's exact term
+	// contract avoids silently changing full-text query parameters.
+	if len(keywords) == 0 {
+		for _, fragment := range chineseSearchFragments(searchText) {
+			if extracted >= maxTimelineExtractedTerms {
+				break
+			}
+			if add(fragment) {
+				extracted++
+			}
 		}
 	}
 
