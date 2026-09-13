@@ -820,10 +820,10 @@ func (ir *IterativeRetriever) SearchWithDetailedLogging(ctx context.Context, ori
 		stepLog := IterationStepLog{
 			Iteration:              i + 1,
 			Query:                  query,
-			RetrievedDocuments:     []DocumentResult{}, // 简化版本
-			QualityScore:           QualityScore{},     // 简化版本
-			ImprovementSuggestions: []string{},         // 简化版本
-			ProcessingTime:         time.Duration(0),   // 简化版本
+			RetrievedDocuments:     []DocumentResult{},        // 简化版本
+			QualityScore:           QualityScore{},            // 简化版本
+			ImprovementSuggestions: []ImprovementSuggestion{}, // 简化版本
+			ProcessingTime:         time.Duration(0),          // 简化版本
 			Metadata:               make(map[string]interface{}),
 		}
 
@@ -910,8 +910,8 @@ func (ir *IterativeRetriever) printIterativeRetrievalComparison(log *IterativeRe
 		if len(step.ImprovementSuggestions) > 0 {
 			fmt.Println("  💡 改进建议:")
 			for _, suggestion := range step.ImprovementSuggestions {
-				fmt.Printf("    • %s (置信度: %.2f) - %s\n",
-					suggestion.Type, suggestion.Confidence, suggestion.Description)
+				fmt.Printf("    • %s (预期收益: %.2f) - %s\n",
+					suggestion.Type, suggestion.ExpectedGain, suggestion.Description)
 			}
 		}
 
@@ -1207,7 +1207,7 @@ func (ir *IterativeRetriever) convertToRetrievalResults(results []RetrievalResul
 // convertQualityAssessment 转换质量评估结果
 func (ir *IterativeRetriever) convertQualityAssessment(assessment *QualityAssessment) float64 {
 	if assessment != nil {
-		return assessment.Score
+		return assessment.OverallScore
 	}
 	return 0.0
 }
