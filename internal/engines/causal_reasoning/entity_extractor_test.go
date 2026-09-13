@@ -4,7 +4,11 @@ import (
 	"context"
 	"errors"
 	"math"
+	"net/http"
+	"net/http/httptest"
 	"testing"
+
+	"github.com/contextkeeper/service/internal/llm"
 )
 
 func TestExtractWithExecutionRejectsLLMWithoutClient(t *testing.T) {
@@ -32,6 +36,31 @@ func TestExtractWithExecutionRecordsRulesFallback(t *testing.T) {
 	}
 	if len(relations) == 0 || len(relations[0].RuleMatches) == 0 || relations[0].PCCMEvidence == nil {
 		t.Fatalf("relations = %#v, want rule and PCCM evidence", relations)
+	}
+}
+
+func TestExtractWithExecutionSkipsConfiguredLLMWhenRulesAreComplete(t *testing.T) {
+	called := false
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		called = true
+		t.Fatalf("LLM endpoint called for a complete deterministic candidate")
+	}))
+	defer server.Close()
+
+	client, err := llm.NewOllamaLocalClient(&llm.LLMConfig{BaseURL: server.URL, Model: "qwen2.5:3b"})
+	if err != nil {
+		t.Fatalf("NewOllamaLocalClient() error = %v", err)
+	}
+	extractor := NewEntityExtractor(client.(*llm.OllamaLocalClient))
+	relations, execution, err := extractor.ExtractWithExecution(context.Background(), "李爷爷服用降压药后出现体位性低血压并在洗手间滑倒", true, false, true)
+	if err != nil || len(relations) != 1 {
+		t.Fatalf("relations=%#v err=%v", relations, err)
+	}
+	if called {
+		t.Fatal("configured model should not run when rules already verify the tuple")
+	}
+	if execution.Mode != "rules" || execution.ModelStatus != "not_needed" || execution.FallbackReason != "rules_sufficient" || execution.ModelTier != "rules" {
+		t.Fatalf("execution=%+v, want audited rules-first state", execution)
 	}
 }
 

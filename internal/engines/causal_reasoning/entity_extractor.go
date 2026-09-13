@@ -59,6 +59,24 @@ func (ee *EntityExtractor) ExtractWithExecution(ctx context.Context, text string
 	execution := ee.ExecutionEvidence(text, useRules, usePMI, useLLM)
 	var relations []CausalRelation
 
+	// A complete, deterministic rule candidate is both faster and more
+	// auditable than asking the model to restate an already supported tuple.
+	// Keep the nil-client branch below as an explicit model-unavailable
+	// fallback so callers can still distinguish configuration failures.
+	if useLLM && useRules && ee.llmClient != nil {
+		ruleRelations, ruleErr := ee.extractWithRules(text)
+		if ruleErr == nil {
+			ee.AttachAuditEvidence(ruleRelations, execution)
+		}
+		if ruleErr == nil && hasVerifiedRelations(ruleRelations) {
+			execution.Mode = "rules"
+			execution.ModelStatus = "not_needed"
+			execution.ModelTier = "rules"
+			execution.FallbackReason = "rules_sufficient"
+			return ruleRelations, execution, nil
+		}
+	}
+
 	// 使用LLM抽取O→C→P→R四元组
 	if useLLM {
 		llmRelations, err := ee.extractWithLLM(ctx, text)
@@ -129,6 +147,18 @@ func (ee *EntityExtractor) ExtractWithExecution(ctx context.Context, text string
 
 	ee.AttachAuditEvidence(relations, execution)
 	return relations, execution, nil
+}
+
+func hasVerifiedRelations(relations []CausalRelation) bool {
+	if len(relations) == 0 {
+		return false
+	}
+	for _, relation := range relations {
+		if relation.Quality == nil || !relation.Quality.TupleValid || relation.Quality.ReviewRequired {
+			return false
+		}
+	}
+	return true
 }
 
 func extractionFallbackReason(err error) string {
