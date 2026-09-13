@@ -1,6 +1,6 @@
 {
   "schema": "structured-threeway-verification-v2",
-  "verified_at": "2026-07-17T10:56:47Z",
+  "verified_at": "2026-09-13T12:32:50Z",
   "manifest": "D:\\context\\context-keeper-main\\experiments\\results\\structured_threeway_seed\\eval_retrieval_test\\manifest.json",
   "scope": {
     "user_id": "eval_user_001",

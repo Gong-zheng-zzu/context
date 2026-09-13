@@ -1,6 +1,6 @@
 {
   "schema": "structured-threeway-seed-manifest-v1",
-  "created_at": "2026-07-17T15:29:13Z",
+  "created_at": "2026-09-13T12:32:00Z",
   "scope": {
     "user_id": "eval_user_001",
     "session_id": "eval_retrieval_test"
@@ -8,6 +8,19 @@
   "source": {
     "path": "experiments/datasets/retrieval_corpus/retrieval_corpus_30.json",
     "sha256": "751572402e7923a37dfd9d8f8008ca51640bd3916368eb248bae9a5db6efa6ef",
+    "dual_digest": {
+      "hash_algorithms": [
+        "SHA-256",
+        "SM3"
+      ],
+      "sha256": "751572402e7923a37dfd9d8f8008ca51640bd3916368eb248bae9a5db6efa6ef",
+      "sm3": {
+        "status": "available",
+        "provider": "hashlib_openssl",
+        "value": "cbbc62c764a73019a2ee13ed0e250ebeed4db8ecfadc1dc1c0ad91aff38620bf"
+      },
+      "generated_at": "2026-09-13T12:32:00Z"
+    },
     "document_count": 30,
     "corpus_metadata": {
       "source_file": "datasets\\nursing_data\\nursing_records.json",
@@ -19,6 +32,7 @@
     }
   },
   "three_way_contract": {
+    "ingestion_mode": "deterministic_preannotated_no_llm",
     "write_endpoint": "/mcp/tools/create_context",
     "authentication": "JWT Bearer token from /api/auth/login",
     "vector": "submitted through unified ingestion; retrieval can be independently checked",
@@ -458,14 +472,44 @@
       "request_sha256": "f6dec3a6467485dbc0efa81b94685d962c04c21924bcb9ee40dc237b6668b62e"
     }
   ],
+  "hash_algorithms": [
+    "SHA-256",
+    "SM3"
+  ],
   "request_file": {
     "path": "create_context_requests.jsonl",
-    "sha256": "013b6e26cb8c47402a96e9c3554230b99692bcf6f3795b5233f3bdadb87c46a5"
+    "sha256": "013b6e26cb8c47402a96e9c3554230b99692bcf6f3795b5233f3bdadb87c46a5",
+    "dual_digest": {
+      "hash_algorithms": [
+        "SHA-256",
+        "SM3"
+      ],
+      "sha256": "013b6e26cb8c47402a96e9c3554230b99692bcf6f3795b5233f3bdadb87c46a5",
+      "sm3": {
+        "status": "available",
+        "provider": "hashlib_openssl",
+        "value": "ff2d62c611cafce0290eaad839c8bee1f931e81f7fdaf426555f49e146e89d06"
+      },
+      "generated_at": "2026-09-13T12:32:00Z"
+    }
   },
   "mode": "submit",
   "submission": {
     "path": "submission.jsonl",
-    "sha256": "2f9b7af4147e7ecd1bd98ac8641fb0c53c94d067ec3ddb953a6080d3a50d0132",
+    "sha256": "a48595e9d6bc3aa0a83e4b7940dcac5a9e3c749930a6a312b82fd047c28ec1ac",
+    "dual_digest": {
+      "hash_algorithms": [
+        "SHA-256",
+        "SM3"
+      ],
+      "sha256": "a48595e9d6bc3aa0a83e4b7940dcac5a9e3c749930a6a312b82fd047c28ec1ac",
+      "sm3": {
+        "status": "available",
+        "provider": "hashlib_openssl",
+        "value": "1f0947b29506a78dcba6ecd53200644168497cec1444c13f3e1cb19e64bd9d20"
+      },
+      "generated_at": "2026-09-13T12:32:31Z"
+    },
     "accepted_by_unified_ingestion": 30,
     "attempted": 30,
     "note": "HTTP acceptance is not proof of independent vector, timeline, and graph persistence."
