@@ -332,8 +332,17 @@ func (oc *OllamaLocalClient) convertToOllamaFormat(req *LLMRequest) *OllamaReque
 		Stream:    false,
 		Options:   options,
 		Context:   nil,  // 🔥 强制清除上下文缓存，避免历史对话污染
-		KeepAlive: "0s", // 🔥 立即卸载模型，确保每次请求完全独立
+		KeepAlive: ollamaKeepAlive(),
 	}
+}
+
+// ollamaKeepAlive keeps the model warm between requests without retaining
+// conversation context. Set OLLAMA_KEEP_ALIVE=0s to restore immediate unload.
+func ollamaKeepAlive() string {
+	if value := strings.TrimSpace(os.Getenv("OLLAMA_KEEP_ALIVE")); value != "" {
+		return value
+	}
+	return "10m"
 }
 
 // convertFromOllamaFormat 转换Ollama响应格式

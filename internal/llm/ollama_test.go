@@ -6,6 +6,17 @@ import (
 	"time"
 )
 
+func TestOllamaKeepAliveDefaultsWarmAndSupportsOverride(t *testing.T) {
+	t.Setenv("OLLAMA_KEEP_ALIVE", "")
+	if got := ollamaKeepAlive(); got != "10m" {
+		t.Fatalf("default keep-alive = %q, want 10m", got)
+	}
+	t.Setenv("OLLAMA_KEEP_ALIVE", "0s")
+	if got := ollamaKeepAlive(); got != "0s" {
+		t.Fatalf("override keep-alive = %q, want 0s", got)
+	}
+}
+
 // TestOllamaLocalClient 测试Ollama本地客户端
 func TestOllamaLocalClient(t *testing.T) {
 	// 创建配置

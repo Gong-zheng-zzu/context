@@ -162,6 +162,8 @@ services:
       # - NVIDIA_DRIVER_CAPABILITIES=compute,utility
       # Ollama 服务地址（使用宿主机服务）
       - OLLAMA_HOST=http://host.docker.internal:11434
+      # 保持模型短时常驻，避免现场演示重复冷启动；设为 0s 可立即卸载
+      - OLLAMA_KEEP_ALIVE=${OLLAMA_KEEP_ALIVE:-10m}
       # LLM 配置
       - LLM_PROVIDER=ollama_local
       - LLM_MODEL=qwen2.5:3b
