@@ -65,3 +65,6 @@ __pycache__/
 
 # Generated local cache directory
 ~/
+
+# Local competition demo outputs
+experiments/results/demo_runs/

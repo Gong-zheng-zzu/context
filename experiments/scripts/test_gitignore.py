@@ -24,6 +24,10 @@ class GitIgnoreTest(unittest.TestCase):
         backups = [path for path in tracked_files if path.endswith(".env.backup")]
         self.assertEqual([], backups, f"runtime environment backups are tracked: {backups}")
 
+    def test_competition_demo_outputs_are_ignored(self):
+        ignore_rules = (REPOSITORY_ROOT / ".gitignore").read_text(encoding="utf-8")
+        self.assertIn("experiments/results/demo_runs/", ignore_rules)
+
 
 if __name__ == "__main__":
     unittest.main()
