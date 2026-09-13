@@ -748,7 +748,6 @@ func (lds *LLMDrivenContextService) retrieveEvaluationRRF(ctx context.Context, r
 		"knowledge": 15,
 		"timeline":  20,
 	}
-	response.RetrievalMetadata["source_candidate_counts"] = retrievalResults.SourceCounts
 	response.RetrievalMetadata["source_latency_ms"] = evaluationSourceLatencies(retrievalResults.SourceLatencyMs)
 	response.RetrievalMetadata["source_statuses"] = evaluationSourceStatuses(retrievalResults.SourceStatuses)
 	response.RetrievalMetadata["wall_clock_latency_ms"] = retrievalResults.WallClockLatencyMs
@@ -1145,7 +1144,11 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 
 	activeSources := make([]string, 0, len(bySource))
 	emptySources := make([]string, 0, len(evaluationRRFWeights))
+	evidenceCounts := map[string]int{
+		"vector": 0, "knowledge": 0, "timeline": 0,
+	}
 	for _, source := range []string{"vector", "knowledge", "timeline"} {
+		evidenceCounts[source] = len(bySource[source])
 		if len(bySource[source]) == 0 {
 			emptySources = append(emptySources, source)
 		} else {
@@ -1194,6 +1197,7 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 		metadata["retrieval_fusion_mode"] = fusionMode
 		metadata["retrieval_source_statuses"] = sourceStatuses
 		metadata["retrieval_source_latency_ms"] = sourceLatencies
+		metadata["retrieval_source_candidate_counts"] = evidenceCounts
 		metadata["retrieval_wall_clock_latency_ms"] = retrieval.WallClockLatencyMs
 		contextSource := "rrf"
 		if len(activeSources) == 1 {
@@ -1218,6 +1222,7 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 			"retrieval_active_sources": activeSources,
 			"retrieval_empty_sources":  emptySources,
 			"retrieval_fusion_mode":    fusionMode,
+			"source_candidate_counts":  evidenceCounts,
 			"source_statuses":          sourceStatuses,
 			"source_latency_ms":        sourceLatencies,
 			"wall_clock_latency_ms":    retrieval.WallClockLatencyMs,

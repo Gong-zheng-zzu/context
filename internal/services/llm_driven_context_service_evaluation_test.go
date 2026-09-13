@@ -106,6 +106,7 @@ func TestBuildEvaluationRRFResponseFusesDuplicateDocumentWithAuditableRanks(t *t
 	response := buildEvaluationRRFResponse(&RetrievalResults{
 		Results: []interface{}{
 			&models.VectorMatch{ID: "doc-shared", Content: "vector", Score: 0.9},
+			&models.VectorMatch{ID: "doc-shared", Content: "vector duplicate", Score: 0.8},
 			&models.VectorMatch{ID: "doc-vector", Content: "vector-only", Score: 0.8},
 			&models.KnowledgeNode{ID: "node-shared", Content: "knowledge", Score: 0.7, Properties: map[string]interface{}{"doc_ids": []string{"doc-shared"}}},
 			&models.TimelineEvent{ID: "event-shared", SourceDocID: "doc-shared", Content: "timeline", RelevanceScore: 0.6},
@@ -136,6 +137,30 @@ func TestBuildEvaluationRRFResponseFusesDuplicateDocumentWithAuditableRanks(t *t
 	}
 	if _, ok := shared.Metadata["rrf_score"].(float64); !ok {
 		t.Fatalf("rrf_score = %#v, want float64", shared.Metadata["rrf_score"])
+	}
+	if got, want := response.RetrievalMetadata["source_candidate_counts"], map[string]int{"vector": 2, "knowledge": 1, "timeline": 1}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("source_candidate_counts = %#v, want %#v", got, want)
+	}
+	if got, want := shared.Metadata["retrieval_source_candidate_counts"], map[string]int{"vector": 2, "knowledge": 1, "timeline": 1}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("context source_candidate_counts = %#v, want %#v", got, want)
+	}
+}
+
+func TestBuildEvaluationRRFResponseCountsOnlyTraceableCandidates(t *testing.T) {
+	response := buildEvaluationRRFResponse(&RetrievalResults{
+		Results: []interface{}{
+			&models.VectorMatch{ID: "vector-doc", Score: 0.9},
+			&models.KnowledgeNode{ID: "node-without-doc-id", Score: 0.8},
+			&models.TimelineEvent{ID: "event-without-doc-id", RelevanceScore: 0.7},
+		},
+		Sources: []string{"vector", "knowledge", "timeline"},
+	}, 5)
+
+	if got, want := response.RetrievalMetadata["source_candidate_counts"], map[string]int{"vector": 1, "knowledge": 0, "timeline": 0}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("source_candidate_counts = %#v, want %#v", got, want)
+	}
+	if got, want := response.RetrievalMetadata["retrieval_fusion_mode"], "vector_only_fallback"; got != want {
+		t.Fatalf("retrieval_fusion_mode = %#v, want %#v", got, want)
 	}
 }
 
