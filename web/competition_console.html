@@ -72,10 +72,11 @@
     const now = () => new Date().toLocaleString('zh-CN', { hour12:false });
     const fixture = {
       analysis_only:true, graph_persisted:false, count:1, process_time_ms:0,
-      execution:{ mode:'offline_fixture', use_rules:true, use_pmi:false, use_llm:false, llm_available:false, model_status:'fixture_only', fallback_reason:'固定夹具，不是实时模型执行' },
+      execution:{ mode:'offline_fixture', model_tier:'fixture_only', use_rules:true, use_pmi:false, use_llm:false, llm_available:false, model_status:'fixture_only', fallback_reason:'固定夹具，不是实时模型执行', cache_hit:false, latency_breakdown_ms:{total:0} },
       persistence:{ requested:false, attempted:false, succeeded:false, status:'analysis_only' },
       security_execution:{ asdf_checked:false },
-      relations:[{ object:'李爷爷', mediator:'服用降压药', property:'头晕', result:'起身跌倒风险', confidence:0.85, rule_confidence:0.95, pmi_confidence:0, llm_confidence:0, evidence:['固定离线夹具'], rule_matches:[{id:'fixture-rule',source:'offline-fixture'}], pccm_evidence:{active_sources:['rule'],final_confidence:0.85} }]
+      quality:{tuple_valid:true,evidence_coverage:1,negation_checked:true,temporal_consistent:true,review_required:false,confidence_level:'verified',validation_errors:[]},
+      relations:[{ object:'李爷爷', mediator:'服用降压药', property:'头晕', result:'起身跌倒风险', confidence:0.85, rule_confidence:0.95, pmi_confidence:0, llm_confidence:0, evidence:['固定离线夹具'], evidence_spans:[{field:'object',text:'李爷爷',start:0,end:3},{field:'mediator',text:'服用降压药',start:3,end:8},{field:'property',text:'头晕',start:8,end:10},{field:'result',text:'起身跌倒风险',start:10,end:16}], rule_matches:[{id:'fixture-rule',source:'offline-fixture'}], pccm_evidence:{active_sources:['rule'],final_confidence:0.85}, quality:{tuple_valid:true,evidence_coverage:1,negation_checked:true,temporal_consistent:true,review_required:false,confidence_level:'verified'} }]
     };
     function mode() { return $('mode').value; }
     let lastCausalResponse = null;

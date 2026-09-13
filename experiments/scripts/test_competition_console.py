@@ -48,6 +48,9 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn("$('password').value = '';", self.console)
         self.assertIn("offline_fixture", self.console)
         self.assertIn("不能模拟 RRF 证据", self.console)
+        self.assertIn("model_tier:'fixture_only'", self.console)
+        self.assertIn("quality:{tuple_valid:true", self.console)
+        self.assertIn("evidence_spans", self.console)
 
     def test_launcher_records_safe_manifest_and_checks_mode(self):
         self.assertIn('[ValidateSet("ollama", "fixture")]', self.launcher)
