@@ -18,6 +18,7 @@ from typing import Any, Dict, List, Optional, Tuple
 sys.path.insert(0, str(Path(__file__).parent))
 
 from base_evaluator import APIResponse, BaseEvaluator
+from causal_metrics import evidence_gate, field_macro_f1, normalized_text_hash, percentile
 
 
 LABELS = ("object", "mediator", "property", "result")
@@ -45,6 +46,7 @@ class CausalResult:
     confidence_threshold_met: bool
     expected_tuple: List[str]
     predicted_tuples: List[List[str]]
+    input_sha256: str
     timestamp: str
 
 
@@ -78,6 +80,11 @@ class CausalMetrics:
     strict_tuple_f1: Optional[float]
     avg_best_relation_confidence: Optional[float]
     avg_latency_ms: Optional[float]
+    latency_p50_ms: Optional[float]
+    latency_p95_ms: Optional[float]
+    field_macro_f1: Optional[float]
+    field_f1: Dict[str, Optional[float]]
+    evidence_gate: Dict[str, Any]
 
 
 class CausalEvaluator(BaseEvaluator):
@@ -227,6 +234,7 @@ class CausalEvaluator(BaseEvaluator):
             confidence_threshold_met=False,
             expected_tuple=list(self._strict_tuple(expected)),
             predicted_tuples=[],
+            input_sha256=normalized_text_hash(case["input_text"]),
             timestamp=datetime.now().isoformat(),
         )
 
@@ -310,8 +318,12 @@ class CausalEvaluator(BaseEvaluator):
             if strict_precision is not None and strict_recall is not None and strict_precision + strict_recall
             else None
         )
+        field_f1_macro, field_f1 = field_macro_f1(business_results)
+        latency_values = [result.latency_ms for result in business_results]
+        latency_p50 = percentile(latency_values, 0.50)
+        latency_p95 = percentile(latency_values, 0.95)
 
-        return CausalMetrics(
+        metric_values = dict(
             run_label=run_label,
             total_samples=total,
             api_success_count=api_success_count,
@@ -344,7 +356,13 @@ class CausalEvaluator(BaseEvaluator):
                 if api_success_count
                 else None
             ),
+            latency_p50_ms=latency_p50,
+            latency_p95_ms=latency_p95,
+            field_macro_f1=field_f1_macro,
+            field_f1=field_f1,
         )
+        metric_values["evidence_gate"] = evidence_gate(metric_values)
+        return CausalMetrics(**metric_values)
 
     def save_results(
         self,
@@ -379,11 +397,13 @@ class CausalEvaluator(BaseEvaluator):
                 },
             },
             "scoring": {
-                "dataset": "20 annotated O-M-P-R causal test cases",
+                "dataset": f"{len(results)} annotated O-M-P-R causal test cases",
                 "matching": "NFKC/case normalization plus whole-label containment; no semantic similarity model",
                 "strict_tuple_metrics": "Precision/Recall/F1 use case-scoped, exact normalized O-M-P-R tuples across every returned relation; API/contract failures are excluded.",
                 "business_metric_denominator": "only HTTP-successful, contract-valid responses",
                 "empty_relations": "valid business response scored as an extraction miss",
+                "latency_percentiles": "nearest-rank p50/p95 over HTTP-successful, contract-valid responses",
+                "field_f1": "per-field F1 penalizes extra returned relations as false positives",
             },
             "detailed_results": [asdict(result) for result in results],
             "metrics": asdict(metrics),
@@ -424,11 +444,16 @@ class CausalEvaluator(BaseEvaluator):
             print(f"  average best-relation confidence: {metrics.avg_best_relation_confidence:.3f}")
         if metrics.avg_latency_ms is not None:
             print(f"  average latency (valid responses): {metrics.avg_latency_ms:.1f}ms")
+        if metrics.latency_p95_ms is not None:
+            print(f"  latency p50/p95 (valid responses): {metrics.latency_p50_ms:.1f}/{metrics.latency_p95_ms:.1f}ms")
+        if metrics.field_macro_f1 is not None:
+            print(f"  field macro F1: {metrics.field_macro_f1:.3f}")
+        print(f"  evidence gate: {'PASS' if metrics.evidence_gate['passed'] else 'FAIL'}")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate causal O-M-P-R extraction against annotated cases.")
-    parser.add_argument("--samples", type=int, default=20, help="Number of canonical cases to evaluate (1-20).")
+    parser.add_argument("--samples", type=int, default=20, help="Number of annotated cases to evaluate (1-N).")
     parser.add_argument("--base-url", default="http://localhost:8088", help="API base URL.")
     parser.add_argument("--run-label", default="causal_extract", help="Label saved with this run; it does not change API behavior.")
     parser.add_argument(
