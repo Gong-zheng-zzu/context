@@ -28,6 +28,17 @@ class GitIgnoreTest(unittest.TestCase):
         ignore_rules = (REPOSITORY_ROOT / ".gitignore").read_text(encoding="utf-8")
         self.assertIn("experiments/results/demo_runs/", ignore_rules)
 
+    def test_repository_has_no_tracked_backup_copies(self):
+        tracked_files = subprocess.run(
+            ["git", "ls-files"],
+            cwd=REPOSITORY_ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.splitlines()
+        backups = [path for path in tracked_files if path.endswith((".bak", ".backup"))]
+        self.assertEqual([], backups, f"legacy backup copies are tracked: {backups}")
+
 
 if __name__ == "__main__":
     unittest.main()
