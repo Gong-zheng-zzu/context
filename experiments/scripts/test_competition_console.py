@@ -12,6 +12,8 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 CONSOLE = ROOT / "web" / "competition_console.html"
 LAUNCHER = ROOT / "experiments" / "scripts" / "run_competition_demo.ps1"
+CONFIG = ROOT / "web" / "js" / "config.js"
+AUTH_OVERRIDE = ROOT / "web" / "js" / "auth-security-override.js"
 
 
 class CompetitionConsoleContractTests(unittest.TestCase):
@@ -19,6 +21,8 @@ class CompetitionConsoleContractTests(unittest.TestCase):
     def setUpClass(cls):
         cls.console = CONSOLE.read_text(encoding="utf-8")
         cls.launcher = LAUNCHER.read_text(encoding="utf-8")
+        cls.config = CONFIG.read_text(encoding="utf-8")
+        cls.auth_override = AUTH_OVERRIDE.read_text(encoding="utf-8")
 
     def test_console_uses_protected_live_endpoints(self):
         self.assertIn("/api/auth/login", self.console)
@@ -84,6 +88,20 @@ class CompetitionConsoleContractTests(unittest.TestCase):
             self.assertEqual(completed.returncode, 0, completed.stderr)
         finally:
             Path(script_path).unlink(missing_ok=True)
+
+    def test_console_exposes_causal_audit_actions(self):
+        self.assertIn('id="causalQuality"', self.console)
+        self.assertIn('id="causalEvidence"', self.console)
+        self.assertIn('id="causalRerun"', self.console)
+        self.assertIn('id="causalCopy"', self.console)
+        self.assertIn("evidence_spans", self.console)
+        self.assertIn("model_tier", self.console)
+
+    def test_local_api_override_and_connection_error_are_actionable(self):
+        self.assertIn("new URLSearchParams(window.location.search).get('api')", self.config)
+        self.assertIn("?api=http://127.0.0.1:8088", self.auth_override)
+        self.assertIn("Failed to fetch", self.auth_override)
+        self.assertIn("请确认 Docker/服务已启动", self.auth_override)
 
 
 if __name__ == "__main__":

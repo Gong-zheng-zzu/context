@@ -1,12 +1,17 @@
 // 忆安智护 前端配置文件
 // 根据部署环境自动选择 API 地址
 
+// The API can be overridden per launch (for example, `?api=http://127.0.0.1:8088`).
+// This is useful when the static files are served from a different local port.
+const apiOverride = typeof window !== 'undefined'
+    ? new URLSearchParams(window.location.search).get('api')
+    : '';
 const CONFIG = {
     // 离线演示模式：无需后端，所有数据保存在 localStorage
     OFFLINE_MODE: false,
 
     // API 基础地址配置
-    API_BASE_URL: 'http://localhost:8088',
+    API_BASE_URL: (apiOverride || 'http://localhost:8088').replace(/\/$/, ''),
 
     // 默认工作空间
     DEFAULT_WORKSPACE: 'default',

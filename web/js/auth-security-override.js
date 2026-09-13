@@ -98,7 +98,11 @@
                 renderSecurityNotice();
             }
             if (typeof showAuthError === 'function') {
-                showAuthError(`Login failed: ${error.message}. Enable OFFLINE_MODE explicitly for local-only demos.`);
+                const apiBase = window.CONFIG ? window.CONFIG.API_BASE_URL : 'http://localhost:8088';
+                const detail = error && error.message === 'Failed to fetch'
+                    ? `无法连接服务 ${apiBase}。请确认 Docker/服务已启动，或用 ?api=http://127.0.0.1:8088 指定地址。`
+                    : `服务返回登录失败（${error.message}）。请检查演示密码和服务日志。`;
+                showAuthError(`${detail} 如需纯本地展示，请在 web/js/config.js 中明确开启 OFFLINE_MODE。`);
             }
         }
     };
