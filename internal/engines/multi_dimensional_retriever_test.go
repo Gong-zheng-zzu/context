@@ -43,16 +43,18 @@ func (s *recordingKnowledgeStore) SearchByQuery(_ context.Context, req Knowledge
 }
 
 type recordingVectorStore struct {
-	delay time.Duration
-	mu    sync.Mutex
-	query string
-	limit int
+	delay  time.Duration
+	mu     sync.Mutex
+	query  string
+	limit  int
+	userID string
 }
 
-func (s *recordingVectorStore) SearchByQuery(_ context.Context, query string, limit int) ([]*models.VectorMatch, error) {
+func (s *recordingVectorStore) SearchByQuery(ctx context.Context, query string, limit int) ([]*models.VectorMatch, error) {
 	time.Sleep(s.delay)
 	s.mu.Lock()
 	s.query, s.limit = query, limit
+	s.userID, _ = ctx.Value("user_id").(string)
 	s.mu.Unlock()
 	return []*models.VectorMatch{{ID: "vector-1", Content: "vector", Score: 0.9}}, nil
 }
@@ -103,10 +105,34 @@ func TestParallelRetrieveReportsWallClockDurationAndPreservesScope(t *testing.T)
 		t.Fatalf("knowledge scope = %#v, want user/session/workspace propagation", knowledgeRequest)
 	}
 	vector.mu.Lock()
-	vectorQuery, vectorLimit := vector.query, vector.limit
+	vectorQuery, vectorLimit, vectorUserID := vector.query, vector.limit, vector.userID
 	vector.mu.Unlock()
 	if vectorQuery != "vector query" || vectorLimit != retriever.config.VectorMaxResults {
 		t.Fatalf("vector call = query:%q limit:%d, want configured query and limit", vectorQuery, vectorLimit)
+	}
+	if vectorUserID != "user-1" {
+		t.Fatalf("vector user_id = %q, want query tenant propagated to context", vectorUserID)
+	}
+}
+
+func TestParallelRetrievePreservesAuthenticatedContextTenant(t *testing.T) {
+	vector := &recordingVectorStore{}
+	retriever := NewMultiDimensionalRetriever(nil, nil, vector)
+	ctx := context.WithValue(context.Background(), "user_id", "authenticated-user")
+
+	_, err := retriever.ParallelRetrieve(ctx, &models.MultiDimensionalQuery{
+		VectorQueries: []string{"vector query"},
+		UserID:        "query-user-should-not-override",
+	})
+	if err != nil {
+		t.Fatalf("ParallelRetrieve() error = %v", err)
+	}
+
+	vector.mu.Lock()
+	got := vector.userID
+	vector.mu.Unlock()
+	if got != "authenticated-user" {
+		t.Fatalf("vector user_id = %q, want authenticated context tenant", got)
 	}
 }
 

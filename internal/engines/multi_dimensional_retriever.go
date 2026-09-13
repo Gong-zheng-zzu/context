@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 	"sync"
 	"time"
 
@@ -118,6 +119,16 @@ func NewMultiDimensionalRetriever(timelineStore TimelineStore, knowledgeStore Kn
 func (mdr *MultiDimensionalRetrieverImpl) ParallelRetrieve(ctx context.Context, queries *models.MultiDimensionalQuery) (*RetrievalResults, error) {
 	log.Printf("🔍 [多维度检索] 开始并行检索...")
 	startedAt := time.Now()
+
+	// Direct callers may provide the tenant on the query object rather than on
+	// the context. Preserve an already-authenticated context identity, but make
+	// sure vector adapters still receive a user boundary for those callers.
+	if queries != nil && strings.TrimSpace(queries.UserID) != "" {
+		currentUserID, _ := ctx.Value("user_id").(string)
+		if strings.TrimSpace(currentUserID) == "" {
+			ctx = context.WithValue(ctx, "user_id", queries.UserID)
+		}
+	}
 
 	// 创建结果通道
 	timelineResultChan := make(chan *TimelineRetrievalResult, 1)
