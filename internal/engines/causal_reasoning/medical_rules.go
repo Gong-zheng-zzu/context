@@ -1,6 +1,7 @@
 package causal_reasoning
 
 import (
+	"sort"
 	"strings"
 	"sync"
 )
@@ -151,7 +152,7 @@ func (re *RuleEngine) MatchRules(text string) []*MedicalRule {
 			}
 		}
 	}
-
+	sort.Slice(matched, func(i, j int) bool { return matched[i].ID < matched[j].ID })
 	return matched
 }
 

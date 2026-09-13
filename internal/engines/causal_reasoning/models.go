@@ -7,29 +7,55 @@ import (
 // CausalRelation O→C→P→R因果四元组
 // 对应策划书第2.2.2节"因果推理模型的图谱构建"
 type CausalRelation struct {
-	Object         string         `json:"object"`          // O: 对象（如"李爷爷"）
-	Mediator       string         `json:"mediator"`        // C: 中介/共现因素（如"服用降压药"）
-	Property       string         `json:"property"`        // P: 属性/机制（如"体位性低血压"）
-	Result         string         `json:"result"`          // R: 结果（如"洗手间滑倒"）
-	Confidence     float64        `json:"confidence"`      // PCCM融合后的最终置信度
-	RuleConfidence float64        `json:"rule_confidence"` // 规则匹配置信度
-	PMIConfidence  float64        `json:"pmi_confidence"`  // PMI统计置信度
-	LLMConfidence  float64        `json:"llm_confidence"`  // LLM推理置信度
-	Evidence       []string       `json:"evidence"`        // 证据文本片段
-	RuleMatches    []RuleEvidence `json:"rule_matches,omitempty"`
-	PCCMEvidence   *PCCMEvidence  `json:"pccm_evidence,omitempty"`
-	Timestamp      time.Time      `json:"timestamp"`
+	Object         string           `json:"object"`          // O: 对象（如"李爷爷"）
+	Mediator       string           `json:"mediator"`        // C: 中介/共现因素（如"服用降压药"）
+	Property       string           `json:"property"`        // P: 属性/机制（如"体位性低血压"）
+	Result         string           `json:"result"`          // R: 结果（如"洗手间滑倒"）
+	Confidence     float64          `json:"confidence"`      // PCCM融合后的最终置信度
+	RuleConfidence float64          `json:"rule_confidence"` // 规则匹配置信度
+	PMIConfidence  float64          `json:"pmi_confidence"`  // PMI统计置信度
+	LLMConfidence  float64          `json:"llm_confidence"`  // LLM推理置信度
+	Evidence       []string         `json:"evidence"`        // 证据文本片段
+	RuleMatches    []RuleEvidence   `json:"rule_matches,omitempty"`
+	PCCMEvidence   *PCCMEvidence    `json:"pccm_evidence,omitempty"`
+	Quality        *RelationQuality `json:"quality,omitempty"`
+	EvidenceSpans  []EvidenceSpan   `json:"evidence_spans,omitempty"`
+	Timestamp      time.Time        `json:"timestamp"`
+}
+
+// EvidenceSpan identifies the exact source span supporting a field. Offsets
+// are byte offsets, matching Go string slicing semantics.
+type EvidenceSpan struct {
+	Field string `json:"field"`
+	Text  string `json:"text"`
+	Start int    `json:"start"`
+	End   int    `json:"end"`
+}
+
+// RelationQuality is an explicit, conservative quality gate for extracted
+// tuples. A relation that lacks a verifiable field remains visible for review
+// but is never presented as a fully verified causal tuple.
+type RelationQuality struct {
+	TupleValid         bool     `json:"tuple_valid"`
+	EvidenceCoverage   float64  `json:"evidence_coverage"`
+	NegationChecked    bool     `json:"negation_checked"`
+	TemporalConsistent bool     `json:"temporal_consistent"`
+	ReviewRequired     bool     `json:"review_required"`
+	ConfidenceLevel    string   `json:"confidence_level"`
+	ValidationErrors   []string `json:"validation_errors,omitempty"`
 }
 
 // RuleEvidence identifies the clinical rule that contributed observable
 // evidence to an extraction. It deliberately contains no internal rule state.
 type RuleEvidence struct {
-	ID         string  `json:"id"`
-	Condition  string  `json:"condition"`
-	Effect     string  `json:"effect"`
-	Confidence float64 `json:"confidence"`
-	Category   string  `json:"category"`
-	Source     string  `json:"source"`
+	ID          string  `json:"id"`
+	Condition   string  `json:"condition"`
+	Effect      string  `json:"effect"`
+	Confidence  float64 `json:"confidence"`
+	Category    string  `json:"category"`
+	Source      string  `json:"source"`
+	Edge        string  `json:"edge,omitempty"`
+	MatchedTerm string  `json:"matched_term,omitempty"`
 }
 
 // PCCMEvidence makes every final confidence auditable from its source signals.
@@ -78,11 +104,14 @@ type ExtractResponse struct {
 	GraphPersisted    bool                 `json:"graph_persisted"`
 	SecurityExecution *SecurityExecution   `json:"security_execution,omitempty"`
 	Execution         *ExtractionExecution `json:"execution,omitempty"`
-	Persistence       PersistenceExecution `json:"persistence"`
-	Error             string               `json:"error,omitempty"`
-	Relations         []CausalRelation     `json:"relations"`
-	Count             int                  `json:"count"`
-	ProcessTimeMs     int64                `json:"process_time_ms"`
+	// Quality is the conservative aggregate quality gate for all returned
+	// relations. Relation-level quality remains available on each relation.
+	Quality       *RelationQuality     `json:"quality,omitempty"`
+	Persistence   PersistenceExecution `json:"persistence"`
+	Error         string               `json:"error,omitempty"`
+	Relations     []CausalRelation     `json:"relations"`
+	Count         int                  `json:"count"`
+	ProcessTimeMs int64                `json:"process_time_ms"`
 }
 
 // ExtractionExecution documents which deterministic and model-backed paths
@@ -99,6 +128,11 @@ type ExtractionExecution struct {
 	FallbackReason string         `json:"fallback_reason,omitempty"`
 	MatchedRules   []RuleEvidence `json:"matched_rules,omitempty"`
 	PCCMWeights    PCCMWeights    `json:"pccm_weights"`
+	// ModelTier describes the actual serving tier (or deterministic fallback),
+	// rather than the configured model alone.
+	ModelTier          string           `json:"model_tier,omitempty"`
+	CacheHit           bool             `json:"cache_hit"`
+	LatencyBreakdownMs map[string]int64 `json:"latency_breakdown_ms,omitempty"`
 }
 
 // PersistenceExecution reports whether a request was analysis-only or wrote

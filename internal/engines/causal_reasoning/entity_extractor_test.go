@@ -102,3 +102,46 @@ func TestPCCMFusionNormalizesOverAvailableEvidence(t *testing.T) {
 		t.Fatalf("rule+LLM confidence = %.4f, want %.4f", got, want)
 	}
 }
+
+func TestRuleExtractionComposesTwoDirectedEdgesAndAudit(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, _, err := extractor.ExtractWithExecution(context.Background(), "李爷爷服用降压药后出现体位性低血压并在洗手间滑倒", true, false, false)
+	if err != nil || len(relations) != 1 {
+		t.Fatalf("relations=%#v err=%v", relations, err)
+	}
+	rel := relations[0]
+	if rel.Object != "李爷爷" || rel.Mediator != "服用降压药" || rel.Property != "体位性低血压" || rel.Result != "滑倒" {
+		t.Fatalf("relation=%+v", rel)
+	}
+	if rel.Quality == nil || !rel.Quality.TupleValid || rel.Quality.ReviewRequired || rel.Quality.EvidenceCoverage < 0.75 {
+		t.Fatalf("quality=%+v", rel.Quality)
+	}
+	if len(rel.RuleMatches) != 2 || rel.RuleMatches[0].Edge == "" || rel.RuleMatches[1].Edge == "" {
+		t.Fatalf("rule evidence=%+v", rel.RuleMatches)
+	}
+	if len(rel.EvidenceSpans) < 4 {
+		t.Fatalf("spans=%+v", rel.EvidenceSpans)
+	}
+}
+
+func TestRuleExtractionRejectsNegatedCause(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, _, err := extractor.ExtractWithExecution(context.Background(), "患者否认服用降压药后出现体位性低血压", true, false, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(relations) != 0 {
+		t.Fatalf("negated relation=%+v", relations)
+	}
+}
+
+func TestRuleExtractionNormalizesSynonymChain(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, _, err := extractor.ExtractWithExecution(context.Background(), "张奶奶使用血压药后发生直立性低血压，随后滑倒", true, false, false)
+	if err != nil || len(relations) != 1 {
+		t.Fatalf("relations=%#v err=%v", relations, err)
+	}
+	if relations[0].Property != "直立性低血压" || relations[0].Result != "滑倒" {
+		t.Fatalf("relation=%+v", relations[0])
+	}
+}

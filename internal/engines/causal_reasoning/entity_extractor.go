@@ -194,7 +194,104 @@ func (ee *EntityExtractor) AttachAuditEvidence(relations []CausalRelation, execu
 			EvidenceCount:   evidenceCount,
 			FinalConfidence: relation.Confidence,
 		}
+		relation.Quality = assessRelationQuality(*relation, strings.Join(relation.Evidence, "\n"))
 	}
+}
+
+func assessRelationQuality(relation CausalRelation, source string) *RelationQuality {
+	q := &RelationQuality{NegationChecked: true, TemporalConsistent: true}
+	fields := []struct{ name, value string }{{"object", relation.Object}, {"mediator", relation.Mediator}, {"property", relation.Property}, {"result", relation.Result}}
+	covered := 0
+	for _, field := range fields {
+		if field.value == "" {
+			q.ValidationErrors = append(q.ValidationErrors, field.name+"_missing")
+			continue
+		}
+		if field.name == "object" && field.value == "患者" {
+			covered++
+			continue
+		}
+		if fieldOffset(source, field.value) >= 0 {
+			covered++
+		} else {
+			q.ValidationErrors = append(q.ValidationErrors, field.name+"_not_in_source")
+		}
+	}
+	q.EvidenceCoverage = float64(covered) / float64(len(fields))
+	for _, field := range []struct{ name, value string }{{"mediator", relation.Mediator}, {"property", relation.Property}, {"result", relation.Result}} {
+		if field.value != "" && isNegatedAt(source, fieldOffset(source, field.value)) {
+			q.NegationChecked = false
+			q.ValidationErrors = append(q.ValidationErrors, field.name+"_negated")
+		}
+	}
+	last := -1
+	for _, pos := range []int{fieldOffset(source, relation.Mediator), fieldOffset(source, relation.Property), fieldOffset(source, relation.Result)} {
+		if pos < 0 {
+			continue
+		}
+		if pos < last {
+			q.TemporalConsistent = false
+			break
+		}
+		last = pos
+	}
+	if !q.TemporalConsistent {
+		q.ValidationErrors = append(q.ValidationErrors, "causal_order_inconsistent")
+	}
+	q.TupleValid = relation.Object != "" && relation.Mediator != "" && relation.Property != "" && relation.Result != "" && q.EvidenceCoverage >= 0.75 && q.NegationChecked && q.TemporalConsistent
+	q.ReviewRequired = !q.TupleValid
+	if q.TupleValid {
+		q.ConfidenceLevel = "verified"
+	} else if q.EvidenceCoverage >= 0.5 {
+		q.ConfidenceLevel = "needs_review"
+	} else {
+		q.ConfidenceLevel = "insufficient_evidence"
+	}
+	return q
+}
+
+func fieldOffset(source, value string) int {
+	if value == "" {
+		return -1
+	}
+	return strings.Index(normalizeForLookup(source), normalizeForLookup(value))
+}
+
+func isNegatedAt(source string, offset int) bool {
+	if offset < 0 {
+		return false
+	}
+	n := normalizeForLookup(source)
+	prefix := []rune(n[:offset])
+	if len(prefix) > 8 {
+		prefix = prefix[len(prefix)-8:]
+	}
+	context := string(prefix)
+	for _, marker := range []string{"否认", "未见", "未发生", "没有", "无", "排除", "未"} {
+		if strings.Contains(context, marker) {
+			return true
+		}
+	}
+	return false
+}
+
+func hasNegatedCausalMention(text string, rules []*MedicalRule) bool {
+	n := normalizeForLookup(text)
+	for _, marker := range []string{"否认", "未见", "未发生", "没有", "排除"} {
+		pos := strings.Index(n, marker)
+		if pos < 0 {
+			continue
+		}
+		window := n[pos:]
+		for _, rule := range rules {
+			for _, term := range rule.Keywords {
+				if strings.Contains(window, normalizeForLookup(term)) {
+					return true
+				}
+			}
+		}
+	}
+	return false
 }
 
 func matchingRuleEvidence(relation CausalRelation, rules []RuleEvidence) []RuleEvidence {
@@ -205,13 +302,13 @@ func matchingRuleEvidence(relation CausalRelation, rules []RuleEvidence) []RuleE
 		conditionMatched := false
 		effectMatched := false
 		for _, condition := range conditions {
-			if condition != "" && strings.Contains(condition, strings.ToLower(rule.Condition)) {
+			if condition != "" && (strings.Contains(condition, strings.ToLower(rule.Condition)) || canonicalTerm(condition) == canonicalTerm(rule.Condition)) {
 				conditionMatched = true
 				break
 			}
 		}
 		for _, effect := range effects {
-			if effect != "" && strings.Contains(effect, strings.ToLower(rule.Effect)) {
+			if effect != "" && (strings.Contains(effect, strings.ToLower(rule.Effect)) || canonicalTerm(effect) == canonicalTerm(rule.Effect)) {
 				effectMatched = true
 				break
 			}
@@ -266,6 +363,7 @@ func ruleEvidence(rules []*MedicalRule) []RuleEvidence {
 		evidence = append(evidence, RuleEvidence{
 			ID: rule.ID, Condition: rule.Condition, Effect: rule.Effect,
 			Confidence: rule.Confidence, Category: rule.Category, Source: rule.Source,
+			Edge: rule.Condition + "->" + rule.Effect,
 		})
 	}
 	sort.Slice(evidence, func(i, j int) bool { return evidence[i].ID < evidence[j].ID })
@@ -275,8 +373,8 @@ func ruleEvidence(rules []*MedicalRule) []RuleEvidence {
 // buildExtractionPrompt 构建因果关系抽取提示词
 var (
 	markdownJSONFence   = regexp.MustCompile("(?s)^```(json)?\\s*|\\s*```$")
-	fieldPrefix         = regexp.MustCompile(`^(object|mediator|property|result|o|c|p|r|对象|患者|中介|诱因|机制|属性|结果)\\s*[:：]\\s*`)
-	trailingPunctuation = regexp.MustCompile(`[。；;，,、\\s]+$`)
+	fieldPrefix         = regexp.MustCompile(`^(object|mediator|property|result|o|c|p|r|对象|患者|中介|诱因|机制|属性|结果)\s*[:：]\s*`)
+	trailingPunctuation = regexp.MustCompile(`[。；;，,、\s]+$`)
 )
 
 func parseLLMExtractionResults(content string) ([]LLMExtractionResult, error) {
@@ -389,6 +487,17 @@ func normalizeLLMExtraction(source string, result LLMExtractionResult) (LLMExtra
 	if propertyOffset >= 0 && resultOffset >= 0 && propertyOffset > resultOffset {
 		result.Property, result.Result = result.Result, result.Property
 	}
+	// Do not accept hallucinated clinical spans or duplicated mechanism/outcome.
+	lookup := normalizeForLookup(source)
+	if result.Object != "患者" && !strings.Contains(lookup, normalizeForLookup(result.Object)) {
+		return LLMExtractionResult{}, 0, false
+	}
+	if !strings.Contains(lookup, normalizeForLookup(result.Mediator)) || !strings.Contains(lookup, normalizeForLookup(result.Property)) || !strings.Contains(lookup, normalizeForLookup(result.Result)) {
+		return LLMExtractionResult{}, 0, false
+	}
+	if normalizeForLookup(result.Property) == normalizeForLookup(result.Result) || isNegatedAt(source, fieldOffset(source, result.Mediator)) || isNegatedAt(source, fieldOffset(source, result.Property)) || isNegatedAt(source, fieldOffset(source, result.Result)) {
+		return LLMExtractionResult{}, 0, false
+	}
 
 	return result, calibratedLLMConfidence(source, result), true
 }
@@ -467,6 +576,10 @@ func calibratedLLMConfidence(source string, result LLMExtractionResult) float64 
 		if confidence > 0.95 {
 			return 0.95
 		}
+	} else if confidence > 0.88 {
+		// A response without a model score must remain conservative; source
+		// coverage alone is not enough to claim very high confidence.
+		confidence = 0.88
 	}
 	return confidence
 }
@@ -542,26 +655,193 @@ func (ee *EntityExtractor) extractWithRules(text string) ([]CausalRelation, erro
 	}
 
 	var relations []CausalRelation
-	for _, rule := range matchedRules {
-		relation := CausalRelation{
-			Object:         "患者", // 规则引擎无法精确识别对象
-			Mediator:       rule.Condition,
-			Property:       "",
-			Result:         rule.Effect,
-			RuleConfidence: rule.Confidence,
-			PMIConfidence:  0.0,
-			LLMConfidence:  0.0,
-			Evidence:       []string{text},
-			Timestamp:      time.Now(),
+	// MatchRules contains rules whose keywords occur in the record. Include
+	// condition/effect synonyms as well so a chain remains discoverable when the
+	// record uses "滑倒" for the rule's canonical "跌倒" effect.
+	allRules := ee.ruleEngine.GetAllRules()
+	for _, candidate := range allRules {
+		if findTermOffset(text, candidate.Keywords) >= 0 {
+			seen := false
+			for _, existing := range matchedRules {
+				if existing.ID == candidate.ID {
+					seen = true
+					break
+				}
+			}
+			if !seen {
+				matchedRules = append(matchedRules, candidate)
+			}
 		}
-
-		// 仅使用规则置信度
-		relation.Confidence = rule.Confidence
-
-		relations = append(relations, relation)
+	}
+	sort.Slice(matchedRules, func(i, j int) bool { return matchedRules[i].ID < matchedRules[j].ID })
+	if hasNegatedCausalMention(text, matchedRules) {
+		return []CausalRelation{}, nil
+	}
+	object := detectPatient(text)
+	used := make(map[string]bool)
+	for _, first := range matchedRules {
+		for _, second := range matchedRules {
+			if first.ID == second.ID || !termsOverlap(first.Effect, second.Condition, second.Keywords) {
+				continue
+			}
+			if isNegatedAt(text, findTermOffset(text, first.Keywords)) || isNegatedAt(text, findTermOffset(text, second.Keywords)) {
+				continue
+			}
+			key := first.ID + ":" + second.ID
+			if used[key] {
+				continue
+			}
+			used[key] = true
+			confidence := first.Confidence * second.Confidence
+			property := observedTerm(text, first.Effect, first.Keywords)
+			result := observedResultAfterProperty(text, property, second.Effect, second.Keywords)
+			relation := CausalRelation{Object: object, Mediator: contextualMediator(text, first.Keywords), Property: property, Result: result, RuleConfidence: confidence, Evidence: []string{text}, Timestamp: time.Now()}
+			relation.Confidence = confidence
+			relation.EvidenceSpans = spansForRelation(text, relation)
+			relations = append(relations, relation)
+		}
+	}
+	if len(relations) == 0 {
+		for _, rule := range matchedRules {
+			if isNegatedAt(text, findTermOffset(text, rule.Keywords)) {
+				continue
+			}
+			property := observedTerm(text, rule.Effect, rule.Keywords)
+			result := observedResultAfterProperty(text, property, "", nil)
+			relation := CausalRelation{Object: object, Mediator: contextualMediator(text, rule.Keywords), Property: property, Result: result, RuleConfidence: rule.Confidence, Evidence: []string{text}, Timestamp: time.Now()}
+			relation.Confidence = rule.Confidence
+			relation.EvidenceSpans = spansForRelation(text, relation)
+			relations = append(relations, relation)
+		}
 	}
 
 	return relations, nil
+}
+
+func termsOverlap(effect, condition string, keywords []string) bool {
+	a, b := canonicalTerm(effect), canonicalTerm(condition)
+	if a != "" && a == b {
+		return true
+	}
+	for _, keyword := range keywords {
+		if canonicalTerm(keyword) == a {
+			return true
+		}
+	}
+	return false
+}
+
+func canonicalTerm(value string) string {
+	v := strings.ToLower(strings.TrimSpace(value))
+	for _, group := range [][]string{{"体位性低血压", "直立性低血压", "姿势性低血压"}, {"跌倒", "滑倒", "摔倒"}, {"降压药", "血压药", "抗高血压药"}, {"低钾", "低钾血症"}} {
+		for _, item := range group {
+			if v == item {
+				return group[0]
+			}
+		}
+	}
+	return v
+}
+
+func findTermOffset(text string, terms []string) int {
+	n := normalizeForLookup(text)
+	best := -1
+	for _, term := range terms {
+		if pos := strings.Index(n, normalizeForLookup(term)); pos >= 0 && (best < 0 || pos < best) {
+			best = pos
+		}
+	}
+	return best
+}
+
+func contextualMediator(text string, terms []string) string {
+	n := normalizeForLookup(text)
+	for _, term := range terms {
+		pos := strings.Index(n, normalizeForLookup(term))
+		if pos < 0 {
+			continue
+		}
+		for _, action := range []string{"服用", "口服", "使用", "长期", "留置", "注射", "因", "由于"} {
+			if strings.HasSuffix(n[:pos], action) {
+				return action + term
+			}
+		}
+		return term
+	}
+	if len(terms) > 0 {
+		return terms[0]
+	}
+	return ""
+}
+
+func observedTerm(text, preferred string, terms []string) string {
+	n := normalizeForLookup(text)
+	if preferred != "" && strings.Contains(n, normalizeForLookup(preferred)) {
+		return preferred
+	}
+	for _, group := range [][]string{{"体位性低血压", "直立性低血压", "姿势性低血压"}, {"跌倒", "滑倒", "摔倒"}} {
+		for _, term := range group {
+			if strings.Contains(n, normalizeForLookup(term)) {
+				return term
+			}
+		}
+	}
+	for _, term := range terms {
+		if strings.Contains(n, normalizeForLookup(term)) {
+			return term
+		}
+	}
+	return preferred
+}
+
+// observedResultAfterProperty finds a concrete outcome occurring after the
+// intermediate property. This prevents a one-edge rule from duplicating the
+// property as the result when the record says "...低血压，随后滑倒".
+func observedResultAfterProperty(text, property, preferred string, terms []string) string {
+	n := normalizeForLookup(text)
+	start := 0
+	if property != "" {
+		if pos := strings.Index(n, normalizeForLookup(property)); pos >= 0 {
+			start = pos + len(normalizeForLookup(property))
+		}
+	}
+	for _, term := range append([]string{preferred}, terms...) {
+		if term == "" {
+			continue
+		}
+		if pos := strings.Index(n[start:], normalizeForLookup(term)); pos >= 0 {
+			return term
+		}
+	}
+	for _, term := range []string{"跌倒", "滑倒", "摔倒", "骨折", "溃疡", "感染", "出血", "卒中", "受伤", "无力", "难以行走", "风险增加"} {
+		if strings.Contains(n[start:], normalizeForLookup(term)) {
+			return term
+		}
+	}
+	return ""
+}
+
+func detectPatient(text string) string {
+	name := regexp.MustCompile(`[\p{Han}]{1,3}(?:爷爷|奶奶|先生|女士|叔叔|阿姨)`)
+	if found := name.FindString(text); found != "" {
+		return found
+	}
+	return "患者"
+}
+
+func spansForRelation(text string, relation CausalRelation) []EvidenceSpan {
+	spans := make([]EvidenceSpan, 0, 4)
+	n := normalizeForLookup(text)
+	for _, field := range []struct{ name, value string }{{"object", relation.Object}, {"mediator", relation.Mediator}, {"property", relation.Property}, {"result", relation.Result}} {
+		if field.value == "" || field.value == "患者" {
+			continue
+		}
+		start := strings.Index(n, normalizeForLookup(field.value))
+		if start >= 0 {
+			spans = append(spans, EvidenceSpan{Field: field.name, Text: field.value, Start: start, End: start + len(field.value)})
+		}
+	}
+	return spans
 }
 
 // matchRules 匹配规则并计算规则置信度
