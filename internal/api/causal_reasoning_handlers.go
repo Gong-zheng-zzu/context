@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/contextkeeper/service/internal/engines/causal_reasoning"
@@ -59,6 +60,8 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 	}
 
 	startTime := time.Now()
+	latency := make(map[string]int64, 4)
+	securityStart := time.Now()
 	securityExecution := &causal_reasoning.SecurityExecution{ASDFChecked: h.securityService != nil}
 	if h.securityService != nil {
 		normalizedText, _, _, _ := h.securityService.DefendAndNormalize(req.Text)
@@ -78,19 +81,25 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 			}
 		}
 	}
+	latency["security"] = time.Since(securityStart).Milliseconds()
 
 	// 抽取因果关系。该入口保留实际执行路径，避免客户端从关系内容猜测
 	// 是模型、规则还是降级路径。
+	extractionStart := time.Now()
 	relations, execution, err := h.extractor.ExtractWithExecution(c.Request.Context(), req.Text, req.UseRules, req.UsePMI, req.UseLLM)
+	latency["extract"] = time.Since(extractionStart).Milliseconds()
 	if err != nil {
 		status := http.StatusInternalServerError
 		if errors.Is(err, causal_reasoning.ErrLLMUnavailable) {
 			status = http.StatusServiceUnavailable
 		}
+		quality := causalAuditQuality(relations)
+		finalizeCausalExecution(execution, latency, time.Since(startTime).Milliseconds())
 		c.JSON(status, causal_reasoning.ExtractResponse{
 			AnalysisOnly:      true,
 			SecurityExecution: securityExecution,
 			Execution:         execution,
+			Quality:           quality,
 			Persistence: causal_reasoning.PersistenceExecution{
 				Requested: req.Persist,
 				Status:    "not_attempted",
@@ -107,23 +116,30 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 	// The caller must explicitly request persistence. Analysis-only requests
 	// remain side-effect free so they can be used safely in the live demo.
 	graphPersisted := false
+	persistenceStart := time.Now()
 	persistence := causal_reasoning.PersistenceExecution{Requested: req.Persist, Status: "analysis_only"}
 	if req.Persist && len(relations) > 0 {
 		persistence.Attempted = true
 		if h.graphWriter == nil {
 			persistence.Status = "unavailable"
+			latency["persistence"] = time.Since(persistenceStart).Milliseconds()
+			processTime := time.Since(startTime).Milliseconds()
+			finalizeCausalExecution(execution, latency, processTime)
 			c.JSON(http.StatusServiceUnavailable, causal_reasoning.ExtractResponse{
 				AnalysisOnly: true, SecurityExecution: securityExecution, Execution: execution,
-				Persistence: persistence, Relations: relations, Count: len(relations),
+				Quality: causalAuditQuality(relations), Persistence: persistence, Relations: relations, Count: len(relations), ProcessTimeMs: processTime,
 				Error: "因果图谱存储不可用",
 			})
 			return
 		}
 		if err := h.graphWriter.BuildCausalGraph(c.Request.Context(), relations); err != nil {
 			persistence.Status = "failed"
+			latency["persistence"] = time.Since(persistenceStart).Milliseconds()
+			processTime := time.Since(startTime).Milliseconds()
+			finalizeCausalExecution(execution, latency, processTime)
 			c.JSON(http.StatusInternalServerError, causal_reasoning.ExtractResponse{
 				AnalysisOnly: true, SecurityExecution: securityExecution, Execution: execution,
-				Persistence: persistence, Relations: relations, Count: len(relations),
+				Quality: causalAuditQuality(relations), Persistence: persistence, Relations: relations, Count: len(relations), ProcessTimeMs: processTime,
 				Error: "构建因果图谱失败",
 			})
 			return
@@ -134,14 +150,18 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 	} else if req.Persist {
 		persistence.Status = "no_relations"
 	}
+	latency["persistence"] = time.Since(persistenceStart).Milliseconds()
 
 	processTime := time.Since(startTime).Milliseconds()
+	quality := causalAuditQuality(relations)
+	finalizeCausalExecution(execution, latency, processTime)
 
 	c.JSON(http.StatusOK, causal_reasoning.ExtractResponse{
 		AnalysisOnly:      !graphPersisted,
 		GraphPersisted:    graphPersisted,
 		SecurityExecution: securityExecution,
 		Execution:         execution,
+		Quality:           quality,
 		Persistence:       persistence,
 		Relations:         relations,
 		Count:             len(relations),
@@ -156,6 +176,114 @@ func causalUserID(c *gin.Context) string {
 		}
 	}
 	return ""
+}
+
+// finalizeCausalExecution enriches the execution record at the HTTP boundary.
+// The extractor owns model/fallback truth; the handler owns request timing.
+func finalizeCausalExecution(execution *causal_reasoning.ExtractionExecution, latency map[string]int64, total int64) {
+	if execution == nil {
+		return
+	}
+	if latency == nil {
+		latency = make(map[string]int64)
+	}
+	latency["total"] = total
+	execution.LatencyBreakdownMs = latency
+	if execution.ModelTier == "" {
+		switch execution.Mode {
+		case "llm":
+			model := strings.ToLower(execution.Model)
+			switch {
+			case strings.Contains(model, "7b"):
+				execution.ModelTier = "qwen7b_q4"
+			case strings.Contains(model, "3b"):
+				execution.ModelTier = "qwen3b"
+			default:
+				execution.ModelTier = "llm"
+			}
+		case "rules", "rules_fallback":
+			execution.ModelTier = "rules"
+		case "model_unavailable":
+			execution.ModelTier = "unavailable"
+		default:
+			execution.ModelTier = execution.Mode
+		}
+	}
+}
+
+// causalAuditQuality aggregates relation-level quality without upgrading an
+// incomplete relation. It is deliberately conservative for legacy extractors
+// that do not yet provide RelationQuality.
+func causalAuditQuality(relations []causal_reasoning.CausalRelation) *causal_reasoning.RelationQuality {
+	quality := &causal_reasoning.RelationQuality{TupleValid: true, NegationChecked: true, TemporalConsistent: true}
+	if len(relations) == 0 {
+		quality.ReviewRequired = true
+		quality.ConfidenceLevel = "insufficient_evidence"
+		quality.ValidationErrors = []string{"no_relations"}
+		return quality
+	}
+	var coverage float64
+	for i := range relations {
+		relation := &relations[i]
+		complete := relation.Object != "" && relation.Mediator != "" && relation.Property != "" && relation.Result != ""
+		if relation.Quality != nil {
+			coverage += relation.Quality.EvidenceCoverage
+			complete = complete && relation.Quality.TupleValid
+			quality.NegationChecked = quality.NegationChecked && relation.Quality.NegationChecked
+			quality.TemporalConsistent = quality.TemporalConsistent && relation.Quality.TemporalConsistent
+			quality.ReviewRequired = quality.ReviewRequired || relation.Quality.ReviewRequired
+			quality.ValidationErrors = appendUniqueStrings(quality.ValidationErrors, relation.Quality.ValidationErrors...)
+		} else {
+			coverage += relationEvidenceCoverage(*relation)
+			quality.NegationChecked = false
+			quality.TemporalConsistent = false
+		}
+		quality.TupleValid = quality.TupleValid && complete
+		if !complete {
+			quality.ValidationErrors = appendUniqueStrings(quality.ValidationErrors, "incomplete_tuple")
+			quality.ReviewRequired = true
+		}
+	}
+	quality.EvidenceCoverage = coverage / float64(len(relations))
+	if quality.TupleValid && !quality.ReviewRequired && quality.NegationChecked && quality.TemporalConsistent {
+		quality.ConfidenceLevel = "verified"
+	} else if quality.EvidenceCoverage > 0 {
+		quality.ConfidenceLevel = "needs_review"
+	} else {
+		quality.ConfidenceLevel = "insufficient_evidence"
+		quality.ReviewRequired = true
+	}
+	return quality
+}
+
+func relationEvidenceCoverage(relation causal_reasoning.CausalRelation) float64 {
+	if len(relation.Evidence) == 0 {
+		return 0
+	}
+	joined := strings.ToLower(strings.Join(relation.Evidence, " "))
+	supported := 0
+	for _, field := range []string{relation.Object, relation.Mediator, relation.Property, relation.Result} {
+		if field != "" && strings.Contains(joined, strings.ToLower(field)) {
+			supported++
+		}
+	}
+	return float64(supported) / 4
+}
+
+func appendUniqueStrings(dst []string, values ...string) []string {
+	seen := make(map[string]struct{}, len(dst)+len(values))
+	for _, value := range dst {
+		seen[value] = struct{}{}
+	}
+	for _, value := range values {
+		if value != "" {
+			if _, ok := seen[value]; !ok {
+				dst = append(dst, value)
+				seen[value] = struct{}{}
+			}
+		}
+	}
+	return dst
 }
 
 func causalResultLimit(raw string) (int, error) {

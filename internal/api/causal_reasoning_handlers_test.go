@@ -87,6 +87,12 @@ func TestExtractCausalRelationsIsAnalysisOnlyWithoutPersistFlag(t *testing.T) {
 	if !body.AnalysisOnly || body.GraphPersisted {
 		t.Fatalf("response persistence flags = persisted:%t analysis_only:%t", body.GraphPersisted, body.AnalysisOnly)
 	}
+	if body.Quality == nil || body.Quality.ConfidenceLevel == "" {
+		t.Fatalf("quality = %#v; response must expose an aggregate quality gate", body.Quality)
+	}
+	if body.Execution == nil || body.Execution.LatencyBreakdownMs == nil || body.Execution.LatencyBreakdownMs["total"] < 0 {
+		t.Fatalf("execution = %#v; response must expose request timing", body.Execution)
+	}
 }
 
 func TestCausalResultLimit(t *testing.T) {
@@ -224,6 +230,12 @@ func TestExtractCausalRelationsReportsUnavailableModelWithoutFabricatingOutput(t
 	if len(body.Relations) != 0 || body.Error == "" {
 		t.Fatalf("relations = %#v, error = %q; arbitrary input must not receive fabricated output", body.Relations, body.Error)
 	}
+	if body.Quality == nil || body.Quality.ConfidenceLevel != "insufficient_evidence" || !body.Quality.ReviewRequired {
+		t.Fatalf("quality = %#v; unavailable model must be marked insufficient", body.Quality)
+	}
+	if body.Execution.LatencyBreakdownMs == nil || body.Execution.ModelTier != "unavailable" {
+		t.Fatalf("execution = %#v; unavailable model audit is incomplete", body.Execution)
+	}
 }
 
 func TestExtractCausalRelationsReportsRulesFallbackWhenModelUnavailable(t *testing.T) {
@@ -251,5 +263,8 @@ func TestExtractCausalRelationsReportsRulesFallbackWhenModelUnavailable(t *testi
 	}
 	if len(body.Relations) == 0 || len(body.Relations[0].RuleMatches) == 0 {
 		t.Fatalf("relations = %#v, want rule-backed fallback output", body.Relations)
+	}
+	if body.Execution.ModelTier != "rules" || body.Execution.LatencyBreakdownMs == nil {
+		t.Fatalf("execution = %#v, want explicit rules fallback tier and timing", body.Execution)
 	}
 }
