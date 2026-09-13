@@ -14,6 +14,7 @@ CONSOLE = ROOT / "web" / "competition_console.html"
 LAUNCHER = ROOT / "experiments" / "scripts" / "run_competition_demo.ps1"
 CONFIG = ROOT / "web" / "js" / "config.js"
 AUTH_OVERRIDE = ROOT / "web" / "js" / "auth-security-override.js"
+COMPOSE = ROOT / "docker-compose.yml"
 
 
 class CompetitionConsoleContractTests(unittest.TestCase):
@@ -23,6 +24,7 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         cls.launcher = LAUNCHER.read_text(encoding="utf-8")
         cls.config = CONFIG.read_text(encoding="utf-8")
         cls.auth_override = AUTH_OVERRIDE.read_text(encoding="utf-8")
+        cls.compose = COMPOSE.read_text(encoding="utf-8")
 
     def test_console_uses_protected_live_endpoints(self):
         self.assertIn("/api/auth/login", self.console)
@@ -102,6 +104,11 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn("?api=http://127.0.0.1:8088", self.auth_override)
         self.assertIn("Failed to fetch", self.auth_override)
         self.assertIn("请确认 Docker/服务已启动", self.auth_override)
+
+    def test_compose_allows_common_local_static_server_origins(self):
+        self.assertIn("http://localhost:5500", self.compose)
+        self.assertIn("http://127.0.0.1:5500", self.compose)
+        self.assertIn("http://localhost:5173", self.compose)
 
 
 if __name__ == "__main__":
