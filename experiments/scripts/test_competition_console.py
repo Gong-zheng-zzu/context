@@ -63,6 +63,7 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn('if (-not $isFixture) {', self.launcher)
         self.assertIn('if ($RunIsolatedUnlearning -and $isFixture)', self.launcher)
         self.assertIn('artifacts = $(if ($isFixture) { ,@("run_manifest.json") }', self.launcher)
+        self.assertIn('$([System.Uri]::new($consolePath).AbsoluteUri)?mode=fixture', self.launcher)
         # The credential guard is inside the live-mode branch, not at script scope.
         credential_guard = 'if (-not $env:EVAL_USER_ID -or -not $env:EVAL_PASSWORD)'
         self.assertEqual(self.launcher.count(credential_guard), 1)

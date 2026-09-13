@@ -13,8 +13,13 @@ $Experiments = Join-Path $ProjectRoot "experiments"
 $Timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 $RunDir = Join-Path $Experiments "results\demo_runs\$Timestamp"
 New-Item -ItemType Directory -Force $RunDir | Out-Null
-$ConsoleUrl = "$($BaseUrl.TrimEnd('/'))/web/competition_console.html?mode=$Mode"
 $isFixture = $Mode -eq "fixture"
+$consolePath = Join-Path $ProjectRoot "web\competition_console.html"
+$ConsoleUrl = if ($isFixture) {
+    "$([System.Uri]::new($consolePath).AbsoluteUri)?mode=fixture"
+} else {
+    "$($BaseUrl.TrimEnd('/'))/web/competition_console.html?mode=$Mode"
+}
 $health = [ordered]@{ status_code = $null; passed = $false }
 $authCheck = [ordered]@{ checked = $false; credential_source = "none_fixture"; token_persisted = $false }
 
