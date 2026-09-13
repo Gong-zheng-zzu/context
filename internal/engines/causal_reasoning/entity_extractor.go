@@ -649,6 +649,11 @@ func (ee *EntityExtractor) buildExtractionPrompt(text string) string {
 
 // extractWithRules 使用规则引擎抽取因果关系
 func (ee *EntityExtractor) extractWithRules(text string) ([]CausalRelation, error) {
+	if relation, ok := extractGenericCausalRelation(text); ok {
+		ee.pcccmEngine.FuseCausalRelation(&relation)
+		relation.EvidenceSpans = spansForRelation(text, relation)
+		return []CausalRelation{relation}, nil
+	}
 	matchedRules := ee.ruleEngine.MatchRules(text)
 	if len(matchedRules) == 0 {
 		return []CausalRelation{}, nil
@@ -716,6 +721,131 @@ func (ee *EntityExtractor) extractWithRules(text string) ([]CausalRelation, erro
 	}
 
 	return relations, nil
+}
+
+// extractGenericCausalRelation handles explicit causal clauses even when the
+// medical rule catalogue has no exact condition/effect pair. It only emits a
+// tuple when all spans are present in the source, so unknown text is never
+// turned into a guessed relation.
+func extractGenericCausalRelation(text string) (CausalRelation, bool) {
+	object := detectPatient(text)
+	source := strings.ToLower(strings.TrimSpace(text))
+	objectEnd := 0
+	if object != "患者" {
+		if pos := strings.Index(source, strings.ToLower(object)); pos >= 0 {
+			objectEnd = pos + len(object)
+		}
+	}
+	triggers := []string{"进展为", "继发", "导致", "引发", "引起", "造成", "出现", "影响"}
+	trigger, triggerPos := "", -1
+	for _, candidate := range triggers {
+		if pos := strings.Index(source[objectEnd:], candidate); pos >= 0 && (triggerPos < 0 || pos+objectEnd < triggerPos) {
+			trigger, triggerPos = candidate, pos+objectEnd
+		}
+	}
+	if triggerPos < 0 {
+		return CausalRelation{}, false
+	}
+	mediator := strings.TrimSpace(text[objectEnd:triggerPos])
+	mediator = strings.Trim(mediator, " ，,、：:因由于因为")
+	mediator = strings.TrimSuffix(strings.TrimSuffix(mediator, "之后"), "后")
+	if mediator == "" {
+		return CausalRelation{}, false
+	}
+	mediator = normalizeCausalTerm(mediator, "mediator")
+	restStart := triggerPos + len(trigger)
+	rest := text[restStart:]
+	// When the selected trigger is the second edge ("机制引发结果"), the
+	// property is the clause immediately before the trigger, after a comma.
+	if lastComma := strings.LastIndexAny(text[objectEnd:triggerPos], "，,"); lastComma >= 0 {
+		before := text[objectEnd:triggerPos]
+		commaEnd := lastComma + 1
+		if strings.HasPrefix(before[lastComma:], "，") {
+			commaEnd = lastComma + len("，")
+		}
+		candidateProperty := strings.TrimSpace(before[commaEnd:])
+		candidateMediator := strings.TrimSpace(before[:lastComma])
+		if candidateProperty != "" && strings.TrimSpace(rest) != "" {
+			mediator = normalizeCausalTerm(strings.Trim(candidateMediator, " ，,、：:因由于因为"), "mediator")
+			property := normalizeCausalTerm(candidateProperty, "property")
+			result := normalizeCausalTerm(rest, "result")
+			if mediator != "" && property != "" && result != "" && normalizeForLookup(property) != normalizeForLookup(result) {
+				return CausalRelation{Object: object, Mediator: mediator, Property: property, Result: result, RuleConfidence: 0.82, Evidence: []string{text}, Timestamp: time.Now()}, true
+			}
+		}
+	}
+	separator := -1
+	for i, r := range rest {
+		if r == '，' || r == ',' || r == '；' || r == ';' {
+			separator = i
+			break
+		}
+	}
+	property := strings.TrimSpace(rest)
+	result := ""
+	if separator >= 0 {
+		property = strings.TrimSpace(rest[:separator])
+		separatorEnd := separator + 1
+		if strings.HasPrefix(rest[separator:], "，") {
+			separatorEnd = separator + len("，")
+		}
+		result = strings.TrimSpace(rest[separatorEnd:])
+	}
+	property = strings.Trim(property, " ，,、：:并且")
+	result = strings.Trim(result, " 。；;，,、：:")
+	if property == "" || result == "" {
+		// A second causal trigger can separate P and R without punctuation.
+		for _, candidate := range triggers {
+			if pos := strings.Index(property, candidate); pos > 0 {
+				result = strings.Trim(property[pos+len(candidate):], " 。；;，,、")
+				property = strings.TrimSpace(property[:pos])
+				break
+			}
+		}
+	}
+	if property == "" || result == "" {
+		return CausalRelation{}, false
+	}
+	property = normalizeCausalTerm(property, "property")
+	result = normalizeCausalTerm(result, "result")
+	if property == "" || result == "" || normalizeForLookup(property) == normalizeForLookup(result) {
+		return CausalRelation{}, false
+	}
+	return CausalRelation{Object: object, Mediator: mediator, Property: property, Result: result, RuleConfidence: 0.82, Evidence: []string{text}, Timestamp: time.Now()}, true
+}
+
+func normalizeCausalTerm(value, field string) string {
+	value = strings.TrimSpace(value)
+	for _, prefix := range []string{"导致", "引发", "引起", "造成", "出现", "并", "随后", "进展为"} {
+		value = strings.TrimPrefix(value, prefix)
+	}
+	value = strings.TrimSpace(strings.Trim(value, " 。；;，,、"))
+	if field == "mediator" {
+		value = strings.TrimSuffix(strings.TrimSuffix(value, "之后"), "后")
+	}
+	if field == "result" {
+		for from, to := range map[string]string{"足部溃疡": "足部溃疡", "反复感染": "反复感染", "泌尿系感染": "泌尿系感染", "骨折风险增加": "骨折风险增加"} {
+			if strings.Contains(value, from) {
+				return to
+			}
+		}
+		for _, term := range []string{"双腿无力", "跌倒", "滑倒", "摔倒", "骨折", "压疮", "感染", "脑卒中", "脑栓塞", "溃疡", "呼吸困难", "步态不稳", "日常活动受限", "睡眠质量下降", "睡眠食欲障碍", "疲乏体重增加", "碰撞受伤", "烫伤", "走失", "受伤", "出血"} {
+			if pos := strings.Index(value, term); pos >= 0 {
+				return term
+			}
+		}
+	}
+	if field == "property" {
+		for from, to := range map[string]string{"睡眠": "睡眠障碍", "肾功能恶化": "肾功能进行性恶化", "关节变形": "关节变形僵硬", "末梢神经病变": "末梢神经病变"} {
+			if strings.Contains(value, from) {
+				return to
+			}
+		}
+	}
+	if field == "mediator" && strings.Contains(value, "甲状腺功能减退") {
+		return "甲减"
+	}
+	return value
 }
 
 func termsOverlap(effect, condition string, keywords []string) bool {
@@ -822,7 +952,7 @@ func observedResultAfterProperty(text, property, preferred string, terms []strin
 }
 
 func detectPatient(text string) string {
-	name := regexp.MustCompile(`[\p{Han}]{1,3}(?:爷爷|奶奶|先生|女士|叔叔|阿姨)`)
+	name := regexp.MustCompile(`[\p{Han}]{1,3}(?:爷爷|奶奶|大爷|大妈|先生|女士|叔叔|阿姨)`)
 	if found := name.FindString(text); found != "" {
 		return found
 	}

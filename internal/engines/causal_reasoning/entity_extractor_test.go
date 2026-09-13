@@ -145,3 +145,30 @@ func TestRuleExtractionNormalizesSynonymChain(t *testing.T) {
 		t.Fatalf("relation=%+v", relations[0])
 	}
 }
+
+func TestGenericCausalExtractionHandlesUncataloguedMedicalChain(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, _, err := extractor.ExtractWithExecution(context.Background(), "王奶奶因长期卧床导致肌肉萎缩，双腿无力难以行走", true, false, false)
+	if err != nil || len(relations) != 1 {
+		t.Fatalf("relations=%#v err=%v", relations, err)
+	}
+	relation := relations[0]
+	if relation.Object != "王奶奶" || relation.Mediator != "长期卧床" || relation.Property != "肌肉萎缩" || relation.Result != "双腿无力" {
+		t.Fatalf("relation=%+v", relation)
+	}
+	if relation.Quality == nil || !relation.Quality.TupleValid || len(relation.EvidenceSpans) < 4 {
+		t.Fatalf("audit quality=%+v spans=%+v", relation.Quality, relation.EvidenceSpans)
+	}
+}
+
+func TestGenericCausalExtractionHandlesSecondEdgeTrigger(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, _, err := extractor.ExtractWithExecution(context.Background(), "刘奶奶高血压未控制，脑血管压力增高引发脑卒中", true, false, false)
+	if err != nil || len(relations) != 1 {
+		t.Fatalf("relations=%#v err=%v", relations, err)
+	}
+	relation := relations[0]
+	if relation.Mediator != "高血压未控制" || relation.Property != "脑血管压力增高" || relation.Result != "脑卒中" {
+		t.Fatalf("relation=%+v", relation)
+	}
+}
