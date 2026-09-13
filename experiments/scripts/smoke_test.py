@@ -91,6 +91,14 @@ def fixture_smoke() -> int:
     return 0
 
 
+def write_json_report(path: Path | None, payload: dict) -> None:
+    """Write a redacted smoke report, including failed early exits."""
+    if path is None:
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run non-destructive authenticated API smoke checks.")
     parser.add_argument("--quick", action="store_true", help="accepted for runner compatibility; all checks are bounded")
@@ -101,21 +109,21 @@ def main() -> int:
 
     if args.mode == "fixture":
         result = fixture_smoke()
-        if args.json_output:
-            args.json_output.parent.mkdir(parents=True, exist_ok=True)
-            args.json_output.write_text(json.dumps({"mode": "fixture", "passed": result == 0}, indent=2) + "\n", encoding="utf-8")
+        write_json_report(args.json_output, {"mode": "fixture", "passed": result == 0})
         return result
 
     evaluator = BaseEvaluator(args.base_url)
     healthy, health_message = evaluator.check_service_health()
     if not healthy:
         print(f"[FAIL] health: {health_message}")
+        write_json_report(args.json_output, {"mode": "live", "base_url": args.base_url, "passed": False, "failure": "health", "message": health_message, "checks": []})
         return 1
     print(f"[PASS] health: {health_message}")
 
     auth = evaluator.authenticate_from_env()
     if not auth.is_valid_business_response():
         print(f"[FAIL] authentication: {auth.error_message}")
+        write_json_report(args.json_output, {"mode": "live", "base_url": args.base_url, "passed": False, "failure": "authentication", "error_type": auth.error_type, "message": auth.error_message, "checks": []})
         return 1
     print("[PASS] authentication: JWT acquired from environment credentials")
 
@@ -130,7 +138,13 @@ def main() -> int:
         "causal": evaluator.call_api(
             "POST",
             "/api/v1/causal/extract",
-            {"text": "Medication omission caused elevated blood pressure.", "use_llm": False, "min_confidence": 0.5},
+            {
+                "text": "Medication omission caused elevated blood pressure.",
+                "use_rules": True,
+                "use_pmi": False,
+                "use_llm": False,
+                "min_confidence": 0.5,
+            },
             headers,
         ),
         "retrieval": evaluator.call_api(
@@ -158,8 +172,7 @@ def main() -> int:
         report_rows.append({"name": name, "passed": basic and contract, "http_status": response.http_status, "latency_ms": response.latency_ms, "error_type": response.error_type, "error": response.error_message})
     print(f"Summary: {sum(passed)}/{len(passed)} checks passed; no destructive request was issued.")
     if args.json_output:
-        args.json_output.parent.mkdir(parents=True, exist_ok=True)
-        args.json_output.write_text(json.dumps({"mode": "live", "base_url": args.base_url, "passed": all(passed), "checks": report_rows}, indent=2) + "\n", encoding="utf-8")
+        write_json_report(args.json_output, {"mode": "live", "base_url": args.base_url, "passed": all(passed), "checks": report_rows})
     return 0 if all(passed) else 1
 
 
