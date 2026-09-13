@@ -199,16 +199,24 @@ func (ee *EntityExtractor) AttachAuditEvidence(relations []CausalRelation, execu
 
 func matchingRuleEvidence(relation CausalRelation, rules []RuleEvidence) []RuleEvidence {
 	matched := make([]RuleEvidence, 0, len(rules))
-	condition := strings.ToLower(relation.Mediator)
-	if condition == "" {
-		condition = strings.ToLower(relation.Property)
-	}
-	effect := strings.ToLower(relation.Property)
-	if effect == "" {
-		effect = strings.ToLower(relation.Result)
-	}
+	conditions := []string{strings.ToLower(relation.Mediator), strings.ToLower(relation.Property)}
+	effects := []string{strings.ToLower(relation.Property), strings.ToLower(relation.Result)}
 	for _, rule := range rules {
-		if strings.Contains(condition, strings.ToLower(rule.Condition)) && strings.Contains(effect+strings.ToLower(relation.Result), strings.ToLower(rule.Effect)) {
+		conditionMatched := false
+		effectMatched := false
+		for _, condition := range conditions {
+			if condition != "" && strings.Contains(condition, strings.ToLower(rule.Condition)) {
+				conditionMatched = true
+				break
+			}
+		}
+		for _, effect := range effects {
+			if effect != "" && strings.Contains(effect, strings.ToLower(rule.Effect)) {
+				effectMatched = true
+				break
+			}
+		}
+		if conditionMatched && effectMatched {
 			matched = append(matched, rule)
 		}
 	}

@@ -35,6 +35,18 @@ func TestExtractWithExecutionRecordsRulesFallback(t *testing.T) {
 	}
 }
 
+func TestMatchingRuleEvidenceIncludesBothCausalEdges(t *testing.T) {
+	relation := CausalRelation{Mediator: "服用降压药", Property: "体位性低血压", Result: "跌倒"}
+	rules := []RuleEvidence{
+		{ID: "rule_001", Condition: "降压药", Effect: "体位性低血压"},
+		{ID: "rule_002", Condition: "体位性低血压", Effect: "跌倒"},
+	}
+	matched := matchingRuleEvidence(relation, rules)
+	if len(matched) != 2 || matched[0].ID != "rule_001" || matched[1].ID != "rule_002" {
+		t.Fatalf("matched rules = %#v, want both causal edges", matched)
+	}
+}
+
 func TestParseLLMExtractionResultsAcceptsFencedEnvelopeAndAliases(t *testing.T) {
 	results, err := parseLLMExtractionResults("```json\n{\"relations\":[{\"O\":\"张奶奶\",\"C\":\"服用降压药后\",\"P\":\"体位性低血压\",\"R\":\"滑倒\",\"confidence\":\"0.87\",\"evidence\":\"服药后出现低血压并滑倒\"}]}\n```")
 	if err != nil {
