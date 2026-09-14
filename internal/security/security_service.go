@@ -73,6 +73,16 @@ type ScanResult struct {
 	Metadata         map[string]interface{} // 🆕 额外的元数据（如多层检测信息）
 }
 
+// MultiLayerSecurityConfiguration is the service-level audit snapshot. It
+// explicitly distinguishes an enabled detector from a request that actually
+// reached the multi-layer path (which may fall back on an error).
+type MultiLayerSecurityConfiguration struct {
+	Enabled      bool `json:"enabled"`
+	PCCMEnabled  bool `json:"pccm_enabled"`
+	CASIAEnabled bool `json:"casia_enabled"`
+	EarlyStop    bool `json:"early_stop"`
+}
+
 // NewSecurityService 创建安全服务
 func NewSecurityService(configPath string, auditLogPath string) (*SecurityService, error) {
 	detector := NewDetector()
@@ -131,7 +141,9 @@ func NewSecurityService(configPath string, auditLogPath string) (*SecurityServic
 			DetectionsByType: make(map[SensitiveType]int64),
 		},
 		alertHandlers: make([]AlertHandler, 0),
-		useMultiLayer: getSecurityEnvAsBool("SECURITY_ENABLE_MULTI_LAYER", false),
+		// The protected input path must use the same configured detector stack as
+		// the competition console. Operators can still explicitly disable it.
+		useMultiLayer: getSecurityEnvAsBool("SECURITY_ENABLE_MULTI_LAYER", true),
 	}, nil
 }
 
@@ -212,6 +224,12 @@ func (s *SecurityService) ScanContent(ctx context.Context, sessionID, userID, co
 			// 如果多层检测失败，回退到单层检测
 			logger.Infof("多层检测失败，回退到单层检测: %v", err)
 			sensitiveInfos = s.detector.Detect(content)
+			result.Metadata = map[string]interface{}{
+				"multi_layer_used":     false,
+				"multi_layer_fallback": "single_layer",
+				"multi_layer_error":    err.Error(),
+				"configuration":        s.GetMultiLayerConfiguration(),
+			}
 		} else {
 			// 转换多层检测结果为SensitiveInfo格式
 			sensitiveInfos = make([]SensitiveInfo, 0, len(fusionResult.FinalItems))
@@ -339,6 +357,25 @@ func (s *SecurityService) ScanContent(ctx context.Context, sessionID, userID, co
 
 	result.ScanTime = time.Since(startTime)
 	return result, nil
+}
+
+// GetMultiLayerConfiguration returns the effective service configuration for
+// API audit output. It is safe to call while scans are running.
+func (s *SecurityService) GetMultiLayerConfiguration() MultiLayerSecurityConfiguration {
+	if s == nil {
+		return MultiLayerSecurityConfiguration{}
+	}
+	s.mu.RLock()
+	enabled := s.useMultiLayer
+	s.mu.RUnlock()
+	configuration := MultiLayerSecurityConfiguration{Enabled: enabled}
+	if s.multiLayerDetector != nil {
+		layerConfiguration := s.multiLayerDetector.GetConfiguration()
+		configuration.PCCMEnabled = layerConfiguration.PCCMEnabled
+		configuration.CASIAEnabled = layerConfiguration.CASIAEnabled
+		configuration.EarlyStop = layerConfiguration.EarlyStop
+	}
+	return configuration
 }
 
 // updateStats 更新统计信息

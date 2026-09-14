@@ -168,18 +168,10 @@ func (d *HomophoneDetector) Detect(text string) (bool, float64, string) {
 		d.initHomophoneMap()
 	}
 
-	// 检测是否包含数字的同音字
-	homophoneCount := 0
-	for _, ch := range text {
-		if _, exists := d.homophoneMap[ch]; exists {
-			homophoneCount++
-		}
-	}
-
-	// 🔥 降低阈值：只要有1个同音字就检测
-	// 修改前：homophoneCount >= 3
-	// 修改后：homophoneCount >= 1
-	if homophoneCount >= 1 {
+	// A single Chinese numeral is ordinary care language ("一片药",
+	// "两次测量"). Require a contiguous run of at least three numeral-like
+	// characters before treating it as an obfuscated identifier.
+	if longestMappedRun(text, d.homophoneMap) >= 3 {
 		confidence := 0.75
 		return true, confidence, "homophone_substitution"
 	}
@@ -223,26 +215,36 @@ type ChineseNumberDetector struct{}
 func (d *ChineseNumberDetector) Detect(text string) (bool, float64, string) {
 	// 检测是否包含中文数字
 	chineseNumbers := []rune{'零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'}
-	chineseCount := 0
-
-	for _, ch := range text {
-		for _, cn := range chineseNumbers {
-			if ch == cn {
-				chineseCount++
-				break
-			}
-		}
+	chineseMap := make(map[rune]rune, len(chineseNumbers))
+	for _, ch := range chineseNumbers {
+		// 十 is a sequence marker, but mapping it to itself still lets it
+		// participate in suspicious runs without changing normalization.
+		chineseMap[ch] = ch
 	}
-
-	// 🔥 降低阈值：只要有1个中文数字就检测
-	// 修改前：chineseCount >= 5
-	// 修改后：chineseCount >= 1
-	if chineseCount >= 1 {
+	if longestMappedRun(text, chineseMap) >= 3 {
 		confidence := 0.7
 		return true, confidence, "chinese_number"
 	}
 
 	return false, 0.0, ""
+}
+
+// longestMappedRun returns the longest contiguous run of characters in the
+// supplied map. Contiguity is intentional: isolated numerals in prose should
+// remain normal text, while a phone/ID-like sequence is still detected.
+func longestMappedRun(text string, mapped map[rune]rune) int {
+	longest, current := 0, 0
+	for _, ch := range text {
+		if _, ok := mapped[ch]; ok {
+			current++
+			if current > longest {
+				longest = current
+			}
+			continue
+		}
+		current = 0
+	}
+	return longest
 }
 
 func (d *ChineseNumberDetector) Normalize(text string) string {

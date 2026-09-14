@@ -35,13 +35,21 @@ func inputSecurityDecision(inputRedacted, inputNormalized bool) (string, string)
 }
 
 func newSecurityExecutionEvidence(securityService *security.SecurityService) gin.H {
-	return gin.H{
+	evidence := gin.H{
 		"asdf_checked":     securityService != nil,
 		"input_normalized": false,
 		"multi_layer_used": false,
 		"pccm_enabled":     false,
 		"casia_enabled":    false,
 	}
+	if securityService != nil {
+		configuration := securityService.GetMultiLayerConfiguration()
+		evidence["multi_layer_enabled"] = configuration.Enabled
+		evidence["pccm_enabled"] = configuration.PCCMEnabled
+		evidence["casia_enabled"] = configuration.CASIAEnabled
+		evidence["early_stop"] = configuration.EarlyStop
+	}
+	return evidence
 }
 
 // HandleSecurityInputEvaluation evaluates the same deterministic input guards
@@ -83,8 +91,10 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 	sensitiveTypes := make([]string, 0)
 	// Resolve the service before creating execution evidence so the response
 	// truthfully reports whether ASDF and multi-layer scanning were available.
-	var securityService *security.SecurityService
-	if contextService != nil {
+	// Prefer the handler's injected service. The global chat service is kept as
+	// a compatibility fallback, but must not hide the route's actual config.
+	securityService := h.securityService
+	if securityService == nil && contextService != nil {
 		securityService = contextService.GetSecurityService()
 	}
 	securityExecution := newSecurityExecutionEvidence(securityService)
@@ -92,13 +102,14 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 	// Match ChatHandler's pre-generation order without persisting a message,
 	// retrieving memory, or invoking the language model.
 	if securityService != nil {
-		normalized, adversarial, types, _ := securityService.DefendAndNormalize(message)
+		normalized, adversarial, types, asdfConfidence := securityService.DefendAndNormalize(message)
 		if adversarial {
 			message = normalized
 			attackTypes = append(attackTypes, types...)
 			warnings = append(warnings, "asdf_normalized")
 			inputNormalized = normalized != originalMessage
 			securityExecution["input_normalized"] = inputNormalized
+			securityExecution["asdf_confidence"] = asdfConfidence
 		}
 	}
 
@@ -138,6 +149,17 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 				if configuration, ok := scan.Metadata["configuration"].(security.MultiLayerConfiguration); ok {
 					securityExecution["pccm_enabled"] = configuration.PCCMEnabled
 					securityExecution["casia_enabled"] = configuration.CASIAEnabled
+				}
+				if configuration, ok := scan.Metadata["configuration"].(security.MultiLayerSecurityConfiguration); ok {
+					securityExecution["multi_layer_enabled"] = configuration.Enabled
+					securityExecution["pccm_enabled"] = configuration.PCCMEnabled
+					securityExecution["casia_enabled"] = configuration.CASIAEnabled
+					securityExecution["early_stop"] = configuration.EarlyStop
+				}
+				for _, field := range []string{"layers_used", "final_confidence", "conflicts_resolved", "multi_layer_fallback", "multi_layer_error"} {
+					if value, exists := scan.Metadata[field]; exists {
+						securityExecution[field] = value
+					}
 				}
 			}
 			if len(scan.SensitiveInfos) > 0 {

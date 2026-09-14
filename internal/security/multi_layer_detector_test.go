@@ -127,6 +127,17 @@ func TestConfigureMultiLayerAlgorithmsUsesConfiguredSwitches(t *testing.T) {
 	}
 }
 
+func TestSecurityServiceConfigurationIncludesEnabledPath(t *testing.T) {
+	service := &SecurityService{
+		multiLayerDetector: NewMultiLayerDetector("http://localhost:11434", "qwen2.5:3b"),
+		useMultiLayer:      true,
+	}
+	configuration := service.GetMultiLayerConfiguration()
+	if !configuration.Enabled || !configuration.PCCMEnabled || !configuration.CASIAEnabled {
+		t.Fatalf("configuration = %+v, want enabled CASIA/PCCM path", configuration)
+	}
+}
+
 // TestLayerPerformance 测试各层性能
 func TestLayerPerformance(t *testing.T) {
 	detector := NewMultiLayerDetector("http://localhost:11434", "qwen2.5:7b")
