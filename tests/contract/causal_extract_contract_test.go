@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 )
@@ -12,6 +13,10 @@ import (
 // TestCausalExtractContract 最小契约测试：用固定因果样本验证API返回非空因果链
 func TestCausalExtractContract(t *testing.T) {
 	t.Log("🧪 [契约测试] 因果推理API最小契约测试")
+	token := os.Getenv("EVAL_AUTH_TOKEN")
+	if token == "" {
+		t.Skip("受保护契约测试需要 EVAL_AUTH_TOKEN；使用 experiments/scripts/smoke_test.py 执行环境登录")
+	}
 
 	// 1. 构造请求
 	payload := map[string]interface{}{
@@ -33,6 +38,7 @@ func TestCausalExtractContract(t *testing.T) {
 	}
 
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
+	req.Header.Set("Authorization", "Bearer "+token)
 
 	client := &http.Client{Timeout: 60 * time.Second}
 	resp, err := client.Do(req)

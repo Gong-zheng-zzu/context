@@ -10,6 +10,8 @@ import (
 
 // 简单的API测试
 func TestSessionManagementAPI(t *testing.T) {
+	t.Skip("占位集成测试：会话处理器尚未在该测试中接入；受保护 API 契约由 experiments/scripts/smoke_test.py 覆盖")
+
 	// 创建请求
 	requestBody := `{"action":"create"}`
 	req, err := http.NewRequest("POST", "/api/mcp_context_keeper_session_management", strings.NewReader(requestBody))

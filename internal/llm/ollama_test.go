@@ -2,9 +2,17 @@ package llm
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"time"
 )
+
+func skipIfOllamaModelUnavailable(t *testing.T, err error) {
+	t.Helper()
+	if err != nil && strings.Contains(strings.ToLower(err.Error()), "model") && strings.Contains(strings.ToLower(err.Error()), "not found") {
+		t.Skipf("Ollama model is not installed: %v", err)
+	}
+}
 
 func TestOllamaKeepAliveDefaultsWarmAndSupportsOverride(t *testing.T) {
 	t.Setenv("OLLAMA_KEEP_ALIVE", "")
@@ -51,6 +59,7 @@ func TestOllamaLocalClient(t *testing.T) {
 
 	resp, err := client.Complete(ctx, req)
 	if err != nil {
+		skipIfOllamaModelUnavailable(t, err)
 		t.Fatalf("Failed to complete request: %v", err)
 	}
 
@@ -116,6 +125,7 @@ func TestOllamaModelSwitching(t *testing.T) {
 
 			resp, err := client.Complete(ctx, req)
 			if err != nil {
+				skipIfOllamaModelUnavailable(t, err)
 				t.Fatalf("Failed to complete request with %s: %v", model, err)
 			}
 
