@@ -12,8 +12,12 @@ import (
 // TrendAnalysisTool 健康趋势分析工具
 type TrendAnalysisTool struct{}
 
-func (t *TrendAnalysisTool) Name() string        { return "trend_analysis" }
-func (t *TrendAnalysisTool) Description() string  { return "分析居民的健康数据趋势，支持按时间范围查询。输入格式：居民ID,数据类型,天数（如：张大爷,血压,7）" }
+func (t *TrendAnalysisTool) IsReadOnly() bool { return true }
+
+func (t *TrendAnalysisTool) Name() string { return "trend_analysis" }
+func (t *TrendAnalysisTool) Description() string {
+	return "分析居民的健康数据趋势，支持按时间范围查询。输入格式：居民ID,数据类型,天数（如：张大爷,血压,7）"
+}
 
 func (t *TrendAnalysisTool) Execute(ctx context.Context, input string) (string, error) {
 	deps := GetDeps(ctx)

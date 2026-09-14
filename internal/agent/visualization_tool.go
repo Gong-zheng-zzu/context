@@ -16,6 +16,8 @@ import (
 // VisualizationTool 数据可视化工具 - 根据用户需求生成真实的图表
 type VisualizationTool struct{}
 
+func (t *VisualizationTool) IsReadOnly() bool { return true }
+
 func (t *VisualizationTool) Name() string { return "generate_chart" }
 func (t *VisualizationTool) Description() string {
 	return "生成数据可视化图表（折线图、柱状图、饼图等）。输入JSON格式：{\"chart_type\":\"line\",\"data_query\":\"查询条件\",\"title\":\"图表标题\"}"

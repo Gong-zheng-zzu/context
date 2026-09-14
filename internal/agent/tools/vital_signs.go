@@ -12,8 +12,12 @@ import (
 // VitalSignsTool 生命体征查询工具
 type VitalSignsTool struct{}
 
-func (t *VitalSignsTool) Name() string        { return "vital_signs" }
-func (t *VitalSignsTool) Description() string  { return "查询居民的生命体征数据，包括血压、心率、体温、血氧等。输入格式：居民ID 或 最新（查询最新数据）" }
+func (t *VitalSignsTool) IsReadOnly() bool { return true }
+
+func (t *VitalSignsTool) Name() string { return "vital_signs" }
+func (t *VitalSignsTool) Description() string {
+	return "查询居民的生命体征数据，包括血压、心率、体温、血氧等。输入格式：居民ID 或 最新（查询最新数据）"
+}
 
 func (t *VitalSignsTool) Execute(ctx context.Context, input string) (string, error) {
 	deps := GetDeps(ctx)

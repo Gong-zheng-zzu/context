@@ -11,8 +11,12 @@ import (
 // MemorySearchTool 记忆检索工具
 type MemorySearchTool struct{}
 
-func (t *MemorySearchTool) Name() string        { return "memory_search" }
-func (t *MemorySearchTool) Description() string  { return "检索相关的记忆上下文，包括短期记忆、长期记忆和相关知识" }
+func (t *MemorySearchTool) IsReadOnly() bool { return true }
+
+func (t *MemorySearchTool) Name() string { return "memory_search" }
+func (t *MemorySearchTool) Description() string {
+	return "检索相关的记忆上下文，包括短期记忆、长期记忆和相关知识"
+}
 
 func (t *MemorySearchTool) Execute(ctx context.Context, input string) (string, error) {
 	deps := GetDeps(ctx)

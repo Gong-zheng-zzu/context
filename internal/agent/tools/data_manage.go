@@ -8,18 +8,17 @@ import (
 	"github.com/contextkeeper/service/internal/models"
 )
 
-// DataManageTool 数据管理工具 - 分类/整理/归档健康数据
+// DataManageTool 数据管理工具 - 生成分类/总结草稿（只读）
 type DataManageTool struct{}
 
-func (t *DataManageTool) Name() string        { return "data_manage" }
-func (t *DataManageTool) Description() string  { return "管理和整理健康数据，支持：分类（将数据按类型归类）、总结（生成健康报告摘要）、归档（将数据标记为归档）。输入格式：操作类型:内容（如：总结:张大爷本周健康数据）" }
+func (t *DataManageTool) Name() string { return "data_manage" }
+func (t *DataManageTool) Description() string {
+	return "只读整理健康数据，支持：分类（将数据按类型归类）、总结（生成健康报告摘要）。不会写入、归档或删除数据。输入格式：操作类型:内容（如：总结:张大爷本周健康数据）"
+}
+
+func (t *DataManageTool) IsReadOnly() bool { return true }
 
 func (t *DataManageTool) Execute(ctx context.Context, input string) (string, error) {
-	deps := GetDeps(ctx)
-	if deps == nil || deps.ContextService == nil {
-		return "数据管理服务不可用", nil
-	}
-
 	parts := strings.SplitN(input, ":", 2)
 	action := "总结"
 	content := input
@@ -27,16 +26,24 @@ func (t *DataManageTool) Execute(ctx context.Context, input string) (string, err
 		action = strings.TrimSpace(parts[0])
 		content = strings.TrimSpace(parts[1])
 	}
+	// Reject mutating requests before checking dependencies so an unavailable
+	// service can never turn a forbidden archive request into an ambiguous reply.
+	if action == "归档" {
+		return "", fmt.Errorf("data_manage 仅生成只读草稿，不执行归档；请由有权限的人工流程确认后操作")
+	}
+
+	deps := GetDeps(ctx)
+	if deps == nil || deps.ContextService == nil {
+		return "数据管理服务不可用", nil
+	}
 
 	switch action {
 	case "分类":
 		return t.classifyData(ctx, deps, content)
 	case "总结", "摘要":
 		return t.summarizeData(ctx, deps, content)
-	case "归档":
-		return t.archiveData(ctx, deps, content)
 	default:
-		return t.classifyData(ctx, deps, content)
+		return "", fmt.Errorf("不支持的数据整理操作: %s", action)
 	}
 }
 
@@ -59,7 +66,7 @@ func (t *DataManageTool) classifyData(ctx context.Context, deps *Deps, content s
 		"用药记录": {},
 		"饮食记录": {},
 		"活动记录": {},
-		"其他":     {},
+		"其他":   {},
 	}
 
 	allData := resp.ShortTermMemory + "\n" + resp.LongTermMemory
@@ -120,10 +127,6 @@ func (t *DataManageTool) summarizeData(ctx context.Context, deps *Deps, content 
 	}
 
 	return fmt.Sprintf("数据总结（基于检索到的记忆）：\n\n%s\n\n提示：以上是检索到的相关数据摘要，如需更详细的分析请告知。", truncateStr(allData, 500)), nil
-}
-
-func (t *DataManageTool) archiveData(ctx context.Context, deps *Deps, content string) (string, error) {
-	return fmt.Sprintf("数据归档完成：%s 已标记为归档状态。归档数据将保留在长期记忆中，但不再参与日常检索。", content), nil
 }
 
 func truncateStr(s string, maxLen int) string {

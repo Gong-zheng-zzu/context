@@ -4,11 +4,13 @@ import "time"
 
 // AgentStep 单步推理记录
 type AgentStep struct {
-	StepNumber  int           `json:"step_number"`
-	Thought     string        `json:"thought"`
+	StepNumber int `json:"step_number"`
+	// Thought, ActionInput and Observation are request-local model context. They
+	// must never be serialized as part of a public execution trace.
+	Thought     string        `json:"-"`
 	Action      string        `json:"action,omitempty"`
-	ActionInput string        `json:"action_input,omitempty"`
-	Observation string        `json:"observation,omitempty"`
+	ActionInput string        `json:"-"`
+	Observation string        `json:"-"`
 	DurationMs  time.Duration `json:"duration_ms"`
 }
 

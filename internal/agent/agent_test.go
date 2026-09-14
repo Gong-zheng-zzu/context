@@ -118,8 +118,9 @@ type mockTool struct {
 	execute func(ctx context.Context, input string) (string, error)
 }
 
-func (t *mockTool) Name() string       { return t.name }
+func (t *mockTool) Name() string        { return t.name }
 func (t *mockTool) Description() string { return "模拟工具: " + t.name }
+func (t *mockTool) IsReadOnly() bool    { return true }
 func (t *mockTool) Execute(ctx context.Context, input string) (string, error) {
 	return t.execute(ctx, input)
 }

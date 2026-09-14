@@ -15,8 +15,12 @@ type SummaryTool struct {
 	llm LLMCaller
 }
 
-func (t *SummaryTool) Name() string        { return "auto_summary" }
-func (t *SummaryTool) Description() string  { return "对健康数据进行智能总结分析，生成结构化报告。输入：总结主题或数据范围" }
+func (t *SummaryTool) IsReadOnly() bool { return true }
+
+func (t *SummaryTool) Name() string { return "auto_summary" }
+func (t *SummaryTool) Description() string {
+	return "对健康数据进行智能总结分析，生成结构化报告。输入：总结主题或数据范围"
+}
 
 func (t *SummaryTool) Execute(ctx context.Context, input string) (string, error) {
 	deps := tools.GetDeps(ctx)

@@ -9,8 +9,12 @@ import (
 // ResidentProfileTool 居民档案查询工具
 type ResidentProfileTool struct{}
 
-func (t *ResidentProfileTool) Name() string        { return "resident_profile" }
-func (t *ResidentProfileTool) Description() string  { return "查询居民的基本信息档案，包括姓名、年龄、既往病史、过敏史等" }
+func (t *ResidentProfileTool) IsReadOnly() bool { return true }
+
+func (t *ResidentProfileTool) Name() string { return "resident_profile" }
+func (t *ResidentProfileTool) Description() string {
+	return "查询居民的基本信息档案，包括姓名、年龄、既往病史、过敏史等"
+}
 
 func (t *ResidentProfileTool) Execute(ctx context.Context, input string) (string, error) {
 	deps := GetDeps(ctx)

@@ -10,8 +10,11 @@ import (
 )
 
 const (
-	maxIterations = 5
-	timeout       = 60 * time.Second
+	maxIterations       = 5
+	timeout             = 60 * time.Second
+	maxQueryBytes       = 8192
+	maxPromptBytes      = 32768
+	maxObservationBytes = 8192
 )
 
 // LLMCaller LLM调用接口（简化版，仅需GenerateResponse）
@@ -35,12 +38,20 @@ func NewOrchestrator(llm LLMCaller, tools *ToolRegistry, systemPrompt string) *O
 func (o *Orchestrator) Run(ctx context.Context, userQuery string) *AgentTrace {
 	start := time.Now()
 	trace := &AgentTrace{}
+	if len([]byte(userQuery)) > maxQueryBytes {
+		trace.Fallback = true
+		trace.FinalAnswer = fmt.Sprintf("请求内容超过 %d 字节限制，无法执行Agent操作。", maxQueryBytes)
+		trace.TotalTimeMs = time.Since(start).Milliseconds()
+		return trace
+	}
 
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
 	// 初始LLM调用
 	currentPrompt := fmt.Sprintf("%s\n\n%s", o.prompt, userQuery)
+	// history is request-local only. Never place these fields on AgentTrace.
+	history := make([]string, 0, maxIterations)
 
 	for i := 0; i < maxIterations; i++ {
 		stepStart := time.Now()
@@ -64,7 +75,6 @@ func (o *Orchestrator) Run(ctx context.Context, userQuery string) *AgentTrace {
 
 		step := AgentStep{
 			StepNumber: i + 1,
-			Thought:    parsed.Thought,
 			DurationMs: time.Since(stepStart),
 		}
 
@@ -87,9 +97,8 @@ func (o *Orchestrator) Run(ctx context.Context, userQuery string) *AgentTrace {
 
 		// 执行工具
 		step.Action = parsed.Action
-		step.ActionInput = parsed.ActionInput
 
-		log.Printf("🔧 [Agent] 第%d轮: Action=%s, Input=%s", i+1, parsed.Action, truncate(parsed.ActionInput, 100))
+		log.Printf("🔧 [Agent] 第%d轮: Action=%s", i+1, parsed.Action)
 
 		obs, err := o.tools.Execute(ctx, parsed.Action, parsed.ActionInput)
 		if err != nil {
@@ -99,24 +108,24 @@ func (o *Orchestrator) Run(ctx context.Context, userQuery string) *AgentTrace {
 			log.Printf("✅ [Agent] 工具 %s 执行成功，结果长度: %d", parsed.Action, len(obs))
 		}
 
-		step.Observation = obs
+		// Keep only a bounded observation in the next model prompt. It is not
+		// retained in the externally returned trace.
+		if len([]byte(obs)) > maxObservationBytes {
+			obs = truncate(obs, maxObservationBytes)
+		}
 		trace.Steps = append(trace.Steps, step)
 		trace.ToolCalls++
+		history = append(history, fmt.Sprintf("Action: %s\n[Observation]\n%s", parsed.Action, obs))
 
 		// 构建下一轮prompt
 		currentPrompt = fmt.Sprintf("%s\n\n%s", o.prompt, userQuery)
-		for _, s := range trace.Steps {
-			if s.Thought != "" {
-				currentPrompt += fmt.Sprintf("\n\nThought: %s", s.Thought)
-			}
-			if s.Action != "" {
-				currentPrompt += fmt.Sprintf("\nAction: %s\nActionInput: %s", s.Action, s.ActionInput)
-			}
-			if s.Observation != "" {
-				currentPrompt += fmt.Sprintf("\n\n[Observation]\n%s", s.Observation)
-			}
+		for _, item := range history {
+			currentPrompt += "\n\n" + item
 		}
 		currentPrompt += "\n\n请根据以上信息继续思考。如果已有足够信息请给出FinalAnswer。"
+		if len([]byte(currentPrompt)) > maxPromptBytes {
+			currentPrompt = truncate(currentPrompt, maxPromptBytes)
+		}
 	}
 
 	// 如果循环结束仍未给出FinalAnswer
