@@ -48,6 +48,20 @@ class ExperimentContractTest(unittest.TestCase):
         self.assertNotIn("full_system | >0.80", readme)
         self.assertNotIn("full_system | >85%", readme)
 
+    def test_linux_release_workflow_runs_clean_environment_gates(self):
+        workflow = (EXPERIMENTS.parent / ".github" / "workflows" / "competition-validation.yml").read_text(encoding="utf-8")
+        for required in (
+            "go mod verify",
+            "go vet -tags http ./...",
+            "go test -tags http ./...",
+            "python -m unittest discover -s experiments/scripts",
+            "experiments/training",
+            "docker compose config --quiet",
+            "docker compose build context-keeper",
+            "config/.env.competition.example config/.env",
+        ):
+            self.assertIn(required, workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,37 @@
+name: competition-validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  linux-release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify Go modules
+        run: go mod verify
+      - name: Run Python experiment contracts
+        run: |
+          python -m unittest discover -s experiments/scripts -p 'test_*.py'
+          python -m unittest discover -s experiments/training -p 'test_*.py'
+      - name: Run Go release checks
+        run: |
+          go vet -tags http ./...
+          go test -tags http ./...
+      - name: Prepare safe Compose configuration
+        run: cp config/.env.competition.example config/.env
+      - name: Validate Compose and build application image
+        run: |
+          docker compose config --quiet
+          docker compose build context-keeper
