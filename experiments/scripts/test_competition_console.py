@@ -36,6 +36,26 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn("live-${Date.now()}", self.console)
         self.assertIn("现场新增护理记录", self.console)
 
+    def test_console_research_agent_uses_protected_read_only_contract(self):
+        self.assertIn('id="researchTopic"', self.console)
+        self.assertIn('id="researchSourceUrl"', self.console)
+        self.assertIn('id="researchRun"', self.console)
+        self.assertIn("/api/v1/agent/execute", self.console)
+        self.assertIn("authoritative_web_search", self.console)
+        self.assertIn("authoritative_source_fetch", self.console)
+        self.assertIn("source_evidence", self.console)
+        self.assertIn("content_sha256", self.console)
+        self.assertIn("retrieved_at", self.console)
+        self.assertIn("write_applied", self.console)
+        self.assertIn("不能模拟权威来源证据", self.console)
+
+    def test_console_research_agent_fences_untrusted_sources_and_personal_data(self):
+        self.assertIn("const allowed = ['who.int', 'nhc.gov.cn', 'chinacdc.cn', 'nmpa.gov.cn']", self.console)
+        self.assertIn("parsed.protocol === 'https:'", self.console)
+        self.assertIn("不要输入护理记录、姓名、病历号、联系方式", self.console)
+        self.assertIn("不得编造", self.console)
+        self.assertIn("不得写入、归档、通知、删除或修改任何记录", self.console)
+
     def test_console_defaults_to_analysis_and_fences_destructive_scope(self):
         self.assertIn('id="persist" type="checkbox"', self.console)
         self.assertIn("persist && $('persistPhrase').value.trim() !== 'PERSIST'", self.console)
@@ -59,6 +79,7 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn("model_tier:'fixture_only'", self.console)
         self.assertIn("quality:{tuple_valid:true", self.console)
         self.assertIn("evidence_spans", self.console)
+        self.assertIn('autocomplete="off"', self.console)
 
     def test_launcher_records_safe_manifest_and_checks_mode(self):
         self.assertIn('[ValidateSet("ollama", "fixture")]', self.launcher)
