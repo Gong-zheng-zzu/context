@@ -334,33 +334,20 @@ func (engine *RetrievalIntegrationEngine) executeMultiDimensionalRetrieval(
 	return results, multiResult.EnginesUsed, nil
 }
 
-// executeLegacyRetrieval 执行传统检索
+// executeLegacyRetrieval is retained only for source compatibility with the
+// pre-HTTP prototype. It must never fabricate evidence: callers must migrate
+// to the real vector/timeline/knowledge adapters instead.
+//
+// Deprecated: the competition HTTP path must not enable legacy fallback.
 func (engine *RetrievalIntegrationEngine) executeLegacyRetrieval(
 	ctx context.Context,
 	request *IntegratedRetrievalRequest,
 	semanticResult *SemanticAnalysisResult,
 ) ([]IntegratedResult, []string, error) {
-
-	log.Printf("🔄 执行传统检索逻辑")
-
-	// TODO: 调用现有的检索逻辑
-	// 这里不修改现有代码，只是包装现有结果
-
-	// 模拟现有检索结果
-	results := []IntegratedResult{
-		{
-			ID:        "legacy_result_1",
-			Source:    "legacy",
-			Content:   "传统检索结果示例",
-			Title:     "Legacy Result",
-			Score:     0.8,
-			Relevance: 0.8,
-			Timestamp: time.Now(),
-			Metadata:  map[string]interface{}{"source": "legacy_system"},
-		},
-	}
-
-	return results, []string{"legacy"}, nil
+	_ = ctx
+	_ = request
+	_ = semanticResult
+	return nil, nil, fmt.Errorf("legacy simulated retrieval is disabled; use the real multi-source adapters")
 }
 
 // IsMultiDimensionalEnabled 检查多维度检索是否启用
