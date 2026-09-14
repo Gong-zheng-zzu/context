@@ -60,6 +60,45 @@ type WebSearchResult struct {
 	Reason        string          `json:"reason,omitempty"`
 }
 
+// PublicSourceEvidence is the only portion of a web-tool observation that may
+// be exposed by a browser-facing API. Extracted page text stays request-local.
+type PublicSourceEvidence struct {
+	Status        WebSearchStatus `json:"status"`
+	Title         string          `json:"title,omitempty"`
+	URL           string          `json:"url,omitempty"`
+	RetrievedAt   time.Time       `json:"retrieved_at"`
+	ContentSHA256 string          `json:"content_sha256,omitempty"`
+	SourceDomain  string          `json:"source_domain,omitempty"`
+	Reason        string          `json:"reason,omitempty"`
+}
+
+// PublicSourceEvidenceFromToolOutput converts an actual authoritative-tool
+// result into stable public provenance. No other tool output is eligible.
+func PublicSourceEvidenceFromToolOutput(toolName, observation string) (PublicSourceEvidence, bool) {
+	if toolName != "authoritative_web_search" {
+		return PublicSourceEvidence{}, false
+	}
+	var result WebSearchResult
+	if err := json.Unmarshal([]byte(observation), &result); err != nil || result.Status == "" {
+		return PublicSourceEvidence{}, false
+	}
+	if result.URL != "" {
+		u, err := url.Parse(result.URL)
+		if err != nil || !validSourceURL(u, authoritativeDomains) {
+			return PublicSourceEvidence{}, false
+		}
+	}
+	return PublicSourceEvidence{
+		Status:        result.Status,
+		Title:         result.Title,
+		URL:           result.URL,
+		RetrievedAt:   result.RetrievedAt,
+		ContentSHA256: result.ContentSHA256,
+		SourceDomain:  result.SourceDomain,
+		Reason:        result.Reason,
+	}, true
+}
+
 // WebSearchOption configures a client. AllowedDomains is useful for a local
 // contract test; production defaults must remain the four authoritative sets.
 type WebSearchOption func(*AuthoritativeWebSearchTool)

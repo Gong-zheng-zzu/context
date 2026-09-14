@@ -22,6 +22,9 @@ type AgentTrace struct {
 	ToolCalls   int         `json:"tool_calls"`
 	Iterations  int         `json:"iterations"`
 	Fallback    bool        `json:"fallback"`
+	// SourceEvidence contains narrowly scoped, public provenance from the
+	// authoritative-source tool. General trace serialization excludes it.
+	SourceEvidence []PublicSourceEvidence `json:"-"`
 }
 
 // ParsedLLMOutput LLM输出解析结果

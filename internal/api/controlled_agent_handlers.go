@@ -26,12 +26,13 @@ type ControlledAgentRequest struct {
 // ControlledAgentResponse never contains chain-of-thought, tool arguments,
 // observations, or a write receipt. The trace ID links this response to logs.
 type ControlledAgentResponse struct {
-	TraceID       string                 `json:"trace_id"`
-	Answer        string                 `json:"answer"`
-	Execution     *AgentExecutionSummary `json:"execution"`
-	WriteApplied  bool                   `json:"write_applied"`
-	ExecutionMode string                 `json:"execution_mode"`
-	SessionID     string                 `json:"session_id"`
+	TraceID        string                       `json:"trace_id"`
+	Answer         string                       `json:"answer"`
+	Execution      *AgentExecutionSummary       `json:"execution"`
+	SourceEvidence []agent.PublicSourceEvidence `json:"source_evidence,omitempty"`
+	WriteApplied   bool                         `json:"write_applied"`
+	ExecutionMode  string                       `json:"execution_mode"`
+	SessionID      string                       `json:"session_id"`
 }
 
 type controlledAgentRunner func(context.Context, agent.LLMCaller, *agenttools.Deps, string, string) *agent.AgentTrace
@@ -108,12 +109,13 @@ func (h *Handler) HandleControlledAgent(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, APIResponse{Success: true, Data: ControlledAgentResponse{
-		TraceID:       traceID,
-		Answer:        trace.FinalAnswer,
-		Execution:     newAgentExecutionSummary(trace),
-		WriteApplied:  false,
-		ExecutionMode: controlledAgentExecutionMode,
-		SessionID:     req.SessionID,
+		TraceID:        traceID,
+		Answer:         trace.FinalAnswer,
+		Execution:      newAgentExecutionSummary(trace),
+		SourceEvidence: trace.SourceEvidence,
+		WriteApplied:   false,
+		ExecutionMode:  controlledAgentExecutionMode,
+		SessionID:      req.SessionID,
 	}})
 }
 

@@ -107,6 +107,9 @@ func (o *Orchestrator) Run(ctx context.Context, userQuery string) *AgentTrace {
 		} else {
 			log.Printf("✅ [Agent] 工具 %s 执行成功，结果长度: %d", parsed.Action, len(obs))
 		}
+		if sourceEvidence, ok := PublicSourceEvidenceFromToolOutput(parsed.Action, obs); ok {
+			trace.SourceEvidence = append(trace.SourceEvidence, sourceEvidence)
+		}
 
 		// Keep only a bounded observation in the next model prompt. It is not
 		// retained in the externally returned trace.

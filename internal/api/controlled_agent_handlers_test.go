@@ -64,6 +64,10 @@ func TestControlledAgentEndpointReturnsReadOnlyAuditableSummary(t *testing.T) {
 					StepNumber: 1, Action: "authoritative_web_search", DurationMs: 7 * time.Millisecond,
 					Thought: "private", ActionInput: "secret URL", Observation: "private source body",
 				}},
+				SourceEvidence: []agent.PublicSourceEvidence{{
+					Status: "ok", URL: "https://www.who.int/example", SourceDomain: "www.who.int",
+					ContentSHA256: strings.Repeat("a", 64), RetrievedAt: time.Date(2026, 9, 14, 7, 0, 0, 0, time.UTC),
+				}},
 			}
 		},
 	}
@@ -97,7 +101,9 @@ func TestControlledAgentEndpointReturnsReadOnlyAuditableSummary(t *testing.T) {
 	if !strings.Contains(serialized, `"trace_id":"agent-trace-001"`) ||
 		!strings.Contains(serialized, `"write_applied":false`) ||
 		!strings.Contains(serialized, `"execution_mode":"read_only_authoritative_tools"`) ||
-		!strings.Contains(serialized, `"capability":"authoritative_source_fetch"`) {
+		!strings.Contains(serialized, `"capability":"authoritative_source_fetch"`) ||
+		!strings.Contains(serialized, `"source_evidence"`) ||
+		!strings.Contains(serialized, `"content_sha256"`) {
 		t.Fatalf("response omitted required auditable contract fields: %s", serialized)
 	}
 

@@ -46,6 +46,7 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn("source_evidence", self.console)
         self.assertIn("content_sha256", self.console)
         self.assertIn("retrieved_at", self.console)
+        self.assertIn("Array.isArray(raw) ? raw[0] : raw", self.console)
         self.assertIn("write_applied", self.console)
         self.assertIn("不能模拟权威来源证据", self.console)
 
