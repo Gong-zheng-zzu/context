@@ -15,6 +15,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/contextkeeper/service/internal/agent"
 	"github.com/contextkeeper/service/internal/config"
 	"github.com/contextkeeper/service/internal/models"
 	"github.com/contextkeeper/service/internal/security"
@@ -137,6 +138,8 @@ type Handler struct {
 	unifiedContextManager   *services.UnifiedContextManager   // 🔥 新增：统一上下文管理器
 	wideRecallService       *services.WideRecallService       // 🔥 新增：宽召回服务
 	securityService         *security.SecurityService         // 🔥 新增：安全服务
+	agentCaller             agent.LLMCaller                   // 受保护 Agent 入口的可替换调用方（契约测试使用）
+	controlledAgentRunner   controlledAgentRunner             // 受保护 Agent 入口的可替换执行器（契约测试使用）
 	startTime               time.Time
 }
 

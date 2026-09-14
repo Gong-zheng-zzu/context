@@ -259,6 +259,7 @@ type ChatResponse struct {
 type AgentExecutionStep struct {
 	StepNumber int    `json:"step_number"`
 	ToolName   string `json:"tool_name,omitempty"`
+	Capability string `json:"capability,omitempty"`
 	Status     string `json:"status"`
 	DurationMs int64  `json:"duration_ms"`
 }
@@ -286,6 +287,7 @@ func newAgentExecutionSummary(trace *agent.AgentTrace) *AgentExecutionSummary {
 		steps = append(steps, AgentExecutionStep{
 			StepNumber: step.StepNumber,
 			ToolName:   step.Action,
+			Capability: agentToolCapability(step.Action),
 			Status:     status,
 			DurationMs: step.DurationMs.Milliseconds(),
 		})
@@ -297,6 +299,21 @@ func newAgentExecutionSummary(trace *agent.AgentTrace) *AgentExecutionSummary {
 		TotalTimeMs:   trace.TotalTimeMs,
 		Fallback:      trace.Fallback,
 		ExecutionMode: "controlled_registered_tools",
+	}
+}
+
+func agentToolCapability(toolName string) string {
+	switch toolName {
+	case "memory_search":
+		return "memory_retrieval"
+	case "data_manage":
+		return "read_only_data_summary"
+	case "auto_summary":
+		return "read_only_model_summary"
+	case "authoritative_web_search":
+		return "authoritative_source_fetch"
+	default:
+		return ""
 	}
 }
 

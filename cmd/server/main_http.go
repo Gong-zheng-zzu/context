@@ -410,6 +410,11 @@ func setupRoutesAndStartServer(router *gin.Engine, handler *api.Handler, cfg *co
 		nursingRecords := protected.Group("/v1/nursing")
 		nursingRecords.POST("/records", handler.HandleNursingRecord)
 
+		// Competition Agent endpoint: JWT-protected and limited to the explicit
+		// read-only tool allowlist. It cannot persist or mutate nursing data.
+		controlledAgent := protected.Group("/v1/agent")
+		controlledAgent.POST("/execute", handler.HandleControlledAgent)
+
 		// 安全检测路由
 		securityGroup := protected.Group("/security")
 		{
