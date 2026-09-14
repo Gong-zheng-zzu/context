@@ -1,0 +1,16 @@
+name: release-guard
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  release-scope:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check competition release scope
+        run: python3 experiments/scripts/release_guard.py
+      - name: Test release guard
+        run: python3 -m unittest experiments/scripts/test_release_guard.py
