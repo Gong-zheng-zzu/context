@@ -1,0 +1,19 @@
+# RTX 2050 4 GB bounded QLoRA defaults. Weights are never committed.
+base_model: Qwen/Qwen2.5-3B-Instruct
+output_model: contextkeeper-causal-3b
+quantization: nf4
+compute_dtype: float16
+use_4bit: true
+gradient_checkpointing: true
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+max_seq_length: 768
+num_train_epochs: 3
+learning_rate: 0.0002
+seed: 20260914
+eval_strategy: steps
+eval_steps: 50
+save_steps: 50
