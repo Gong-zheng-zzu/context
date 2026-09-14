@@ -17,6 +17,11 @@ class ReadmeNavigationTest(unittest.TestCase):
         ):
             self.assertIn(required, readme)
 
+    def test_role_selection_exposes_only_verified_competition_entries(self):
+        page = (ROOT / "web" / "role_selection.html").read_text(encoding="utf-8")
+        self.assertIn("competition_portal.html?mode=fixture", page)
+        self.assertIn("competition_console.html?mode=fixture", page)
+
 
 if __name__ == "__main__":
     unittest.main()
