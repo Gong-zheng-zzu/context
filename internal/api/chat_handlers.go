@@ -1094,13 +1094,18 @@ func ChatHandler(c *gin.Context) {
 
 // runAgentMode 执行Agent模式的ReAct推理循环
 func runAgentMode(c *gin.Context, req ChatRequest, redactedMessage, retrievedMemory string, memoryCount int, sensitiveInfos []SensitiveInfoDisplay, securityWarnings []string, memoryWriteApplied bool, memoryID string) {
-	// 确定用户角色
-	role := "doctor"
-	if strings.HasPrefix(req.UserID, "caregiver_") {
-		role = "caregiver"
+	// The JWT role is authoritative. Legacy user-ID prefixes are only a
+	// compatibility fallback for callers using the generic demo login.
+	role := "caregiver"
+	if value, exists := c.Get("role"); exists {
+		if jwtRole, ok := value.(string); ok && jwtRole != "" {
+			role = jwtRole
+		}
+	} else if strings.HasPrefix(req.UserID, "doctor_") {
+		role = "doctor"
 	} else if strings.HasPrefix(req.UserID, "family_") {
 		role = "family"
-	} else if strings.HasPrefix(req.UserID, "elder_") || strings.HasPrefix(req.UserID, "admin_") {
+	} else if strings.HasPrefix(req.UserID, "elder_") {
 		role = "elder"
 	}
 
@@ -1112,15 +1117,7 @@ func runAgentMode(c *gin.Context, req ChatRequest, redactedMessage, retrievedMem
 		SessionID:      req.SessionID,
 	}
 
-	// 注册Agent工具
-	registry := agent.NewToolRegistry()
-	registry.Register(&agenttools.MemorySearchTool{})
-	registry.Register(&agenttools.VitalSignsTool{})
-	registry.Register(&agenttools.ResidentProfileTool{})
-	registry.Register(&agenttools.TrendAnalysisTool{})
-	registry.Register(&agenttools.DataManageTool{})
-	registry.Register(agent.NewSummaryTool(llmService.(agent.LLMCaller)))
-	registry.Register(agent.NewVisualizationTool())
+	registry := newControlledAgentRegistry(llmService.(agent.LLMCaller))
 
 	// 构建Agent系统提示词
 	toolDescs := registry.ToolDescriptions()
@@ -1135,26 +1132,9 @@ func runAgentMode(c *gin.Context, req ChatRequest, redactedMessage, retrievedMem
 	log.Printf("🤖 [Agent] 推理完成: %d轮, %d次工具调用, %dms, fallback=%v",
 		trace.Iterations, trace.ToolCalls, trace.TotalTimeMs, trace.Fallback)
 
-	// 存储Agent最终回复到记忆系统
-	if contextService != nil && trace.FinalAnswer != "" {
-		storeReq := models.StoreContextRequest{
-			SessionID: req.SessionID,
-			UserID:    req.UserID,
-			Content:   trace.FinalAnswer,
-			Metadata: map[string]interface{}{
-				"role":      "assistant",
-				"timestamp": time.Now().Unix(),
-				"agent":     true,
-			},
-		}
-		ctx := context.Background()
-		contextService.StoreContext(ctx, storeReq)
-
-		sessionStore := contextService.SessionStore()
-		if sessionStore != nil {
-			sessionStore.UpdateSession(req.SessionID, fmt.Sprintf("助手: %s", trace.FinalAnswer))
-		}
-	}
+	// Agent output is a reviewable draft. It is intentionally not persisted
+	// automatically: nursing-record writes, notifications and deletion require
+	// an explicit, separately authorised confirmation workflow.
 
 	// 输出过滤
 	filteredResponse := trace.FinalAnswer
@@ -1183,6 +1163,18 @@ func runAgentMode(c *gin.Context, req ChatRequest, redactedMessage, retrievedMem
 		},
 		Error: "",
 	})
+}
+
+// newControlledAgentRegistry is the allowlist for the HTTP competition path.
+// Every registered tool is read-only and produces evidence or a review draft.
+func newControlledAgentRegistry(caller agent.LLMCaller) *agent.ToolRegistry {
+	registry := agent.NewToolRegistry()
+	registry.SetAllowlist("memory_search", "data_manage", "auto_summary", "authoritative_web_search")
+	registry.Register(&agenttools.MemorySearchTool{})
+	registry.Register(&agenttools.DataManageTool{})
+	registry.Register(agent.NewSummaryTool(caller))
+	registry.Register(agent.NewAuthoritativeWebSearchTool())
+	return registry
 }
 
 // buildHealthAssistantPrompt 构建养老院护理助手的系统提示词（根据用户角色）
