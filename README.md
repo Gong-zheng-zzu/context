@@ -16,6 +16,7 @@ Invoke-WebRequest http://127.0.0.1:8088/health
 
 - 在线模式：`http://127.0.0.1:8088/web/competition_console.html?mode=ollama`
 - 离线夹具：直接打开 `web/competition_console.html?mode=fixture`
+- 多角色门户：`http://127.0.0.1:8088/web/competition_portal.html?mode=fixture`
 
 离线夹具只展示固定样例，不伪造真实模型或 RRF 证据。在线演示需要在本地配置认证凭据和 Ollama；凭据只通过环境变量提供，不提交到 Git。
 
@@ -33,6 +34,8 @@ powershell -File experiments/scripts/run_competition_demo.ps1 -Mode fixture
 ```
 
 正式报告只接受带数据集哈希、配置指纹、清理记录和来源审计的评测结果；在完成同数据集、同配置的三路检索对比前，不宣称 RRF 提升比例。
+
+训练准备：`experiments/training/prepare_causal_dataset.py` 生成 600/100/100 的合成 O-M-P-R 数据集，`experiments/training/qlora_config.yaml` 提供 RTX 2050 4GB 的 QLoRA 候选配置。该目录不包含模型权重；训练和导出必须在 Linux GPU 环境完成冻结集验收后再启用。
 
 ## 目录职责
 
@@ -60,4 +63,3 @@ go vet -tags http ./...
 ## 安全提示
 
 不要提交 `.env`、令牌、运行密钥、`effective.env` 或生产/私有护理数据。公开仓库中的历史实验结果仅作为可追溯材料，不能替代重新运行的正式评测。
-

@@ -14,6 +14,8 @@ class ReadmeNavigationTest(unittest.TestCase):
             "experiments/scripts/smoke_test.py",
             "不得生成伪造结果",
             "effective.env",
+            "competition_portal.html?mode=fixture",
+            "experiments/training/prepare_causal_dataset.py",
         ):
             self.assertIn(required, readme)
 
