@@ -1357,6 +1357,35 @@ func (h *Handler) updateSessionActivity(sessionID string) {
 	}
 }
 
+func isSessionScopedMCPTool(name string) bool {
+	switch name {
+	case "associate_file", "record_edit", "retrieve_context", "programming_context":
+		return true
+	default:
+		return false
+	}
+}
+
+func authenticatedUserID(c *gin.Context) string {
+	value, ok := c.Get("user_id")
+	if !ok {
+		return ""
+	}
+	userID, _ := value.(string)
+	return strings.TrimSpace(userID)
+}
+
+func (h *Handler) authorizeMCPToolSession(c *gin.Context, sessionID string) error {
+	userID := authenticatedUserID(c)
+	if userID == "" {
+		return fmt.Errorf("missing authenticated user")
+	}
+	if h.contextService == nil || h.contextService.SessionStore() == nil {
+		return fmt.Errorf("session ownership service unavailable")
+	}
+	return ensureProtectedSessionOwner(h.contextService.SessionStore(), sessionID, userID)
+}
+
 // handleMCPToolCall 处理MCP工具调用通用接口
 func (h *Handler) HandleMCPToolCall(c *gin.Context) {
 	var request struct {
@@ -1383,6 +1412,35 @@ func (h *Handler) HandleMCPToolCall(c *gin.Context) {
 
 	// 记录工具调用请求
 	log.Printf("[MCP工具调用] 工具: %s, 参数: %+v", request.Params.Name, request.Params.Arguments)
+
+	// All session-scoped tools share the same ownership boundary as their
+	// versioned HTTP endpoints. This protects the generic JSON-RPC route from
+	// cross-user access when a caller supplies another user's session ID.
+	if isSessionScopedMCPTool(request.Params.Name) {
+		sessionID, ok := request.Params.Arguments["sessionId"].(string)
+		if !ok || strings.TrimSpace(sessionID) == "" {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"jsonrpc": "2.0",
+				"id":      request.ID,
+				"error": gin.H{
+					"code":    -32602,
+					"message": "缺少必要参数或参数类型错误",
+				},
+			})
+			return
+		}
+		if err := h.authorizeMCPToolSession(c, sessionID); err != nil {
+			c.JSON(http.StatusForbidden, gin.H{
+				"jsonrpc": "2.0",
+				"id":      request.ID,
+				"error": gin.H{
+					"code":    -32003,
+					"message": "无权访问该会话",
+				},
+			})
+			return
+		}
+	}
 
 	// 🔥 自动更新会话活跃时间（在工具执行前）
 	if sessionId, ok := request.Params.Arguments["sessionId"].(string); ok && sessionId != "" {
@@ -1527,6 +1585,7 @@ func (h *Handler) HandleMCPToolCall(c *gin.Context) {
 		internalReq := models.RetrieveContextRequest{
 			SessionID:       sessionId,
 			Query:           query,
+			UserID:          authenticatedUserID(c),
 			ProjectAnalysis: projectAnalysis, // 🆕 传递工程分析结果
 		}
 

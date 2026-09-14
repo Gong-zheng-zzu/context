@@ -24,6 +24,19 @@ func TestEnsureProtectedSessionOwner(t *testing.T) {
 	}
 }
 
+func TestSessionScopedMCPToolAllowlist(t *testing.T) {
+	for _, name := range []string{"associate_file", "record_edit", "retrieve_context", "programming_context"} {
+		if !isSessionScopedMCPTool(name) {
+			t.Fatalf("%q must require session ownership", name)
+		}
+	}
+	for _, name := range []string{"tools/list", "unknown", "health"} {
+		if isSessionScopedMCPTool(name) {
+			t.Fatalf("%q must not be classified as a session-scoped tool", name)
+		}
+	}
+}
+
 func TestIsClinicalFactQuery(t *testing.T) {
 	if !isClinicalFactQuery("王奶奶今天服用降压药了吗？") {
 		t.Fatal("expected medication status question to require a record")
