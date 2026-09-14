@@ -297,7 +297,7 @@ func isNegatedAt(source string, offset int) bool {
 		prefix = prefix[len(prefix)-8:]
 	}
 	context := string(prefix)
-	for _, marker := range []string{"否认", "未见", "未发生", "没有", "无", "排除", "未"} {
+	for _, marker := range []string{"否认", "未见", "未发生", "未服用", "未使用", "没有", "无", "排除"} {
 		if strings.Contains(context, marker) {
 			return true
 		}
@@ -307,7 +307,7 @@ func isNegatedAt(source string, offset int) bool {
 
 func hasNegatedCausalMention(text string, rules []*MedicalRule) bool {
 	n := normalizeForLookup(text)
-	for _, marker := range []string{"否认", "未见", "未发生", "没有", "排除"} {
+	for _, marker := range []string{"否认", "未见", "未发生", "未服用", "未使用", "没有", "排除"} {
 		pos := strings.Index(n, marker)
 		if pos < 0 {
 			continue
@@ -709,9 +709,6 @@ func (ee *EntityExtractor) extractWithRules(text string) ([]CausalRelation, erro
 		}
 	}
 	sort.Slice(matchedRules, func(i, j int) bool { return matchedRules[i].ID < matchedRules[j].ID })
-	if hasNegatedCausalMention(text, matchedRules) {
-		return []CausalRelation{}, nil
-	}
 	object := detectPatient(text)
 	used := make(map[string]bool)
 	for _, first := range matchedRules {
@@ -719,7 +716,10 @@ func (ee *EntityExtractor) extractWithRules(text string) ([]CausalRelation, erro
 			if first.ID == second.ID || !termsOverlap(first.Effect, second.Condition, second.Keywords) {
 				continue
 			}
-			if isNegatedAt(text, findTermOffset(text, first.Keywords)) || isNegatedAt(text, findTermOffset(text, second.Keywords)) {
+			// Negation is evaluated at the matched clinical span rather than at
+			// document level. A historical denial of one medication must not
+			// suppress a later, independently evidenced causal chain.
+			if findUnnegatedTermOffset(text, first.Keywords) < 0 || findUnnegatedTermOffset(text, second.Keywords) < 0 {
 				continue
 			}
 			key := first.ID + ":" + second.ID
@@ -738,11 +738,14 @@ func (ee *EntityExtractor) extractWithRules(text string) ([]CausalRelation, erro
 	}
 	if len(relations) == 0 {
 		for _, rule := range matchedRules {
-			if isNegatedAt(text, findTermOffset(text, rule.Keywords)) {
+			if findUnnegatedTermOffset(text, rule.Keywords) < 0 {
 				continue
 			}
 			property := observedTerm(text, rule.Effect, rule.Keywords)
 			result := observedResultAfterProperty(text, property, "", nil)
+			if result == "" || normalizeForLookup(property) == normalizeForLookup(result) {
+				continue
+			}
 			relation := CausalRelation{Object: object, Mediator: contextualMediator(text, rule.Keywords), Property: property, Result: result, RuleConfidence: rule.Confidence, Evidence: []string{text}, Timestamp: time.Now()}
 			relation.Confidence = rule.Confidence
 			relation.EvidenceSpans = spansForRelation(text, relation)
@@ -800,7 +803,7 @@ func extractGenericCausalRelation(text string) (CausalRelation, bool) {
 			property := normalizeCausalTerm(candidateProperty, "property")
 			result := normalizeCausalTerm(rest, "result")
 			if mediator != "" && property != "" && result != "" && normalizeForLookup(property) != normalizeForLookup(result) {
-				return CausalRelation{Object: object, Mediator: mediator, Property: property, Result: result, RuleConfidence: 0.82, Evidence: []string{text}, Timestamp: time.Now()}, true
+				return validatedGenericCausalRelation(text, CausalRelation{Object: object, Mediator: mediator, Property: property, Result: result, RuleConfidence: 0.82, Evidence: []string{text}, Timestamp: time.Now()})
 			}
 		}
 	}
@@ -841,7 +844,38 @@ func extractGenericCausalRelation(text string) (CausalRelation, bool) {
 	if property == "" || result == "" || normalizeForLookup(property) == normalizeForLookup(result) {
 		return CausalRelation{}, false
 	}
-	return CausalRelation{Object: object, Mediator: mediator, Property: property, Result: result, RuleConfidence: 0.82, Evidence: []string{text}, Timestamp: time.Now()}, true
+	return validatedGenericCausalRelation(text, CausalRelation{Object: object, Mediator: mediator, Property: property, Result: result, RuleConfidence: 0.82, Evidence: []string{text}, Timestamp: time.Now()})
+}
+
+// validatedGenericCausalRelation keeps the catalogue-independent extractor
+// conservative. Generic candidates must be backed by unnegated source spans
+// in causal order; otherwise callers receive no relation instead of a guessed
+// mechanism or outcome.
+func validatedGenericCausalRelation(text string, relation CausalRelation) (CausalRelation, bool) {
+	for _, value := range []string{relation.Mediator, relation.Property, relation.Result} {
+		if containsExplicitNegation(value) {
+			return CausalRelation{}, false
+		}
+	}
+	positions := []int{
+		findUnnegatedTermOffset(text, []string{relation.Mediator}),
+		findUnnegatedTermOffset(text, []string{relation.Property}),
+		findUnnegatedTermOffset(text, []string{relation.Result}),
+	}
+	if positions[0] < 0 || positions[1] < 0 || positions[2] < 0 || positions[0] >= positions[1] || positions[1] >= positions[2] {
+		return CausalRelation{}, false
+	}
+	return relation, true
+}
+
+func containsExplicitNegation(value string) bool {
+	normalized := normalizeForLookup(value)
+	for _, marker := range []string{"否认", "未见", "未发生", "没有", "排除"} {
+		if strings.Contains(normalized, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 func normalizeCausalTerm(value, field string) string {
@@ -914,10 +948,36 @@ func findTermOffset(text string, terms []string) int {
 	return best
 }
 
+// findUnnegatedTermOffset returns the earliest occurrence not covered by a
+// local negation cue. It intentionally examines every occurrence so a denied
+// historical mention does not mask a later observed condition.
+func findUnnegatedTermOffset(text string, terms []string) int {
+	n := normalizeForLookup(text)
+	best := -1
+	for _, term := range terms {
+		needle := normalizeForLookup(term)
+		if needle == "" {
+			continue
+		}
+		for start := 0; start < len(n); {
+			relative := strings.Index(n[start:], needle)
+			if relative < 0 {
+				break
+			}
+			position := start + relative
+			if !isNegatedAt(text, position) && (best < 0 || position < best) {
+				best = position
+			}
+			start = position + len(needle)
+		}
+	}
+	return best
+}
+
 func contextualMediator(text string, terms []string) string {
 	n := normalizeForLookup(text)
 	for _, term := range terms {
-		pos := strings.Index(n, normalizeForLookup(term))
+		pos := findUnnegatedTermOffset(text, []string{term})
 		if pos < 0 {
 			continue
 		}
@@ -935,19 +995,18 @@ func contextualMediator(text string, terms []string) string {
 }
 
 func observedTerm(text, preferred string, terms []string) string {
-	n := normalizeForLookup(text)
-	if preferred != "" && strings.Contains(n, normalizeForLookup(preferred)) {
+	if preferred != "" && findUnnegatedTermOffset(text, []string{preferred}) >= 0 {
 		return preferred
 	}
 	for _, group := range [][]string{{"体位性低血压", "直立性低血压", "姿势性低血压"}, {"跌倒", "滑倒", "摔倒"}} {
 		for _, term := range group {
-			if strings.Contains(n, normalizeForLookup(term)) {
+			if findUnnegatedTermOffset(text, []string{term}) >= 0 {
 				return term
 			}
 		}
 	}
 	for _, term := range terms {
-		if strings.Contains(n, normalizeForLookup(term)) {
+		if findUnnegatedTermOffset(text, []string{term}) >= 0 {
 			return term
 		}
 	}

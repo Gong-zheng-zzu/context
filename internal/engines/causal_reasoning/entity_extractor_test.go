@@ -164,6 +164,47 @@ func TestRuleExtractionRejectsNegatedCause(t *testing.T) {
 	}
 }
 
+func TestRuleExtractionDoesNotLetHistoricalNegationSuppressLaterObservedChain(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	text := "患者否认既往服用降压药。今日服用安眠药后出现意识模糊，随后跌倒。"
+	relations, _, err := extractor.ExtractWithExecution(context.Background(), text, true, false, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(relations) != 1 {
+		t.Fatalf("relations=%#v, want exactly the later observed chain", relations)
+	}
+	relation := relations[0]
+	if relation.Mediator != "服用安眠药" || relation.Property != "意识模糊" || relation.Result != "跌倒" {
+		t.Fatalf("relation=%+v, want observed sedative chain", relation)
+	}
+	if relation.Quality == nil || !relation.Quality.TupleValid || !relation.Quality.NegationChecked {
+		t.Fatalf("quality=%+v, want verified non-negated chain", relation.Quality)
+	}
+}
+
+func TestGenericCausalExtractionRejectsCandidateWhoseMediatorContainsExplicitNegation(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, _, err := extractor.ExtractWithExecution(context.Background(), "王奶奶否认长期卧床导致肌肉萎缩，双腿无力难以行走", true, false, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(relations) != 0 {
+		t.Fatalf("negated generic candidate=%+v, want no causal relation", relations)
+	}
+}
+
+func TestGenericCausalExtractionRejectsUnadministeredMedicationCandidate(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, _, err := extractor.ExtractWithExecution(context.Background(), "患者未服用抗生素导致腹泻，随后脱水", true, false, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(relations) != 0 {
+		t.Fatalf("unadministered medication candidate=%+v, want no causal relation", relations)
+	}
+}
+
 func TestRuleExtractionNormalizesSynonymChain(t *testing.T) {
 	extractor := NewEntityExtractor(nil)
 	relations, _, err := extractor.ExtractWithExecution(context.Background(), "张奶奶使用血压药后发生直立性低血压，随后滑倒", true, false, false)
