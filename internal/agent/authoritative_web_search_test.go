@@ -57,6 +57,7 @@ func TestAuthoritativeWebSearchRejectsUntrustedSourceAndPII(t *testing.T) {
 		{"non tls", WebSearchRequest{Query: "guidance", URL: "http://who.int/a"}, WebSearchInvalidSource},
 		{"phone", WebSearchRequest{Query: "请搜索 13800138000 的护理档案", URL: "https://who.int/a"}, WebSearchBlockedQuery},
 		{"record label", WebSearchRequest{Query: "查询某人的病历号", URL: "https://who.int/a"}, WebSearchBlockedQuery},
+		{"missing source URL", WebSearchRequest{Query: "pressure ulcer prevention"}, WebSearchInvalidSource},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -64,6 +65,24 @@ func TestAuthoritativeWebSearchRejectsUntrustedSourceAndPII(t *testing.T) {
 				t.Fatalf("status=%s want %s", got, tc.status)
 			}
 		})
+	}
+}
+
+func TestAuthoritativeWebSearchMissingURLDoesNotCallSearchEngine(t *testing.T) {
+	called := false
+	tool := testTool(func(*http.Request) (*http.Response, error) {
+		called = true
+		return nil, errors.New("must not call transport")
+	})
+	result := tool.Search(context.Background(), WebSearchRequest{Query: "跌倒预防指南"})
+	if result.Status != WebSearchInvalidSource {
+		t.Fatalf("status=%s", result.Status)
+	}
+	if !strings.Contains(result.Reason, "explicit sources only") {
+		t.Fatalf("reason=%q", result.Reason)
+	}
+	if called {
+		t.Fatal("missing URL must not be sent to a search engine or HTTP transport")
 	}
 }
 

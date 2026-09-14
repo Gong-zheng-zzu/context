@@ -134,6 +134,10 @@ func (t *AuthoritativeWebSearchTool) Search(ctx context.Context, req WebSearchRe
 		result.Status, result.Reason = WebSearchInvalidSource, "query is required"
 		return result
 	}
+	if strings.TrimSpace(req.URL) == "" {
+		result.Status, result.Reason = WebSearchInvalidSource, "source URL is required; this tool fetches explicit sources only and does not query search engines"
+		return result
+	}
 	u, err := url.Parse(strings.TrimSpace(req.URL))
 	if err != nil || !validSourceURL(u, t.domains) || containsPersonalData(u.RawQuery) || containsPersonalData(u.Fragment) {
 		result.Status, result.Reason = WebSearchInvalidSource, "source URL must be HTTPS and belong to an approved authority"
