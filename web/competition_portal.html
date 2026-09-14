@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>忆安智护 | 多角色护理治理门户</title>
+  <style>
+    :root { --ink:#182b3a; --muted:#647886; --line:#dbe5e9; --paper:#f4f7f8; --panel:#fff; --teal:#0b7285; --teal-dark:#075766; --ok:#237a57; --warn:#a15c12; --danger:#9c3d3d; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif; }
+    button,input,select,textarea { font:inherit; }
+    .shell { max-width:1220px; margin:0 auto; padding:24px; }
+    header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:22px; }
+    h1 { margin:0; font-size:25px; letter-spacing:.02em; } h2 { margin:0 0 12px; font-size:18px; } h3 { margin:0 0 8px; font-size:15px; }
+    .subtitle { color:var(--muted); margin-top:4px; }
+    .status { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .pill { border:1px solid var(--line); border-radius:999px; padding:4px 10px; background:#fff; color:var(--muted); white-space:nowrap; }
+    .pill.live { color:var(--ok); border-color:#a9d6c0; background:#eef9f3; } .pill.fixture { color:var(--warn); border-color:#e5c28f; background:#fff7e8; }
+    .layout { display:grid; grid-template-columns:240px 1fr; gap:18px; align-items:start; }
+    nav,.panel { background:var(--panel); border:1px solid var(--line); border-radius:8px; box-shadow:0 3px 12px rgba(23,55,66,.04); }
+    nav { padding:10px; position:sticky; top:18px; }
+    .role-button { width:100%; text-align:left; border:1px solid transparent; background:transparent; color:var(--ink); padding:12px; border-radius:6px; cursor:pointer; margin-bottom:4px; }
+    .role-button:hover,.role-button.active { background:#e9f5f6; border-color:#b9dfe3; color:var(--teal-dark); }
+    .role-button strong { display:block; font-size:15px; } .role-button small { color:var(--muted); }
+    .scope { border-top:1px solid var(--line); margin-top:10px; padding:14px 12px 4px; color:var(--muted); font-size:12px; }
+    main { min-width:0; } .panel { padding:20px; margin-bottom:18px; }
+    .panel-head { display:flex; justify-content:space-between; gap:14px; align-items:flex-start; margin-bottom:14px; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; } .metric-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .metric { border:1px solid var(--line); border-radius:6px; padding:13px; background:#fbfdfd; } .metric b { display:block; font-size:22px; margin-top:3px; }
+    label { display:block; color:var(--muted); font-size:12px; margin-bottom:5px; } input,select,textarea { width:100%; border:1px solid #cbd9de; border-radius:5px; padding:9px 10px; background:#fff; color:var(--ink); } textarea { min-height:115px; resize:vertical; }
+    .field { margin-bottom:12px; } .actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .primary,.secondary,.danger { border:0; border-radius:5px; padding:9px 14px; cursor:pointer; } .primary { background:var(--teal); color:#fff; } .primary:hover { background:var(--teal-dark); } .secondary { background:#e7f2f3; color:var(--teal-dark); } .danger { background:#f9e8e8; color:var(--danger); }
+    button:disabled { opacity:.55; cursor:not-allowed; } .notice { border-left:3px solid var(--teal); background:#edf7f8; padding:10px 12px; color:#385762; } .notice.warn { border-left-color:#cc821f; background:#fff7e8; }
+    .list { margin:0; padding:0; list-style:none; } .list li { border-top:1px solid var(--line); padding:11px 0; } .list li:first-child { border-top:0; }
+    pre { margin:0; white-space:pre-wrap; word-break:break-word; background:#13232b; color:#d8f1f2; border-radius:6px; padding:13px; max-height:300px; overflow:auto; font-size:12px; }
+    .hidden { display:none !important; } .empty { color:var(--muted); padding:20px 0; text-align:center; } .error { color:var(--danger); min-height:22px; } .login { max-width:480px; margin:8vh auto; } .login .panel { padding:28px; }
+    .redacted { color:#687b83; font-style:italic; } footer { color:var(--muted); font-size:12px; padding:4px 0 22px; }
+    @media(max-width:820px) { .layout { grid-template-columns:1fr; } nav { position:static; display:grid; grid-template-columns:repeat(2,1fr); gap:4px; } .scope { grid-column:1/-1; } .metric-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:520px) { .shell { padding:14px; } header { display:block; } .status { justify-content:flex-start; margin-top:12px; } .grid { grid-template-columns:1fr; } nav { grid-template-columns:1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="loginView" class="shell login">
+    <div class="panel">
+      <h1>忆安智护</h1><p class="subtitle">多角色护理数据治理门户</p>
+      <div class="notice" style="margin:18px 0">仅使用合成评测数据。后端 JWT 才是权限依据，浏览器不会保存密码或令牌。</div>
+      <div class="field"><label for="loginRole">登录角色</label><select id="loginRole"><option value="caregiver">护工</option><option value="doctor">医生</option><option value="family">家属</option><option value="elder">老人</option></select></div>
+      <div class="field"><label for="loginUser">演示用户 ID</label><input id="loginUser" autocomplete="username" placeholder="例如 caregiver_001"></div>
+      <div class="field"><label for="loginPassword">演示密码</label><input id="loginPassword" type="password" autocomplete="current-password"></div>
+      <div class="actions"><button id="loginButton" class="primary">安全登录</button><button id="fixtureButton" class="secondary">进入离线夹具</button></div>
+      <p id="loginError" class="error" role="alert"></p>
+    </div>
+  </div>
+
+  <div id="appView" class="shell hidden">
+    <header><div><h1>护理数据治理门户</h1><p class="subtitle">证据可追溯 · 角色最小权限 · 删除可验证</p></div><div class="status"><span id="modePill" class="pill"></span><span id="rolePill" class="pill"></span><span id="tracePill" class="pill">本次尚未请求</span><button id="logoutButton" class="secondary">退出</button></div></header>
+    <div class="layout">
+      <nav aria-label="角色视图"><button class="role-button" data-role="caregiver"><strong>护工工作台</strong><small>记录与因果证据</small></button><button class="role-button" data-role="doctor"><strong>医生工作台</strong><small>风险与审计证据</small></button><button class="role-button" data-role="family"><strong>家属视图</strong><small>最小化脱敏摘要</small></button><button class="role-button" data-role="elder"><strong>老人授权中心</strong><small>范围与删除请求</small></button><div class="scope"><b>访问边界</b><br><span id="scopeText">由服务端 JWT 角色和关系共同决定。</span></div></nav>
+      <main>
+        <section class="panel"><div class="panel-head"><div><h2 id="viewTitle">工作台</h2><p id="viewDescription" class="subtitle"></p></div><span class="pill">合成数据范围</span></div><div id="dashboardNotice" class="notice">正在读取后端授权范围...</div><div id="metrics" class="grid metric-grid" style="margin-top:14px"></div><ul id="elderList" class="list" style="margin-top:14px"></ul></section>
+
+        <section id="causalPanel" class="panel hidden"><div class="panel-head"><div><h2>护理记录证据分析</h2><p class="subtitle">规则候选、模型裁决和 O-M-P-R span 均由服务端校验。</p></div><span class="pill">默认不写入</span></div><div class="field"><label for="causalText">合成护理记录</label><textarea id="causalText">李爷爷夜间服用降压药后起身，出现头晕，存在跌倒风险。</textarea></div><div class="actions"><button id="causalButton" class="primary">分析并查看证据</button><button id="causalCopy" class="secondary">复制 JSON</button></div><p id="causalError" class="error" role="alert"></p><pre id="causalOutput" class="empty">尚未执行分析。</pre></section>
+
+        <section id="researchPanel" class="panel hidden"><div class="panel-head"><div><h2>受控权威资料研究</h2><p class="subtitle">只读 Agent 仅访问显式 HTTPS 白名单来源，不发送护理记录。</p></div><span class="pill">需人工复核</span></div><div class="grid"><div class="field"><label for="researchTopic">研究主题（不含个人信息）</label><input id="researchTopic" value="老年人跌倒预防建议" autocomplete="off"></div><div class="field"><label for="researchUrl">权威来源 URL</label><input id="researchUrl" value="https://www.who.int/news-room/fact-sheets/detail/falls" autocomplete="off"></div></div><div class="actions"><button id="researchButton" class="primary">生成只读草稿</button></div><p id="researchError" class="error" role="alert"></p><pre id="researchOutput" class="empty">尚未执行研究。</pre></section>
+
+        <section id="privacyPanel" class="panel hidden"><div class="panel-head"><div><h2>授权与删除验证</h2><p class="subtitle">仅演示隔离用户/会话的 dry-run 检查，不宣称模型遗忘。</p></div><span class="pill">跨存储审计</span></div><div class="notice warn">删除前请确认：这里只允许配置的合成评测会话，实际删除由服务端再次校验所有权。</div><div class="field" style="margin-top:14px"><label for="deleteSession">固定评测会话 ID</label><input id="deleteSession" value="eval_retrieval_test" readonly></div><div class="actions"><button id="deleteButton" class="danger">执行删除前 dry-run</button></div><p id="deleteError" class="error" role="alert"></p><pre id="deleteOutput" class="empty">尚未执行验证。</pre></section>
+        <footer>本门户不提供诊断、处方或自动通知。所有展示均来自受保护 API 或明确标识的离线合成夹具。</footer>
+      </main>
+    </div>
+  </div>
+  <script>
+    'use strict';
+    const qs = new URLSearchParams(location.search);
+    const API = (qs.get('api') || 'http://localhost:8088').replace(/\/$/, '');
+    const fixture = qs.get('mode') === 'fixture';
+    let token = ''; let serverRole = ''; let dashboard = null; let lastJSON = null;
+    const $ = id => document.getElementById(id);
+    const roleInfo = { caregiver:['护工工作台','录入合成护理记录，查看可解释因果证据。'], doctor:['医生工作台','查看风险提示、证据链和只读权威资料草稿。'], family:['家属视图','查看与关系绑定的最小化脱敏摘要。'], elder:['老人授权中心','查看自身授权范围并发起删除前验证。'] };
+    const fixtureDashboard = { role:'caregiver', role_name:'护工', user_id:'fixture_caregiver', elders:[{elder_id:'synthetic_001',name:'合成住民 A',age:78,room:'评测房 A',status:'稳定'}],alerts:[{title:'示例提醒',content:'该提醒来自离线合成夹具'}],recommendations:[],statistics:{elder_count:1,alert_count:1}};
+    function show(view) { $('loginView').classList.toggle('hidden', view !== 'login'); $('appView').classList.toggle('hidden', view === 'login'); }
+    function setMode() { $('modePill').textContent = fixture ? '离线夹具（合成）' : '实时服务'; $('modePill').className = 'pill ' + (fixture ? 'fixture' : 'live'); }
+    function setJSON(el, value) { el.textContent = JSON.stringify(value, null, 2); el.classList.remove('empty'); lastJSON = value; }
+    function fail(id, error) { $(id).textContent = '请求未完成：' + (error && error.message ? error.message : error); }
+    async function request(path, options) { const headers = Object.assign({'Content-Type':'application/json'}, (options && options.headers) || {}); if (token) headers.Authorization = 'Bearer ' + token; const r = await fetch(API + path, Object.assign({}, options, {headers})); const body = await r.json().catch(() => ({})); if (!r.ok) throw new Error(body.error || body.message || ('HTTP ' + r.status)); return body.data || body; }
+    function renderDashboard(data) { dashboard = data; serverRole = data.role || serverRole; $('rolePill').textContent = (data.role_name || serverRole || '未识别角色') + ' · ' + (data.user_id || ''); $('scopeText').textContent = serverRole === 'doctor' ? '医生：服务端关系允许的全量风险证据。' : serverRole === 'caregiver' ? '护工：仅负责关联住民，护理记录默认不持久化。' : serverRole === 'family' ? '家属：仅关联住民的脱敏摘要。' : '老人：仅本人授权范围，删除需服务端所有权校验。'; $('viewTitle').textContent = roleInfo[serverRole] ? roleInfo[serverRole][0] : '工作台'; $('viewDescription').textContent = roleInfo[serverRole] ? roleInfo[serverRole][1] : '后端角色未识别，已限制为只读。'; const stats = data.statistics || {}; $('metrics').innerHTML = ''; [['关联住民',stats.elder_count ?? (data.elders || []).length],['待处理提醒',stats.alert_count ?? (data.alerts || []).length],['建议数量',stats.recommendation_count ?? (data.recommendations || []).length],['权限状态','JWT 已校验']].forEach(x => { const d=document.createElement('div'); d.className='metric'; d.innerHTML='<span>'+x[0]+'</span><b>'+x[1]+'</b>'; $('metrics').appendChild(d); }); $('elderList').innerHTML=''; (data.elders || []).forEach(e => { const li=document.createElement('li'); const safeName = serverRole === 'family' || serverRole === 'elder' ? '授权住民（脱敏）' : (e.name || '合成住民'); li.textContent = safeName + ' · ' + (e.status || '状态受控') + ' · ' + (e.room || '区域受控'); $('elderList').appendChild(li); }); if (!(data.elders || []).length) $('elderList').innerHTML='<li class="empty">当前角色没有可展示的关联住民。</li>'; $('dashboardNotice').textContent = fixture ? '离线夹具：以下内容为合成数据，不代表服务端授权结果。' : '服务端已返回角色范围；前端不自行扩大权限。'; ['caregiver','doctor','family','elder'].forEach(role => document.querySelector('[data-role="'+role+'"]').classList.toggle('active', role === serverRole)); $('causalPanel').classList.toggle('hidden', !['caregiver','doctor'].includes(serverRole)); $('researchPanel').classList.toggle('hidden', !['caregiver','doctor'].includes(serverRole)); $('privacyPanel').classList.toggle('hidden', serverRole !== 'elder'); }
+    function approvedSourceURL(value) { try { const parsed = new URL(value); const host = parsed.hostname.toLowerCase().replace(/\.$/, ''); const allowed = ['who.int','nhc.gov.cn','chinacdc.cn','nmpa.gov.cn']; return parsed.protocol === 'https:' && allowed.some(domain => host === domain || host.endsWith('.' + domain)) ? parsed.toString() : ''; } catch (_) { return ''; } }
+    async function login() { $('loginError').textContent=''; const role=$('loginRole').value, user=$('loginUser').value.trim(), password=$('loginPassword').value; if(!user || !password) { $('loginError').textContent='请输入用户 ID 和密码。'; return; } $('loginButton').disabled=true; try { const data=await request('/api/role/login',{method:'POST',body:JSON.stringify({user_id:user,password,role,workspace_id:'default'})}); token=data.token || ''; if(!token) throw new Error('服务端未返回令牌'); $('loginPassword').value=''; serverRole=data.role || role; show('app'); setMode(); await loadDashboard(); } catch(e) { fail('loginError',e); token=''; } finally { $('loginButton').disabled=false; } }
+    async function loadDashboard() { try { renderDashboard(fixture ? fixtureDashboard : await request('/api/dashboard')); } catch(e) { fail('dashboardNotice',e); renderDashboard({role:serverRole,role_name:'未完成认证',user_id:'',elders:[],statistics:{}}); } }
+    async function runCausal() { $('causalError').textContent=''; $('causalButton').disabled=true; try { const body=fixture ? {execution:{model_tier:'fixture_only',cache_hit:false},quality:{tuple_valid:true,review_required:true},evidence_spans:[],note:'离线夹具，未调用真实模型'} : await request('/api/v1/causal/extract',{method:'POST',body:JSON.stringify({text:$('causalText').value.trim(),persist:false,use_rules:true,use_pmi:true,use_llm:true,min_confidence:.5})}); setJSON($('causalOutput'),body); $('tracePill').textContent='因果请求已完成'; } catch(e) { fail('causalError',e); } finally { $('causalButton').disabled=false; } }
+    async function runResearch() { $('researchError').textContent=''; $('researchButton').disabled=true; try { if(fixture) throw new Error('离线夹具不执行联网研究，不能模拟权威来源证据。'); const topic=$('researchTopic').value.trim(); const source=approvedSourceURL($('researchUrl').value.trim()); if(!topic) throw new Error('请输入不含个人信息的研究主题。'); if(!source) throw new Error('来源 URL 必须是 HTTPS 且属于 WHO、国家卫健委、国家疾控或国家药监局。'); const body=await request('/api/v1/agent/execute',{method:'POST',body:JSON.stringify({session_id:'eval_retrieval_test',query:'请只读获取权威来源并整理主题：'+topic+'；来源：'+source})}); setJSON($('researchOutput'),{trace_id:body.trace_id,answer:body.answer,execution:body.execution,write_applied:body.write_applied,source_evidence:body.source_evidence}); $('tracePill').textContent='研究请求已完成'; } catch(e) { fail('researchError',e); } finally { $('researchButton').disabled=false; } }
+    async function dryRunDelete() { $('deleteError').textContent=''; $('deleteButton').disabled=true; try { const id=$('deleteSession').value.trim(); if(id !== 'eval_retrieval_test') throw new Error('只允许隔离评测会话 eval_retrieval_test。'); const body=fixture ? {complete:false,mode:'offline_fixture',message:'离线夹具不执行删除'} : await request('/api/sessions/'+encodeURIComponent(id)+'?dry_run=true',{method:'DELETE'}); setJSON($('deleteOutput'),body); $('tracePill').textContent='删除验证已完成'; } catch(e) { fail('deleteError',e); } finally { $('deleteButton').disabled=false; } }
+    $('loginButton').addEventListener('click',login); $('fixtureButton').addEventListener('click',()=>{ serverRole='caregiver'; show('app'); setMode(); renderDashboard(fixtureDashboard); }); $('logoutButton').addEventListener('click',()=>{ token=''; dashboard=null; serverRole=''; $('loginPassword').value=''; show('login'); }); $('causalButton').addEventListener('click',runCausal); $('researchButton').addEventListener('click',runResearch); $('deleteButton').addEventListener('click',dryRunDelete); $('causalCopy').addEventListener('click',()=>{ if(lastJSON) navigator.clipboard?.writeText(JSON.stringify(lastJSON,null,2)); }); document.querySelectorAll('.role-button').forEach(button=>button.addEventListener('click',()=>{ if(serverRole && button.dataset.role !== serverRole) { $('dashboardNotice').textContent='角色由 JWT 决定，不能在前端切换权限。'; return; } })); if(fixture) { show('app'); setMode(); renderDashboard(fixtureDashboard); }
+  </script>
+</body>
+</html>
