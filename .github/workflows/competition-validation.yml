@@ -10,6 +10,11 @@ jobs:
   linux-release-gate:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # Test-only credentials. Production deployments must provide their own
+    # secrets through the environment and never reuse these values.
+    env:
+      JWT_SECRET: ci-only-test-secret
+      ENCRYPTION_KEY: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5

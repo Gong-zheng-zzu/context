@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"sync"
 	"testing"
@@ -963,7 +964,10 @@ func TestJWTExpiredToken(t *testing.T) {
 		}
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-		jwtSecret := []byte("test-jwt-secret")
+		jwtSecret := []byte(os.Getenv("JWT_SECRET"))
+		if len(jwtSecret) == 0 {
+			t.Fatal("JWT_SECRET must be configured by the test harness")
+		}
 		tokenString, _ := token.SignedString(jwtSecret)
 
 		_, err := middleware.ParseToken(tokenString)
@@ -988,7 +992,10 @@ func TestJWTExpiredToken(t *testing.T) {
 		}
 
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-		jwtSecret := []byte("test-jwt-secret")
+		jwtSecret := []byte(os.Getenv("JWT_SECRET"))
+		if len(jwtSecret) == 0 {
+			t.Fatal("JWT_SECRET must be configured by the test harness")
+		}
 		tokenString, _ := token.SignedString(jwtSecret)
 
 		_, err := middleware.ParseToken(tokenString)
@@ -1691,8 +1698,12 @@ func generateExpiredTokenHelper(t *testing.T) string {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	// 使用默认密钥签名
-	jwtSecret := []byte("test-jwt-secret")
+	// 使用测试进程配置的密钥签名，确保与 middleware.ParseToken 使用同一配置。
+	// CI 通过 workflow env 提供该值；本地运行时由 tests/test_main_test.go 提供。
+	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
+	if len(jwtSecret) == 0 {
+		t.Fatal("JWT_SECRET must be configured by the test harness")
+	}
 	tokenString, err := token.SignedString(jwtSecret)
 	if err != nil {
 		t.Fatalf("生成过期Token失败: %v", err)
