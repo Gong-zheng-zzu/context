@@ -3,6 +3,7 @@ package contract
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
 	"testing"
 	"time"
@@ -46,6 +47,18 @@ func TestVectorSearchContract(t *testing.T) {
 	}
 	if config.DatabaseConfig.Endpoint == "" {
 		config.DatabaseConfig.Endpoint = "http://localhost:6333"
+	}
+	// This contract exercises a real external service. Keep the default test
+	// suite deterministic when Docker/Qdrant is not running, while preserving
+	// hard failures once the service is reachable.
+	probeClient := &http.Client{Timeout: 2 * time.Second}
+	probe, probeErr := probeClient.Get(config.DatabaseConfig.Endpoint + "/collections")
+	if probeErr != nil {
+		t.Skipf("Qdrant is unavailable at %s: %v", config.DatabaseConfig.Endpoint, probeErr)
+	}
+	probe.Body.Close()
+	if probe.StatusCode >= http.StatusInternalServerError {
+		t.Fatalf("Qdrant health probe failed: HTTP %d", probe.StatusCode)
 	}
 
 	// 使用工厂创建向量存储
