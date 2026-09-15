@@ -1,8 +1,34 @@
 package security
 
 import (
+	"math"
+	"sort"
 	"strings"
+	"unicode/utf8"
 )
+
+const defaultCASIAContextWindow = 64
+
+// CASIAKeywordEvidence identifies one context feature that affected a
+// sensitive-information decision. It is deliberately metadata-only: callers
+// can audit the decision without receiving a second copy of the candidate.
+type CASIAKeywordEvidence struct {
+	Keyword string  `json:"keyword"`
+	Weight  float64 `json:"weight"`
+}
+
+// CASIAEvidence is attached to a candidate after CASIA recalibrates it.
+type CASIAEvidence struct {
+	SensitiveType    string                 `json:"sensitive_type"`
+	ContextStart     int                    `json:"context_start"`
+	ContextEnd       int                    `json:"context_end"`
+	WindowBytes      int                    `json:"window_bytes"`
+	MatchedKeywords  []CASIAKeywordEvidence `json:"matched_keywords"`
+	RawWeight        float64                `json:"raw_weight"`
+	NormalizedWeight float64                `json:"normalized_weight"`
+	BaseConfidence   float64                `json:"base_confidence"`
+	AdjustedScore    float64                `json:"adjusted_score"`
+}
 
 // ContextAwareSensitiveInfoAlgorithm 上下文感知的敏感信息识别算法
 // Context-Aware Sensitive Information Algorithm (CASIA)
@@ -64,16 +90,16 @@ func (a *ContextAwareSensitiveInfoAlgorithm) initContextKeywords() {
 
 	// 血压相关上下文
 	a.contextKeywords["blood_pressure"] = map[string]float64{
-		"血压":    1.0,
-		"高压":    0.8,
-		"低压":    0.8,
-		"收缩压":   0.9,
-		"舒张压":   0.9,
-		"测量":    0.6,
-		"体检":    0.7,
-		"比例":    -0.6, // "120/80"可能是比例而非血压
-		"分数":    -0.7,
-		"得分":    -0.6,
+		"血压":  1.0,
+		"高压":  0.8,
+		"低压":  0.8,
+		"收缩压": 0.9,
+		"舒张压": 0.9,
+		"测量":  0.6,
+		"体检":  0.7,
+		"比例":  -0.6, // "120/80"可能是比例而非血压
+		"分数":  -0.7,
+		"得分":  -0.6,
 	}
 }
 
@@ -86,57 +112,77 @@ func (a *ContextAwareSensitiveInfoAlgorithm) CalculateContextWeight(
 	sensitiveType string,
 	contextWindow int, // 上下文窗口大小（字符数）
 ) float64 {
+	return a.AnalyzeContext(text, candidateStart, candidateEnd, sensitiveType, contextWindow).NormalizedWeight
+}
+
+// AnalyzeContext calculates a deterministic, auditable context score. The
+// requested window is clipped at sentence boundaries so unrelated clauses do
+// not influence a nearby candidate merely because they fall within a fixed
+// byte radius.
+func (a *ContextAwareSensitiveInfoAlgorithm) AnalyzeContext(
+	text string,
+	candidateStart int,
+	candidateEnd int,
+	sensitiveType string,
+	contextWindow int,
+) CASIAEvidence {
+	if contextWindow <= 0 {
+		contextWindow = defaultCASIAContextWindow
+	}
+	if candidateStart < 0 {
+		candidateStart = 0
+	}
+	if candidateStart > len(text) {
+		candidateStart = len(text)
+	}
+	if candidateEnd < candidateStart {
+		candidateEnd = candidateStart
+	}
+	if candidateEnd > len(text) {
+		candidateEnd = len(text)
+	}
+	contextStart, contextEnd := casiaContextBounds(text, candidateStart, candidateEnd, contextWindow)
+	evidence := CASIAEvidence{
+		SensitiveType: sensitiveType,
+		ContextStart:  contextStart,
+		ContextEnd:    contextEnd,
+		WindowBytes:   contextWindow,
+	}
+
 	// 获取该类型的上下文关键词
 	keywords, exists := a.contextKeywords[sensitiveType]
 	if !exists {
-		return 0.5 // 默认中性权重
-	}
-
-	// 提取上下文文本
-	contextStart := candidateStart - contextWindow
-	if contextStart < 0 {
-		contextStart = 0
-	}
-	contextEnd := candidateEnd + contextWindow
-	if contextEnd > len(text) {
-		contextEnd = len(text)
+		evidence.RawWeight = 0
+		evidence.NormalizedWeight = 0.5
+		return evidence
 	}
 	contextText := text[contextStart:contextEnd]
 
 	// 累积上下文权重
-	totalWeight := 0.0
-	matchCount := 0
-
 	for keyword, weight := range keywords {
 		if strings.Contains(contextText, keyword) {
-			totalWeight += weight
-			matchCount++
+			evidence.RawWeight += weight
+			evidence.MatchedKeywords = append(evidence.MatchedKeywords, CASIAKeywordEvidence{Keyword: keyword, Weight: weight})
 		}
 	}
-
-	// 归一化权重到[0, 1]区间
-	// 使用sigmoid函数：f(x) = 1 / (1 + e^(-x))
-	normalizedWeight := 1.0 / (1.0 + exp(-totalWeight))
-
-	return normalizedWeight
+	sort.Slice(evidence.MatchedKeywords, func(i, j int) bool {
+		return evidence.MatchedKeywords[i].Keyword < evidence.MatchedKeywords[j].Keyword
+	})
+	evidence.NormalizedWeight = 1.0 / (1.0 + math.Exp(-evidence.RawWeight))
+	return evidence
 }
 
-// exp 计算e^x（简化版，实际应使用math.Exp）
-func exp(x float64) float64 {
-	if x > 10 {
-		return 22026.0 // e^10 ≈ 22026
+func casiaContextBounds(text string, candidateStart, candidateEnd, window int) (int, int) {
+	start := max(0, candidateStart-window)
+	end := min(len(text), candidateEnd+window)
+	if boundary := strings.LastIndexAny(text[start:candidateStart], "。！？；\n"); boundary >= 0 {
+		_, size := utf8.DecodeRuneInString(text[start+boundary:])
+		start += boundary + size
 	}
-	if x < -10 {
-		return 0.0
+	if boundary := strings.IndexAny(text[candidateEnd:end], "。！？；\n"); boundary >= 0 {
+		end = candidateEnd + boundary
 	}
-	// 泰勒展开近似：e^x ≈ 1 + x + x^2/2 + x^3/6 + ...
-	result := 1.0
-	term := 1.0
-	for i := 1; i <= 10; i++ {
-		term *= x / float64(i)
-		result += term
-	}
-	return result
+	return start, end
 }
 
 // DetectWithContext 带上下文感知的检测
@@ -151,16 +197,16 @@ func (a *ContextAwareSensitiveInfoAlgorithm) DetectWithContext(
 	baseConfidence := 0.7
 
 	// 计算上下文权重
-	contextWeight := a.CalculateContextWeight(
+	evidence := a.AnalyzeContext(
 		text,
 		patternStart,
 		patternEnd,
 		sensitiveType,
-		50, // 上下文窗口50个字符
+		defaultCASIAContextWindow,
 	)
 
 	// 最终置信度 = 基础置信度 × 上下文权重
-	finalConfidence := baseConfidence * contextWeight
+	finalConfidence := baseConfidence * evidence.NormalizedWeight
 
 	// 判定阈值
 	isSensitive = finalConfidence >= 0.6
@@ -178,16 +224,16 @@ func (a *ContextAwareSensitiveInfoAlgorithm) AdjustConfidenceByContext(
 ) float64 {
 	// 计算上下文权重
 	end := start + len(value)
-	contextWeight := a.CalculateContextWeight(
+	evidence := a.AnalyzeContext(
 		text,
 		start,
 		end,
 		sensitiveType,
-		50, // 上下文窗口50个字符
+		defaultCASIAContextWindow,
 	)
 
 	// 最终置信度 = 基础置信度 × 上下文权重
-	finalConfidence := baseConfidence * contextWeight
+	finalConfidence := baseConfidence * evidence.NormalizedWeight
 
 	// 确保置信度在[0, 1]范围内
 	if finalConfidence > 1.0 {

@@ -245,16 +245,20 @@ func (mld *MultiLayerDetector) applyCASIA(text string, items []SensitiveInfo) []
 
 	for _, item := range items {
 		// 使用CASIA算法分析上下文
-		adjustedConf := mld.casiaAlgorithm.AdjustConfidenceByContext(
+		evidence := mld.casiaAlgorithm.AnalyzeContext(
 			text,
-			item.Value,
-			string(item.Type),
 			item.Start,
-			item.Confidence,
+			item.End,
+			string(item.Type),
+			defaultCASIAContextWindow,
 		)
+		evidence.BaseConfidence = item.Confidence
+		adjustedConf := item.Confidence * evidence.NormalizedWeight
+		evidence.AdjustedScore = adjustedConf
 
 		// 更新置信度
 		item.Confidence = adjustedConf
+		item.CASIA = &evidence
 
 		// 只保留置信度足够高的结果（过滤掉被CASIA判定为误报的）
 		if adjustedConf > 0.3 {

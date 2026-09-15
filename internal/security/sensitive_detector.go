@@ -34,15 +34,16 @@ const (
 )
 
 type SensitiveInfo struct {
-	Type       SensitiveType `json:"type"`
-	Value      string        `json:"value"`
-	Start      int           `json:"start"`
-	End        int           `json:"end"`
-	Label      string        `json:"label"`
-	Position   int           `json:"position"`   // 位置（与Start相同，为了兼容性）
-	Length     int           `json:"length"`     // 长度
-	Confidence float64       `json:"confidence"` // 置信度
-	Encrypted  bool          `json:"encrypted"`  // 是否已加密
+	Type       SensitiveType  `json:"type"`
+	Value      string         `json:"value"`
+	Start      int            `json:"start"`
+	End        int            `json:"end"`
+	Label      string         `json:"label"`
+	Position   int            `json:"position"`   // 位置（与Start相同，为了兼容性）
+	Length     int            `json:"length"`     // 长度
+	Confidence float64        `json:"confidence"` // 置信度
+	Encrypted  bool           `json:"encrypted"`  // 是否已加密
+	CASIA      *CASIAEvidence `json:"casia_evidence,omitempty"`
 }
 
 type Detector struct {
