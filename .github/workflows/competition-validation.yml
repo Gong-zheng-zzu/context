@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Install Python experiment dependencies
+        run: python -m pip install --disable-pip-version-check -r experiments/requirements.txt
       - name: Verify Go modules
         run: go mod verify
       - name: Run Python experiment contracts

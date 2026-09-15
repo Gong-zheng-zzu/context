@@ -52,6 +52,7 @@ class ExperimentContractTest(unittest.TestCase):
         workflow = (EXPERIMENTS.parent / ".github" / "workflows" / "competition-validation.yml").read_text(encoding="utf-8")
         for required in (
             "go mod verify",
+            "pip install --disable-pip-version-check -r experiments/requirements.txt",
             "go vet -tags http ./...",
             "go test -tags http ./...",
             "python -m unittest discover -s experiments/scripts",
