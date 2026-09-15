@@ -270,6 +270,7 @@ func (d *ChineseNumberDetector) Normalize(text string) string {
 type Base64Detector struct{}
 
 var base64TokenPattern = regexp.MustCompile(`[A-Za-z0-9+/]{16,}={0,2}`)
+var sensitiveDecodedPattern = regexp.MustCompile(`(?:\d[\s-]*){6,}`)
 
 func validBase64Token(token string) ([]byte, bool) {
 	if len(token)%4 != 0 {
@@ -287,9 +288,22 @@ func validBase64Token(token string) ([]byte, bool) {
 	return decoded, true
 }
 
+func isSensitiveDecodedPayload(decoded []byte) bool {
+	text := string(decoded)
+	if sensitiveDecodedPattern.MatchString(text) {
+		return true
+	}
+	for _, keyword := range []string{"身份证", "手机号", "电话", "病历号", "银行卡", "密码", "token", "api_key"} {
+		if strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
+			return true
+		}
+	}
+	return false
+}
+
 func (d *Base64Detector) Detect(text string) (bool, float64, string) {
 	for _, token := range base64TokenPattern.FindAllString(text, -1) {
-		if _, ok := validBase64Token(token); ok {
+		if decoded, ok := validBase64Token(token); ok && isSensitiveDecodedPayload(decoded) {
 			return true, 0.85, "base64_encoding"
 		}
 	}
@@ -299,7 +313,7 @@ func (d *Base64Detector) Detect(text string) (bool, float64, string) {
 func (d *Base64Detector) Normalize(text string) string {
 	return base64TokenPattern.ReplaceAllStringFunc(text, func(token string) string {
 		decoded, ok := validBase64Token(token)
-		if !ok {
+		if !ok || !isSensitiveDecodedPayload(decoded) {
 			return token
 		}
 		return string(decoded)

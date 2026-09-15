@@ -52,3 +52,14 @@ func TestASDFBase64DetectorRejectsInvalidOrShortTokens(t *testing.T) {
 		}
 	}
 }
+
+func TestASDFBase64DetectorDoesNotFlagOrdinaryEncodedText(t *testing.T) {
+	detector := &Base64Detector{}
+	input := base64.StdEncoding.EncodeToString([]byte("ordinary documentation text"))
+	if detected, _, _ := detector.Detect(input); detected {
+		t.Fatalf("ordinary Base64 text was classified as sensitive obfuscation: %q", input)
+	}
+	if got := detector.Normalize(input); got != input {
+		t.Fatalf("ordinary Base64 text was normalized unexpectedly: %q", got)
+	}
+}
