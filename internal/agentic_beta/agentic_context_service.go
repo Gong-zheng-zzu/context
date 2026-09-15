@@ -25,6 +25,11 @@ import (
 type AgenticContextService struct {
 	// 🏗️ 基础服务层 - 直接使用ContextService
 	contextService *services.ContextService
+	// retriever keeps the service testable and allows compatible adapters to be
+	// used without manufacturing an incomplete *ContextService value.
+	retriever interface {
+		RetrieveContext(context.Context, models.RetrieveContextRequest) (models.ContextResponse, error)
+	}
 
 	// 🤖 Agentic组件（A→B→C）
 	intentAnalyzer *components.BasicQueryIntentAnalyzer
@@ -70,15 +75,30 @@ type AgenticPerformanceRecord struct {
 // 🔥 重构：直接基于ContextService创建完整的智能上下文服务
 func NewAgenticContextService(serviceInput interface{}) *AgenticContextService {
 	var contextService *services.ContextService
+	var retriever interface {
+		RetrieveContext(context.Context, models.RetrieveContextRequest) (models.ContextResponse, error)
+	}
 	switch service := serviceInput.(type) {
 	case *services.ContextService:
 		contextService = service
+		retriever = service
 	case interface {
 		GetContextService() *services.ContextService
 	}:
 		contextService = service.GetContextService()
+		if contextService != nil {
+			retriever = contextService
+		} else if compatible, ok := serviceInput.(interface {
+			RetrieveContext(context.Context, models.RetrieveContextRequest) (models.ContextResponse, error)
+		}); ok {
+			retriever = compatible
+		}
+	case interface {
+		RetrieveContext(context.Context, models.RetrieveContextRequest) (models.ContextResponse, error)
+	}:
+		retriever = service
 	default:
-		panic("NewAgenticContextService requires a ContextService or compatible smart service")
+		panic("NewAgenticContextService requires a ContextService or compatible retriever")
 	}
 	// 🔍 创建意图分析器
 	analyzer := components.NewBasicQueryIntentAnalyzer()
@@ -108,6 +128,7 @@ func NewAgenticContextService(serviceInput interface{}) *AgenticContextService {
 
 	service := &AgenticContextService{
 		contextService:    contextService,
+		retriever:         retriever,
 		intentAnalyzer:    analyzer,
 		decisionCenter:    decisionCenter,
 		similarityService: similarityService, // 新增
@@ -143,6 +164,13 @@ func NewAgenticContextService(serviceInput interface{}) *AgenticContextService {
 	return service
 }
 
+func (acs *AgenticContextService) retrieveContext(ctx context.Context, req models.RetrieveContextRequest) (models.ContextResponse, error) {
+	if acs.retriever == nil {
+		return models.ContextResponse{}, fmt.Errorf("context retrieval service is not configured")
+	}
+	return acs.retriever.RetrieveContext(ctx, req)
+}
+
 // NewAgenticContextServiceFromSmart 从SmartContextService创建Agentic上下文服务
 // 🔥 已废弃：直接使用NewAgenticContextService(contextService)替代
 // func NewAgenticContextServiceFromSmart(smartService *services.SmartContextService) *AgenticContextService {
@@ -170,13 +198,13 @@ func (acs *AgenticContextService) RetrieveContext(ctx context.Context, req model
 	// 如果Agentic功能禁用，直接使用基础ContextService
 	if !acs.smartEnabled {
 		log.Printf("【AgenticContextService】⚪ Agentic功能已禁用，降级到基础服务模式")
-		return acs.contextService.RetrieveContext(ctx, req)
+		return acs.retrieveContext(ctx, req)
 	}
 
 	// 如果查询为空，直接使用基础ContextService
 	if strings.TrimSpace(originalQuery) == "" {
 		log.Printf("【AgenticContextService】ℹ️ 查询为空，使用标准检索流程")
-		return acs.contextService.RetrieveContext(ctx, req)
+		return acs.retrieveContext(ctx, req)
 	}
 
 	acs.stats.AgenticEnhanced++
@@ -302,7 +330,7 @@ func (acs *AgenticContextService) smartRetrieveContext(ctx context.Context, req 
 	// 如果智能功能被禁用，直接调用原始方法
 	if !acs.smartEnabled {
 		log.Printf("【AgenticContextService】⚪ 智能优化功能已禁用，使用基础服务模式")
-		return acs.contextService.RetrieveContext(ctx, req)
+		return acs.retrieveContext(ctx, req)
 	}
 
 	acs.stats.SmartOptimized++
@@ -358,7 +386,7 @@ func (acs *AgenticContextService) smartRetrieveContext(ctx context.Context, req 
 	retrievalStartTime := time.Now()
 
 	// 调用原始检索方法
-	response, err := acs.contextService.RetrieveContext(ctx, req)
+	response, err := acs.retrieveContext(ctx, req)
 
 	retrievalTime := time.Since(retrievalStartTime)
 
@@ -578,7 +606,7 @@ func (acs *AgenticContextService) enhancedRetrieve(ctx context.Context, req mode
 	acs.printAgenticQueryRewriteComparison(req.Query, optimizedReq.Query, intent, decision)
 
 	// 调用底层ContextService执行检索
-	response, err := acs.contextService.RetrieveContext(ctx, optimizedReq)
+	response, err := acs.retrieveContext(ctx, optimizedReq)
 	if err != nil {
 		return response, err
 	}

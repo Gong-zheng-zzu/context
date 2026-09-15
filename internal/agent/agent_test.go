@@ -322,8 +322,11 @@ func TestBuildAgentSystemPrompt(t *testing.T) {
 	if !strings.Contains(prompt, "vital_signs") {
 		t.Error("FAIL: 提示词应包含工具描述")
 	}
-	if !strings.Contains(prompt, "Thought:") {
-		t.Error("FAIL: 提示词应包含Thought格式说明")
+	if strings.Contains(prompt, "Thought:") {
+		t.Error("FAIL: 提示词不应要求输出思维链")
+	}
+	if !strings.Contains(prompt, "FinalAnswer:") || !strings.Contains(prompt, "Action:") {
+		t.Error("FAIL: 提示词应包含受控Action和FinalAnswer格式")
 	}
 	t.Log("  └─ PASS ✓")
 }

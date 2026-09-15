@@ -122,8 +122,8 @@ func TestAgenticContextServiceCreation(t *testing.T) {
 		t.Errorf("Expected name 'AgenticContextService', got %s", agentic.name)
 	}
 
-	if agentic.version != "v1.0.0-beta" {
-		t.Errorf("Expected version 'v1.0.0-beta', got %s", agentic.version)
+	if agentic.version != "v2.1.0-unified-similarity" {
+		t.Errorf("Expected current unified-similarity version, got %s", agentic.version)
 	}
 
 	if !agentic.enabled {
@@ -406,8 +406,8 @@ func TestAgenticContextServiceServiceInfo(t *testing.T) {
 		t.Errorf("Expected name 'AgenticContextService', got %v", info["name"])
 	}
 
-	if info["version"] != "v1.0.0-beta" {
-		t.Errorf("Expected version 'v1.0.0-beta', got %v", info["version"])
+	if info["version"] != "v2.1.0-unified-similarity" {
+		t.Errorf("Expected current unified-similarity version, got %v", info["version"])
 	}
 
 	if info["enabled"] != true {
