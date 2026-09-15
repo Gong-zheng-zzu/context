@@ -1,8 +1,11 @@
 package security
 
 import (
+	"encoding/base64"
+	"regexp"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 // AdversarialSampleDefenseFramework 对抗样本防御框架
@@ -266,36 +269,41 @@ func (d *ChineseNumberDetector) Normalize(text string) string {
 // Base64Detector Base64编码检测器
 type Base64Detector struct{}
 
-func (d *Base64Detector) Detect(text string) (bool, float64, string) {
-	// 简单检测：Base64字符串特征
-	// 1. 长度是4的倍数
-	// 2. 只包含A-Za-z0-9+/=
-	if len(text)%4 != 0 {
-		return false, 0.0, ""
+var base64TokenPattern = regexp.MustCompile(`[A-Za-z0-9+/]{16,}={0,2}`)
+
+func validBase64Token(token string) ([]byte, bool) {
+	if len(token)%4 != 0 {
+		return nil, false
 	}
-
-	base64Chars := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/="
-	validCount := 0
-
-	for _, ch := range text {
-		if strings.ContainsRune(base64Chars, ch) {
-			validCount++
+	decoded, err := base64.StdEncoding.DecodeString(token)
+	if err != nil || len(decoded) < 4 || !utf8.Valid(decoded) {
+		return nil, false
+	}
+	for _, r := range string(decoded) {
+		if unicode.IsControl(r) && !unicode.IsSpace(r) {
+			return nil, false
 		}
 	}
+	return decoded, true
+}
 
-	// 如果90%以上字符都是Base64字符，可能是Base64编码
-	if float64(validCount)/float64(len(text)) > 0.9 && len(text) >= 16 {
-		confidence := 0.7
-		return true, confidence, "base64_encoding"
+func (d *Base64Detector) Detect(text string) (bool, float64, string) {
+	for _, token := range base64TokenPattern.FindAllString(text, -1) {
+		if _, ok := validBase64Token(token); ok {
+			return true, 0.85, "base64_encoding"
+		}
 	}
-
 	return false, 0.0, ""
 }
 
 func (d *Base64Detector) Normalize(text string) string {
-	// 实际应该进行Base64解码，这里简化处理
-	// 在实际实现中应该使用encoding/base64包
-	return text // 简化：返回原文本
+	return base64TokenPattern.ReplaceAllStringFunc(text, func(token string) string {
+		decoded, ok := validBase64Token(token)
+		if !ok {
+			return token
+		}
+		return string(decoded)
+	})
 }
 
 // GetFrameworkDescription 获取框架描述（用于论文和答辩）
