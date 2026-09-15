@@ -20,6 +20,10 @@ type MockSmartContextService struct {
 	ShouldReturnError    bool
 }
 
+type nilContextProvider struct{}
+
+func (nilContextProvider) GetContextService() *services.ContextService { return nil }
+
 func NewMockSmartContextService() *MockSmartContextService {
 	return &MockSmartContextService{
 		RetrieveContextCalls: make([]models.RetrieveContextRequest, 0),
@@ -141,6 +145,16 @@ func TestAgenticContextServiceCreation(t *testing.T) {
 
 	if agentic.stats == nil {
 		t.Error("Expected stats to be initialized")
+	}
+}
+
+func TestAgenticContextServiceMissingRetrieverReturnsError(t *testing.T) {
+	agentic := NewAgenticContextService(nilContextProvider{})
+	defer agentic.Stop(context.Background())
+
+	_, err := agentic.RetrieveContext(context.Background(), models.RetrieveContextRequest{Query: "health"})
+	if err == nil || !strings.Contains(err.Error(), "retrieval service is not configured") {
+		t.Fatalf("expected explicit missing retriever error, got %v", err)
 	}
 }
 
