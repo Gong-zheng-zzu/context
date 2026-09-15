@@ -30,6 +30,7 @@ type AgenticContextService struct {
 	retriever interface {
 		RetrieveContext(context.Context, models.RetrieveContextRequest) (models.ContextResponse, error)
 	}
+	operations contextOperations
 
 	// 🤖 Agentic组件（A→B→C）
 	intentAnalyzer *components.BasicQueryIntentAnalyzer
@@ -44,6 +45,27 @@ type AgenticContextService struct {
 	name         string
 	version      string
 	stats        *AgenticServiceStats
+}
+
+// contextOperations is the compatibility surface exposed by ContextService.
+// Keeping it injectable lets legacy adapters and deterministic tests exercise
+// the Agentic wrapper without constructing a partially initialized service.
+type contextOperations interface {
+	RetrieveTodos(context.Context, models.RetrieveTodosRequest) (*models.RetrieveTodosResponse, error)
+	AssociateFile(context.Context, models.AssociateFileRequest) error
+	RecordEdit(context.Context, models.RecordEditRequest) error
+	GetProgrammingContext(context.Context, string, string) (*models.ProgrammingContext, error)
+	StartSessionCleanupTask(context.Context, time.Duration, time.Duration)
+	SummarizeToLongTermMemory(context.Context, models.SummarizeToLongTermRequest) (string, error)
+	StoreContext(context.Context, models.StoreContextRequest) (string, error)
+	SummarizeContext(context.Context, models.SummarizeContextRequest) (string, error)
+	StoreSessionMessages(context.Context, models.StoreMessagesRequest) (*models.StoreMessagesResponse, error)
+	RetrieveConversation(context.Context, models.RetrieveConversationRequest) (*models.ConversationResponse, error)
+	GetSessionState(context.Context, string) (*models.MCPSessionResponse, error)
+	SearchContext(context.Context, string, string) ([]string, error)
+	GetUserIDFromSessionID(string) (string, error)
+	GetUserSessionStore(string) (*store.SessionStore, error)
+	SessionStore() *store.SessionStore
 }
 
 // AgenticServiceStats Agentic服务统计
@@ -78,25 +100,34 @@ func NewAgenticContextService(serviceInput interface{}) *AgenticContextService {
 	var retriever interface {
 		RetrieveContext(context.Context, models.RetrieveContextRequest) (models.ContextResponse, error)
 	}
+	var operations contextOperations
 	switch service := serviceInput.(type) {
 	case *services.ContextService:
 		contextService = service
 		retriever = service
+		operations = service
 	case interface {
 		GetContextService() *services.ContextService
 	}:
 		contextService = service.GetContextService()
 		if contextService != nil {
 			retriever = contextService
-		} else if compatible, ok := serviceInput.(interface {
+		}
+		if compatible, ok := serviceInput.(interface {
 			RetrieveContext(context.Context, models.RetrieveContextRequest) (models.ContextResponse, error)
 		}); ok {
 			retriever = compatible
+		}
+		if compatible, ok := serviceInput.(contextOperations); ok {
+			operations = compatible
 		}
 	case interface {
 		RetrieveContext(context.Context, models.RetrieveContextRequest) (models.ContextResponse, error)
 	}:
 		retriever = service
+		if compatible, ok := serviceInput.(contextOperations); ok {
+			operations = compatible
+		}
 	default:
 		panic("NewAgenticContextService requires a ContextService or compatible retriever")
 	}
@@ -129,6 +160,7 @@ func NewAgenticContextService(serviceInput interface{}) *AgenticContextService {
 	service := &AgenticContextService{
 		contextService:    contextService,
 		retriever:         retriever,
+		operations:        operations,
 		intentAnalyzer:    analyzer,
 		decisionCenter:    decisionCenter,
 		similarityService: similarityService, // 新增
@@ -830,77 +862,121 @@ func (acs *AgenticContextService) Stop(ctx context.Context) error {
 
 // RetrieveTodos 获取待办事项
 func (acs *AgenticContextService) RetrieveTodos(ctx context.Context, req models.RetrieveTodosRequest) (*models.RetrieveTodosResponse, error) {
-	return acs.contextService.RetrieveTodos(ctx, req)
+	if acs.operations == nil {
+		return nil, fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.RetrieveTodos(ctx, req)
 }
 
 // AssociateFile 关联文件
 func (acs *AgenticContextService) AssociateFile(ctx context.Context, req models.AssociateFileRequest) error {
-	return acs.contextService.AssociateFile(ctx, req)
+	if acs.operations == nil {
+		return fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.AssociateFile(ctx, req)
 }
 
 // RecordEdit 记录编辑
 func (acs *AgenticContextService) RecordEdit(ctx context.Context, req models.RecordEditRequest) error {
-	return acs.contextService.RecordEdit(ctx, req)
+	if acs.operations == nil {
+		return fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.RecordEdit(ctx, req)
 }
 
 // GetProgrammingContext 获取编程上下文
 func (acs *AgenticContextService) GetProgrammingContext(ctx context.Context, sessionID string, query string) (*models.ProgrammingContext, error) {
-	return acs.contextService.GetProgrammingContext(ctx, sessionID, query)
+	if acs.operations == nil {
+		return nil, fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.GetProgrammingContext(ctx, sessionID, query)
 }
 
 // StartSessionCleanupTask 启动会话清理任务
 func (acs *AgenticContextService) StartSessionCleanupTask(ctx context.Context, timeout, interval time.Duration) {
-	acs.contextService.StartSessionCleanupTask(ctx, timeout, interval)
+	if acs.operations != nil {
+		acs.operations.StartSessionCleanupTask(ctx, timeout, interval)
+	}
 }
 
 // SummarizeToLongTermMemory 总结到长期记忆
 func (acs *AgenticContextService) SummarizeToLongTermMemory(ctx context.Context, req models.SummarizeToLongTermRequest) (string, error) {
-	return acs.contextService.SummarizeToLongTermMemory(ctx, req)
+	if acs.operations == nil {
+		return "", fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.SummarizeToLongTermMemory(ctx, req)
 }
 
 // StoreContext 存储上下文
 func (acs *AgenticContextService) StoreContext(ctx context.Context, req models.StoreContextRequest) (string, error) {
-	return acs.contextService.StoreContext(ctx, req)
+	if acs.operations == nil {
+		return "", fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.StoreContext(ctx, req)
 }
 
 // SummarizeContext 总结上下文
 func (acs *AgenticContextService) SummarizeContext(ctx context.Context, req models.SummarizeContextRequest) (string, error) {
-	return acs.contextService.SummarizeContext(ctx, req)
+	if acs.operations == nil {
+		return "", fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.SummarizeContext(ctx, req)
 }
 
 // StoreSessionMessages 存储会话消息
 func (acs *AgenticContextService) StoreSessionMessages(ctx context.Context, req models.StoreMessagesRequest) (*models.StoreMessagesResponse, error) {
-	return acs.contextService.StoreSessionMessages(ctx, req)
+	if acs.operations == nil {
+		return nil, fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.StoreSessionMessages(ctx, req)
 }
 
 // RetrieveConversation 检索对话
 func (acs *AgenticContextService) RetrieveConversation(ctx context.Context, req models.RetrieveConversationRequest) (*models.ConversationResponse, error) {
-	return acs.contextService.RetrieveConversation(ctx, req)
+	if acs.operations == nil {
+		return nil, fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.RetrieveConversation(ctx, req)
 }
 
 // GetSessionState 获取会话状态
 func (acs *AgenticContextService) GetSessionState(ctx context.Context, sessionID string) (*models.MCPSessionResponse, error) {
-	return acs.contextService.GetSessionState(ctx, sessionID)
+	if acs.operations == nil {
+		return nil, fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.GetSessionState(ctx, sessionID)
 }
 
 // SearchContext 搜索上下文
 func (acs *AgenticContextService) SearchContext(ctx context.Context, sessionID, query string) ([]string, error) {
-	return acs.contextService.SearchContext(ctx, sessionID, query)
+	if acs.operations == nil {
+		return nil, fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.SearchContext(ctx, sessionID, query)
 }
 
 // GetUserIDFromSessionID 从会话ID获取用户ID
 func (acs *AgenticContextService) GetUserIDFromSessionID(sessionID string) (string, error) {
-	return acs.contextService.GetUserIDFromSessionID(sessionID)
+	if acs.operations == nil {
+		return "", fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.GetUserIDFromSessionID(sessionID)
 }
 
 // GetUserSessionStore 获取用户会话存储
 func (acs *AgenticContextService) GetUserSessionStore(userID string) (*store.SessionStore, error) {
-	return acs.contextService.GetUserSessionStore(userID)
+	if acs.operations == nil {
+		return nil, fmt.Errorf("context operations are not configured")
+	}
+	return acs.operations.GetUserSessionStore(userID)
 }
 
 // SessionStore 获取会话存储
 func (acs *AgenticContextService) SessionStore() *store.SessionStore {
-	return acs.contextService.SessionStore()
+	if acs.operations == nil {
+		return nil
+	}
+	return acs.operations.SessionStore()
 }
 
 // GetContextService 获取内部的ContextService实例
