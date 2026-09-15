@@ -239,7 +239,12 @@ func (s *SecurityService) ScanContent(ctx context.Context, sessionID, userID, co
 					Value:      item.Value,
 					Start:      item.Start,
 					End:        item.End,
+					Label:      item.Label,
+					Position:   item.Position,
+					Length:     item.Length,
 					Confidence: item.Confidence,
+					Encrypted:  item.Encrypted,
+					CASIA:      item.CASIA,
 				})
 			}
 			// 记录多层检测的额外信息

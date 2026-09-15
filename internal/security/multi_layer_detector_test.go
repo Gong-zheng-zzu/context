@@ -118,6 +118,29 @@ func TestMultiLayerConfigurationReflectsAlgorithmSwitches(t *testing.T) {
 	}
 }
 
+func TestMultiLayerDetectorAttachesCASIAEvidence(t *testing.T) {
+	detector := NewMultiLayerDetector("http://localhost:11434", "qwen2.5:3b")
+	result, err := detector.Detect(context.Background(), "患者身份证号是110101199001011234")
+	if err != nil {
+		t.Fatalf("detect: %v", err)
+	}
+	if len(result.FinalItems) == 0 {
+		t.Fatal("expected an ID-card detection")
+	}
+	for _, item := range result.FinalItems {
+		if item.Type == SensitiveTypeIDCard {
+			if item.CASIA == nil {
+				t.Fatal("ID-card result is missing CASIA evidence")
+			}
+			if item.CASIA.AdjustedScore != item.Confidence {
+				t.Fatalf("CASIA adjusted score=%v, item confidence=%v", item.CASIA.AdjustedScore, item.Confidence)
+			}
+			return
+		}
+	}
+	t.Fatalf("ID-card detection missing from results: %#v", result.FinalItems)
+}
+
 func TestConfigureMultiLayerAlgorithmsUsesConfiguredSwitches(t *testing.T) {
 	detector := NewMultiLayerDetector("http://localhost:11434", "qwen2.5:7b")
 	configureMultiLayerAlgorithms(detector, false, true)
