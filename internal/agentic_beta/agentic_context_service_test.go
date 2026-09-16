@@ -358,6 +358,7 @@ func TestAgenticContextServiceError(t *testing.T) {
 func TestAgenticContextServiceMultipleQueries(t *testing.T) {
 	mockSmart := NewMockSmartContextService()
 	agentic := NewAgenticContextService(mockSmart)
+	agentic.EnableSmart(true)
 	defer agentic.Stop(context.Background())
 
 	ctx := context.Background()

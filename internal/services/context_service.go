@@ -3329,8 +3329,8 @@ func (s *ContextService) extractKnowledgeNodesFromAnalysis(analysisResult *model
 }
 
 var (
-	patientNameLabelPattern  = regexp.MustCompile(`(?im)\bpatient\s*(?:name)?\s*[:=-]\s*([A-Z][\p{L}'-]*(?:\s+[A-Z][\p{L}'-]*){0,3})`)
-	patientNamePhrasePattern = regexp.MustCompile(`(?im)\b(?:patient|pt\.)\s+(?:is|was|named)\s+([A-Z][\p{L}'-]*(?:\s+[A-Z][\p{L}'-]*){0,3})`)
+	patientNameLabelPattern  = regexp.MustCompile(`(?im)\bpatient\s*(?:name)?\s*[:=-]\s*([A-Z][\p{Ll}'-]*(?:\s+[A-Z][\p{Ll}'-]*){0,3})`)
+	patientNamePhrasePattern = regexp.MustCompile(`(?im)\b(?:patient|pt\.)\s+(?:is|was|named)\s+([A-Z][\p{Ll}'-]*(?:\s+[A-Z][\p{Ll}'-]*){0,3})`)
 )
 
 // appendPatientNameEntity creates a graph-only patient entity from explicit,
