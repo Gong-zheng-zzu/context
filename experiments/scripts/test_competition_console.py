@@ -30,13 +30,58 @@ class CompetitionConsoleContractTests(unittest.TestCase):
 
     def test_console_uses_protected_live_endpoints(self):
         self.assertIn("/api/auth/login", self.console)
+        self.assertIn("/api/v1/security/ablation", self.console)
         self.assertIn("/api/v1/causal/extract", self.console)
+        self.assertIn("/api/v1/causal/reviews", self.console)
         self.assertIn("/api/mcp/tools/retrieve_context", self.console)
         self.assertIn("evaluationRetrievalOnly:true", self.console)
         self.assertIn("/api/sessions/${EVAL_SESSION}?dry_run=${dryRun}", self.console)
         self.assertIn("/mcp/tools/create_context", self.console)
         self.assertIn("live-${Date.now()}", self.console)
         self.assertIn("现场新增护理记录", self.console)
+
+    def test_console_uses_one_validated_trace_across_lifecycle_calls(self):
+        self.assertIn("let lifecycleTraceID = createTraceID();", self.console)
+        self.assertIn("'X-Trace-ID':lifecycleTraceID", self.console)
+        self.assertIn("function setStage(stage, state, message)", self.console)
+        for stage in ("security", "causal", "storage", "retrieval", "deletion"):
+            self.assertIn(f'data-stage="{stage}"', self.console)
+
+    def test_security_ablation_is_server_owned_and_complete(self):
+        self.assertIn('id="securityProfiles"', self.console)
+        self.assertIn("['regex_only','asdf','asdf_casia','asdf_casia_pccm']", self.console)
+        self.assertIn("sample_id:`synthetic_${Date.now()}`", self.console)
+        self.assertIn("synthetic:true", self.console)
+        self.assertIn("不代表达到正式指标", self.console)
+
+    def test_causal_review_and_counterfactual_remain_governed(self):
+        self.assertIn('id="reviewSubmit"', self.console)
+        self.assertIn("training_applied", self.console)
+        self.assertIn("未直接进入训练集", self.console)
+        self.assertIn("synthetic:true", self.console)
+        self.assertIn("mode:'research_preview'", self.console)
+        self.assertIn("persisted:false", self.console)
+        self.assertIn("clinical_advice:false", self.console)
+        self.assertIn("不生成新的医学机制、诊断或治疗建议", self.console)
+
+    def test_deletion_proof_runs_probes_and_idempotency_without_raw_text(self):
+        self.assertIn("const beforeProbe = retrievalProbe(await runRRF(probeQuery))", self.console)
+        self.assertIn("const afterProbe = retrievalProbe(await runRRF(probeQuery))", self.console)
+        self.assertIn("const idempotent = deletionEvidence(await sessionDelete(false))", self.console)
+        self.assertIn("evidence_sha256", self.console)
+        self.assertIn("scope_sha256", self.console)
+        self.assertIn("certificate_sha256", self.console)
+        self.assertIn("不代表梯度或模型参数遗忘", self.console)
+        certificate_builder = self.console.split("const certificate =", 1)[1].split("certificate.certificate_sha256", 1)[0]
+        self.assertNotIn("causalText", certificate_builder)
+        self.assertNotIn("liveRecord", certificate_builder)
+        self.assertNotIn("content:", certificate_builder)
+
+    def test_fixture_mode_has_no_network_or_mutating_controls(self):
+        self.assertIn("严格离线：不联网、不写入、不检索、不删除", self.console)
+        self.assertIn("for (const id of ['securityRun','researchRun','liveSeedRun','rrfRun','unlearningVerify','unlearningRun','reviewSubmit'])", self.console)
+        fixture_branch = self.console.split("async function refreshStatus()", 1)[1].split("function requireEvalScope", 1)[0]
+        self.assertLess(fixture_branch.index("if (fixtureMode)"), fixture_branch.index("fetch(API_BASE + '/health'"))
 
     def test_console_research_agent_uses_protected_read_only_contract(self):
         self.assertIn('id="researchTopic"', self.console)
