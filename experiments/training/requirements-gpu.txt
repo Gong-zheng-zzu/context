@@ -1,0 +1,8 @@
+# GPU-only training environment. The default test suite does not install these.
+torch>=2.3,<3
+transformers>=4.45,<5
+datasets>=2.20,<4
+peft>=0.12,<1
+accelerate>=0.33,<2
+bitsandbytes>=0.43,<1
+safetensors>=0.4,<1
