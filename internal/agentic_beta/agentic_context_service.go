@@ -324,6 +324,7 @@ func (acs *AgenticContextService) RetrieveContext(ctx context.Context, req model
 	if err != nil {
 		log.Printf("【AgenticContextService】【增强检索】❌ 黑盒异常: %v", err)
 		log.Printf("【AgenticContextService】【增强检索】🔴 退出黑盒 - 检索失败")
+		acs.recordPerformance(originalQuery, intent, time.Since(startTime), false)
 		return models.ContextResponse{}, err
 	}
 
@@ -349,6 +350,7 @@ func (acs *AgenticContextService) RetrieveContext(ctx context.Context, req model
 	log.Printf("【AgenticContextService】   └── 总耗时: %v", totalTime)
 	log.Printf("【AgenticContextService】✅ 返回最终结果")
 	log.Print(strings.Repeat("=", 100))
+	acs.recordPerformance(originalQuery, intent, totalTime, true)
 
 	return response, nil
 }

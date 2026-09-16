@@ -162,6 +162,7 @@ func TestAgenticContextServiceMissingRetrieverReturnsError(t *testing.T) {
 func TestAgenticContextServiceDebugQuery(t *testing.T) {
 	mockSmart := NewMockSmartContextService()
 	agentic := NewAgenticContextService(mockSmart)
+	agentic.EnableSmart(true)
 	defer agentic.Stop(context.Background())
 
 	ctx := context.Background()
@@ -215,6 +216,7 @@ func TestAgenticContextServiceDebugQuery(t *testing.T) {
 func TestAgenticContextServiceArchitectureQuery(t *testing.T) {
 	mockSmart := NewMockSmartContextService()
 	agentic := NewAgenticContextService(mockSmart)
+	agentic.EnableSmart(true)
 	defer agentic.Stop(context.Background())
 
 	ctx := context.Background()
@@ -325,6 +327,7 @@ func TestAgenticContextServiceError(t *testing.T) {
 	mockSmart.ShouldReturnError = true
 
 	agentic := NewAgenticContextService(mockSmart)
+	agentic.EnableSmart(true)
 	defer agentic.Stop(context.Background())
 
 	ctx := context.Background()
