@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from prepare_causal_dataset import (
+    ANNOTATION_STATUS,
     SCHEMA_VERSION,
     SPLIT_COUNTS,
     generate_dataset,
@@ -33,7 +34,7 @@ class CausalDatasetTests(unittest.TestCase):
             second = generate_dataset(output, force=True)
             self.assertEqual(first["dataset_sha256"], second["dataset_sha256"])
 
-    def test_frozen_test_rows_are_synthetic_and_have_review_metadata(self) -> None:
+    def test_generated_test_rows_are_explicitly_unreviewed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "causal_ompr"
             generate_dataset(output)
@@ -43,8 +44,10 @@ class CausalDatasetTests(unittest.TestCase):
             ]
             self.assertEqual(100, len(rows))
             self.assertTrue(all(row["synthetic"] is True for row in rows))
-            self.assertTrue(all(row["annotation"]["reviewers"] == 2 for row in rows))
-            self.assertTrue(all(row["annotation"]["arbitrated"] is True for row in rows))
+            self.assertTrue(all(row["data_origin"] == "synthetic" for row in rows))
+            self.assertTrue(all(row["annotation"]["status"] == ANNOTATION_STATUS for row in rows))
+            self.assertTrue(all(row["annotation"]["human_review_count"] == 0 for row in rows))
+            self.assertTrue(all(row["annotation"]["arbitrated"] is False for row in rows))
 
 
 if __name__ == "__main__":

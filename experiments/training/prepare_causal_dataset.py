@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 SCHEMA_VERSION = "causal-ompr-v1"
+ANNOTATION_STATUS = "synthetic_unreviewed"
 SPLIT_COUNTS = {"train": 600, "validation": 100, "test": 100}
 GROUPS_PER_SPLIT = {"train": 60, "validation": 10, "test": 10}
 
@@ -73,8 +74,14 @@ def _record(group: int, index: int, split: str, rng: random.Random) -> dict[str,
         "template_family": f"{scenario}-family-{group:03d}",
         "split": split,
         "synthetic": True,
+        "data_origin": "synthetic",
         "relations": relations,
-        "annotation": {"schema_version": SCHEMA_VERSION, "reviewers": 2, "arbitrated": True},
+        "annotation": {
+            "schema_version": SCHEMA_VERSION,
+            "status": ANNOTATION_STATUS,
+            "human_review_count": 0,
+            "arbitrated": False,
+        },
     }
 
 
@@ -89,6 +96,8 @@ def generate_dataset(output_dir: Path, seed: int = 20260914, force: bool = False
     manifest: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "seed": seed,
+        "annotation_status": ANNOTATION_STATUS,
+        "eligible_for_frozen_evaluation": False,
         "split_counts": SPLIT_COUNTS.copy(),
         "files": {},
     }
@@ -138,6 +147,14 @@ def validate_dataset(output_dir: Path, expected_seed: int | None = None) -> dict
         for row in rows:
             if row.get("split") != split or row.get("synthetic") is not True:
                 raise ValueError(f"invalid row metadata in {split}")
+            annotation = row.get("annotation", {})
+            if (
+                row.get("data_origin") != "synthetic"
+                or annotation.get("status") != ANNOTATION_STATUS
+                or annotation.get("human_review_count") != 0
+                or annotation.get("arbitrated") is not False
+            ):
+                raise ValueError(f"generated row falsely claims human review in {split}")
             family = row.get("template_family")
             if not family:
                 raise ValueError("missing template_family")
@@ -149,6 +166,11 @@ def validate_dataset(output_dir: Path, expected_seed: int | None = None) -> dict
     ).hexdigest()
     if manifest.get("dataset_sha256") != expected_hash:
         raise ValueError("dataset sha256 mismatch")
+    if (
+        manifest.get("annotation_status") != ANNOTATION_STATUS
+        or manifest.get("eligible_for_frozen_evaluation") is not False
+    ):
+        raise ValueError("generated manifest must remain synthetic_unreviewed")
     return {"valid": True, "counts": SPLIT_COUNTS.copy(), "dataset_sha256": expected_hash}
 
 
