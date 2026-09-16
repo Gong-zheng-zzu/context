@@ -109,24 +109,24 @@ func (s *FileCausalReviewStore) List() ([]CausalReviewRecord, error) {
 
 func (h *CausalReasoningHandler) CreateCausalReview(c *gin.Context) {
 	if !causalReviewAuthorized(c) {
-		c.JSON(http.StatusForbidden, gin.H{"error": "causal review requires doctor or evaluation scope"})
+		writeCompetitionError(c, http.StatusForbidden, "causal_review", "causal review requires doctor or evaluation scope")
 		return
 	}
 	var req CausalReviewRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid review request"})
+		writeCompetitionError(c, http.StatusBadRequest, "causal_review", "invalid review request")
 		return
 	}
 	if !req.Synthetic || strings.TrimSpace(req.SourceText) == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "only explicit synthetic review data is accepted"})
+		writeCompetitionError(c, http.StatusBadRequest, "causal_review", "only explicit synthetic review data is accepted")
 		return
 	}
 	if req.SessionID != evaluationSessionID() {
-		c.JSON(http.StatusForbidden, gin.H{"error": "review session is outside the evaluation scope"})
+		writeCompetitionError(c, http.StatusForbidden, "causal_review", "review session is outside the evaluation scope")
 		return
 	}
 	if h.reviewStore == nil {
-		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "causal review queue is not configured"})
+		writeCompetitionUnavailable(c, "causal_review", "causal review queue is not configured")
 		return
 	}
 	userID, _ := middleware.GetUserID(c)
@@ -142,28 +142,28 @@ func (h *CausalReasoningHandler) CreateCausalReview(c *gin.Context) {
 		Status: "pending_second_review", CreatedAt: createdAt,
 	}
 	if err := h.reviewStore.Append(record); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to append review"})
+		writeCompetitionError(c, http.StatusInternalServerError, "causal_review", "failed to append review")
 		return
 	}
 	record.SourceText = ""
-	c.JSON(http.StatusCreated, gin.H{"trace_id": record.TraceID, "review": record, "training_applied": false})
+	c.JSON(http.StatusCreated, gin.H{"trace_id": record.TraceID, "stage": "causal_review", "status": "queued", "review": record, "training_applied": false})
 }
 
 func (h *CausalReasoningHandler) ListCausalReviews(c *gin.Context) {
 	if !causalReviewAuthorized(c) {
-		c.JSON(http.StatusForbidden, gin.H{"error": "causal review requires doctor or evaluation scope"})
+		writeCompetitionError(c, http.StatusForbidden, "causal_review", "causal review requires doctor or evaluation scope")
 		return
 	}
 	if h.reviewStore == nil {
-		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "causal review queue is not configured"})
+		writeCompetitionUnavailable(c, "causal_review", "causal review queue is not configured")
 		return
 	}
 	records, err := h.reviewStore.List()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to read review queue"})
+		writeCompetitionError(c, http.StatusInternalServerError, "causal_review", "failed to read review queue")
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"trace_id": utils.GetTraceIDFromGin(c), "reviews": records, "count": len(records)})
+	c.JSON(http.StatusOK, gin.H{"trace_id": competitionTraceID(c), "stage": "causal_review", "status": "ok", "reviews": records, "count": len(records)})
 }
 
 func causalReviewAuthorized(c *gin.Context) bool {

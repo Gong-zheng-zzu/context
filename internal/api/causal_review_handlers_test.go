@@ -65,5 +65,12 @@ func TestCausalReviewQueueRejectsRealOrUnauthorizedData(t *testing.T) {
 		if response.Code != test.want {
 			t.Fatalf("status=%d want=%d body=%s", response.Code, test.want, response.Body.String())
 		}
+		var payload map[string]interface{}
+		if err := json.Unmarshal(response.Body.Bytes(), &payload); err != nil {
+			t.Fatalf("decode error response: %v", err)
+		}
+		if payload["trace_id"] != "review-trace-001" || payload["stage"] != "causal_review" || payload["status"] != "failed" {
+			t.Fatalf("missing failure evidence: %v", payload)
+		}
 	}
 }

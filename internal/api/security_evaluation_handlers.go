@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/contextkeeper/service/internal/security"
-	"github.com/contextkeeper/service/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -237,30 +236,30 @@ func (h *Handler) HandleSecurityAblationEvaluation(c *gin.Context) {
 	userValue, exists := c.Get("user_id")
 	userID, ok := userValue.(string)
 	if !exists || !ok || strings.TrimSpace(userID) == "" {
-		c.JSON(http.StatusUnauthorized, APIResponse{Success: false, Error: "missing authenticated user identity"})
+		writeCompetitionError(c, http.StatusUnauthorized, "security_ablation", "missing authenticated user identity")
 		return
 	}
 	if userID != configuredSecurityEvaluationUserID() {
-		c.JSON(http.StatusForbidden, APIResponse{Success: false, Error: "authenticated user is outside the security evaluation scope"})
+		writeCompetitionError(c, http.StatusForbidden, "security_ablation", "authenticated user is outside the security evaluation scope")
 		return
 	}
 
 	var req SecurityAblationEvaluationRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, APIResponse{Success: false, Error: "invalid request: " + err.Error()})
+		writeCompetitionError(c, http.StatusBadRequest, "security_ablation", "invalid request: "+err.Error())
 		return
 	}
 	if !req.Synthetic || !syntheticSecuritySampleIDPattern.MatchString(req.SampleID) {
-		c.JSON(http.StatusBadRequest, APIResponse{Success: false, Error: "security lab accepts only explicit synthetic samples with a synthetic_ sample_id"})
+		writeCompetitionError(c, http.StatusBadRequest, "security_ablation", "security lab accepts only explicit synthetic samples with a synthetic_ sample_id")
 		return
 	}
 	if message := strings.TrimSpace(req.Message); message == "" || len(message) > 4096 {
-		c.JSON(http.StatusBadRequest, APIResponse{Success: false, Error: "message must contain 1 to 4096 bytes"})
+		writeCompetitionError(c, http.StatusBadRequest, "security_ablation", "message must contain 1 to 4096 bytes")
 		return
 	}
 	securityService := h.securityEvaluationService()
 	if securityService == nil {
-		c.JSON(http.StatusServiceUnavailable, APIResponse{Success: false, Error: "security evaluation pipeline is unavailable"})
+		writeCompetitionUnavailable(c, "security_ablation", "security evaluation pipeline is unavailable")
 		return
 	}
 
@@ -268,17 +267,13 @@ func (h *Handler) HandleSecurityAblationEvaluation(c *gin.Context) {
 	for _, profile := range security.SecurityLabProfiles {
 		result, err := securityService.EvaluateSecurityProfile(c.Request.Context(), profile, req.Message)
 		if err != nil {
-			c.JSON(http.StatusServiceUnavailable, APIResponse{Success: false, Error: err.Error()})
+			writeCompetitionUnavailable(c, "security_ablation", err.Error())
 			return
 		}
 		results = append(results, result)
 	}
 	completed := time.Now().UTC()
-	traceID := utils.GetTraceIDFromGin(c)
-	if traceID == "" {
-		traceID = utils.GenerateTraceID()
-		c.Header("X-Trace-ID", traceID)
-	}
+	traceID := competitionTraceID(c)
 	c.JSON(http.StatusOK, APIResponse{Success: true, Data: gin.H{
 		"trace_id": traceID, "sample_id": req.SampleID, "synthetic": true,
 		"started_at": started.Format(time.RFC3339Nano), "completed_at": completed.Format(time.RFC3339Nano),

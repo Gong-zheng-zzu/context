@@ -75,7 +75,8 @@ func TestSecurityAblationEvaluationRequiresConfiguredUserAndSyntheticScope(t *te
 		{"invalid sample scope", "security_eval_user", `{"message":"正常护理记录","sample_id":"normal_1","synthetic":true}`, http.StatusBadRequest},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			ctx, _ := gin.CreateTestContext(httptest.NewRecorder())
+			recorder := httptest.NewRecorder()
+			ctx, _ := gin.CreateTestContext(recorder)
 			ctx.Request = httptest.NewRequest(http.MethodPost, "/api/v1/security/ablation", strings.NewReader(test.body))
 			ctx.Request.Header.Set("Content-Type", "application/json")
 			if test.userID != "" {
@@ -84,6 +85,13 @@ func TestSecurityAblationEvaluationRequiresConfiguredUserAndSyntheticScope(t *te
 			handler.HandleSecurityAblationEvaluation(ctx)
 			if ctx.Writer.Status() != test.status {
 				t.Fatalf("status = %d, want %d", ctx.Writer.Status(), test.status)
+			}
+			var payload map[string]interface{}
+			if err := json.Unmarshal(recorder.Body.Bytes(), &payload); err != nil {
+				t.Fatalf("decode error response: %v", err)
+			}
+			if payload["trace_id"] == "" || payload["stage"] != "security_ablation" || payload["status"] != "failed" {
+				t.Fatalf("missing failure evidence: %v", payload)
 			}
 		})
 	}
