@@ -93,6 +93,12 @@ func TestExtractCausalRelationsIsAnalysisOnlyWithoutPersistFlag(t *testing.T) {
 	if body.Execution == nil || body.Execution.LatencyBreakdownMs == nil || body.Execution.LatencyBreakdownMs["total"] < 0 {
 		t.Fatalf("execution = %#v; response must expose request timing", body.Execution)
 	}
+	if body.Stage != "causal_extract" || body.Status != "completed" || body.PipelineVersion == "" {
+		t.Fatalf("lifecycle evidence = stage:%q status:%q version:%q", body.Stage, body.Status, body.PipelineVersion)
+	}
+	if body.StartedAt.IsZero() || body.CompletedAt.IsZero() || body.CompletedAt.Before(body.StartedAt) {
+		t.Fatalf("invalid lifecycle timestamps: started=%v completed=%v", body.StartedAt, body.CompletedAt)
+	}
 }
 
 func TestCausalResultLimit(t *testing.T) {
@@ -235,6 +241,9 @@ func TestExtractCausalRelationsReportsUnavailableModelWithoutFabricatingOutput(t
 	}
 	if body.Execution.LatencyBreakdownMs == nil || body.Execution.ModelTier != "unavailable" {
 		t.Fatalf("execution = %#v; unavailable model audit is incomplete", body.Execution)
+	}
+	if body.Stage != "causal_extract" || body.Status != "failed" || body.StartedAt.IsZero() || body.CompletedAt.IsZero() {
+		t.Fatalf("failure lifecycle evidence is incomplete: %#v", body)
 	}
 }
 

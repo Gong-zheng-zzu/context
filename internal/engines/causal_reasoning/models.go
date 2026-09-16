@@ -107,6 +107,11 @@ type ExtractRequest struct {
 // ExtractResponse 因果关系抽取响应
 type ExtractResponse struct {
 	TraceID            string               `json:"trace_id,omitempty"`
+	Stage              string               `json:"stage,omitempty"`
+	Status             string               `json:"status,omitempty"`
+	PipelineVersion    string               `json:"pipeline_version,omitempty"`
+	StartedAt          time.Time            `json:"started_at,omitempty"`
+	CompletedAt        time.Time            `json:"completed_at,omitempty"`
 	CalibrationVersion string               `json:"calibration_version,omitempty"`
 	Candidates         []CausalRelation     `json:"candidates,omitempty"`
 	Abstained          bool                 `json:"abstained"`

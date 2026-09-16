@@ -99,7 +99,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 		}
 		quality := causalAuditQuality(relations)
 		finalizeCausalExecution(execution, latency, time.Since(startTime).Milliseconds())
-		c.JSON(status, causal_reasoning.ExtractResponse{
+		response := causal_reasoning.ExtractResponse{
 			TraceID: traceID, CalibrationVersion: "pccm-c-frozen-v1", Abstained: true, AbstainReason: "model_unavailable",
 			AnalysisOnly:      true,
 			SecurityExecution: securityExecution,
@@ -111,7 +111,9 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 			},
 			Relations: []causal_reasoning.CausalRelation{},
 			Error:     "因果关系抽取失败：真实模型不可用且没有启用规则回退",
-		})
+		}
+		finalizeCausalResponse(&response, startTime, "failed")
+		c.JSON(status, response)
 		return
 	}
 
@@ -130,12 +132,14 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 			latency["persistence"] = time.Since(persistenceStart).Milliseconds()
 			processTime := time.Since(startTime).Milliseconds()
 			finalizeCausalExecution(execution, latency, processTime)
-			c.JSON(http.StatusServiceUnavailable, causal_reasoning.ExtractResponse{
+			response := causal_reasoning.ExtractResponse{
 				TraceID: traceID, CalibrationVersion: "pccm-c-frozen-v1", Candidates: relations,
 				AnalysisOnly: true, SecurityExecution: securityExecution, Execution: execution,
 				Quality: causalAuditQuality(relations), Persistence: persistence, Relations: relations, Count: len(relations), ProcessTimeMs: processTime,
 				Error: "因果图谱存储不可用",
-			})
+			}
+			finalizeCausalResponse(&response, startTime, "failed")
+			c.JSON(http.StatusServiceUnavailable, response)
 			return
 		}
 		if err := h.graphWriter.BuildCausalGraph(c.Request.Context(), relations); err != nil {
@@ -143,12 +147,14 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 			latency["persistence"] = time.Since(persistenceStart).Milliseconds()
 			processTime := time.Since(startTime).Milliseconds()
 			finalizeCausalExecution(execution, latency, processTime)
-			c.JSON(http.StatusInternalServerError, causal_reasoning.ExtractResponse{
+			response := causal_reasoning.ExtractResponse{
 				TraceID: traceID, CalibrationVersion: "pccm-c-frozen-v1", Candidates: relations,
 				AnalysisOnly: true, SecurityExecution: securityExecution, Execution: execution,
 				Quality: causalAuditQuality(relations), Persistence: persistence, Relations: relations, Count: len(relations), ProcessTimeMs: processTime,
 				Error: "构建因果图谱失败",
-			})
+			}
+			finalizeCausalResponse(&response, startTime, "failed")
+			c.JSON(http.StatusInternalServerError, response)
 			return
 		}
 		graphPersisted = true
@@ -163,7 +169,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 	quality := causalAuditQuality(relations)
 	finalizeCausalExecution(execution, latency, processTime)
 
-	c.JSON(http.StatusOK, causal_reasoning.ExtractResponse{
+	response := causal_reasoning.ExtractResponse{
 		TraceID:            traceID,
 		CalibrationVersion: "pccm-c-frozen-v1",
 		Candidates:         relations,
@@ -178,7 +184,17 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 		Relations:          relations,
 		Count:              len(relations),
 		ProcessTimeMs:      processTime,
-	})
+	}
+	finalizeCausalResponse(&response, startTime, "completed")
+	c.JSON(http.StatusOK, response)
+}
+
+func finalizeCausalResponse(response *causal_reasoning.ExtractResponse, startedAt time.Time, status string) {
+	response.Stage = "causal_extract"
+	response.Status = status
+	response.PipelineVersion = "causal-evidence-v1"
+	response.StartedAt = startedAt.UTC()
+	response.CompletedAt = time.Now().UTC()
 }
 
 func causalAbstainReason(relations []causal_reasoning.CausalRelation) string {
