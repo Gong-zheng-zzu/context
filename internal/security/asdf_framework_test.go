@@ -2,8 +2,44 @@ package security
 
 import (
 	"encoding/base64"
+	"encoding/json"
+	"strings"
 	"testing"
 )
+
+func TestASDFAuditRecordsHashesAndBidirectionalSpanMapWithoutPlaintext(t *testing.T) {
+	framework := NewAdversarialSampleDefenseFramework()
+	result := framework.DefendAndNormalizeWithAudit("联系电话 138-1234-5678")
+	if !result.IsAdversarial || result.NormalizedText != "联系电话 13812345678" {
+		t.Fatalf("unexpected ASDF result: %+v", result)
+	}
+	if result.OriginalSHA256 == result.NormalizedSHA256 || len(result.NormalizationSteps) != 1 {
+		t.Fatalf("audit hashes/steps = %+v", result)
+	}
+	step := result.NormalizationSteps[0]
+	if len(step.SpanMap) != 1 || !step.SpanMap[0].Bidirectional {
+		t.Fatalf("span map = %+v, want bidirectional changed range", step.SpanMap)
+	}
+	serialized, err := json.Marshal(result)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(serialized), "138-1234-5678") || strings.Contains(string(serialized), "13812345678") {
+		t.Fatalf("audit JSON leaked input plaintext: %s", serialized)
+	}
+	if !result.RedetectionPerformed || len(result.ResidualAttackTypes) != 0 {
+		t.Fatalf("redetection evidence = %+v", result)
+	}
+}
+
+func TestASDFAuditIsIdempotentAfterNormalization(t *testing.T) {
+	framework := NewAdversarialSampleDefenseFramework()
+	first := framework.DefendAndNormalizeWithAudit("手机号 1 3 8 1 2 3 4 5 6 7 8")
+	second := framework.DefendAndNormalizeWithAudit(first.NormalizedText)
+	if second.IsAdversarial || len(second.NormalizationSteps) != 0 || second.OriginalSHA256 != first.NormalizedSHA256 {
+		t.Fatalf("second audit = %+v, want unchanged normalized input", second)
+	}
+}
 
 func TestASDFSeparatedDigitDetectorsIgnoreNormalNursingMeasurements(t *testing.T) {
 	testCases := []string{
@@ -118,5 +154,19 @@ func TestASDFBase64DetectorDoesNotFlagOrdinaryEncodedText(t *testing.T) {
 	}
 	if got := detector.Normalize(input); got != input {
 		t.Fatalf("ordinary Base64 text was normalized unexpectedly: %q", got)
+	}
+}
+
+func TestASDFDescriptionDoesNotClaimUnverifiedPerformanceOrNovelty(t *testing.T) {
+	description := NewAdversarialSampleDefenseFramework().GetFrameworkDescription()
+	for _, unsupported := range []string{"首次将对抗学习", "防御成功率：95%+", "可发表论文：信息安全顶会"} {
+		if strings.Contains(description, unsupported) {
+			t.Fatalf("framework description contains unsupported claim %q", unsupported)
+		}
+	}
+	for _, boundary := range []string{"不主张未经检索验证的首次性", "数据集哈希", "不作发表级别承诺"} {
+		if !strings.Contains(description, boundary) {
+			t.Fatalf("framework description is missing evidence boundary %q", boundary)
+		}
 	}
 }

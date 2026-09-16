@@ -4,12 +4,19 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
+	"regexp"
 	"strings"
 	"time"
 
 	"github.com/contextkeeper/service/internal/security"
+	"github.com/contextkeeper/service/internal/utils"
 	"github.com/gin-gonic/gin"
 )
+
+const defaultSecurityEvaluationUserID = "eval_user_001"
+
+var syntheticSecuritySampleIDPattern = regexp.MustCompile(`^synthetic_[A-Za-z0-9_-]{1,64}$`)
 
 // SecurityInputEvaluationRequest is intentionally limited to the authenticated
 // input pipeline. It is used by the experiment runner and never calls the LLM.
@@ -20,6 +27,32 @@ type SecurityInputEvaluationRequest struct {
 	SampleID   string `json:"sample_id"`
 	AttackType string `json:"attack_type"`
 	Name       string `json:"name"`
+}
+
+type SecurityAblationEvaluationRequest struct {
+	Message   string `json:"message" binding:"required"`
+	SampleID  string `json:"sample_id" binding:"required"`
+	Synthetic bool   `json:"synthetic" binding:"required"`
+}
+
+func configuredSecurityEvaluationUserID() string {
+	if value := strings.TrimSpace(os.Getenv("SECURITY_EVAL_USER_ID")); value != "" {
+		return value
+	}
+	if value := strings.TrimSpace(os.Getenv("EVAL_USER_ID")); value != "" {
+		return value
+	}
+	return defaultSecurityEvaluationUserID
+}
+
+func (h *Handler) securityEvaluationService() *security.SecurityService {
+	if h != nil && h.securityService != nil {
+		return h.securityService
+	}
+	if contextService != nil {
+		return contextService.GetSecurityService()
+	}
+	return nil
 }
 
 // inputSecurityDecision is the pre-generation decision contract shared by the
@@ -93,23 +126,21 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 	// truthfully reports whether ASDF and multi-layer scanning were available.
 	// Prefer the handler's injected service. The global chat service is kept as
 	// a compatibility fallback, but must not hide the route's actual config.
-	securityService := h.securityService
-	if securityService == nil && contextService != nil {
-		securityService = contextService.GetSecurityService()
-	}
+	securityService := h.securityEvaluationService()
 	securityExecution := newSecurityExecutionEvidence(securityService)
 
 	// Match ChatHandler's pre-generation order without persisting a message,
 	// retrieving memory, or invoking the language model.
 	if securityService != nil {
-		normalized, adversarial, types, asdfConfidence := securityService.DefendAndNormalize(message)
-		if adversarial {
-			message = normalized
-			attackTypes = append(attackTypes, types...)
+		asdfAudit := securityService.DefendAndNormalizeWithAudit(message)
+		securityExecution["asdf"] = asdfAudit
+		if asdfAudit.IsAdversarial {
+			message = asdfAudit.NormalizedText
+			attackTypes = append(attackTypes, asdfAudit.AttackTypes...)
 			warnings = append(warnings, "asdf_normalized")
-			inputNormalized = normalized != originalMessage
+			inputNormalized = asdfAudit.NormalizedText != originalMessage
 			securityExecution["input_normalized"] = inputNormalized
-			securityExecution["asdf_confidence"] = asdfConfidence
+			securityExecution["asdf_confidence"] = asdfAudit.Confidence
 		}
 	}
 
@@ -195,5 +226,64 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 		"disclosure_permitted":  false,
 		"claim_generated":       false,
 		"deleted_data_returned": false,
+	}})
+}
+
+// HandleSecurityAblationEvaluation computes all security-lab profiles on the
+// server. The route is JWT-protected at registration and additionally scoped
+// to one configured evaluation identity and explicit synthetic samples.
+func (h *Handler) HandleSecurityAblationEvaluation(c *gin.Context) {
+	started := time.Now().UTC()
+	userValue, exists := c.Get("user_id")
+	userID, ok := userValue.(string)
+	if !exists || !ok || strings.TrimSpace(userID) == "" {
+		c.JSON(http.StatusUnauthorized, APIResponse{Success: false, Error: "missing authenticated user identity"})
+		return
+	}
+	if userID != configuredSecurityEvaluationUserID() {
+		c.JSON(http.StatusForbidden, APIResponse{Success: false, Error: "authenticated user is outside the security evaluation scope"})
+		return
+	}
+
+	var req SecurityAblationEvaluationRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, APIResponse{Success: false, Error: "invalid request: " + err.Error()})
+		return
+	}
+	if !req.Synthetic || !syntheticSecuritySampleIDPattern.MatchString(req.SampleID) {
+		c.JSON(http.StatusBadRequest, APIResponse{Success: false, Error: "security lab accepts only explicit synthetic samples with a synthetic_ sample_id"})
+		return
+	}
+	if message := strings.TrimSpace(req.Message); message == "" || len(message) > 4096 {
+		c.JSON(http.StatusBadRequest, APIResponse{Success: false, Error: "message must contain 1 to 4096 bytes"})
+		return
+	}
+	securityService := h.securityEvaluationService()
+	if securityService == nil {
+		c.JSON(http.StatusServiceUnavailable, APIResponse{Success: false, Error: "security evaluation pipeline is unavailable"})
+		return
+	}
+
+	results := make([]security.SecurityProfileEvaluation, 0, len(security.SecurityLabProfiles))
+	for _, profile := range security.SecurityLabProfiles {
+		result, err := securityService.EvaluateSecurityProfile(c.Request.Context(), profile, req.Message)
+		if err != nil {
+			c.JSON(http.StatusServiceUnavailable, APIResponse{Success: false, Error: err.Error()})
+			return
+		}
+		results = append(results, result)
+	}
+	completed := time.Now().UTC()
+	traceID := utils.GetTraceIDFromGin(c)
+	if traceID == "" {
+		traceID = utils.GenerateTraceID()
+		c.Header("X-Trace-ID", traceID)
+	}
+	c.JSON(http.StatusOK, APIResponse{Success: true, Data: gin.H{
+		"trace_id": traceID, "sample_id": req.SampleID, "synthetic": true,
+		"started_at": started.Format(time.RFC3339Nano), "completed_at": completed.Format(time.RFC3339Nano),
+		"latency_ms":       float64(completed.Sub(started).Microseconds()) / 1000,
+		"pipeline_version": security.SecurityLabPipelineVersion,
+		"profiles":         results, "memory_write_applied": false, "generation_skipped": true,
 	}})
 }

@@ -77,10 +77,12 @@ type ScanResult struct {
 // explicitly distinguishes an enabled detector from a request that actually
 // reached the multi-layer path (which may fall back on an error).
 type MultiLayerSecurityConfiguration struct {
-	Enabled      bool `json:"enabled"`
-	PCCMEnabled  bool `json:"pccm_enabled"`
-	CASIAEnabled bool `json:"casia_enabled"`
-	EarlyStop    bool `json:"early_stop"`
+	Enabled      bool               `json:"enabled"`
+	PCCMEnabled  bool               `json:"pccm_enabled"`
+	CASIAEnabled bool               `json:"casia_enabled"`
+	EarlyStop    bool               `json:"early_stop"`
+	PCCM         PCCMSecurityConfig `json:"pccm_s"`
+	CASIA        CASIAConfig        `json:"casia"`
 }
 
 // NewSecurityService 创建安全服务
@@ -197,6 +199,20 @@ func (s *SecurityService) DefendAndNormalize(text string) (
 	}
 
 	return s.asdfFramework.DefendAndNormalize(text)
+}
+
+// DefendAndNormalizeWithAudit exposes metadata-only ASDF evidence while the
+// normalized plaintext remains available only to the server-side pipeline.
+func (s *SecurityService) DefendAndNormalizeWithAudit(text string) ASDFAuditResult {
+	if s == nil || s.asdfFramework == nil {
+		return ASDFAuditResult{
+			NormalizedText: text, PipelineVersion: ASDFPipelineVersion,
+			OriginalSHA256: asdfTextHash(text), NormalizedSHA256: asdfTextHash(text),
+			AttackTypes: []string{}, NormalizationSteps: []ASDFNormalizationStep{},
+			ResidualAttackTypes: []string{}, RedetectionPerformed: false,
+		}
+	}
+	return s.asdfFramework.DefendAndNormalizeWithAudit(text)
 }
 
 // ScanContent 扫描内容
@@ -379,6 +395,8 @@ func (s *SecurityService) GetMultiLayerConfiguration() MultiLayerSecurityConfigu
 		configuration.PCCMEnabled = layerConfiguration.PCCMEnabled
 		configuration.CASIAEnabled = layerConfiguration.CASIAEnabled
 		configuration.EarlyStop = layerConfiguration.EarlyStop
+		configuration.PCCM = layerConfiguration.PCCM
+		configuration.CASIA = layerConfiguration.CASIA
 	}
 	return configuration
 }

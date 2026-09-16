@@ -427,6 +427,7 @@ func setupRoutesAndStartServer(router *gin.Engine, handler *api.Handler, cfg *co
 			// pre-generation security pipeline and is reserved for reproducible tests.
 			securityEvaluation := protected.Group("/v1/security")
 			securityEvaluation.POST("/evaluate-input", handler.HandleSecurityInputEvaluation)
+			securityEvaluation.POST("/ablation", handler.HandleSecurityAblationEvaluation)
 
 			experimentEvidence := protected.Group("/v1/experiments")
 			experimentEvidence.POST("/threeway/evidence", handler.HandleStructuredThreeWayEvidence)

@@ -27,10 +27,34 @@ type MultiLayerDetector struct {
 	parallelLayers []int           // 可并行执行的层
 	usePCCM        bool            // 🆕 是否使用PCCM模型
 	useCASIA       bool            // 🆕 是否使用CASIA算法
+	pccmConfig     PCCMSecurityConfig
 
 	// 统计
 	stats *DetectionStats
 	mu    sync.RWMutex
+}
+
+const PCCMSecurityConfigVersion = "pccm-s-fixed-v1"
+
+// PCCMSecurityConfig is the frozen, hand-configured PCCM-S fusion contract.
+// CalibrationSource is explicit so fixed weights are never presented as a
+// learned or validated calibration artifact.
+type PCCMSecurityConfig struct {
+	Version                  string          `json:"version"`
+	CalibrationSource        string          `json:"calibration_source"`
+	LayerWeights             map[int]float64 `json:"layer_weights"`
+	EnhancementPerExtraLayer float64         `json:"enhancement_per_extra_layer"`
+	DecisionThreshold        float64         `json:"decision_threshold"`
+}
+
+func DefaultPCCMSecurityConfig() PCCMSecurityConfig {
+	return PCCMSecurityConfig{
+		Version:                  PCCMSecurityConfigVersion,
+		CalibrationSource:        "fixed_unvalidated",
+		LayerWeights:             map[int]float64{1: 0.70, 2: 0.10, 4: 0.15, 5: 0.05},
+		EnhancementPerExtraLayer: 0.05,
+		DecisionThreshold:        0.45,
+	}
 }
 
 // DetectionStats 检测统计
@@ -64,9 +88,11 @@ type FusionResult struct {
 // MultiLayerConfiguration is emitted with a scan result so an experiment can
 // prove which detection path actually produced its outcome.
 type MultiLayerConfiguration struct {
-	PCCMEnabled  bool `json:"pccm_enabled"`
-	CASIAEnabled bool `json:"casia_enabled"`
-	EarlyStop    bool `json:"early_stop"`
+	PCCMEnabled  bool               `json:"pccm_enabled"`
+	CASIAEnabled bool               `json:"casia_enabled"`
+	EarlyStop    bool               `json:"early_stop"`
+	PCCM         PCCMSecurityConfig `json:"pccm_s"`
+	CASIA        CASIAConfig        `json:"casia"`
 }
 
 // NewMultiLayerDetector 创建多层检测器
@@ -93,6 +119,7 @@ func NewMultiLayerDetector(ollamaURL, llmModel string) *MultiLayerDetector {
 		parallelLayers: []int{1, 2, 4}, // L1, L2, L4可并行
 		usePCCM:        true,           // 🆕 默认启用PCCM
 		useCASIA:       true,           // 🆕 默认启用CASIA
+		pccmConfig:     DefaultPCCMSecurityConfig(),
 		stats: &DetectionStats{
 			LayerUsage: make(map[int]int64),
 		},
@@ -250,7 +277,7 @@ func (mld *MultiLayerDetector) applyCASIA(text string, items []SensitiveInfo) []
 			item.Start,
 			item.End,
 			string(item.Type),
-			defaultCASIAContextWindow,
+			mld.casiaAlgorithm.config.ContextWindow,
 		)
 		evidence.BaseConfidence = item.Confidence
 		adjustedConf := item.Confidence * evidence.NormalizedWeight
@@ -399,12 +426,7 @@ func (mld *MultiLayerDetector) calculateConfidenceWithPCCM(results []LayerResult
 	}
 
 	// 加权累积各层置信度（仅对有检测结果的层进行归一化加权）
-	layerWeights := map[int]float64{
-		1: 0.70, // 正则
-		2: 0.10, // 词典
-		4: 0.15, // 上下文
-		5: 0.05, // LLM
-	}
+	layerWeights := mld.pccmConfig.LayerWeights
 	layerConfs := map[int]float64{
 		1: regexConf,
 		2: trieConf,
@@ -442,7 +464,7 @@ func (mld *MultiLayerDetector) calculateConfidenceWithPCCM(results []LayerResult
 		layerCount++
 	}
 	if layerCount > 1 {
-		finalConfidence *= 1.0 + float64(layerCount-1)*0.05
+		finalConfidence *= 1.0 + float64(layerCount-1)*mld.pccmConfig.EnhancementPerExtraLayer
 	}
 
 	if finalConfidence > 1.0 {
@@ -639,7 +661,18 @@ func (mld *MultiLayerDetector) GetConfiguration() MultiLayerConfiguration {
 		PCCMEnabled:  mld.usePCCM,
 		CASIAEnabled: mld.useCASIA,
 		EarlyStop:    mld.earlyStop,
+		PCCM:         clonePCCMSecurityConfig(mld.pccmConfig),
+		CASIA:        mld.casiaAlgorithm.GetConfiguration(),
 	}
+}
+
+func clonePCCMSecurityConfig(source PCCMSecurityConfig) PCCMSecurityConfig {
+	cloned := source
+	cloned.LayerWeights = make(map[int]float64, len(source.LayerWeights))
+	for layerID, weight := range source.LayerWeights {
+		cloned.LayerWeights[layerID] = weight
+	}
+	return cloned
 }
 
 // 🆕 GetPCCMModel 获取PCCM模型（用于调优）

@@ -19,24 +19,26 @@ type ProgressiveConfidenceModel struct {
 
 // PCCMDetectionResult 检测结果（PCCM专用）
 type PCCMDetectionResult struct {
-	IsSensitive      bool    // 是否为敏感信息
-	FinalConfidence  float64 // 最终置信度
-	RegexConfidence  float64 // 正则检测置信度
-	TrieConfidence   float64 // 字典树检测置信度
-	LLMConfidence    float64 // LLM语义检测置信度
-	ConfidenceLevel  string  // 置信度等级：high/medium/low
-	DetectionLayers  []string // 触发的检测层
-	RecommendAction  string  // 推荐操作：auto_redact/manual_review/pass
+	IsSensitive     bool     // 是否为敏感信息
+	FinalConfidence float64  // 最终置信度
+	RegexConfidence float64  // 正则检测置信度
+	TrieConfidence  float64  // 字典树检测置信度
+	LLMConfidence   float64  // LLM语义检测置信度
+	ConfidenceLevel string   // 置信度等级：high/medium/low
+	DetectionLayers []string // 触发的检测层
+	RecommendAction string   // 推荐操作：auto_redact/manual_review/pass
 }
 
 // NewProgressiveConfidenceModel 创建渐进式置信度模型
 func NewProgressiveConfidenceModel() *ProgressiveConfidenceModel {
+	configuration := DefaultPCCMSecurityConfig()
+	// This legacy three-input API projects the single PCCM-S source of truth
+	// onto regex/dictionary/LLM and renormalizes after excluding context.
+	projectedTotal := configuration.LayerWeights[1] + configuration.LayerWeights[2] + configuration.LayerWeights[5]
 	return &ProgressiveConfidenceModel{
-		// 🔥 优化权重配置：提高正则检测权重，降低其他层权重
-		// 原因：正则检测是最可靠的基础层，应该占主导地位
-		RegexWeight: 0.85, // 正则检测权重85%（主导层）
-		TrieWeight:  0.10, // 字典树检测权重10%
-		LLMWeight:   0.05, // LLM语义检测权重5%（最慢层权重最低）
+		RegexWeight: configuration.LayerWeights[1] / projectedTotal,
+		TrieWeight:  configuration.LayerWeights[2] / projectedTotal,
+		LLMWeight:   configuration.LayerWeights[5] / projectedTotal,
 
 		// 默认阈值配置
 		HighConfidenceThreshold:   0.9,
@@ -145,9 +147,9 @@ func (m *ProgressiveConfidenceModel) Detect(
 // 使用梯度下降法优化权重，最小化误报率和漏报率
 func (m *ProgressiveConfidenceModel) OptimizeWeights(
 	trainingData []struct {
-		RegexConf  float64
-		TrieConf   float64
-		LLMConf    float64
+		RegexConf   float64
+		TrieConf    float64
+		LLMConf     float64
 		GroundTruth bool // 真实标签
 	},
 	learningRate float64,
@@ -222,9 +224,9 @@ C_final = (w1·C_regex + w2·C_trie + w3·C_llm) × (1 + 0.1·(n-1))
 3. 非线性增强：多层协同时置信度额外提升
 4. 自适应优化：权重可根据历史数据自动调优
 
-优势：
-- 准确率提升：多层融合比单层检测准确率提升67.3%
-- 性能优化：渐进式检测减少30%计算开销
-- 可解释性：每层置信度可追溯，便于审计
+评测边界：
+- 默认权重是固定工程配置，不代表已通过训练或冻结集校准
+- 准确率和性能提升必须由同配置、同数据集的消融实验验证
+- 每层置信度可追溯，便于审计和复测
 `
 }

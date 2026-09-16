@@ -7,6 +7,21 @@ import (
 	"time"
 )
 
+func TestMultiLayerConfigurationAuditsFixedUnvalidatedPCCMSWeights(t *testing.T) {
+	detector := NewMultiLayerDetector("http://127.0.0.1:1", "unused")
+	configuration := detector.GetConfiguration()
+	if configuration.PCCM.Version != PCCMSecurityConfigVersion || configuration.PCCM.CalibrationSource != "fixed_unvalidated" {
+		t.Fatalf("PCCM-S configuration = %+v", configuration.PCCM)
+	}
+	if configuration.PCCM.LayerWeights[1] != 0.70 || configuration.PCCM.LayerWeights[4] != 0.15 {
+		t.Fatalf("PCCM-S weights = %+v", configuration.PCCM.LayerWeights)
+	}
+	configuration.PCCM.LayerWeights[1] = 0
+	if detector.GetConfiguration().PCCM.LayerWeights[1] != 0.70 {
+		t.Fatal("configuration snapshot mutated live PCCM-S weights")
+	}
+}
+
 // TestMultiLayerDetector 测试多层检测器
 func TestMultiLayerDetector(t *testing.T) {
 	detector := NewMultiLayerDetector("http://localhost:11434", "qwen2.5:7b")

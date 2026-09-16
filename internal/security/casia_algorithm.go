@@ -8,6 +8,14 @@ import (
 )
 
 const defaultCASIAContextWindow = 64
+const CASIAConfigVersion = "casia-context-v1"
+
+type CASIAConfig struct {
+	Version           string                        `json:"version"`
+	ContextWindow     int                           `json:"context_window_bytes"`
+	DecisionThreshold float64                       `json:"decision_threshold"`
+	KeywordWeights    map[string]map[string]float64 `json:"keyword_weights"`
+}
 
 // CASIAKeywordEvidence identifies one context feature that affected a
 // sensitive-information decision. It is deliberately metadata-only: callers
@@ -19,15 +27,17 @@ type CASIAKeywordEvidence struct {
 
 // CASIAEvidence is attached to a candidate after CASIA recalibrates it.
 type CASIAEvidence struct {
-	SensitiveType    string                 `json:"sensitive_type"`
-	ContextStart     int                    `json:"context_start"`
-	ContextEnd       int                    `json:"context_end"`
-	WindowBytes      int                    `json:"window_bytes"`
-	MatchedKeywords  []CASIAKeywordEvidence `json:"matched_keywords"`
-	RawWeight        float64                `json:"raw_weight"`
-	NormalizedWeight float64                `json:"normalized_weight"`
-	BaseConfidence   float64                `json:"base_confidence"`
-	AdjustedScore    float64                `json:"adjusted_score"`
+	ConfigurationVersion string                 `json:"configuration_version"`
+	SensitiveType        string                 `json:"sensitive_type"`
+	ContextStart         int                    `json:"context_start"`
+	ContextEnd           int                    `json:"context_end"`
+	WindowBytes          int                    `json:"window_bytes"`
+	MatchedKeywords      []CASIAKeywordEvidence `json:"matched_keywords"`
+	RawWeight            float64                `json:"raw_weight"`
+	NormalizedWeight     float64                `json:"normalized_weight"`
+	BaseConfidence       float64                `json:"base_confidence"`
+	AdjustedScore        float64                `json:"adjusted_score"`
+	DecisionThreshold    float64                `json:"decision_threshold"`
 }
 
 // ContextAwareSensitiveInfoAlgorithm 上下文感知的敏感信息识别算法
@@ -35,15 +45,54 @@ type CASIAEvidence struct {
 type ContextAwareSensitiveInfoAlgorithm struct {
 	// 上下文关键词权重表
 	contextKeywords map[string]map[string]float64
+	config          CASIAConfig
 }
 
 // NewContextAwareSensitiveInfoAlgorithm 创建上下文感知算法
 func NewContextAwareSensitiveInfoAlgorithm() *ContextAwareSensitiveInfoAlgorithm {
-	algo := &ContextAwareSensitiveInfoAlgorithm{
-		contextKeywords: make(map[string]map[string]float64),
+	return NewContextAwareSensitiveInfoAlgorithmWithConfig(DefaultCASIAConfig())
+}
+
+func NewContextAwareSensitiveInfoAlgorithmWithConfig(config CASIAConfig) *ContextAwareSensitiveInfoAlgorithm {
+	if config.Version == "" {
+		config.Version = CASIAConfigVersion
 	}
-	algo.initContextKeywords()
+	if config.ContextWindow <= 0 {
+		config.ContextWindow = defaultCASIAContextWindow
+	}
+	if config.DecisionThreshold <= 0 || config.DecisionThreshold > 1 {
+		config.DecisionThreshold = 0.6
+	}
+	algo := &ContextAwareSensitiveInfoAlgorithm{
+		contextKeywords: cloneCASIAKeywords(config.KeywordWeights),
+		config:          config,
+	}
+	if len(algo.contextKeywords) == 0 {
+		algo.initContextKeywords()
+		algo.config.KeywordWeights = cloneCASIAKeywords(algo.contextKeywords)
+	}
 	return algo
+}
+
+func DefaultCASIAConfig() CASIAConfig {
+	return CASIAConfig{Version: CASIAConfigVersion, ContextWindow: defaultCASIAContextWindow, DecisionThreshold: 0.6}
+}
+
+func cloneCASIAKeywords(source map[string]map[string]float64) map[string]map[string]float64 {
+	cloned := make(map[string]map[string]float64, len(source))
+	for sensitiveType, keywords := range source {
+		cloned[sensitiveType] = make(map[string]float64, len(keywords))
+		for keyword, weight := range keywords {
+			cloned[sensitiveType][keyword] = weight
+		}
+	}
+	return cloned
+}
+
+func (a *ContextAwareSensitiveInfoAlgorithm) GetConfiguration() CASIAConfig {
+	configuration := a.config
+	configuration.KeywordWeights = cloneCASIAKeywords(a.contextKeywords)
+	return configuration
 }
 
 // initContextKeywords 初始化上下文关键词权重表
@@ -127,7 +176,7 @@ func (a *ContextAwareSensitiveInfoAlgorithm) AnalyzeContext(
 	contextWindow int,
 ) CASIAEvidence {
 	if contextWindow <= 0 {
-		contextWindow = defaultCASIAContextWindow
+		contextWindow = a.config.ContextWindow
 	}
 	if candidateStart < 0 {
 		candidateStart = 0
@@ -143,10 +192,12 @@ func (a *ContextAwareSensitiveInfoAlgorithm) AnalyzeContext(
 	}
 	contextStart, contextEnd := casiaContextBounds(text, candidateStart, candidateEnd, contextWindow)
 	evidence := CASIAEvidence{
-		SensitiveType: sensitiveType,
-		ContextStart:  contextStart,
-		ContextEnd:    contextEnd,
-		WindowBytes:   contextWindow,
+		ConfigurationVersion: a.config.Version,
+		SensitiveType:        sensitiveType,
+		ContextStart:         contextStart,
+		ContextEnd:           contextEnd,
+		WindowBytes:          contextWindow,
+		DecisionThreshold:    a.config.DecisionThreshold,
 	}
 
 	// 获取该类型的上下文关键词
@@ -202,14 +253,14 @@ func (a *ContextAwareSensitiveInfoAlgorithm) DetectWithContext(
 		patternStart,
 		patternEnd,
 		sensitiveType,
-		defaultCASIAContextWindow,
+		a.config.ContextWindow,
 	)
 
 	// 最终置信度 = 基础置信度 × 上下文权重
 	finalConfidence := baseConfidence * evidence.NormalizedWeight
 
 	// 判定阈值
-	isSensitive = finalConfidence >= 0.6
+	isSensitive = finalConfidence >= a.config.DecisionThreshold
 
 	return isSensitive, finalConfidence
 }
@@ -229,7 +280,7 @@ func (a *ContextAwareSensitiveInfoAlgorithm) AdjustConfidenceByContext(
 		start,
 		end,
 		sensitiveType,
-		defaultCASIAContextWindow,
+		a.config.ContextWindow,
 	)
 
 	// 最终置信度 = 基础置信度 × 上下文权重
@@ -276,16 +327,15 @@ w_i: 第i个上下文关键词的权重（正权重增强，负权重抑制）
 4. 权重累积：累加匹配到的关键词权重
 5. 置信度计算：基础置信度 × 上下文权重
 
-创新点：
+	设计特点：
 1. 上下文感知：不只看模式，还看语境
-2. 权重学习：关键词权重可根据历史数据优化
-3. 误报降低：通过负权重关键词抑制误判
+2. 固定配置：当前关键词权重来自版本化人工配置，未声称为学习校准结果
+3. 负向证据：通过负权重关键词抑制误判
 4. 可解释性：可追溯哪些上下文关键词影响了判定
 
-实验效果：
-- 误报率降低：从8.5% → 3.2%（降低62.4%）
-- 准确率提升：从78.1% → 85.4%（提升9.3%）
-- 特别适用于：身份证/邮编、手机号/工号、病历号/订单号等易混淆场景
+评测边界：
+- 误报率、召回率和提升幅度必须来自带数据集哈希与配置版本的正式评测
+- 当前配置版本和命中证据会随结果返回，历史数字不代表当前代码成绩
 
 示例：
 文本1："患者身份证：110101199001011234"

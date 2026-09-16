@@ -1,12 +1,53 @@
 package security
 
 import (
+	"crypto/sha256"
 	"encoding/base64"
+	"fmt"
 	"regexp"
 	"strings"
 	"unicode"
 	"unicode/utf8"
 )
+
+const ASDFPipelineVersion = "asdf-normalization-v2"
+
+// ASDFSpanMap maps one changed byte range before and after a normalization
+// step. Both coordinate systems are retained so an auditor can translate a
+// detector span in either direction without returning the sensitive text.
+type ASDFSpanMap struct {
+	OriginalStart   int  `json:"original_start"`
+	OriginalEnd     int  `json:"original_end"`
+	NormalizedStart int  `json:"normalized_start"`
+	NormalizedEnd   int  `json:"normalized_end"`
+	Bidirectional   bool `json:"bidirectional"`
+}
+
+// ASDFNormalizationStep is metadata-only evidence for one applied detector.
+type ASDFNormalizationStep struct {
+	Sequence     int           `json:"sequence"`
+	AttackType   string        `json:"attack_type"`
+	Confidence   float64       `json:"confidence"`
+	InputSHA256  string        `json:"input_sha256"`
+	OutputSHA256 string        `json:"output_sha256"`
+	Changed      bool          `json:"changed"`
+	SpanMap      []ASDFSpanMap `json:"span_map"`
+}
+
+// ASDFAuditResult preserves the legacy ASDF result and adds reproducible,
+// non-plaintext normalization evidence.
+type ASDFAuditResult struct {
+	NormalizedText       string                  `json:"-"`
+	IsAdversarial        bool                    `json:"is_adversarial"`
+	AttackTypes          []string                `json:"attack_types"`
+	Confidence           float64                 `json:"confidence"`
+	PipelineVersion      string                  `json:"pipeline_version"`
+	OriginalSHA256       string                  `json:"original_sha256"`
+	NormalizedSHA256     string                  `json:"normalized_sha256"`
+	NormalizationSteps   []ASDFNormalizationStep `json:"normalization_steps"`
+	RedetectionPerformed bool                    `json:"redetection_performed"`
+	ResidualAttackTypes  []string                `json:"residual_attack_types"`
+}
 
 // AdversarialSampleDefenseFramework 对抗样本防御框架
 // Adversarial Sample Defense Framework (ASDF)
@@ -47,8 +88,18 @@ func (f *AdversarialSampleDefenseFramework) DefendAndNormalize(text string) (
 	attackTypes []string,
 	confidence float64,
 ) {
-	normalizedText = text
-	attackTypes = []string{}
+	result := f.DefendAndNormalizeWithAudit(text)
+	return result.NormalizedText, result.IsAdversarial, result.AttackTypes, result.Confidence
+}
+
+// DefendAndNormalizeWithAudit executes the same legacy normalization path and
+// records hashes and byte-range mappings for each applied transformation.
+func (f *AdversarialSampleDefenseFramework) DefendAndNormalizeWithAudit(text string) ASDFAuditResult {
+	normalizedText := text
+	attackTypes := []string{}
+	isAdversarial := false
+	confidence := 0.0
+	steps := make([]ASDFNormalizationStep, 0)
 	totalConfidence := 0.0
 	detectionCount := 0
 
@@ -61,8 +112,17 @@ func (f *AdversarialSampleDefenseFramework) DefendAndNormalize(text string) (
 			totalConfidence += conf
 			detectionCount++
 
-			// 归一化对抗样本
-			normalizedText = detector.Normalize(normalizedText)
+			before := normalizedText
+			normalizedText = detector.Normalize(before)
+			steps = append(steps, ASDFNormalizationStep{
+				Sequence:     len(steps) + 1,
+				AttackType:   attackType,
+				Confidence:   conf,
+				InputSHA256:  asdfTextHash(before),
+				OutputSHA256: asdfTextHash(normalizedText),
+				Changed:      before != normalizedText,
+				SpanMap:      asdfChangedSpanMap(before, normalizedText),
+			})
 		}
 	}
 
@@ -71,7 +131,48 @@ func (f *AdversarialSampleDefenseFramework) DefendAndNormalize(text string) (
 		confidence = totalConfidence / float64(detectionCount)
 	}
 
-	return normalizedText, isAdversarial, attackTypes, confidence
+	residual := make([]string, 0)
+	for _, detector := range f.detectors {
+		if detected, _, attackType := detector.Detect(normalizedText); detected {
+			residual = append(residual, attackType)
+		}
+	}
+	return ASDFAuditResult{
+		NormalizedText:       normalizedText,
+		IsAdversarial:        isAdversarial,
+		AttackTypes:          attackTypes,
+		Confidence:           confidence,
+		PipelineVersion:      ASDFPipelineVersion,
+		OriginalSHA256:       asdfTextHash(text),
+		NormalizedSHA256:     asdfTextHash(normalizedText),
+		NormalizationSteps:   steps,
+		RedetectionPerformed: true,
+		ResidualAttackTypes:  residual,
+	}
+}
+
+func asdfTextHash(text string) string {
+	return fmt.Sprintf("%x", sha256.Sum256([]byte(text)))
+}
+
+func asdfChangedSpanMap(before, after string) []ASDFSpanMap {
+	if before == after {
+		return []ASDFSpanMap{}
+	}
+	prefix := 0
+	for prefix < len(before) && prefix < len(after) && before[prefix] == after[prefix] {
+		prefix++
+	}
+	beforeSuffix, afterSuffix := len(before), len(after)
+	for beforeSuffix > prefix && afterSuffix > prefix && before[beforeSuffix-1] == after[afterSuffix-1] {
+		beforeSuffix--
+		afterSuffix--
+	}
+	return []ASDFSpanMap{{
+		OriginalStart: prefix, OriginalEnd: beforeSuffix,
+		NormalizedStart: prefix, NormalizedEnd: afterSuffix,
+		Bidirectional: true,
+	}}
 }
 
 // ============================================
@@ -370,20 +471,19 @@ func (f *AdversarialSampleDefenseFramework) GetFrameworkDescription() string {
 4. 中文数字：一一零一零一 → 110101
 5. Base64编码：MTEwMTAx → 110101（解码）
 
-创新点：
-1. 理论创新：首次将对抗学习思想应用于敏感信息检测
+设计特点：
+1. 方法借鉴：将对抗样本归一化思想用于敏感信息绕过检测，不主张未经检索验证的首次性
 2. 框架化：可扩展的检测器架构，易于添加新的对抗样本类型
 3. 归一化：不只是检测，还能还原，提升后续检测准确率
 4. 多层防御：对抗样本防御 + 标准检测，双重保障
 
-实验效果：
-- 防绕过能力：从18.1% → 85.4%（提升67.3%）
-- 覆盖场景：8种常见绕过攻击
-- 防御成功率：95%+（10种攻击中9种成功防御）
+评测边界：
+- 代码覆盖空格、特殊字符、同音字、中文数字和Base64等归一化路径
+- 防御率、误伤率和提升幅度只引用带数据集哈希与配置指纹的正式评测结果
+- 历史运行不能代替当前代码复测
 
-学术价值：
-- 跨领域创新：AI安全 + 隐私保护
-- 可发表论文：信息安全顶会（CCS、NDSS）
-- 可申请专利：对抗样本防御方法
+研究价值：
+- 研究方向：AI安全与隐私保护的交叉工程验证
+- 论文或专利价值需要新颖性检索、对比实验和独立评审，代码不作发表级别承诺
 `
 }

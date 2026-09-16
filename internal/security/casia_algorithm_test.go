@@ -5,6 +5,48 @@ import (
 	"testing"
 )
 
+func TestCASIAConfigurationIsVersionedAndDefensivelyCopied(t *testing.T) {
+	algo := NewContextAwareSensitiveInfoAlgorithm()
+	config := algo.GetConfiguration()
+	if config.Version != CASIAConfigVersion || config.ContextWindow != defaultCASIAContextWindow || config.DecisionThreshold != 0.6 {
+		t.Fatalf("configuration = %+v", config)
+	}
+	config.KeywordWeights["phone"]["手机"] = 99
+	evidence := algo.AnalyzeContext("手机号13812345678", len("手机号"), len("手机号13812345678"), "phone", 0)
+	if evidence.ConfigurationVersion != CASIAConfigVersion || evidence.DecisionThreshold != 0.6 {
+		t.Fatalf("evidence metadata = %+v", evidence)
+	}
+	if evidence.RawWeight == 99 {
+		t.Fatal("configuration snapshot mutated the live CASIA keyword table")
+	}
+}
+
+func TestCASIACustomWindowAndThresholdReachEvidence(t *testing.T) {
+	config := DefaultCASIAConfig()
+	config.Version = "casia-test-v2"
+	config.ContextWindow = 12
+	config.DecisionThreshold = 0.75
+	algo := NewContextAwareSensitiveInfoAlgorithmWithConfig(config)
+	evidence := algo.AnalyzeContext("手机号13812345678", len("手机号"), len("手机号13812345678"), "phone", 0)
+	if evidence.ConfigurationVersion != "casia-test-v2" || evidence.WindowBytes != 12 || evidence.DecisionThreshold != 0.75 {
+		t.Fatalf("custom evidence = %+v", evidence)
+	}
+}
+
+func TestCASIADescriptionDoesNotClaimUnverifiedMetricsOrLearnedWeights(t *testing.T) {
+	description := NewContextAwareSensitiveInfoAlgorithm().GetAlgorithmDescription()
+	for _, unsupported := range []string{"误报率降低：从", "准确率提升：从", "权重学习："} {
+		if strings.Contains(description, unsupported) {
+			t.Fatalf("algorithm description contains unsupported claim %q", unsupported)
+		}
+	}
+	for _, boundary := range []string{"固定配置", "数据集哈希", "历史数字不代表当前代码成绩"} {
+		if !strings.Contains(description, boundary) {
+			t.Fatalf("algorithm description is missing evidence boundary %q", boundary)
+		}
+	}
+}
+
 func TestCASIAEvidenceCapturesPositiveAndNegativeKeywords(t *testing.T) {
 	algorithm := NewContextAwareSensitiveInfoAlgorithm()
 	text := "邮编110101。患者身份证110101199001011234。"
