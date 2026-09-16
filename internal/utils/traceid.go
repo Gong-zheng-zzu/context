@@ -18,6 +18,8 @@ import (
 // TraceID 键名
 const TraceIDKey = "traceId"
 
+var validExternalTraceID = regexp.MustCompile(`^[A-Za-z0-9_-]{8,64}$`)
+
 // goroutine local storage for TraceID
 var (
 	traceIDMap   = make(map[uint64]string)
@@ -153,7 +155,7 @@ func TraceIDMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 从请求头获取TraceID，如果没有则生成新的
 		traceID := c.GetHeader("X-Trace-ID")
-		if traceID == "" {
+		if !validExternalTraceID.MatchString(traceID) {
 			traceID = GenerateTraceID()
 		}
 

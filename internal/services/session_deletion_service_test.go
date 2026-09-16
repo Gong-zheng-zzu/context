@@ -3,10 +3,12 @@ package services
 import (
 	"context"
 	"errors"
+	"regexp"
 	"testing"
 
 	"github.com/contextkeeper/service/internal/models"
 	"github.com/contextkeeper/service/internal/store"
+	"github.com/contextkeeper/service/internal/utils"
 )
 
 type fakeSessionReplica struct {
@@ -85,12 +87,19 @@ func TestSessionDeletionDeletesAllReplicasBeforeLocalArtifacts(t *testing.T) {
 		sessionReplicaBinding{name: "neo4j", replica: graphReplica},
 	)
 
-	result, err := service.Delete(context.Background(), "owner", "session-a", false)
+	ctx := utils.WithTraceID(context.Background(), "deletion-trace-001")
+	result, err := service.Delete(ctx, "owner", "session-a", false)
 	if err != nil {
 		t.Fatalf("delete cascade: %v", err)
 	}
 	if !result.Complete {
 		t.Fatal("successful verified cascade must be marked complete")
+	}
+	if result.TraceID != "deletion-trace-001" || result.VerificationID == "" || result.ScopeSHA256 == "" || result.EvidenceSHA256 == "" || result.VerifiedAt.IsZero() {
+		t.Fatalf("missing deletion evidence: %#v", result)
+	}
+	if !regexp.MustCompile(`^[a-f0-9]{64}$`).MatchString(result.ScopeSHA256) || !regexp.MustCompile(`^[a-f0-9]{64}$`).MatchString(result.EvidenceSHA256) {
+		t.Fatalf("invalid deletion hashes: scope=%q evidence=%q", result.ScopeSHA256, result.EvidenceSHA256)
 	}
 	if len(result.Stores) != 3 {
 		t.Fatalf("stores = %d, want 3", len(result.Stores))

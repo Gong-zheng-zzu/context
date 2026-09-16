@@ -2,16 +2,19 @@ package services
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/contextkeeper/service/internal/config"
 	"github.com/contextkeeper/service/internal/engines/multi_dimensional_retrieval/knowledge"
 	"github.com/contextkeeper/service/internal/engines/multi_dimensional_retrieval/timeline"
 	"github.com/contextkeeper/service/internal/models"
 	"github.com/contextkeeper/service/internal/store"
+	"github.com/contextkeeper/service/internal/utils"
 )
 
 var ErrSessionOwnerMismatch = errors.New("authenticated user does not own session")
@@ -118,9 +121,14 @@ type SessionDeletionStoreResult struct {
 
 // SessionDeletionResult is returned for successful, dry-run, and failed cascades.
 type SessionDeletionResult struct {
-	SessionID string `json:"session_id"`
-	UserID    string `json:"user_id"`
-	DryRun    bool   `json:"dry_run"`
+	SessionID      string    `json:"session_id"`
+	UserID         string    `json:"user_id"`
+	DryRun         bool      `json:"dry_run"`
+	VerificationID string    `json:"verification_id"`
+	TraceID        string    `json:"trace_id"`
+	VerifiedAt     time.Time `json:"verified_at"`
+	ScopeSHA256    string    `json:"scope_sha256"`
+	EvidenceSHA256 string    `json:"evidence_sha256,omitempty"`
 	// Complete is true only after every configured durable replica and the
 	// local session cache/file have been verified as deleted.
 	Complete bool                         `json:"complete"`
@@ -235,7 +243,15 @@ func NewProductionSessionDeletionServiceWithVectorStore(sessionStore *store.Sess
 // Delete removes durable replicas before local state. A replica failure leaves the session
 // file and cache untouched, allowing a subsequent request to retry the incomplete cascade.
 func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID string, dryRun bool) (*SessionDeletionResult, error) {
-	result := &SessionDeletionResult{SessionID: sessionID, UserID: userID, DryRun: dryRun}
+	verifiedAt := time.Now().UTC()
+	traceID := utils.GetTraceIDFromContext(ctx)
+	scopeHash := fmt.Sprintf("%x", sha256.Sum256([]byte(userID+"\x1f"+sessionID)))
+	verificationHash := sha256.Sum256([]byte(scopeHash + "\x1f" + traceID + "\x1f" + verifiedAt.Format(time.RFC3339Nano)))
+	result := &SessionDeletionResult{
+		SessionID: sessionID, UserID: userID, DryRun: dryRun,
+		VerificationID: fmt.Sprintf("del-%x", verificationHash[:8]), TraceID: traceID,
+		VerifiedAt: verifiedAt, ScopeSHA256: scopeHash,
+	}
 	if s.sessionStore == nil {
 		return result, fmt.Errorf("session store is not configured")
 	}
@@ -364,6 +380,13 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 }
 
 func (s *SessionDeletionService) audit(result *SessionDeletionResult) {
+	result.EvidenceSHA256 = ""
+	canonical, err := json.Marshal(result)
+	if err != nil {
+		log.Printf("[session-delete] evidence marshal failed: %v", err)
+		return
+	}
+	result.EvidenceSHA256 = fmt.Sprintf("%x", sha256.Sum256(canonical))
 	payload, err := json.Marshal(result)
 	if err != nil {
 		log.Printf("[session-delete] audit marshal failed: %v", err)
