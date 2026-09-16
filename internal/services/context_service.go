@@ -3392,6 +3392,20 @@ func extractPatientName(req models.StoreContextRequest) string {
 
 func normalizePatientName(value string) string {
 	name := strings.Join(strings.Fields(strings.Trim(value, " \t\r\n,;:.\"'")), " ")
+	// Label-based patterns can legally span into the following sentence when
+	// prose starts immediately after the name (e.g. "Ada Lovelace presented").
+	// Keep only the explicit name prefix before common clinical predicates.
+	words := strings.Fields(name)
+	for i, word := range words {
+		switch strings.ToLower(strings.Trim(word, ",.;:")) {
+		case "presented", "reported", "was", "is", "has", "had", "with", "for":
+			words = words[:i]
+		}
+		if len(words) != len(strings.Fields(name)) {
+			break
+		}
+	}
+	name = strings.Join(words, " ")
 	if name == "" || len([]rune(name)) > 128 {
 		return ""
 	}
