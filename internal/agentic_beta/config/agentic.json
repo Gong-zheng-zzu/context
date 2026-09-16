@@ -1,0 +1,72 @@
+{
+  "components": {
+    "retrieval_filter": {
+      "enabled": false,
+      "rules": [
+        "status_confirmation",
+        "emotional_feedback",
+        "ultra_short_query"
+      ],
+      "priority": 100,
+      "config": {
+        "confidence_threshold": 0.6,
+        "min_query_length": 3
+      }
+    },
+    "query_rewriter": {
+      "enabled": false,
+      "keyword_extractor": true,
+      "noise_reducer": true,
+      "context_enricher": true,
+      "priority": 90,
+      "config": {
+        "max_iterations": 3,
+        "quality_threshold": 0.7
+      }
+    },
+    "iterative_retrieval": {
+      "enabled": false,
+      "max_iterations": 3,
+      "quality_check": true,
+      "rewrite_rules": true,
+      "priority": 80,
+      "config": {
+        "quality_threshold": 0.6,
+        "timeout_ms": 30000
+      }
+    },
+    "quality_evaluator": {
+      "enabled": false,
+      "priority": 70,
+      "config": {
+        "feedback_loop": true,
+        "metrics": [
+          "relevance",
+          "diversity",
+          "completeness"
+        ]
+      }
+    }
+  },
+  "retrieval_decision": {
+    "enabled": false,
+    "confidence_threshold": 0.6,
+    "max_retries": 2
+  },
+  "query_optimization": {
+    "enabled": false,
+    "hyde_enabled": false,
+    "query2doc_enabled": false,
+    "max_expansions": 3
+  },
+  "quality_evaluation": {
+    "enabled": false,
+    "relevance_threshold": 0.7,
+    "diversity_weight": 0.3
+  },
+  "experimental": {
+    "multi_hop_reasoning": false,
+    "semantic_cache": false,
+    "query_decomposition": false
+  }
+}
