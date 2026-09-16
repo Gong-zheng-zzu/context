@@ -81,29 +81,26 @@ func (f *AdversarialSampleDefenseFramework) DefendAndNormalize(text string) (
 // SpaceSeparationDetector 空格分隔检测器
 type SpaceSeparationDetector struct{}
 
+const minimumObfuscatedIdentifierDigits = 10
+
+var (
+	spaceSeparatedDigitPattern   = regexp.MustCompile(`[0-9]+(?:[\t ]+[0-9]+)+`)
+	specialSeparatedDigitPattern = regexp.MustCompile(`[0-9]+(?:[-_./\\|]+[0-9]+)+`)
+)
+
 func (d *SpaceSeparationDetector) Detect(text string) (bool, float64, string) {
-	// 检测是否存在异常的空格分隔数字
-	// 例如："1 1 0 1 0 1 1 9 9 0 0 1 0 1 1 2 3 4"
-	spaceCount := 0
-	digitCount := 0
-
-	for _, ch := range text {
-		if ch == ' ' {
-			spaceCount++
-		} else if unicode.IsDigit(ch) {
-			digitCount++
+	// Count separators and digits inside one contiguous candidate. Global
+	// counts combine unrelated dates, measurements and prose spaces, causing
+	// ordinary nursing records to be classified as attacks.
+	for _, candidate := range spaceSeparatedDigitPattern.FindAllString(text, -1) {
+		digitCount, separatorCount := digitAndSeparatorCounts(candidate)
+		if digitCount < minimumObfuscatedIdentifierDigits {
+			continue
 		}
-	}
-
-	// 🔥 降低阈值：如果有数字且有空格，就可能是空格分隔攻击
-	// 修改前：digitCount > 10 && spaceCount > digitCount/2
-	// 修改后：digitCount >= 8 && spaceCount >= 1
-	if digitCount >= 8 && spaceCount >= 1 {
-		confidence := float64(spaceCount) / float64(digitCount)
+		confidence := float64(separatorCount) / float64(digitCount)
 		if confidence > 0.8 {
 			confidence = 0.8
 		}
-		// 至少给0.5的置信度
 		if confidence < 0.5 {
 			confidence = 0.5
 		}
@@ -114,51 +111,56 @@ func (d *SpaceSeparationDetector) Detect(text string) (bool, float64, string) {
 }
 
 func (d *SpaceSeparationDetector) Normalize(text string) string {
-	// 移除所有空格
-	return strings.ReplaceAll(text, " ", "")
+	return spaceSeparatedDigitPattern.ReplaceAllStringFunc(text, func(candidate string) string {
+		if digitCount, _ := digitAndSeparatorCounts(candidate); digitCount < minimumObfuscatedIdentifierDigits {
+			return candidate
+		}
+		return strings.Map(func(r rune) rune {
+			if unicode.IsSpace(r) {
+				return -1
+			}
+			return r
+		}, candidate)
+	})
 }
 
 // SpecialCharDetector 特殊字符混淆检测器
 type SpecialCharDetector struct{}
 
 func (d *SpecialCharDetector) Detect(text string) (bool, float64, string) {
-	// 检测是否存在异常的特殊字符分隔
-	// 例如："138-1234-5678"
-	specialChars := []rune{'-', '_', '.', '/', '\\', '|'}
-	specialCount := 0
-	digitCount := 0
-
-	for _, ch := range text {
-		if unicode.IsDigit(ch) {
-			digitCount++
+	for _, candidate := range specialSeparatedDigitPattern.FindAllString(text, -1) {
+		if digitCount, _ := digitAndSeparatorCounts(candidate); digitCount >= minimumObfuscatedIdentifierDigits {
+			return true, 0.6, "special_char_obfuscation"
 		}
-		for _, special := range specialChars {
-			if ch == special {
-				specialCount++
-				break
-			}
-		}
-	}
-
-	// 🔥 降低阈值：如果有数字且有特殊字符，就可能是特殊字符混淆攻击
-	// 修改前：digitCount > 8 && specialCount >= 2
-	// 修改后：digitCount >= 8 && specialCount >= 1
-	if digitCount >= 8 && specialCount >= 1 {
-		confidence := 0.6
-		return true, confidence, "special_char_obfuscation"
 	}
 
 	return false, 0.0, ""
 }
 
 func (d *SpecialCharDetector) Normalize(text string) string {
-	// 移除常见特殊字符
-	result := text
-	specialChars := []string{"-", "_", ".", "/", "\\", "|", ":", ";"}
-	for _, char := range specialChars {
-		result = strings.ReplaceAll(result, char, "")
+	return specialSeparatedDigitPattern.ReplaceAllStringFunc(text, func(candidate string) string {
+		digitCount, _ := digitAndSeparatorCounts(candidate)
+		if digitCount < minimumObfuscatedIdentifierDigits {
+			return candidate
+		}
+		return strings.Map(func(r rune) rune {
+			if unicode.IsDigit(r) {
+				return r
+			}
+			return -1
+		}, candidate)
+	})
+}
+
+func digitAndSeparatorCounts(candidate string) (digits, separators int) {
+	for _, r := range candidate {
+		if unicode.IsDigit(r) {
+			digits++
+		} else {
+			separators++
+		}
 	}
-	return result
+	return digits, separators
 }
 
 // HomophoneDetector 同音字检测器
