@@ -3331,7 +3331,6 @@ func (s *ContextService) extractKnowledgeNodesFromAnalysis(analysisResult *model
 var (
 	patientNameLabelPattern  = regexp.MustCompile(`(?im)\bpatient\s*(?:name)?\s*[:=-]\s*([A-Z][\p{L}'-]*(?:\s+[A-Z][\p{L}'-]*){0,3})`)
 	patientNamePhrasePattern = regexp.MustCompile(`(?im)\b(?:patient|pt\.)\s+(?:is|was|named)\s+([A-Z][\p{L}'-]*(?:\s+[A-Z][\p{L}'-]*){0,3})`)
-	patientNameInlinePattern = regexp.MustCompile(`(?im)\bpatient\s+([A-Z][\p{L}'-]*(?:\s+[A-Z][\p{L}'-]*){1,3})`)
 )
 
 // appendPatientNameEntity creates a graph-only patient entity from explicit,
@@ -3377,7 +3376,10 @@ func extractPatientName(req models.StoreContextRequest) string {
 		}
 	}
 
-	for _, pattern := range []*regexp.Regexp{patientNameLabelPattern, patientNamePhrasePattern, patientNameInlinePattern} {
+	// Do not infer a person's name from ordinary prose such as
+	// "the patient reported ...". Only explicit labels/phrases are accepted;
+	// this keeps graph identity deterministic and avoids creating false PII.
+	for _, pattern := range []*regexp.Regexp{patientNameLabelPattern, patientNamePhrasePattern} {
 		matches := pattern.FindStringSubmatch(req.Content)
 		if len(matches) == 2 {
 			if normalized := normalizePatientName(matches[1]); normalized != "" {

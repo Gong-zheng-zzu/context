@@ -14,9 +14,11 @@ import (
 
 // TestWideRecallRealIntegration 真实的宽召回集成测试（不使用Mock）
 func TestWideRecallRealIntegration(t *testing.T) {
-	// 跳过测试如果没有配置真实的LLM服务
-	if os.Getenv("SKIP_REAL_TESTS") == "true" {
-		t.Skip("跳过真实集成测试")
+	// External-model integration tests are opt-in. The release gate must remain
+	// deterministic and must never contact a provider or claim model coverage
+	// when credentials are absent.
+	if os.Getenv("RUN_REAL_INTEGRATION") != "true" {
+		t.Skip("跳过真实宽召回集成测试；设置 RUN_REAL_INTEGRATION=true 才运行")
 	}
 
 	// === 创建真实的存储实现 ===

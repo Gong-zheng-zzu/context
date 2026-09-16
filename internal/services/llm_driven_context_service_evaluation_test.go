@@ -111,7 +111,10 @@ func TestBuildEvaluationRRFResponseFusesDuplicateDocumentWithAuditableRanks(t *t
 			&models.KnowledgeNode{ID: "node-shared", Content: "knowledge", Score: 0.7, Properties: map[string]interface{}{"doc_ids": []string{"doc-shared"}}},
 			&models.TimelineEvent{ID: "event-shared", SourceDocID: "doc-shared", Content: "timeline", RelevanceScore: 0.6},
 		},
-		Sources: []string{"vector", "vector", "knowledge", "timeline"},
+		// Sources is positional and must contain one entry per result. The
+		// vector-only candidate is intentionally included to verify deduplication
+		// without misattributing later graph/timeline evidence.
+		Sources: []string{"vector", "vector", "vector", "knowledge", "timeline"},
 		SourceStatuses: map[string]string{
 			"vector": "success", "knowledge": "success", "timeline": "success",
 		},

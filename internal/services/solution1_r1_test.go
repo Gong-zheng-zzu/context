@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"log"
+	"os"
 	"testing"
 	"time"
 
@@ -11,6 +12,9 @@ import (
 
 // TestSolution1_DeepSeekR1Model 方案1：测试DeepSeek-R1模型的效果
 func TestSolution1_DeepSeekR1Model(t *testing.T) {
+	if os.Getenv("RUN_R1_TEST") != "true" {
+		t.Skip("跳过外部R1模型集成测试；设置 RUN_R1_TEST=true 才运行")
+	}
 	log.Printf("🚀 [方案1测试] 开始测试DeepSeek-R1模型处理复杂UnifiedContextModel的能力")
 
 	// === 创建真实的服务实例 ===

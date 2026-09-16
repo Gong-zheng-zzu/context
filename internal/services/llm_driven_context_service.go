@@ -1275,11 +1275,13 @@ func evaluationCandidatesFromResult(source string, result interface{}) []evaluat
 		if score == 0 {
 			score = value.ImportanceScore
 		}
-		docID := value.SourceDocID
-		if docID == "" {
-			docID = value.ID
+		// Timeline event IDs identify events, not source documents. They are not
+		// sufficient evidence for document-level RRF fusion; require an explicit
+		// source document provenance field.
+		if strings.TrimSpace(value.SourceDocID) == "" {
+			return nil
 		}
-		return evaluationCandidatesFromDocIDs(source, []string{docID}, value.Content, score, map[string]interface{}{
+		return evaluationCandidatesFromDocIDs(source, []string{value.SourceDocID}, value.Content, score, map[string]interface{}{
 			"timeline_event_id": value.ID,
 		})
 	case *models.KnowledgeNode:
@@ -1293,10 +1295,9 @@ func evaluationCandidatesFromResult(source string, result interface{}) []evaluat
 		if content == "" {
 			content = value.Name
 		}
+		// A graph node ID is not necessarily a document ID. Only explicit
+		// document provenance may participate in auditable RRF fusion.
 		docIDs := evaluationDocIDs(value.Properties, "doc_ids", "doc_id")
-		if len(docIDs) == 0 {
-			docIDs = []string{value.ID}
-		}
 		return evaluationCandidatesFromDocIDs(source, docIDs, content, value.Score, value.Properties)
 	default:
 		return nil
