@@ -51,7 +51,10 @@ func GenerateTokenWithRole(userID, workspaceID, role string) (string, error) {
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(jwtExpiry)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
-			Issuer:    "context-keeper",
+			// Include a per-token identifier so two tokens minted in the same
+			// second are still distinct and independently revocable/auditable.
+			ID:     fmt.Sprintf("%d", time.Now().UnixNano()),
+			Issuer: "context-keeper",
 		},
 	}
 
