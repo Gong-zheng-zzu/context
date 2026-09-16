@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CONSOLE = ROOT / "web" / "competition_console.html"
 LAUNCHER = ROOT / "experiments" / "scripts" / "run_competition_demo.ps1"
 CONFIG = ROOT / "web" / "js" / "config.js"
+AUDIT_HELPER = ROOT / "web" / "js" / "competition-audit.js"
 AUTH_OVERRIDE = ROOT / "web" / "js" / "auth-security-override.js"
 COMPOSE = ROOT / "docker-compose.yml"
 
@@ -23,6 +24,7 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         cls.console = CONSOLE.read_text(encoding="utf-8")
         cls.launcher = LAUNCHER.read_text(encoding="utf-8")
         cls.config = CONFIG.read_text(encoding="utf-8")
+        cls.audit_helper = AUDIT_HELPER.read_text(encoding="utf-8")
         cls.auth_override = AUTH_OVERRIDE.read_text(encoding="utf-8")
         cls.compose = COMPOSE.read_text(encoding="utf-8")
 
@@ -131,6 +133,52 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn('id="causalCopy"', self.console)
         self.assertIn("evidence_spans", self.console)
         self.assertIn("model_tier", self.console)
+
+    def test_console_exposes_structured_rrf_source_audit(self):
+        self.assertIn('id="rrfAuditStatus"', self.console)
+        self.assertIn('id="rrfSources"', self.console)
+        self.assertIn('id="rrfResults"', self.console)
+        self.assertIn('js/competition-audit.js', self.console)
+        self.assertIn("三路融合完成", self.console)
+        self.assertIn("来源审计不完整", self.console)
+        self.assertIn("本次响应没有可追溯的检索结果", self.console)
+
+    def test_rrf_audit_normalizer_uses_only_response_evidence(self):
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node is not installed")
+        script = r'''
+const audit = require(process.argv[1]);
+const normalized = audit.normalizeRRFResponse({data:{
+  retrieval_metadata:{
+    retrieval_fusion_mode:'rrf_2_sources',
+    retrieval_active_sources:['vector','timeline'],
+    retrieval_empty_sources:['knowledge'],
+    source_statuses:{vector:'success',knowledge:'timeout',timeline:'success'},
+    source_latency_ms:{vector:17,knowledge:500,timeline:24},
+    source_candidate_counts:{vector:3,knowledge:0,timeline:2},
+    wall_clock_latency_ms:503
+  },
+  contexts:[{doc_id:'doc-7',content:'真实返回记录',metadata:{
+    rrf_score:0.031,
+    rrf_sources:['timeline','vector'],
+    rrf_ranks:{vector:1,timeline:2}
+  }}]
+}});
+if (normalized.fusionMode !== 'rrf_2_sources') process.exit(10);
+if (!normalized.auditComplete || !normalized.evidencePresent) process.exit(11);
+if (normalized.sources[1].status !== 'timeout' || normalized.sources[1].candidateCount !== 0) process.exit(12);
+if (normalized.results[0].docId !== 'doc-7' || normalized.results[0].score !== 0.031) process.exit(13);
+const missing = audit.normalizeRRFResponse({contexts:[]});
+if (missing.auditComplete || missing.evidencePresent || missing.fusionMode !== 'unknown') process.exit(14);
+'''
+        completed = subprocess.run(
+            [node, "-e", script, str(AUDIT_HELPER)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
 
     def test_local_api_override_and_connection_error_are_actionable(self):
         self.assertIn("new URLSearchParams(window.location.search).get('api')", self.config)
