@@ -7,20 +7,25 @@ import (
 // CausalRelation O→C→P→R因果四元组
 // 对应策划书第2.2.2节"因果推理模型的图谱构建"
 type CausalRelation struct {
-	Object         string           `json:"object"`          // O: 对象（如"李爷爷"）
-	Mediator       string           `json:"mediator"`        // C: 中介/共现因素（如"服用降压药"）
-	Property       string           `json:"property"`        // P: 属性/机制（如"体位性低血压"）
-	Result         string           `json:"result"`          // R: 结果（如"洗手间滑倒"）
-	Confidence     float64          `json:"confidence"`      // PCCM融合后的最终置信度
-	RuleConfidence float64          `json:"rule_confidence"` // 规则匹配置信度
-	PMIConfidence  float64          `json:"pmi_confidence"`  // PMI统计置信度
-	LLMConfidence  float64          `json:"llm_confidence"`  // LLM推理置信度
-	Evidence       []string         `json:"evidence"`        // 证据文本片段
-	RuleMatches    []RuleEvidence   `json:"rule_matches,omitempty"`
-	PCCMEvidence   *PCCMEvidence    `json:"pccm_evidence,omitempty"`
-	Quality        *RelationQuality `json:"quality,omitempty"`
-	EvidenceSpans  []EvidenceSpan   `json:"evidence_spans,omitempty"`
-	Timestamp      time.Time        `json:"timestamp"`
+	CandidateID    string             `json:"candidate_id,omitempty"`
+	Object         string             `json:"object"`          // O: 对象（如"李爷爷"）
+	Mediator       string             `json:"mediator"`        // C: 中介/共现因素（如"服用降压药"）
+	Property       string             `json:"property"`        // P: 属性/机制（如"体位性低血压"）
+	Result         string             `json:"result"`          // R: 结果（如"洗手间滑倒"）
+	Confidence     float64            `json:"confidence"`      // PCCM融合后的最终置信度
+	RuleConfidence float64            `json:"rule_confidence"` // 规则匹配置信度
+	PMIConfidence  float64            `json:"pmi_confidence"`  // PMI统计置信度
+	LLMConfidence  float64            `json:"llm_confidence"`  // LLM推理置信度
+	Evidence       []string           `json:"evidence"`        // 证据文本片段
+	RuleMatches    []RuleEvidence     `json:"rule_matches,omitempty"`
+	PCCMEvidence   *PCCMEvidence      `json:"pccm_evidence,omitempty"`
+	Quality        *RelationQuality   `json:"quality,omitempty"`
+	EvidenceSpans  []EvidenceSpan     `json:"evidence_spans,omitempty"`
+	FieldScores    map[string]float64 `json:"field_scores,omitempty"`
+	Decision       string             `json:"decision,omitempty"`
+	Abstained      bool               `json:"abstained"`
+	AbstainReason  string             `json:"abstain_reason,omitempty"`
+	Timestamp      time.Time          `json:"timestamp"`
 }
 
 // EvidenceSpan identifies the exact source span supporting a field. Offsets
@@ -60,13 +65,14 @@ type RuleEvidence struct {
 
 // PCCMEvidence makes every final confidence auditable from its source signals.
 type PCCMEvidence struct {
-	RuleConfidence  float64     `json:"rule_confidence"`
-	PMIConfidence   float64     `json:"pmi_confidence"`
-	LLMConfidence   float64     `json:"llm_confidence"`
-	Weights         PCCMWeights `json:"weights"`
-	ActiveSources   []string    `json:"active_sources"`
-	EvidenceCount   int         `json:"evidence_count"`
-	FinalConfidence float64     `json:"final_confidence"`
+	RuleConfidence     float64     `json:"rule_confidence"`
+	PMIConfidence      float64     `json:"pmi_confidence"`
+	LLMConfidence      float64     `json:"llm_confidence"`
+	Weights            PCCMWeights `json:"weights"`
+	ActiveSources      []string    `json:"active_sources"`
+	EvidenceCount      int         `json:"evidence_count"`
+	FinalConfidence    float64     `json:"final_confidence"`
+	CalibrationVersion string      `json:"calibration_version"`
 }
 
 // CausalPath 因果推理路径
@@ -100,10 +106,15 @@ type ExtractRequest struct {
 
 // ExtractResponse 因果关系抽取响应
 type ExtractResponse struct {
-	AnalysisOnly      bool                 `json:"analysis_only"`
-	GraphPersisted    bool                 `json:"graph_persisted"`
-	SecurityExecution *SecurityExecution   `json:"security_execution,omitempty"`
-	Execution         *ExtractionExecution `json:"execution,omitempty"`
+	TraceID            string               `json:"trace_id,omitempty"`
+	CalibrationVersion string               `json:"calibration_version,omitempty"`
+	Candidates         []CausalRelation     `json:"candidates,omitempty"`
+	Abstained          bool                 `json:"abstained"`
+	AbstainReason      string               `json:"abstain_reason,omitempty"`
+	AnalysisOnly       bool                 `json:"analysis_only"`
+	GraphPersisted     bool                 `json:"graph_persisted"`
+	SecurityExecution  *SecurityExecution   `json:"security_execution,omitempty"`
+	Execution          *ExtractionExecution `json:"execution,omitempty"`
 	// Quality is the conservative aggregate quality gate for all returned
 	// relations. Relation-level quality remains available on each relation.
 	Quality       *RelationQuality     `json:"quality,omitempty"`

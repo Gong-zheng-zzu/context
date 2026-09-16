@@ -12,6 +12,7 @@ import (
 	"github.com/contextkeeper/service/internal/engines/multi_dimensional_retrieval/knowledge"
 	"github.com/contextkeeper/service/internal/llm"
 	"github.com/contextkeeper/service/internal/security"
+	"github.com/contextkeeper/service/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,6 +23,7 @@ type CausalReasoningHandler struct {
 	inferenceEngine *causal_reasoning.InferenceEngine
 	graphBuilder    *causal_reasoning.GraphBuilder
 	graphWriter     causalGraphWriter
+	reviewStore     CausalReviewStore
 }
 
 // causalGraphWriter keeps the persistence boundary testable without changing
@@ -38,6 +40,7 @@ func NewCausalReasoningHandler(llmClient *llm.OllamaLocalClient, kgEngine *knowl
 		inferenceEngine: causal_reasoning.NewInferenceEngine(kgEngine),
 		graphBuilder:    graphBuilder,
 		graphWriter:     graphBuilder,
+		reviewStore:     NewFileCausalReviewStore("./data/causal_reviews.jsonl"),
 		securityService: securityService,
 	}
 }
@@ -60,6 +63,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 	}
 
 	startTime := time.Now()
+	traceID := utils.GetTraceIDFromGin(c)
 	latency := make(map[string]int64, 4)
 	securityStart := time.Now()
 	securityExecution := &causal_reasoning.SecurityExecution{ASDFChecked: h.securityService != nil}
@@ -96,6 +100,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 		quality := causalAuditQuality(relations)
 		finalizeCausalExecution(execution, latency, time.Since(startTime).Milliseconds())
 		c.JSON(status, causal_reasoning.ExtractResponse{
+			TraceID: traceID, CalibrationVersion: "pccm-c-frozen-v1", Abstained: true, AbstainReason: "model_unavailable",
 			AnalysisOnly:      true,
 			SecurityExecution: securityExecution,
 			Execution:         execution,
@@ -126,6 +131,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 			processTime := time.Since(startTime).Milliseconds()
 			finalizeCausalExecution(execution, latency, processTime)
 			c.JSON(http.StatusServiceUnavailable, causal_reasoning.ExtractResponse{
+				TraceID: traceID, CalibrationVersion: "pccm-c-frozen-v1", Candidates: relations,
 				AnalysisOnly: true, SecurityExecution: securityExecution, Execution: execution,
 				Quality: causalAuditQuality(relations), Persistence: persistence, Relations: relations, Count: len(relations), ProcessTimeMs: processTime,
 				Error: "因果图谱存储不可用",
@@ -138,6 +144,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 			processTime := time.Since(startTime).Milliseconds()
 			finalizeCausalExecution(execution, latency, processTime)
 			c.JSON(http.StatusInternalServerError, causal_reasoning.ExtractResponse{
+				TraceID: traceID, CalibrationVersion: "pccm-c-frozen-v1", Candidates: relations,
 				AnalysisOnly: true, SecurityExecution: securityExecution, Execution: execution,
 				Quality: causalAuditQuality(relations), Persistence: persistence, Relations: relations, Count: len(relations), ProcessTimeMs: processTime,
 				Error: "构建因果图谱失败",
@@ -157,16 +164,28 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 	finalizeCausalExecution(execution, latency, processTime)
 
 	c.JSON(http.StatusOK, causal_reasoning.ExtractResponse{
-		AnalysisOnly:      !graphPersisted,
-		GraphPersisted:    graphPersisted,
-		SecurityExecution: securityExecution,
-		Execution:         execution,
-		Quality:           quality,
-		Persistence:       persistence,
-		Relations:         relations,
-		Count:             len(relations),
-		ProcessTimeMs:     processTime,
+		TraceID:            traceID,
+		CalibrationVersion: "pccm-c-frozen-v1",
+		Candidates:         relations,
+		Abstained:          len(relations) == 0,
+		AbstainReason:      causalAbstainReason(relations),
+		AnalysisOnly:       !graphPersisted,
+		GraphPersisted:     graphPersisted,
+		SecurityExecution:  securityExecution,
+		Execution:          execution,
+		Quality:            quality,
+		Persistence:        persistence,
+		Relations:          relations,
+		Count:              len(relations),
+		ProcessTimeMs:      processTime,
 	})
+}
+
+func causalAbstainReason(relations []causal_reasoning.CausalRelation) string {
+	if len(relations) == 0 {
+		return "no_supported_candidates"
+	}
+	return ""
 }
 
 func causalUserID(c *gin.Context) string {
@@ -483,5 +502,7 @@ func RegisterCausalReasoningRoutes(router *gin.RouterGroup, handler *CausalReaso
 		causal.GET("/stats", handler.GetGraphStats)
 		causal.GET("/causes/:entity", handler.GetRelatedCauses)
 		causal.GET("/effects/:entity", handler.GetRelatedEffects)
+		causal.POST("/reviews", handler.CreateCausalReview)
+		causal.GET("/reviews", handler.ListCausalReviews)
 	}
 }

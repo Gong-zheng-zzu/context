@@ -2,6 +2,7 @@ package causal_reasoning
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -216,16 +217,49 @@ func (ee *EntityExtractor) AttachAuditEvidence(relations []CausalRelation, execu
 			evidenceCount = 1
 		}
 		relation.PCCMEvidence = &PCCMEvidence{
-			RuleConfidence:  relation.RuleConfidence,
-			PMIConfidence:   relation.PMIConfidence,
-			LLMConfidence:   relation.LLMConfidence,
-			Weights:         execution.PCCMWeights,
-			ActiveSources:   active,
-			EvidenceCount:   evidenceCount,
-			FinalConfidence: relation.Confidence,
+			RuleConfidence:     relation.RuleConfidence,
+			PMIConfidence:      relation.PMIConfidence,
+			LLMConfidence:      relation.LLMConfidence,
+			Weights:            execution.PCCMWeights,
+			ActiveSources:      active,
+			EvidenceCount:      evidenceCount,
+			FinalConfidence:    relation.Confidence,
+			CalibrationVersion: "pccm-c-frozen-v1",
 		}
 		relation.Quality = assessRelationQuality(*relation, strings.Join(relation.Evidence, "\n"))
+		relation.CandidateID = causalCandidateID(*relation)
+		relation.FieldScores = relationFieldScores(*relation)
+		relation.Decision = relation.Quality.ConfidenceLevel
+		relation.Abstained = relation.Decision == "insufficient_evidence"
+		if relation.Abstained {
+			relation.AbstainReason = strings.Join(relation.Quality.ValidationErrors, ",")
+		}
 	}
+}
+
+func causalCandidateID(relation CausalRelation) string {
+	sum := sha256.Sum256([]byte(strings.Join([]string{relation.Object, relation.Mediator, relation.Property, relation.Result}, "\x1f")))
+	return fmt.Sprintf("candidate-%x", sum[:8])
+}
+
+func relationFieldScores(relation CausalRelation) map[string]float64 {
+	source := strings.Join(relation.Evidence, "\n")
+	scores := make(map[string]float64, 4)
+	for _, field := range []struct{ name, value string }{{"object", relation.Object}, {"mediator", relation.Mediator}, {"property", relation.Property}, {"result", relation.Result}} {
+		score := 0.0
+		supported := field.value != "" && fieldOffset(source, field.value) >= 0
+		if field.name == "object" && field.value == "患者" {
+			supported = true
+		}
+		if supported {
+			score = relation.Confidence
+		}
+		if field.name != "object" && isNegatedAt(source, fieldOffset(source, field.value)) {
+			score = 0
+		}
+		scores[field.name] = score
+	}
+	return scores
 }
 
 func assessRelationQuality(relation CausalRelation, source string) *RelationQuality {

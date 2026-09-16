@@ -132,6 +132,30 @@ func TestPCCMFusionNormalizesOverAvailableEvidence(t *testing.T) {
 	}
 }
 
+func TestPCCMFusionDoesNotBoostDuplicateEvidence(t *testing.T) {
+	engine := NewDefaultPCCMFusionEngine()
+	one := engine.FuseConfidence(0.9, 0, 0, 1)
+	many := engine.FuseConfidence(0.9, 0, 0, 20)
+	if one != many {
+		t.Fatalf("duplicate evidence changed confidence: one=%v many=%v", one, many)
+	}
+}
+
+func TestRuleCandidateExposesFieldScoresAndDecision(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	relations, _, err := extractor.ExtractWithExecution(context.Background(), "患者服用降压药后出现体位性低血压并有跌倒风险", true, false, false)
+	if err != nil || len(relations) == 0 {
+		t.Fatalf("extract rule candidate: relations=%#v err=%v", relations, err)
+	}
+	relation := relations[0]
+	if relation.CandidateID == "" || relation.Decision == "" || len(relation.FieldScores) != 4 {
+		t.Fatalf("candidate audit is incomplete: %#v", relation)
+	}
+	if relation.PCCMEvidence == nil || relation.PCCMEvidence.CalibrationVersion != "pccm-c-frozen-v1" {
+		t.Fatalf("calibration evidence is incomplete: %#v", relation.PCCMEvidence)
+	}
+}
+
 func TestRuleExtractionComposesTwoDirectedEdgesAndAudit(t *testing.T) {
 	extractor := NewEntityExtractor(nil)
 	relations, _, err := extractor.ExtractWithExecution(context.Background(), "李爷爷服用降压药后出现体位性低血压并在洗手间滑倒", true, false, false)

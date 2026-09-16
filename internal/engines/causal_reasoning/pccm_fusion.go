@@ -35,7 +35,8 @@ func NewDefaultPCCMFusionEngine() *PCCMFusionEngine {
 // ruleConf: 规则匹配置信度
 // pmiConf: PMI统计置信度
 // llmConf: LLM推理置信度
-// evidenceCount: 证据数量（用于累积增强）
+// evidenceCount is retained for API compatibility. Duplicate snippets are
+// not independent evidence and therefore cannot increase confidence.
 func (pe *PCCMFusionEngine) FuseConfidence(ruleConf, pmiConf, llmConf float64, evidenceCount int) float64 {
 	// 基础融合: C_base = w1·C_rule + w2·C_pmi + w3·C_llm
 	// A missing rule/PMI signal is not negative evidence. Normalize only across
@@ -62,12 +63,7 @@ func (pe *PCCMFusionEngine) FuseConfidence(ruleConf, pmiConf, llmConf float64, e
 	}
 	baseConfidence := weightedSum / activeWeight
 
-	// 证据累积增强: C_final = C_base × (1 + 0.1·(n-1))
-	// 每增加一条证据，置信度提升10%
-	if evidenceCount > 1 {
-		boostFactor := 1.0 + 0.1*float64(evidenceCount-1)
-		baseConfidence *= boostFactor
-	}
+	_ = evidenceCount
 
 	// 确保置信度在[0, 1]区间
 	if baseConfidence > 1.0 {
