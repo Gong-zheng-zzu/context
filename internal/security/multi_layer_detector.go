@@ -12,7 +12,6 @@ type MultiLayerDetector struct {
 	// 各层检测器
 	regexDetector *Detector          // Layer 1: 正则
 	dictMatcher   *DictionaryMatcher // Layer 2: 词典
-	nerDetector   interface{}        // Layer 3: NER (待实现)
 	contextEngine *ContextRuleEngine // Layer 4: 上下文规则
 	llmDetector   *LLMDetector       // Layer 5: LLM
 
@@ -45,6 +44,9 @@ type PCCMSecurityConfig struct {
 	LayerWeights             map[int]float64 `json:"layer_weights"`
 	EnhancementPerExtraLayer float64         `json:"enhancement_per_extra_layer"`
 	DecisionThreshold        float64         `json:"decision_threshold"`
+	// LayerActivationThreshold 是层数计入协同增强因子的置信度下限，
+	// 与既有生产行为（>0.3 计为有效层）保持一致。
+	LayerActivationThreshold float64 `json:"layer_activation_threshold"`
 }
 
 func DefaultPCCMSecurityConfig() PCCMSecurityConfig {
@@ -54,6 +56,7 @@ func DefaultPCCMSecurityConfig() PCCMSecurityConfig {
 		LayerWeights:             map[int]float64{1: 0.70, 2: 0.10, 4: 0.15, 5: 0.05},
 		EnhancementPerExtraLayer: 0.05,
 		DecisionThreshold:        0.45,
+		LayerActivationThreshold: 0.3,
 	}
 }
 
@@ -97,20 +100,22 @@ type MultiLayerConfiguration struct {
 
 // NewMultiLayerDetector 创建多层检测器
 func NewMultiLayerDetector(ollamaURL, llmModel string) *MultiLayerDetector {
+	// PCCM-S 配置唯一来源：环境变量覆盖默认值，模型与配置快照共享同一份。
+	pccmConfig := PCCMSecurityConfigFromEnv()
+
 	return &MultiLayerDetector{
 		regexDetector: NewDetector(),
 		dictMatcher:   NewDictionaryMatcher(),
 		contextEngine: NewContextRuleEngine(),
 		llmDetector:   NewLLMDetector(ollamaURL, llmModel, 500*time.Millisecond),
 
-		// 🆕 初始化理论创新模型
-		pccmModel:      NewProgressiveConfidenceModel(),
+		// 🆕 初始化理论创新模型（PCCM-S 单一真源）
+		pccmModel:      NewProgressiveConfidenceModelWithConfig(pccmConfig),
 		casiaAlgorithm: NewContextAwareSensitiveInfoAlgorithm(),
 
 		weights: map[int]float64{
 			1: 0.10, // 正则
 			2: 0.15, // 词典
-			3: 0.20, // NER
 			4: 0.15, // 上下文
 			5: 0.40, // LLM
 		},
@@ -404,74 +409,15 @@ func (mld *MultiLayerDetector) calculateConfidence(results []LayerResult) float6
 	return finalConfidence
 }
 
-// 🆕 calculateConfidenceWithPCCM 使用PCCM模型计算置信度
+// calculateConfidenceWithPCCM 使用PCCM模型计算置信度。
+// 置信度融合公式的唯一实现位于 ProgressiveConfidenceModel.CalculateFinalConfidence，
+// 此处仅做委托：把实际执行层的置信度组装为 map 交给模型。
 func (mld *MultiLayerDetector) calculateConfidenceWithPCCM(results []LayerResult) float64 {
-	// 提取各层置信度
-	regexConf := 0.0
-	trieConf := 0.0
-	llmConf := 0.0
-	contextConf := 0.0
-
+	layerConfidences := make(map[int]float64, len(results))
 	for _, result := range results {
-		switch result.LayerID {
-		case 1: // 正则检测
-			regexConf = result.Confidence
-		case 2: // 词典匹配（对应Trie）
-			trieConf = result.Confidence
-		case 4: // 上下文规则
-			contextConf = result.Confidence
-		case 5: // LLM检测
-			llmConf = result.Confidence
-		}
+		layerConfidences[result.LayerID] = result.Confidence
 	}
-
-	// 加权累积各层置信度（仅对有检测结果的层进行归一化加权）
-	layerWeights := mld.pccmConfig.LayerWeights
-	layerConfs := map[int]float64{
-		1: regexConf,
-		2: trieConf,
-		4: contextConf,
-		5: llmConf,
-	}
-
-	// 只对有检测结果的层进行加权平均
-	activeWeightSum := 0.0
-	activeConfSum := 0.0
-	for layerID, conf := range layerConfs {
-		if conf > 0 {
-			activeWeightSum += layerWeights[layerID]
-			activeConfSum += layerWeights[layerID] * conf
-		}
-	}
-
-	var finalConfidence float64
-	if activeWeightSum > 0 {
-		finalConfidence = activeConfSum / activeWeightSum
-	}
-
-	// 非线性增强：多层协同提升
-	layerCount := 0
-	if regexConf > 0.3 {
-		layerCount++
-	}
-	if trieConf > 0.3 {
-		layerCount++
-	}
-	if llmConf > 0.3 {
-		layerCount++
-	}
-	if contextConf > 0.3 {
-		layerCount++
-	}
-	if layerCount > 1 {
-		finalConfidence *= 1.0 + float64(layerCount-1)*mld.pccmConfig.EnhancementPerExtraLayer
-	}
-
-	if finalConfidence > 1.0 {
-		finalConfidence = 1.0
-	}
-
-	return finalConfidence
+	return mld.pccmModel.CalculateFinalConfidence(layerConfidences)
 }
 
 // calculateLayerConfidence 计算单层置信度

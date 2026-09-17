@@ -64,6 +64,14 @@ type UnlearningResult struct {
 	// PrivacyBudgetConsumed 消耗的隐私预算
 	PrivacyBudgetConsumed float64 `json:"privacy_budget_consumed"`
 
+	// PrivacyBudgetUsedTotal 该用户累计消耗的隐私预算（含本次，进程内存态记账）
+	PrivacyBudgetUsedTotal float64 `json:"privacy_budget_used_total,omitempty"`
+
+	// IndexRebuildStatus 索引重建真实状态：
+	// 空 = 未启用重建；not_supported_by_backend = 后端无重建/优化接口；
+	// rebuilt = 重建成功；failed:<原因> = 重建失败
+	IndexRebuildStatus string `json:"index_rebuild,omitempty"`
+
 	// ConvergenceAchieved 是否达到收敛
 	ConvergenceAchieved bool `json:"convergence_achieved"`
 

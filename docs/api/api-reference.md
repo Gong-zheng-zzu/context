@@ -1,16 +1,105 @@
 # Context-Keeper API参考文档
 
-本文档提供Context-Keeper服务所有可用的API端点的详细说明。
+> **路由同步日期：2026-09-17**
+>
+> 本文档已对照 `cmd/server/main_http.go` 服务启动时的实际路由注册进行核验。
+> 在死代码清理中，`internal/api/sse_handler.go` 以及 `internal/api/handlers.go` 中一批仅由已被注释的
+> `handler.RegisterRoutes` 引用的处理器已被移除，因此部分历史端点不再注册。请以本文「当前启用的端点」及实现代码为准。
+
+本文档提供Context-Keeper服务API端点的说明。
 
 ## 目录
 
+- [当前启用的端点](#当前启用的端点)
 - [公共端点](#公共端点)
-- [Cursor专用API](#cursor专用api)
-- [MCP标准API](#mcp标准api)
-- [管理API](#管理api)
+- [已移除 / 未启用的端点](#已移除--未启用的端点)
 - [API认证](#api认证)
 - [错误处理](#错误处理)
 - [数据模型](#数据模型)
+
+## 当前启用的端点
+
+以下端点由 `cmd/server/main_http.go` 的 `setupRoutesAndStartServer` 当前实际注册（核验日期 2026-09-17）。
+
+### 公开端点（无需认证）
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/` | 静态页面（`./web/role_selection.html`） |
+| GET | `/web/*` | 静态资源（`./web`） |
+| GET | `/temp/*` | 临时文件（`./data/temp`） |
+| GET | `/health` | 健康检查 |
+| POST | `/api/auth/login` | 账号登录 |
+| POST | `/api/role/login` | 角色登录 |
+
+### WebSocket 与连接管理（无需 JWT）
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/ws` | WebSocket 主连接端点 |
+| GET | `/ws/status` | WebSocket 状态查询 |
+| GET | `/ws/debug` | WebSocket 连接详情调试 |
+| POST | `/api/ws/register-session` | 将会话注册到 WebSocket |
+
+### 受保护端点（JWT 认证 + 速率限制）
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| * | `/api/chat/*` | 聊天相关路由（`RegisterChatRoutes`） |
+| * | `/api/files/*` | 文件相关路由（`RegisterFileRoutes`） |
+| POST | `/api/record` | 记录健康信息 |
+| GET | `/api/history` | 查询健康记录历史 |
+| GET | `/api/summary` | 健康档案摘要 |
+| GET | `/api/report` | 生成就医报告 |
+| POST | `/api/vital-signs` | 记录生命体征 |
+| GET | `/api/vital-signs/history` | 查询生命体征历史 |
+| GET | `/api/vital-signs/stats` | 生命体征统计（差分隐私） |
+| POST | `/api/v1/nursing/records` | 护理记录写入 |
+| POST | `/api/v1/agent/execute` | 受控 Agent（只读工具白名单） |
+| POST | `/api/security/scan` | 安全扫描 |
+| POST | `/api/security/detect` | 敏感信息检测 |
+| POST | `/api/security/redact` | 敏感信息脱敏 |
+| GET | `/api/security/stats` | 安全统计 |
+| POST | `/api/v1/security/evaluate-input` | 安全输入链路评估 |
+| POST | `/api/v1/security/ablation` | 安全消融评估 |
+| POST | `/api/v1/experiments/threeway/evidence` | 三方结构化证据 |
+| GET | `/api/sessions` | 查询会话列表 |
+| GET | `/api/users/:userId/sessions` | 查询用户会话详情 |
+| GET | `/api/dashboard` | 仪表盘 |
+| GET | `/api/alerts` | 告警 |
+| GET | `/api/recommendations` | 推荐 |
+| POST | `/api/call-caregiver` | 呼叫护理员 |
+| POST | `/api/family-message` | 家属消息 |
+| * | `/api/v1/*` | 高级路由（因果推理、机器遗忘；依赖 Ollama/Neo4j，初始化失败时不注册） |
+
+### MCP 端点
+
+| 方法 | 路径 | 认证 | 说明 |
+|------|------|------|------|
+| POST | `/mcp` | 否 | MCP Streamable HTTP 协议主端点 |
+| GET | `/mcp/capabilities` | 否 | 能力查询 |
+| POST | `/api/mcp/tools/retrieve_context` | JWT | 检索上下文工具 |
+| POST | `/api/mcp/tools/programming_context` | JWT | 编程上下文工具 |
+| POST | `/api/mcp/tools/associate_file` | JWT | 关联文件工具 |
+| POST | `/api/mcp/tools/record_edit` | JWT | 记录编辑工具 |
+| POST | `/api/mcp/tools/local_operation_callback` | JWT | 本地操作回调工具 |
+| POST | `/api/mcp/tools/list` | JWT | 列出工具 |
+| POST | `/api/mcp/tools/call` | JWT | 调用工具 |
+| POST | `/mcp/tools/create_context` | JWT | 创建上下文（根级 MCP 路由） |
+| POST | `/mcp/tools/read_context` | JWT | 读取上下文（根级 MCP 路由） |
+| POST | `/mcp/tools/retrieve_context` | JWT | 检索上下文（根级 MCP 路由） |
+
+### 管理与用户端点
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/management/sessions` | 查询所有会话（分页） |
+| GET | `/management/users/:userId/sessions` | 查询用户会话详情 |
+| POST | `/api/users` | 新增用户（唯一性校验） |
+| PUT | `/api/users/:userId` | 变更用户信息 |
+| GET | `/api/users/:userId` | 查询用户信息 |
+
+> 注：批量 embedding 路由仅在 `BatchEmbeddingHandler` 已初始化时注册；session 删除路由见 `RegisterSessionDeletionRoutes`。
 
 ## 公共端点
 
@@ -30,515 +119,46 @@ GET /health
 }
 ```
 
-## Cursor专用API
+## 已移除 / 未启用的端点
 
-### 关联代码文件
+以下端点曾在本文件中文档化，但对应的处理器在死代码清理中已被删除，或从未在服务启动时注册（核验日期 2026-09-17），因此当前不可用。
 
-将代码文件关联到当前编程会话。
+### Cursor 专用 API（未启用）
 
-```
-POST /api/cursor/associateFile
-```
+`internal/api/cursor_handlers.go` 中的 `CursorHandler.RegisterRoutes` 当前未被任何启动路径调用，因此 `/api/cursor/*` 组未注册。
 
-#### 请求参数
+| 方法 | 路径 | 状态 |
+|------|------|------|
+| POST | `/api/cursor/associateFile` | 未启用（处理器未注册） |
+| POST | `/api/cursor/recordEdit` | 未启用（处理器未注册） |
+| POST | `/api/cursor/retrieveContext` | 未启用（处理器未注册） |
+| POST | `/api/cursor/programmingContext` | 未启用（处理器未注册） |
 
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-| filePath | string | 是 | 文件路径 |
-| language | string | 是 | 编程语言 |
-| content | string | 是 | 文件内容 |
+### Legacy MCP 标准 API（已移除）
 
-```json
-{
-  "sessionId": "cursor-session-123",
-  "filePath": "/projects/app/src/main.js",
-  "language": "javascript",
-  "content": "console.log('Hello World');"
-}
-```
+以下 `/api/mcp/context-keeper/*` 端点对应的处理器已被移除。当前可用的 MCP 端点请见「当前启用的端点」中的 MCP 表。
 
-#### 响应
+| 方法 | 路径 | 状态 |
+|------|------|------|
+| POST | `/api/mcp/context-keeper/storeContext` | 已移除 |
+| POST | `/api/mcp/context-keeper/retrieveContext` | 已移除 |
+| POST | `/api/mcp/context-keeper/summarizeContext` | 已移除 |
+| POST | `/api/mcp/context-keeper/storeMessages` | 已移除 |
+| POST | `/api/mcp/context-keeper/retrieveConversation` | 已移除 |
+| GET | `/api/mcp/context-keeper/sessionState` | 已移除 |
+| POST | `/api/mcp/context-keeper/associateFile` | 已移除 |
+| POST | `/api/mcp/context-keeper/recordEdit` | 已移除 |
 
-```json
-{
-  "status": "success",
-  "message": "文件关联成功"
-}
-```
+### 集合管理 API（已移除）
 
-### 记录编辑操作
+`HandleListCollections` / `HandleCreateCollection` / `HandleGetCollection` / `HandleDeleteCollection` 已被移除，因此以下端点不再注册。
 
-记录对代码文件的编辑操作。
-
-```
-POST /api/cursor/recordEdit
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-| filePath | string | 是 | 文件路径 |
-| type | string | 是 | 操作类型(insert/modify/delete) |
-| position | integer | 是 | 操作位置 |
-| content | string | 是 | 编辑内容 |
-
-```json
-{
-  "sessionId": "cursor-session-123",
-  "filePath": "/projects/app/src/main.js",
-  "type": "insert",
-  "position": 42,
-  "content": "const greeting = 'Hello';"
-}
-```
-
-#### 响应
-
-```json
-{
-  "status": "success",
-  "message": "编辑记录成功"
-}
-```
-
-### 检索上下文
-
-基于查询检索相关编程上下文。
-
-```
-POST /api/cursor/retrieveContext
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-| query | string | 是 | 查询内容 |
-| limit | integer | 否 | 返回结果数量限制，默认为2000 |
-| skip_threshold | boolean | 否 | 是否跳过相似度阈值过滤，默认为false |
-| similarity_threshold | float | 否 | 自定义相似度阈值，范围0-1，默认为0.35 |
-| metadata | object | 否 | 元数据过滤条件 |
-
-```json
-{
-  "sessionId": "cursor-session-123",
-  "query": "如何使用Express处理POST请求",
-  "skip_threshold": true
-}
-```
-
-#### 响应
-
-```json
-{
-  "session_state": "会话ID: cursor-session-123\n创建时间: 2023-05-01 10:20:30\n最后活动: 2023-05-01 10:30:45\n状态: active",
-  "short_term_memory": "【最近对话】\n1. 示例代码片段...\n2. 编辑操作记录...",
-  "long_term_memory": "【相关历史】\n1. [相似度:0.3142] 历史相关内容...",
-  "relevant_knowledge": "【编程上下文】\n使用的编程语言:\n  javascript: 2个文件\n编辑操作统计:\n  总编辑数: 5\n  插入操作: 3\n  修改操作: 2"
-}
-```
-
-### 获取编程特征和上下文摘要
-
-获取当前会话的编程特征和上下文摘要。
-
-```
-POST /api/cursor/programmingContext
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-| query | string | 否 | 可选查询参数 |
-
-```json
-{
-  "sessionId": "cursor-session-123",
-  "query": "express route handler"
-}
-```
-
-#### 响应
-
-```json
-{
-  "sessionId": "cursor-session-123",
-  "associatedFiles": [
-    {
-      "path": "/projects/app/src/main.js",
-      "language": "javascript",
-      "lastEdit": 1682937645,
-      "summary": "文件长度: 237字节"
-    }
-  ],
-  "recentEdits": [
-    {
-      "timestamp": 1682937645,
-      "filePath": "/projects/app/src/main.js",
-      "type": "insert",
-      "position": 42,
-      "content": "const greeting = 'Hello';"
-    }
-  ],
-  "extractedFeatures": [
-    "使用的编程语言:",
-    "  javascript: 1个文件",
-    "编辑操作统计:",
-    "  总编辑数: 1",
-    "  插入操作: 1",
-    "活跃文件:",
-    "  main.js: 1次编辑"
-  ]
-}
-```
-
-## MCP标准API
-
-### 存储上下文
-
-将上下文信息存储到服务中。
-
-```
-POST /api/mcp/context-keeper/storeContext
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-| content | string | 是 | 上下文内容 |
-| type | string | 否 | 内容类型，默认为"conversation_summary" |
-| priority | string | 否 | 优先级(P1/P2/P3)，默认为"P1" |
-| metadata | object | 否 | 元数据 |
-
-```json
-{
-  "sessionId": "mcp-session-123",
-  "content": "这是需要记住的上下文信息",
-  "type": "conversation_summary",
-  "priority": "P1",
-  "metadata": {
-    "timestamp": 1682937645,
-    "source": "user_message",
-    "batchId": "batch-1234"
-  }
-}
-```
-
-#### 响应
-
-```json
-{
-  "memoryId": "a3aebc0a-5c2d-43a0-a5e3-ceba8a99dc8e",
-  "status": "success"
-}
-```
-
-### 检索上下文
-
-从服务中检索相关上下文。
-
-```
-POST /api/mcp/context-keeper/retrieveContext
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-| query | string | 否 | 查询内容 |
-| limit | integer | 否 | 返回结果数量限制，默认为2000 |
-| skip_threshold | boolean | 否 | 是否跳过相似度阈值过滤，默认为false |
-| similarity_threshold | float | 否 | 自定义相似度阈值，范围0-1，默认为0.35 |
-| metadata | object | 否 | 元数据过滤条件 |
-| memoryId | string | 否 | 特定记忆ID |
-
-```json
-{
-  "sessionId": "mcp-session-123",
-  "query": "相关内容查询",
-  "metadata": {
-    "batchId": "batch-1234"
-  },
-  "skip_threshold": true
-}
-```
-
-#### 响应
-
-与Cursor的retrieveContext响应格式相同。
-
-### 汇总上下文
-
-对上下文进行汇总。
-
-```
-POST /api/mcp/context-keeper/summarizeContext
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-| maxTokens | integer | 否 | 汇总结果的最大token数，默认为1000 |
-
-```json
-{
-  "sessionId": "mcp-session-123",
-  "maxTokens": 500
-}
-```
-
-#### 响应
-
-```json
-{
-  "summary": "汇总内容...",
-  "status": "success"
-}
-```
-
-### 存储消息集合
-
-将消息集合存储到服务中。
-
-```
-POST /api/mcp/context-keeper/storeMessages
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-| messages | array | 是 | 消息数组 |
-| batchId | string | 否 | 批次ID |
-
-```json
-{
-  "sessionId": "mcp-session-123",
-  "messages": [
-    {
-      "role": "user",
-      "content": "如何在React中使用useEffect?",
-      "contentType": "text",
-      "priority": "P2"
-    },
-    {
-      "role": "assistant",
-      "content": "useEffect是React的一个Hook，用于在函数组件中执行副作用...",
-      "contentType": "text",
-      "priority": "P1"
-    }
-  ],
-  "batchId": "batch-1234"
-}
-```
-
-#### 响应
-
-```json
-{
-  "messageIds": ["msg-123", "msg-124"],
-  "status": "success"
-}
-```
-
-### 检索对话
-
-检索完整对话历史。
-
-```
-POST /api/mcp/context-keeper/retrieveConversation
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-| limit | integer | 否 | 返回消息数量限制，默认为50 |
-| before | string | 否 | 检索此消息ID之前的消息 |
-| batchId | string | 否 | 特定批次ID |
-
-```json
-{
-  "sessionId": "mcp-session-123",
-  "limit": 20,
-  "batchId": "batch-1234"
-}
-```
-
-#### 响应
-
-```json
-{
-  "messages": [
-    {
-      "id": "msg-123",
-      "role": "user",
-      "content": "如何在React中使用useEffect?",
-      "timestamp": 1682937600
-    },
-    {
-      "id": "msg-124",
-      "role": "assistant",
-      "content": "useEffect是React的一个Hook，用于在函数组件中执行副作用...",
-      "timestamp": 1682937645
-    }
-  ],
-  "hasMore": false
-}
-```
-
-### 获取会话状态
-
-获取特定会话的状态信息。
-
-```
-GET /api/mcp/context-keeper/sessionState?sessionId=mcp-session-123
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| sessionId | string | 是 | 会话ID |
-
-#### 响应
-
-```json
-{
-  "sessionId": "mcp-session-123",
-  "created": 1682937600,
-  "lastActive": 1682937645,
-  "status": "active",
-  "stats": {
-    "contextCount": 5,
-    "messageCount": 2,
-    "fileCount": 1,
-    "editCount": 3
-  }
-}
-```
-
-### 关联文件 (MCP标准)
-
-将代码文件关联到当前会话。
-
-```
-POST /api/mcp/context-keeper/associateFile
-```
-
-与Cursor的associateFile接口参数和响应格式相同。
-
-### 记录编辑 (MCP标准)
-
-记录对代码文件的编辑操作。
-
-```
-POST /api/mcp/context-keeper/recordEdit
-```
-
-与Cursor的recordEdit接口参数和响应格式相同。
-
-## 管理API
-
-### 列出集合
-
-列出所有向量集合。
-
-```
-GET /api/collections
-```
-
-#### 响应
-
-```json
-{
-  "collections": ["context_keeper", "test_collection"],
-  "default": "context_keeper"
-}
-```
-
-### 创建集合
-
-创建新的向量集合。
-
-```
-POST /api/collections
-```
-
-#### 请求参数
-
-| 参数名 | 类型 | 必填 | 描述 |
-|-------|------|------|------|
-| name | string | 是 | 集合名称 |
-| dimension | integer | 否 | 向量维度，默认为1536 |
-| metric | string | 否 | 相似度度量方式，默认为"cosine" |
-
-```json
-{
-  "name": "new_collection",
-  "dimension": 1536,
-  "metric": "cosine"
-}
-```
-
-#### 响应
-
-```json
-{
-  "name": "new_collection",
-  "status": "created"
-}
-```
-
-### 获取集合详情
-
-获取特定集合的详细信息。
-
-```
-GET /api/collections/:name
-```
-
-#### 响应
-
-```json
-{
-  "name": "context_keeper",
-  "dimension": 1536,
-  "metric": "cosine",
-  "count": 1250,
-  "created": 1682937600
-}
-```
-
-### 删除集合
-
-删除特定集合。
-
-```
-DELETE /api/collections/:name
-```
-
-#### 响应
-
-```json
-{
-  "name": "context_keeper",
-  "status": "deleted"
-}
-```
+| 方法 | 路径 | 状态 |
+|------|------|------|
+| GET | `/api/collections` | 已移除 |
+| POST | `/api/collections` | 已移除 |
+| GET | `/api/collections/:name` | 已移除 |
+| DELETE | `/api/collections/:name` | 已移除 |
 
 ## API认证
 
@@ -547,6 +167,8 @@ DELETE /api/collections/:name
 ```
 Authorization: Bearer your-api-key
 ```
+
+部分受保护路由使用 JWT 认证（例如 `/api/chat/*`、`/api/files/*`、`/api/security/*` 以及 `/api/mcp/tools/*`）。
 
 ## 错误处理
 
@@ -639,4 +261,4 @@ Authorization: Bearer your-api-key
 
 ---
 
-有关API使用的更多示例，请参考[用法示例](examples.md)文档。 
+有关API使用的更多示例，请参考[用法示例](examples.md)文档。

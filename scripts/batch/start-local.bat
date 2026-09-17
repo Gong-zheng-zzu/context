@@ -45,7 +45,6 @@ echo ========================================
 echo.
 echo 📊 服务地址:
 echo    - Context-Keeper API: http://localhost:8088
-echo    - 演示页面: http://localhost:8000/chat-demo-fixed.html
 echo    - Qdrant 管理界面: http://localhost:6333/dashboard
 echo    - 健康检查: http://localhost:8088/health
 echo.

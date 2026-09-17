@@ -70,6 +70,7 @@ func (ee *EntityExtractor) ExtractWithExecution(ctx context.Context, text string
 			ee.AttachAuditEvidence(ruleRelations, execution)
 		}
 		if ruleErr == nil && hasVerifiedRelations(ruleRelations) {
+			ee.recordCorpusEvidence(ruleRelations)
 			execution.Mode = "rules"
 			execution.ModelStatus = "not_needed"
 			execution.ModelTier = "rules"
@@ -92,6 +93,7 @@ func (ee *EntityExtractor) ExtractWithExecution(ctx context.Context, text string
 				execution.FallbackReason = extractionFallbackReason(err)
 				execution.ModelStatus = "unavailable"
 				ee.AttachAuditEvidence(relations, execution)
+				ee.recordCorpusEvidence(relations)
 				return relations, execution, nil
 			}
 			execution.Mode = "model_unavailable"
@@ -146,8 +148,28 @@ func (ee *EntityExtractor) ExtractWithExecution(ctx context.Context, text string
 		execution.Mode = "no_extractor_requested"
 	}
 
+	ee.recordCorpusEvidence(relations)
 	ee.AttachAuditEvidence(relations, execution)
 	return relations, execution, nil
+}
+
+// recordCorpusEvidence 把成功抽取的因果元组写入 PMI 语料统计。
+// 每个关系按一次文档观测记录，统计 O-M-P-R 实体及其 (cause, effect) 共现对，
+// 使 PMI 置信度获得真实统计来源（此前 RecordDocument 无生产调用，语料恒空）。
+// 记录发生在该文档自身 PMI 置信度计算之后（LLM 路径中 calculatePMI 在循环内
+// 先执行），避免同一文档的自我共现抬高自身分数。
+func (ee *EntityExtractor) recordCorpusEvidence(relations []CausalRelation) {
+	for _, relation := range relations {
+		entities := make([]string, 0, 4)
+		for _, value := range []string{relation.Object, relation.Mediator, relation.Property, relation.Result} {
+			if value != "" {
+				entities = append(entities, value)
+			}
+		}
+		if len(entities) >= 2 {
+			ee.pmiCalc.RecordDocument(entities)
+		}
+	}
 }
 
 func hasVerifiedRelations(relations []CausalRelation) bool {
@@ -1148,7 +1170,9 @@ func (ee *EntityExtractor) calculatePMI(relation *CausalRelation) float64 {
 	return maxPMI
 }
 
-// RecordDocument 记录文档用于PMI统计
+// RecordDocument 记录文档用于PMI统计。
+// 注意：ExtractWithExecution 的各抽取路径已自动调用 recordCorpusEvidence，
+// 此方法供调用方在抽取流程之外补充语料（如历史数据回灌）。
 func (ee *EntityExtractor) RecordDocument(entities []string) {
 	ee.pmiCalc.RecordDocument(entities)
 }

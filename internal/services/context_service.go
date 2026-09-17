@@ -83,15 +83,7 @@ func NewContextService(vectorSvc *aliyun.VectorService, sessionStore *store.Sess
 		log.Printf("✅ [安全服务] 初始化成功")
 	}
 
-	// 🎯 初始化重排序服务
-	var llmClient llm.LLMClient
-	if cfg != nil {
-		// 这里可以从config获取LLM客户端，暂时传nil
-		llmClient = nil
-	}
-	rerankerSvc := NewRerankerService(llmClient)
-
-	return &ContextService{
+	service := &ContextService{
 		vectorService:       vectorSvc,
 		vectorStore:         nil, // 初始为nil，表示使用传统vectorService
 		sessionStore:        sessionStore,
@@ -100,8 +92,40 @@ func NewContextService(vectorSvc *aliyun.VectorService, sessionStore *store.Sess
 		llmDrivenConfig:     llmDrivenConfig,     // 🆕 LLM驱动配置
 		entityVectorService: entityVectorService, // 🆕 实体向量服务
 		securityService:     securitySvc,         // 🔒 安全服务
-		rerankerService:     rerankerSvc,         // 🎯 重排序服务
 	}
+
+	// 🎯 初始化重排序服务：注册惰性LLM客户端工厂
+	// 客户端仅在 UseLLMRerank=true 首次调用 Rerank 时才通过该工厂创建，
+	// 未启用LLM重排序时不会创建客户端、也不写入LLM全局状态（与改动前一致）；
+	// 创建失败/返回nil时降级为纯规则打分，不阻断服务启动。
+	service.rerankerService = NewRerankerServiceWithFactory(service.createRerankerLLMClient)
+
+	return service
+}
+
+// createRerankerLLMClient 为重排序服务创建LLM客户端（作为惰性工厂，仅在需要时调用）。
+// 复用标准的LLM客户端创建流程（createStandardLLMClient）；任何失败都容忍，
+// 返回nil表示LLM重排序不可用（Rerank会降级为纯规则打分），不阻断服务启动。
+func (s *ContextService) createRerankerLLMClient() llm.LLMClient {
+	if s.config == nil {
+		return nil
+	}
+
+	provider := s.config.MultiDimLLMProvider
+	model := s.config.MultiDimLLMModel
+	if provider == "" {
+		provider = "deepseek"
+	}
+	if model == "" {
+		model = "deepseek-chat"
+	}
+
+	client, err := s.createStandardLLMClient(provider, model)
+	if err != nil {
+		log.Printf("⚠️ [重排序] LLM客户端创建失败，LLM重排序不可用（将降级为纯规则打分）: %v", err)
+		return nil
+	}
+	return client
 }
 
 // SetVectorStore 设置新的向量存储接口

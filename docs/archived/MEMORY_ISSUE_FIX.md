@@ -101,7 +101,7 @@ rerankedResults := rerank(vectorResults, query, {
 
 ### 修改前端LLM Prompt
 
-**文件**: `chat-demo-fixed.html` (行1143)
+**文件**: `chat-demo-fixed.html`（已移除）(行1143)
 
 **当前prompt**：
 ```javascript
@@ -173,6 +173,6 @@ ${contextInfo.longTermMemory}
 
 ## 🎯 立即可执行的修复
 
-修改 `chat-demo-fixed.html` 的 LLM prompt，添加更明确的指令来处理个人信息查询。
+修改 `chat-demo-fixed.html`（已移除）的 LLM prompt，添加更明确的指令来处理个人信息查询。
 
 要我现在帮你修改吗？

@@ -342,3 +342,212 @@ func FindConfigFile() (string, error) {
 
 	return "", fmt.Errorf("未找到配置文件 config/llm_config.yaml")
 }
+
+// =============================================================================
+// 默认 provider / model 选择（只读辅助）
+// =============================================================================
+//
+// 背景：服务启动主链路（internal/services/llm_driven_context_service.go 的
+// loadLLMDrivenConfig）历史上一只读取环境变量，导致 config/llm_config.yaml 中
+// 的默认模型配置对主链路不生效。
+//
+// 这里新增一组「只读」辅助函数，用于在环境变量未设置时，从 config/llm_config.yaml
+// 解析出默认 provider / model。它不会修改任何既有函数签名，也不会写入配置文件。
+//
+// 兼容两种 YAML 形态：
+//  1. 嵌套 llm: 段（与 ConfigFile / README 描述的 llm_config.yaml 一致）：
+//       llm:
+//         default:
+//           primary_provider: "deepseek"
+//         providers:
+//           deepseek:
+//             model: "deepseek-chat"
+//  2. 仓库当前实际使用的扁平形态（顶层 providers / models / environments）：
+//       environments:
+//         production:
+//           active_providers: ["ollama_local", "deepseek"]
+//           default_model: "deepseek-coder-v2:16b"
+//
+// 解析优先级：llm: 段 > 顶层 default_provider/default_model > environments 段。
+// 若都取不到，返回 Source 为空的零值（调用方自行回退到内置默认值）。
+//
+// 兼容性影响（如实说明）：
+//   - 只有当 LLM_PROVIDER / LLM_MODEL 环境变量未设置时，本回退才会生效，此时默认选择会
+//     变为 environments.<env>（默认 production）的配置，例如 provider=ollama_local、
+//     model=deepseek-coder-v2:16b。
+//   - 生产部署通过 docker-compose 的 `env_file: ./config/.env` 注入了 LLM_PROVIDER /
+//     LLM_MODEL，因此生产链路仍由环境变量决定，不受本回退影响。
+//   - config/llm_config.yaml 的 environments.production.default_model 为
+//     "deepseek-coder-v2:16b"（16B 模型），低显存机器上可能未安装该 Ollama 模型。这属于
+//     配置文件表达的意图与运维配置范畴；本辅助函数刻意不做任何模型可用性探测。
+
+// DefaultConfigPathEnv 允许通过环境变量覆盖默认配置文件的查找结果（主要用于测试隔离）。
+const DefaultConfigPathEnv = "LLM_CONFIG_PATH"
+
+// DefaultConfigEnvName 指定从 environments 段中读取哪个 profile（默认 production）。
+const DefaultConfigEnvName = "LLM_CONFIG_ENV"
+
+// DefaultLLMSelection 表示从配置文件中解析出的默认 LLM 提供商与模型。
+type DefaultLLMSelection struct {
+	Provider string
+	Model    string
+	// Source 描述该选择来自配置文件中的哪一段（如 "llm.default"、"environments.production"）。
+	// 为空表示未从配置文件解析出任何可用值。
+	Source string
+}
+
+// flatConfigSelection 仅用于读取扁平形态 config/llm_config.yaml 中的默认 provider/model。
+// 不解析 two_stage_config / fallback_strategy / performance_settings 等其它段落。
+type flatConfigSelection struct {
+	DefaultProvider string `yaml:"default_provider"`
+	DefaultModel    string `yaml:"default_model"`
+
+	Environments map[string]struct {
+		ActiveProviders []string `yaml:"active_providers"`
+		DefaultModel    string   `yaml:"default_model"`
+	} `yaml:"environments"`
+
+	Models struct {
+		LocalModels []modelRef `yaml:"local_models"`
+		CloudModels []modelRef `yaml:"cloud_models"`
+	} `yaml:"models"`
+}
+
+// modelRef 描述 models 段中单个模型与其所属 provider 的对应关系。
+type modelRef struct {
+	Name     string `yaml:"name"`
+	Provider string `yaml:"provider"`
+}
+
+// ResolveDefaultConfigPath 返回用于读取默认 provider/model 的配置文件路径。
+// 优先使用 LLM_CONFIG_PATH（便于测试隔离），否则复用 FindConfigFile 向上查找。
+func ResolveDefaultConfigPath() (string, error) {
+	if p := strings.TrimSpace(os.Getenv(DefaultConfigPathEnv)); p != "" {
+		return p, nil
+	}
+	return FindConfigFile()
+}
+
+// LoadDefaultLLMSelection 只读地读取默认 LLM provider/model，不修改任何全局状态。
+// 找不到任何可用值时返回零值（Provider/Model 均为空），调用方应回退到内置默认值。
+func LoadDefaultLLMSelection() (DefaultLLMSelection, error) {
+	path, err := ResolveDefaultConfigPath()
+	if err != nil {
+		return DefaultLLMSelection{}, err
+	}
+	return LoadDefaultLLMSelectionFromFile(path)
+}
+
+// LoadDefaultLLMSelectionFromFile 从指定文件解析默认 provider/model（便于测试注入临时文件）。
+func LoadDefaultLLMSelectionFromFile(path string) (DefaultLLMSelection, error) {
+	// 1) 先复用既有 ConfigLoader 解析嵌套 llm: 段。
+	if selection, ok := loadSelectionViaConfigLoader(path); ok {
+		return selection, nil
+	}
+
+	// 2) 回退到扁平形态（仓库当前 config/llm_config.yaml）。
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return DefaultLLMSelection{}, fmt.Errorf("读取配置文件失败: %w", err)
+	}
+
+	var flat flatConfigSelection
+	if err := yaml.Unmarshal(data, &flat); err != nil {
+		return DefaultLLMSelection{}, fmt.Errorf("解析配置文件失败: %w", err)
+	}
+
+	return flat.resolve(), nil
+}
+
+// loadSelectionViaConfigLoader 复用既有 ConfigLoader 读取嵌套 llm: 段。
+// 只有当 provider 与其 model 都能确定时才返回 ok=true。
+func loadSelectionViaConfigLoader(path string) (DefaultLLMSelection, bool) {
+	loader := NewConfigLoader(path)
+	if err := loader.LoadConfig(); err != nil {
+		return DefaultLLMSelection{}, false
+	}
+
+	contextConfig, err := loader.GetContextAwareLLMConfig()
+	if err != nil || strings.TrimSpace(string(contextConfig.PrimaryProvider)) == "" {
+		return DefaultLLMSelection{}, false
+	}
+
+	providerConfigs, err := loader.GetProviderConfigs()
+	if err != nil {
+		return DefaultLLMSelection{}, false
+	}
+
+	providerConfig, ok := providerConfigs[contextConfig.PrimaryProvider]
+	if !ok || strings.TrimSpace(providerConfig.Model) == "" {
+		return DefaultLLMSelection{}, false
+	}
+
+	return DefaultLLMSelection{
+		Provider: strings.TrimSpace(string(contextConfig.PrimaryProvider)),
+		Model:    strings.TrimSpace(providerConfig.Model),
+		Source:   "llm.default",
+	}, true
+}
+
+// resolve 从扁平形态配置中推导默认 provider/model，并记录来源（Source）。
+func (f *flatConfigSelection) resolve() DefaultLLMSelection {
+	selection := DefaultLLMSelection{
+		Provider: strings.TrimSpace(f.DefaultProvider),
+		Model:    strings.TrimSpace(f.DefaultModel),
+	}
+	if selection.Provider != "" || selection.Model != "" {
+		selection.Source = "default_provider/default_model"
+	}
+
+	// 选择环境 profile：LLM_CONFIG_ENV 指定，默认 production；指定 profile 不存在时回退 production。
+	profileName := strings.TrimSpace(os.Getenv(DefaultConfigEnvName))
+	if profileName == "" {
+		profileName = "production"
+	}
+	profile, ok := f.Environments[profileName]
+	if !ok || (profile.DefaultModel == "" && len(profile.ActiveProviders) == 0) {
+		profileName = "production"
+		profile = f.Environments["production"]
+	}
+
+	if selection.Model == "" {
+		if model := strings.TrimSpace(profile.DefaultModel); model != "" {
+			selection.Model = model
+			if selection.Source == "" {
+				selection.Source = "environments." + profileName
+			}
+		}
+	}
+	if selection.Provider == "" {
+		// 优先根据 default_model 反查其所属 provider，保证 provider/model 成对；
+		// 查不到时退化为 active_providers 的第一个。
+		if provider := f.providerForModel(selection.Model); provider != "" {
+			selection.Provider = provider
+		} else if len(profile.ActiveProviders) > 0 {
+			selection.Provider = strings.TrimSpace(profile.ActiveProviders[0])
+		}
+		if selection.Provider != "" && selection.Source == "" {
+			selection.Source = "environments." + profileName
+		}
+	}
+
+	return selection
+}
+
+// providerForModel 在 models 段中查找指定模型名对应的 provider。
+func (f *flatConfigSelection) providerForModel(model string) string {
+	if model == "" {
+		return ""
+	}
+	for _, candidate := range f.Models.LocalModels {
+		if strings.EqualFold(strings.TrimSpace(candidate.Name), model) {
+			return strings.TrimSpace(candidate.Provider)
+		}
+	}
+	for _, candidate := range f.Models.CloudModels {
+		if strings.EqualFold(strings.TrimSpace(candidate.Name), model) {
+			return strings.TrimSpace(candidate.Provider)
+		}
+	}
+	return ""
+}

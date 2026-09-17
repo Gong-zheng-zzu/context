@@ -4,17 +4,39 @@ import (
 	"math"
 	"sort"
 	"strings"
+	"sync"
 	"unicode/utf8"
 )
 
 const defaultCASIAContextWindow = 64
 const CASIAConfigVersion = "casia-context-v1"
 
+// DefaultCASIASimilarityThreshold 是可选 embedding 语义匹配路径的默认相似度阈值。
+// 仅在该路径被显式启用且调用方注入相似度函数时生效。
+const DefaultCASIASimilarityThreshold = 0.86
+
+// ContextSimilarityFunc 是 CASIA 上下文关键词的语义相似度挂钩。
+//
+// 设计约束：internal/security 不能直接依赖 internal/services（FastEmbed），
+// 否则会形成循环依赖。因此 security 侧只定义这一最小接口，由调用方
+// （如 services 层）在启用时注入 FastEmbed 实现。
+//
+// 语义：
+//   - similarity ∈ [0,1]，越大表示越相近；
+//   - ok=false 表示实现无法给出结果（例如模型未就绪/调用失败），
+//     调用方必须降级到 strings.Contains。
+//
+// 该路径默认关闭，且未注入时行为与纯 strings.Contains 完全一致。
+type ContextSimilarityFunc func(text, keyword string) (similarity float64, ok bool)
+
 type CASIAConfig struct {
 	Version           string                        `json:"version"`
 	ContextWindow     int                           `json:"context_window_bytes"`
 	DecisionThreshold float64                       `json:"decision_threshold"`
 	KeywordWeights    map[string]map[string]float64 `json:"keyword_weights"`
+	// Source 记录关键词表来源："builtin"（内置默认）或 "file"（外部配置文件）。
+	// 与 Version 后缀一起，使审计信息能反映配置是否来自外部文件。
+	Source string `json:"source,omitempty"`
 }
 
 // CASIAKeywordEvidence identifies one context feature that affected a
@@ -23,6 +45,9 @@ type CASIAConfig struct {
 type CASIAKeywordEvidence struct {
 	Keyword string  `json:"keyword"`
 	Weight  float64 `json:"weight"`
+	// MatchMethod 记录命中方式："exact"（子串命中）或 "semantic"（embedding 相似度命中）。
+	// 仅在启用可选语义路径时才会出现 "semantic"。
+	MatchMethod string `json:"match_method,omitempty"`
 }
 
 // CASIAEvidence is attached to a candidate after CASIA recalibrates it.
@@ -46,6 +71,13 @@ type ContextAwareSensitiveInfoAlgorithm struct {
 	// 上下文关键词权重表
 	contextKeywords map[string]map[string]float64
 	config          CASIAConfig
+
+	// 可选 embedding 语义相似度路径的运行时状态。默认关闭；
+	// 由调用方通过 EnableEmbeddingSimilarity 注入实现。
+	mu                  sync.RWMutex
+	similarityFunc      ContextSimilarityFunc
+	similarityEnabled   bool
+	similarityThreshold float64
 }
 
 // NewContextAwareSensitiveInfoAlgorithm 创建上下文感知算法
@@ -63,9 +95,13 @@ func NewContextAwareSensitiveInfoAlgorithmWithConfig(config CASIAConfig) *Contex
 	if config.DecisionThreshold <= 0 || config.DecisionThreshold > 1 {
 		config.DecisionThreshold = 0.6
 	}
+	if config.Source == "" {
+		config.Source = CASIAKeywordSourceBuiltin
+	}
 	algo := &ContextAwareSensitiveInfoAlgorithm{
-		contextKeywords: cloneCASIAKeywords(config.KeywordWeights),
-		config:          config,
+		similarityThreshold: DefaultCASIASimilarityThreshold,
+		contextKeywords:     cloneCASIAKeywords(config.KeywordWeights),
+		config:              config,
 	}
 	if len(algo.contextKeywords) == 0 {
 		algo.initContextKeywords()
@@ -75,7 +111,12 @@ func NewContextAwareSensitiveInfoAlgorithmWithConfig(config CASIAConfig) *Contex
 }
 
 func DefaultCASIAConfig() CASIAConfig {
-	return CASIAConfig{Version: CASIAConfigVersion, ContextWindow: defaultCASIAContextWindow, DecisionThreshold: 0.6}
+	return CASIAConfig{
+		Version:           CASIAConfigVersion,
+		ContextWindow:     defaultCASIAContextWindow,
+		DecisionThreshold: 0.6,
+		Source:            CASIAKeywordSourceBuiltin,
+	}
 }
 
 func cloneCASIAKeywords(source map[string]map[string]float64) map[string]map[string]float64 {
@@ -211,9 +252,13 @@ func (a *ContextAwareSensitiveInfoAlgorithm) AnalyzeContext(
 
 	// 累积上下文权重
 	for keyword, weight := range keywords {
-		if strings.Contains(contextText, keyword) {
+		if matched, method := a.matchContextKeyword(contextText, keyword); matched {
 			evidence.RawWeight += weight
-			evidence.MatchedKeywords = append(evidence.MatchedKeywords, CASIAKeywordEvidence{Keyword: keyword, Weight: weight})
+			evidence.MatchedKeywords = append(evidence.MatchedKeywords, CASIAKeywordEvidence{
+				Keyword:     keyword,
+				Weight:      weight,
+				MatchMethod: method,
+			})
 		}
 	}
 	sort.Slice(evidence.MatchedKeywords, func(i, j int) bool {
@@ -221,6 +266,73 @@ func (a *ContextAwareSensitiveInfoAlgorithm) AnalyzeContext(
 	})
 	evidence.NormalizedWeight = 1.0 / (1.0 + math.Exp(-evidence.RawWeight))
 	return evidence
+}
+
+// matchContextKeyword 判定一个上下文关键词是否命中。
+//
+// 默认路径是 strings.Contains（与历史行为完全一致）。仅当调用方显式启用
+// embedding 语义路径并注入了 ContextSimilarityFunc 时，才会在子串未命中后
+// 尝试语义相似度；相似度低于阈值、实现返回 ok=false、或未注入实现时，
+// 一律视为不命中（即降级为纯 strings.Contains）。
+func (a *ContextAwareSensitiveInfoAlgorithm) matchContextKeyword(contextText, keyword string) (bool, string) {
+	if strings.Contains(contextText, keyword) {
+		return true, "exact"
+	}
+
+	a.mu.RLock()
+	enabled := a.similarityEnabled
+	similarityFunc := a.similarityFunc
+	threshold := a.similarityThreshold
+	a.mu.RUnlock()
+
+	if !enabled || similarityFunc == nil {
+		return false, ""
+	}
+	similarity, ok := similarityFunc(contextText, keyword)
+	if !ok {
+		return false, ""
+	}
+	if similarity < threshold {
+		return false, ""
+	}
+	return true, "semantic"
+}
+
+// EnableEmbeddingSimilarity 启用可选的 embedding 语义相似度匹配路径。
+//
+// 调用方（services 层）注入 FastEmbed 实现。传入 nil 函数或非法阈值时保持关闭，
+// 从而不影响默认行为。threshold ∈ (0,1]，越界时回退到 DefaultCASIASimilarityThreshold。
+func (a *ContextAwareSensitiveInfoAlgorithm) EnableEmbeddingSimilarity(similarityFunc ContextSimilarityFunc, threshold float64) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	if threshold <= 0 || threshold > 1 {
+		threshold = DefaultCASIASimilarityThreshold
+	}
+	a.similarityFunc = similarityFunc
+	a.similarityThreshold = threshold
+	a.similarityEnabled = similarityFunc != nil
+}
+
+// DisableEmbeddingSimilarity 关闭 embedding 语义路径，回到纯 strings.Contains 行为。
+func (a *ContextAwareSensitiveInfoAlgorithm) DisableEmbeddingSimilarity() {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	a.similarityEnabled = false
+	a.similarityFunc = nil
+}
+
+// EmbeddingSimilarityEnabled 报告语义路径当前是否启用。
+func (a *ContextAwareSensitiveInfoAlgorithm) EmbeddingSimilarityEnabled() bool {
+	a.mu.RLock()
+	defer a.mu.RUnlock()
+	return a.similarityEnabled
+}
+
+// EmbeddingSimilarityThreshold 返回当前语义匹配阈值。
+func (a *ContextAwareSensitiveInfoAlgorithm) EmbeddingSimilarityThreshold() float64 {
+	a.mu.RLock()
+	defer a.mu.RUnlock()
+	return a.similarityThreshold
 }
 
 func casiaContextBounds(text string, candidateStart, candidateEnd, window int) (int, int) {
@@ -329,9 +441,13 @@ w_i: 第i个上下文关键词的权重（正权重增强，负权重抑制）
 
 	设计特点：
 1. 上下文感知：不只看模式，还看语境
-2. 固定配置：当前关键词权重来自版本化人工配置，未声称为学习校准结果
+2. 固定配置：当前关键词权重来自版本化人工配置；可通过外部文件覆盖或经离线开发集校准，
+   均不属于运行时在线学习或自适应训练
 3. 负向证据：通过负权重关键词抑制误判
 4. 可解释性：可追溯哪些上下文关键词影响了判定
+5. 可选语义匹配：关键词判定默认使用字符串包含；调用方可显式注入 embedding
+   相似度实现（接口注入，security 层不直接依赖 services），启用后仍对未命中
+   关键词降级到字符串包含，未注入时行为与纯字符串包含一致
 
 评测边界：
 - 误报率、召回率和提升幅度必须来自带数据集哈希与配置版本的正式评测

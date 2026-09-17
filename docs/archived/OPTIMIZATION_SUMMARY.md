@@ -149,7 +149,7 @@ timeStore.Store(memory)
 
 ### 方式1: 浏览器测试（推荐）
 ```
-打开: http://localhost:8088/chat-demo-fixed.html
+打开: （原 `chat-demo-fixed.html` 演示页面已移除，请使用当前前端入口）
 输入: "我是谁？我的信息是什么"
 期望: 返回"宫正行"相关信息
 ```
@@ -185,7 +185,7 @@ docker-compose logs --tail=50 context-keeper | grep "混合检索\|重排序\|�
 |------|------|------|
 | `internal/services/reranker_service.go` | 重排序服务 | 新创建，实现智能重排序 |
 | `internal/services/context_service.go` | 上下文服务 | 集成重排序，添加混合检索 |
-| `chat-demo-fixed.html` | 前端页面 | 优化LLM prompt |
+| `chat-demo-fixed.html`（已移除） | 前端页面 | 优化LLM prompt |
 | `config/.env` | 配置文件 | LLM超时1200s |
 
 ---

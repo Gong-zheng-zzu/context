@@ -418,8 +418,8 @@ cd context-keeper
 # 2. 启动服务
 docker-compose up -d
 
-# 3. 访问演示页面
-open http://localhost:8088/chat-demo-fixed.html
+# 3. 访问服务
+open http://localhost:8088
 ```
 
 **服务列表**:

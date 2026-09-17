@@ -453,7 +453,6 @@ docker-compose ps
 # 5. 访问服务
 # - API: http://localhost:8088
 # - Qdrant: http://localhost:6333/dashboard
-# - 演示页面: http://localhost:8088/chat-demo-fixed.html
 ```
 
 ### 性能指标

@@ -25,7 +25,7 @@
 
 #### 步骤1: 打开演示页面
 ```
-http://localhost:8088/chat-demo-fixed.html
+（原 chat-demo-fixed.html 演示页面已移除，请使用当前实际部署的前端入口）
 ```
 
 #### 步骤2: 存储记忆

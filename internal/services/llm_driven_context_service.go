@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -36,6 +35,9 @@ type LLMDrivenContextService struct {
 
 	// 🆕 实体向量服务（用于混合检索）
 	entityVectorService *EntityVectorService
+
+	// 🆕 云端cross-encoder精排客户端（RERANK_ENABLED=true 时启用；nil 表示关闭/降级）
+	crossEncoderReranker *CrossEncoderReranker
 
 	// 配置和开关
 	config  *LLMDrivenConfig
@@ -142,6 +144,10 @@ type RetrievalResults struct {
 	// WallClockLatencyMs is the elapsed time for the parallel retrieval fan-out,
 	// rather than the sum of individual source latencies.
 	WallClockLatencyMs int64 `json:"wall_clock_latency_ms"`
+	// FusionMetadata 记录生产链路加权RRF融合的审计信息
+	// （retrieval_fusion_mode / active_sources / empty_sources / source_candidate_counts，
+	// 以及 cross-encoder 精排状态）。未启用融合时为 nil。
+	FusionMetadata map[string]interface{} `json:"fusion_metadata,omitempty"`
 }
 
 // MultiDimensionalRetrieverAdapter 多维度检索器适配器
@@ -405,9 +411,9 @@ func NewLLMDrivenContextServiceWithEngines(contextService *ContextService, stora
 }
 
 // loadLLMDrivenConfig 加载LLM驱动配置
-// 统一使用环境变量作为唯一配置源，简化开关逻辑
+// 配置优先级：环境变量 > config/llm_config.yaml > 内置默认值
 func loadLLMDrivenConfig() *LLMDrivenConfig {
-	log.Printf("🔧 [配置加载] 开始加载LLM驱动配置，仅从环境变量读取")
+	log.Printf("🔧 [配置加载] 开始加载LLM驱动配置，读取顺序: 环境变量 > config/llm_config.yaml > 内置默认值")
 
 	// 设置默认值
 	cfg := &LLMDrivenConfig{
@@ -426,10 +432,53 @@ func loadLLMDrivenConfig() *LLMDrivenConfig {
 	}
 
 	// LLM配置
-	cfg.LLM.Provider = getEnv("LLM_PROVIDER", "deepseek")
-	cfg.LLM.Model = getEnv("LLM_MODEL", "deepseek-chat")
+	// 优先级：环境变量 > config/llm_config.yaml 的默认 provider/model > 内置默认值。
+	//
+	// 兼容性说明（如实记录）：
+	//   - 只有当 LLM_PROVIDER / LLM_MODEL 环境变量未设置时，下面的 yaml 回退才会生效；
+	//     此时默认选择会变为 config/llm_config.yaml 中 environments.<env>（默认 production）
+	//     的配置，例如 provider=ollama_local、model=deepseek-coder-v2:16b。
+	//   - 生产部署通过 docker-compose 的 `env_file: ./config/.env` 注入了 LLM_PROVIDER /
+	//     LLM_MODEL，因此生产链路始终由环境变量决定，不受该回退影响。
+	//   - environments.production.default_model 为 16B 的 deepseek-coder-v2:16b，低显存机器上
+	//     可能未安装该 Ollama 模型。这属于配置文件表达的意图与运维配置范畴，这里刻意不做
+	//     任何模型可用性探测。
+	defaultProvider, defaultModel := "deepseek", "deepseek-chat"
+	yamlProvider, yamlModel, yamlSource := "", "", ""
+	if selection, err := llm.LoadDefaultLLMSelection(); err != nil {
+		log.Printf("⚠️ [配置加载] 读取 config/llm_config.yaml 默认模型失败，使用内置默认值: %v", err)
+	} else {
+		yamlProvider, yamlModel, yamlSource = selection.Provider, selection.Model, selection.Source
+		if selection.Provider != "" {
+			defaultProvider = selection.Provider
+		}
+		if selection.Model != "" {
+			defaultModel = selection.Model
+		}
+	}
+
+	_, providerFromEnv := os.LookupEnv("LLM_PROVIDER")
+	_, modelFromEnv := os.LookupEnv("LLM_MODEL")
+
+	cfg.LLM.Provider = getEnv("LLM_PROVIDER", defaultProvider)
+	cfg.LLM.Model = getEnv("LLM_MODEL", defaultModel)
 	cfg.LLM.MaxTokens = getEnvAsInt("LLM_MAX_TOKENS", 4000)
 	cfg.LLM.Temperature = getEnvAsFloat("LLM_TEMPERATURE", 0.3)
+
+	// 配置来源日志：用于排查"改 yaml 是否生效"。
+	switch {
+	case providerFromEnv && modelFromEnv:
+		log.Printf("[LLM配置] 使用环境变量: provider=%s model=%s", cfg.LLM.Provider, cfg.LLM.Model)
+	case !providerFromEnv && !modelFromEnv && yamlSource != "":
+		log.Printf("[LLM配置] 环境变量未设置，回退 config/llm_config.yaml %s: provider=%s model=%s",
+			yamlSource, cfg.LLM.Provider, cfg.LLM.Model)
+	case !providerFromEnv && !modelFromEnv:
+		log.Printf("[LLM配置] 环境变量与 config/llm_config.yaml 均未提供，使用默认 deepseek/deepseek-chat: provider=%s model=%s",
+			cfg.LLM.Provider, cfg.LLM.Model)
+	default:
+		log.Printf("[LLM配置] 环境变量部分设置，实际 provider=%s model=%s（yaml来源=%s, yaml.provider=%s, yaml.model=%s）",
+			cfg.LLM.Provider, cfg.LLM.Model, yamlSource, yamlProvider, yamlModel)
+	}
 
 	log.Printf("🎯 [配置加载] LLM驱动配置加载完成")
 	log.Printf("   🔑 主开关: enabled=%v", cfg.Enabled)
@@ -536,6 +585,9 @@ func (lds *LLMDrivenContextService) initializeLLMComponentsWithEngines(storageEn
 		lds.contentSynthesizer = &ContentSynthesisEngineAdapter{impl: contentSynthesizerImpl}
 		log.Printf("✅ [LLM驱动服务] 内容合成引擎已初始化")
 	}
+
+	// 🆕 云端cross-encoder精排客户端（默认关闭，RERANK_ENABLED=true 且配置完整时启用）
+	lds.crossEncoderReranker = NewCrossEncoderRerankerFromEnv()
 
 	// 🆕 实体向量服务（用于混合检索）
 	if lds.contextService != nil {
@@ -884,6 +936,16 @@ func (lds *LLMDrivenContextService) executeLLMDrivenFlow(ctx context.Context, re
 				}
 			}
 
+			// 🆕 加权RRF融合（生产链路）：在 ParallelRetrieve 之后、内容合成之前执行。
+			// RRF_ENABLED=false 时跳过融合走原路径，保证基线对照配置
+			// （baseline_vanilla_llm / baseline_naive_rag 等）与未配置环境的向后兼容。
+			if fusionAudit := ApplyRRFFusionToRetrieval(retrievalResults, LoadRRFConfigFromEnv()); fusionAudit != nil {
+				log.Printf("🔀 [LLM驱动服务] 生产链路RRF融合完成: %s", fusionAudit.FusionMode)
+			}
+
+			// 🆕 云端cross-encoder精排（RERANK_ENABLED=true 时启用；未配置或失败时降级保留RRF排序）
+			lds.applyCrossEncoderRerank(ctx, req.Query, retrievalResults)
+
 			// Phase 3: 第二次LLM调用 - 内容合成
 			if lds.config.ContentSynthesis && lds.contentSynthesizer != nil {
 				log.Printf("🧠 [LLM驱动服务] 执行内容合成...")
@@ -969,6 +1031,17 @@ func (lds *LLMDrivenContextService) executeLLMDrivenFlow(ctx context.Context, re
 	return lds.contextService.RetrieveContext(ctx, req)
 }
 
+// applyCrossEncoderRerank 在 RRF 融合之后、合成之前执行云端 cross-encoder 精排。
+// 客户端未配置（默认关闭）或调用失败时降级保留 RRF 排序，不阻断主流程。
+func (lds *LLMDrivenContextService) applyCrossEncoderRerank(ctx context.Context, query string, retrieval *RetrievalResults) {
+	if lds.crossEncoderReranker == nil || retrieval == nil || len(retrieval.Results) == 0 {
+		return
+	}
+	if err := lds.crossEncoderReranker.RerankResults(ctx, query, retrieval); err != nil {
+		log.Printf("⚠️ [LLM驱动服务] Cross-encoder精排失败，保留RRF排序: %v", err)
+	}
+}
+
 // retrieveByMemoryID 基于 memoryID 进行精确检索（跳过LLM分析）
 func (lds *LLMDrivenContextService) retrieveByMemoryID(ctx context.Context, req models.RetrieveContextRequest) (models.ContextResponse, error) {
 	log.Printf("🔑 [精确检索] 检测到MemoryID，跳过LLM分析: %s", req.MemoryID)
@@ -1048,13 +1121,12 @@ func (lds *LLMDrivenContextService) buildContextResponse(synthesisResp *models.C
 	return response
 }
 
-const evaluationRRFConstant = 60.0
+// evaluationRRFConstant / evaluationRRFWeights 保留历史常量名作为默认值来源，
+// 实际取值统一由 rrf_fusion.go 的默认配置定义（K=60，vector=1.0/knowledge=1.2/timeline=0.8），
+// 并支持 RRF_K / RRF_SOURCE_WEIGHTS 环境变量覆盖。
+const evaluationRRFConstant = defaultRRFK
 
-var evaluationRRFWeights = map[string]float64{
-	"vector":    1.0,
-	"knowledge": 1.2,
-	"timeline":  0.8,
-}
+var evaluationRRFWeights = defaultRRFSourceWeights()
 
 type evaluationRetrievalCandidate struct {
 	DocID    string
@@ -1064,17 +1136,9 @@ type evaluationRetrievalCandidate struct {
 	Metadata map[string]interface{}
 }
 
-type evaluationFusedCandidate struct {
-	DocID       string
-	Content     string
-	Score       float64
-	SourceRanks map[string]int
-	Sources     map[string]struct{}
-	Metadata    map[string]interface{}
-}
-
 // buildEvaluationRRFResponse returns only evidence-backed retrieval results.
 // It intentionally does not invoke synthesis or update any session state.
+// 融合逻辑复用 rrf_fusion.go 的通用 Fuse 实现，保证评测通道与生产链路行为一致。
 func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.ContextResponse {
 	if limit <= 0 {
 		limit = 5
@@ -1085,123 +1149,58 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 	sourceStatuses := evaluationSourceStatuses(retrieval.SourceStatuses)
 	sourceLatencies := evaluationSourceLatencies(retrieval.SourceLatencyMs)
 
-	bySource := make(map[string]map[string]evaluationRetrievalCandidate)
+	// 评测 RRF 通道是专用证据通道，始终执行融合；K 与来源权重支持环境变量覆盖
+	// （RRF_K / RRF_SOURCE_WEIGHTS），未配置时与历史常量
+	// （K=60，vector=1.0/knowledge=1.2/timeline=0.8）完全一致。
+	rrfConfig := LoadRRFConfigFromEnv()
+	rrfConfig.Enabled = true
+
+	candidates := make([]SourcedCandidate, 0)
 	for index, result := range retrieval.Results {
 		if index >= len(retrieval.Sources) {
 			continue
 		}
 		source := retrieval.Sources[index]
-		if _, supported := evaluationRRFWeights[source]; !supported {
+		if _, supported := rrfConfig.SourceWeights[source]; !supported {
 			continue
 		}
 		for _, candidate := range evaluationCandidatesFromResult(source, result) {
 			if candidate.DocID == "" {
 				continue
 			}
-			if bySource[source] == nil {
-				bySource[source] = make(map[string]evaluationRetrievalCandidate)
-			}
-			existing, exists := bySource[source][candidate.DocID]
-			if !exists || candidate.Score > existing.Score {
-				bySource[source][candidate.DocID] = candidate
-			}
+			candidates = append(candidates, SourcedCandidate{
+				DocID:    candidate.DocID,
+				Content:  candidate.Content,
+				Score:    candidate.Score,
+				Source:   source,
+				Metadata: candidate.Metadata,
+			})
 		}
 	}
 
-	fused := make(map[string]*evaluationFusedCandidate)
-	for source, sourceCandidates := range bySource {
-		ranked := make([]evaluationRetrievalCandidate, 0, len(sourceCandidates))
-		for _, candidate := range sourceCandidates {
-			ranked = append(ranked, candidate)
-		}
-		sort.Slice(ranked, func(left, right int) bool {
-			if ranked[left].Score == ranked[right].Score {
-				return ranked[left].DocID < ranked[right].DocID
-			}
-			return ranked[left].Score > ranked[right].Score
-		})
+	fused, fusionAudit := Fuse(candidates, rrfConfig)
+	log.Printf("[Evaluation RRF Evidence] active_sources=%s empty_sources=%s fusion_mode=%s",
+		strings.Join(fusionAudit.ActiveSources, ","),
+		strings.Join(fusionAudit.EmptySources, ","),
+		fusionAudit.FusionMode)
 
-		for position, candidate := range ranked {
-			item, exists := fused[candidate.DocID]
-			if !exists {
-				item = &evaluationFusedCandidate{
-					DocID:       candidate.DocID,
-					Content:     candidate.Content,
-					SourceRanks: make(map[string]int),
-					Sources:     make(map[string]struct{}),
-					Metadata:    candidate.Metadata,
-				}
-				fused[candidate.DocID] = item
-			}
-			if item.Content == "" && candidate.Content != "" {
-				item.Content = candidate.Content
-			}
-			item.Score += evaluationRRFWeights[source] / (evaluationRRFConstant + float64(position+1))
-			item.SourceRanks[source] = position + 1
-			item.Sources[source] = struct{}{}
-		}
-	}
-
-	activeSources := make([]string, 0, len(bySource))
-	emptySources := make([]string, 0, len(evaluationRRFWeights))
-	evidenceCounts := map[string]int{
-		"vector": 0, "knowledge": 0, "timeline": 0,
-	}
-	for _, source := range []string{"vector", "knowledge", "timeline"} {
-		evidenceCounts[source] = len(bySource[source])
-		if len(bySource[source]) == 0 {
-			emptySources = append(emptySources, source)
-		} else {
-			activeSources = append(activeSources, source)
-		}
-	}
-	fusionMode := "no_evidence"
-	if len(activeSources) == 1 {
-		fusionMode = activeSources[0] + "_only_fallback"
-	} else if len(activeSources) > 1 {
-		fusionMode = fmt.Sprintf("rrf_%d_sources", len(activeSources))
-	}
-	log.Printf("[Evaluation RRF Evidence] active_sources=%s empty_sources=%s fusion_mode=%s", strings.Join(activeSources, ","), strings.Join(emptySources, ","), fusionMode)
-
-	rankedFused := make([]*evaluationFusedCandidate, 0, len(fused))
-	for _, candidate := range fused {
-		rankedFused = append(rankedFused, candidate)
-	}
-	sort.Slice(rankedFused, func(left, right int) bool {
-		if rankedFused[left].Score == rankedFused[right].Score {
-			return rankedFused[left].DocID < rankedFused[right].DocID
-		}
-		return rankedFused[left].Score > rankedFused[right].Score
-	})
-
-	contexts := make([]models.ContextItem, 0, minEvaluationLimit(limit, len(rankedFused)))
-	for index, candidate := range rankedFused {
+	contexts := make([]models.ContextItem, 0, minEvaluationLimit(limit, len(fused)))
+	for index := range fused {
 		if index == limit {
 			break
 		}
-		sources := make([]string, 0, len(candidate.Sources))
-		for source := range candidate.Sources {
-			sources = append(sources, source)
-		}
-		sort.Strings(sources)
-		metadata := make(map[string]interface{}, len(candidate.Metadata)+8)
-		for key, value := range candidate.Metadata {
-			metadata[key] = value
-		}
-		metadata["rrf_score"] = candidate.Score
-		metadata["rrf_sources"] = sources
-		metadata["rrf_ranks"] = candidate.SourceRanks
-		metadata["doc_id"] = candidate.DocID
-		metadata["retrieval_active_sources"] = activeSources
-		metadata["retrieval_empty_sources"] = emptySources
-		metadata["retrieval_fusion_mode"] = fusionMode
-		metadata["retrieval_source_statuses"] = sourceStatuses
-		metadata["retrieval_source_latency_ms"] = sourceLatencies
-		metadata["retrieval_source_candidate_counts"] = evidenceCounts
-		metadata["retrieval_wall_clock_latency_ms"] = retrieval.WallClockLatencyMs
+		candidate := fused[index]
+		metadata := ApplyFusionAuditMetadata(
+			cloneMetadataMap(candidate.Metadata),
+			candidate,
+			fusionAudit,
+			retrieval.SourceStatuses,
+			retrieval.SourceLatencyMs,
+			retrieval.WallClockLatencyMs,
+		)
 		contextSource := "rrf"
-		if len(activeSources) == 1 {
-			contextSource = activeSources[0]
+		if len(fusionAudit.ActiveSources) == 1 {
+			contextSource = fusionAudit.ActiveSources[0]
 		}
 		contexts = append(contexts, models.ContextItem{
 			DocID:    candidate.DocID,
@@ -1213,16 +1212,20 @@ func buildEvaluationRRFResponse(retrieval *RetrievalResults, limit int) models.C
 		})
 	}
 
-	log.Printf("[Evaluation RRF] vector=%d knowledge=%d timeline=%d fused=%d returned=%d", len(bySource["vector"]), len(bySource["knowledge"]), len(bySource["timeline"]), len(rankedFused), len(contexts))
+	log.Printf("[Evaluation RRF] vector=%d knowledge=%d timeline=%d fused=%d returned=%d",
+		fusionAudit.SourceCandidateCounts["vector"],
+		fusionAudit.SourceCandidateCounts["knowledge"],
+		fusionAudit.SourceCandidateCounts["timeline"],
+		len(fused), len(contexts))
 	return models.ContextResponse{
 		SessionState:      "evaluation_retrieval_only",
 		Contexts:          contexts,
 		RetrievedContexts: contexts,
 		RetrievalMetadata: map[string]interface{}{
-			"retrieval_active_sources": activeSources,
-			"retrieval_empty_sources":  emptySources,
-			"retrieval_fusion_mode":    fusionMode,
-			"source_candidate_counts":  evidenceCounts,
+			"retrieval_active_sources": fusionAudit.ActiveSources,
+			"retrieval_empty_sources":  fusionAudit.EmptySources,
+			"retrieval_fusion_mode":    fusionAudit.FusionMode,
+			"source_candidate_counts":  fusionAudit.SourceCandidateCounts,
 			"source_statuses":          sourceStatuses,
 			"source_latency_ms":        sourceLatencies,
 			"wall_clock_latency_ms":    retrieval.WallClockLatencyMs,

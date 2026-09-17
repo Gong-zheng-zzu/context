@@ -64,6 +64,46 @@ The full runner executes 50 retrieval queries per configuration. It exits on a
 failed smoke test, failed evaluator, invalid artifact count, or missing formal
 report evidence; it does not manufacture a comparison from partial data.
 
+### Security ablation evaluation (server-owned profiles)
+
+The security ablation endpoint (`POST /api/v1/security/ablation`) evaluates all
+four server-owned profiles (`regex_only`, `asdf`, `asdf_casia`,
+`asdf_casia_pccm`) inside **one request per sample** and returns one
+`SecurityProfileEvaluation` per profile. `security_eval.py --ablation-mode`
+consumes that response and reports per-profile detection rate, benign
+false-positive rate, latency, layer, ASDF residual-attack, and CASIA/PCCM
+config-snapshot evidence, plus the paired ablation delta against the previous
+profile in canonical order. `--ablation-profiles` only selects which
+server-owned profiles are aggregated; the server has no per-profile request
+parameter. The route accepts only explicit `synthetic_*` sample ids with
+`synthetic: true`, and only the server's configured evaluation identity
+(`SECURITY_EVAL_USER_ID`, default `eval_user_001`).
+
+Offline checks (no service required):
+
+```bash
+python3 experiments/scripts/security_eval.py --self-test
+python3 experiments/scripts/security_eval.py --ablation-mode --ablation-dry-run \
+  --config-label full_system --config-evidence 'config_sha256=<hash>'
+python3 experiments/scripts/test_security_ablation_eval.py
+```
+
+A measured ablation run must go through the evidence gate, exactly like the
+endpoint-mode security run:
+
+```bash
+export SECURITY_EVAL_USER_ID=eval_user_001   # server must scope the same identity
+bash experiments/scripts/run_configured_eval.sh full_system \
+  "python3 security_eval.py --ablation-mode --config-label full_system --config-evidence \$EVAL_RUNTIME_CONFIG_HASH"
+```
+
+The ablation artifact is written to `experiments/results/raw/` as
+`ablation_security_<timestamp>.json` so the gate still finds exactly one new
+raw JSON result, while the `ablation_security_` prefix keeps it from matching
+the report builder's `security_*.json` glob. No ablation metric is
+report-eligible until that gated run completes; leave the numbers absent rather
+than filling placeholders.
+
 ### Competition demonstration
 
 Use the PowerShell entry point for a bounded, interactive proof of execution:

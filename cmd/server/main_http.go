@@ -368,8 +368,6 @@ func setupRoutesAndStartServer(router *gin.Engine, handler *api.Handler, cfg *co
 	router.Static("/web", "./web")
 	router.StaticFile("/", "./web/role_selection.html")
 	router.Static("/temp", "./data/temp")
-	router.StaticFile("/chat-demo-fixed.html", "./chat-demo-fixed.html")
-	router.StaticFile("/chat-demo.html", "./chat-demo.html")
 	log.Println("✅ 静态文件服务器注册成功")
 
 	// 🔥 健康检查端点（公开访问）
@@ -486,8 +484,6 @@ func setupRoutesAndStartServer(router *gin.Engine, handler *api.Handler, cfg *co
 		rootMcpGroup.POST("/tools/retrieve_context", handler.HandleMCPRetrieveContext)
 	}
 	log.Println("✅ 根级别MCP工具路由注册成功（/mcp路径）: JWT认证已应用")
-
-	// handler.RegisterRoutes(router) // MCP协议路由 - 已移至protected组
 
 	// 🔥 批量embedding路由
 	if handler.GetBatchEmbeddingHandler() != nil {

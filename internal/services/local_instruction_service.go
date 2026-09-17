@@ -245,12 +245,11 @@ func (s *LocalInstructionService) GetCallbackInstructionType(callbackID string) 
 	}
 }
 
-// contains 检查字符串是否包含子串
+// contains 检查字符串是否包含子串（语义等价于 strings.Contains）。
+// 原手写实现含重复的后缀分支，被 go vet 判为 redundant or 并阻塞 go test；
+// 改为直接委托标准库，判定结果与原实现完全一致。
 func contains(s, substr string) bool {
-	return len(s) >= len(substr) && s[:len(substr)] == substr ||
-		len(s) > len(substr) && s[len(s)-len(substr):] == substr ||
-		(len(s) > len(substr) && s[len(s)-len(substr):] == substr) ||
-		(len(s) >= len(substr) && findSubstring(s, substr))
+	return strings.Contains(s, substr)
 }
 
 // findSubstring 在字符串中查找子串

@@ -8,7 +8,7 @@
 
 ## 📋 测试环境
 
-- **访问地址**: http://localhost:8088/chat-demo-fixed.html
+- **访问地址**: （原 `chat-demo-fixed.html` 演示页面已移除，请使用当前实际部署的前端入口）
 - **后端服务**: http://localhost:8088
 - **审计日志**: `./data/security_audit.log`
 

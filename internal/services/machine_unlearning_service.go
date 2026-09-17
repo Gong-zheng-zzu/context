@@ -4,6 +4,10 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
+	"os"
+	"strconv"
+	"strings"
+	"sync"
 	"time"
 
 	"github.com/contextkeeper/service/internal/models"
@@ -17,6 +21,11 @@ type MachineUnlearningService struct {
 	vectorStore models.VectorStore
 	dpService   *security.DifferentialPrivacy
 	config      *models.UnlearningConfig
+
+	// 隐私预算真实记账：按用户累计每次遗忘操作消耗的 epsilon（进程内存态，
+	// 重启后清零）。并发安全；MaxPrivacyBudgetPerUser > 0 时强制校验。
+	budgetMu          sync.Mutex
+	privacyBudgetUsed map[string]float64
 }
 
 // NewMachineUnlearningService 创建机器遗忘服务实例
@@ -29,9 +38,10 @@ func NewMachineUnlearningService(
 		config = getDefaultUnlearningConfig()
 	}
 	return &MachineUnlearningService{
-		vectorStore: vectorStore,
-		dpService:   dpService,
-		config:      config,
+		vectorStore:       vectorStore,
+		dpService:         dpService,
+		config:            config,
+		privacyBudgetUsed: make(map[string]float64),
 	}
 }
 
@@ -51,6 +61,12 @@ func (s *MachineUnlearningService) ExecuteUnlearning(ctx context.Context, req *m
 	}
 	if len(collections) == 0 {
 		return nil, fmt.Errorf("no configured vector collection for unlearning")
+	}
+
+	// 隐私预算在执行前记账并强制校验：即使操作中途失败，已注入的噪声
+	// 也无法撤回，因此预算消耗必须预先计入。
+	if err := s.chargePrivacyBudget(req.UserID, req.Epsilon); err != nil {
+		return nil, err
 	}
 
 	result := &models.UnlearningResult{
@@ -80,8 +96,78 @@ func (s *MachineUnlearningService) ExecuteUnlearning(ctx context.Context, req *m
 	result.RemovedVectorCount = totalRemoved
 	result.Duration = time.Since(startTime)
 	result.PrivacyBudgetConsumed = req.Epsilon
+	result.PrivacyBudgetUsedTotal = s.totalPrivacyBudget(req.UserID)
+	result.IndexRebuildStatus = s.rebuildIndexes(ctx, collections, req.RebuildIndex)
 
 	return result, nil
+}
+
+// chargePrivacyBudget 对用户级隐私预算做真实记账：先校验再累加。
+// MaxPrivacyBudgetPerUser <= 0 表示配置未设置预算上限，此时只记账不强制
+// （保持与旧配置的兼容），但消耗仍会如实累计。
+func (s *MachineUnlearningService) chargePrivacyBudget(userID string, epsilon float64) error {
+	s.budgetMu.Lock()
+	defer s.budgetMu.Unlock()
+	if s.privacyBudgetUsed == nil {
+		s.privacyBudgetUsed = make(map[string]float64)
+	}
+	maxBudget := s.config.MaxPrivacyBudgetPerUser
+	if maxBudget > 0 {
+		used := s.privacyBudgetUsed[userID]
+		if used+epsilon > maxBudget {
+			return fmt.Errorf(
+				"privacy budget exceeded for user %s: used %.4f + requested %.4f > max %.4f",
+				userID, used, epsilon, maxBudget,
+			)
+		}
+	}
+	s.privacyBudgetUsed[userID] += epsilon
+	return nil
+}
+
+// totalPrivacyBudget 返回指定用户累计消耗的隐私预算。
+func (s *MachineUnlearningService) totalPrivacyBudget(userID string) float64 {
+	s.budgetMu.Lock()
+	defer s.budgetMu.Unlock()
+	return s.privacyBudgetUsed[userID]
+}
+
+// autoRebuildIndexEnabled 计算索引重建开关：
+// 环境变量 UNLEARNING_AUTO_REBUILD_INDEX（"true"/"1" 等）优先，
+// 未设置时回退到配置项 AutoRebuildIndex。两者都未启用时为 false（默认行为不变）。
+func (s *MachineUnlearningService) autoRebuildIndexEnabled() bool {
+	if raw, ok := os.LookupEnv("UNLEARNING_AUTO_REBUILD_INDEX"); ok {
+		if value, err := strconv.ParseBool(strings.TrimSpace(raw)); err == nil {
+			return value
+		}
+	}
+	return s.config.AutoRebuildIndex
+}
+
+// rebuildIndexes 在删除完成后尝试触发向量存储的索引重建/优化。
+// 当前 Qdrant 后端（pkg/vectorstore/qdrant_store.go）没有暴露索引重建或
+// 优化接口，其他后端也未实现可选的 RebuildIndex 能力，因此默认如实返回
+// not_supported_by_backend，不谎报重建成功。只有当后端显式实现了
+// RebuildIndex(ctx, collection) 接口时才执行真实重建。
+func (s *MachineUnlearningService) rebuildIndexes(ctx context.Context, collections []string, rebuildRequested bool) string {
+	if !rebuildRequested && !s.autoRebuildIndexEnabled() {
+		return ""
+	}
+
+	type rebuildable interface {
+		RebuildIndex(ctx context.Context, collectionName string) error
+	}
+	store, ok := s.vectorStore.(rebuildable)
+	if !ok {
+		return "not_supported_by_backend"
+	}
+
+	for _, collectionName := range collections {
+		if err := store.RebuildIndex(ctx, collectionName); err != nil {
+			return fmt.Sprintf("failed: %v", err)
+		}
+	}
+	return "rebuilt"
 }
 
 // unlearnFromCollection 从单个集合执行遗忘
@@ -155,8 +241,8 @@ func (s *MachineUnlearningService) unlearnFromCollection(
 		return 0, 0, fmt.Errorf("failed to delete forget vectors: %w", err)
 	}
 
-	// TODO: 重建HNSW索引（如果需要）
-	// if req.RebuildIndex { ... }
+	// 索引重建由 ExecuteUnlearning 在全部集合删除完成后统一触发，
+	// 并把真实能力状态写入结果（见 rebuildIndexes）。
 
 	updated = len(retainedVectors)
 	removed = len(forgetVectors)

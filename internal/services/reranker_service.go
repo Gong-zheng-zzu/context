@@ -2,10 +2,15 @@ package services
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
 	"log"
 	"math"
 	"regexp"
+	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/contextkeeper/service/internal/llm"
@@ -15,14 +20,53 @@ import (
 // RerankerService 检索结果重排序服务
 type RerankerService struct {
 	llmClient llm.LLMClient
+	// llmClientFactory 惰性LLM客户端工厂，仅在 UseLLMRerank=true 首次触发时调用，
+	// 避免构造期写入LLM全局配置（未启用时行为与改动前一致）
+	llmClientFactory func() llm.LLMClient
+	llmClientOnce    sync.Once
 }
 
-// NewRerankerService 创建重排序服务
+// NewRerankerService 创建重排序服务（直接注入已有客户端）
 func NewRerankerService(llmClient llm.LLMClient) *RerankerService {
 	return &RerankerService{
 		llmClient: llmClient,
 	}
 }
+
+// NewRerankerServiceWithFactory 使用惰性工厂创建重排序服务。
+// 工厂仅在 UseLLMRerank=true 首次调用 Rerank 时才被触发，
+// 因此未启用LLM重排序时不会创建客户端、也不会写入LLM全局状态。
+func NewRerankerServiceWithFactory(factory func() llm.LLMClient) *RerankerService {
+	return &RerankerService{
+		llmClientFactory: factory,
+	}
+}
+
+// resolveLLMClient 返回LLM客户端，必要时通过惰性工厂创建（并发安全）。
+// 工厂为nil或返回nil时返回nil，调用方据此降级为纯规则打分。
+func (r *RerankerService) resolveLLMClient() llm.LLMClient {
+	if r.llmClientFactory == nil {
+		return r.llmClient
+	}
+	r.llmClientOnce.Do(func() {
+		if r.llmClient == nil {
+			r.llmClient = r.llmClientFactory()
+		}
+	})
+	return r.llmClient
+}
+
+// 重排序可配置常量（默认值，保持改动前的行为不变）
+const (
+	// defaultLLMFusionWeight LLM分数与规则分数的默认融合权重
+	defaultLLMFusionWeight = 0.6
+	// defaultAnswerBoostMultiplier 命中答案时的默认分数提升倍数（提升50%）
+	defaultAnswerBoostMultiplier = 1.5
+	// defaultEntityBoostMultiplier 个人信息查询命中实体时的默认分数提升倍数（提升30%）
+	defaultEntityBoostMultiplier = 1.3
+	// defaultLLMMaxDocChars 送入LLM打分的单个候选正文默认最大字符数
+	defaultLLMMaxDocChars = 500
+)
 
 // RerankConfig 重排序配置
 type RerankConfig struct {
@@ -32,6 +76,19 @@ type RerankConfig struct {
 	EntityWeight   float64 // 实体匹配权重
 	UseEntityBoost bool    // 是否启用实体提升
 	UseLLMRerank   bool    // 是否使用LLM重排序
+
+	// LLMFusionWeight LLM相关性分数与规则分数的融合权重（0, 1]：
+	// 最终分数 = (1-LLMFusionWeight)*规则分数 + LLMFusionWeight*LLM分数。
+	// <=0 或 >1 时回退到默认值 0.6。仅在 UseLLMRerank 为 true 时生效。
+	LLMFusionWeight float64
+
+	// AnswerBoostMultiplier 命中答案（非问题本身）时的分数提升倍数，<=0 时回退到默认值 1.5
+	AnswerBoostMultiplier float64
+	// EntityBoostMultiplier 个人信息查询命中实体（EntityScore>0.5）时的分数提升倍数，<=0 时回退到默认值 1.3
+	EntityBoostMultiplier float64
+
+	// LLMMaxDocChars 送入LLM打分的单个候选正文最大字符数，<=0 时回退到默认值 500（用于成本调优）
+	LLMMaxDocChars int
 }
 
 // DefaultRerankConfig 默认配置
@@ -42,6 +99,27 @@ var DefaultRerankConfig = RerankConfig{
 	EntityWeight:   0.1,
 	UseEntityBoost: true,
 	UseLLMRerank:   false, // 默认关闭LLM重排序（性能考虑）
+
+	LLMFusionWeight:       defaultLLMFusionWeight,
+	AnswerBoostMultiplier: defaultAnswerBoostMultiplier,
+	EntityBoostMultiplier: defaultEntityBoostMultiplier,
+	LLMMaxDocChars:        defaultLLMMaxDocChars,
+}
+
+// effectiveLLMFusionWeight 返回可用的LLM融合权重，非法配置回退到默认值
+func effectiveLLMFusionWeight(configured float64) float64 {
+	if configured <= 0 || configured > 1 {
+		return defaultLLMFusionWeight
+	}
+	return configured
+}
+
+// effectiveBoostMultiplier 返回可用的提升倍数，非法配置回退到默认值
+func effectiveBoostMultiplier(configured, fallback float64) float64 {
+	if configured <= 0 {
+		return fallback
+	}
+	return configured
 }
 
 // QueryIntent 查询意图类型
@@ -79,6 +157,12 @@ func (r *RerankerService) Rerank(ctx context.Context, query string, results []mo
 	for _, result := range filteredResults {
 		scored := r.calculateMultiDimensionalScore(query, result, intent, config)
 		scoredResults = append(scoredResults, scored)
+	}
+
+	// 3.5 LLM重排序（可选）：用LLM相关性分数与规则分数融合；
+	// LLM客户端缺失或调用/解析失败时降级为纯规则打分，并记录降级原因。
+	if config.UseLLMRerank {
+		r.applyLLMRerank(ctx, query, scoredResults, config)
 	}
 
 	// 4. 按最终分数排序
@@ -240,14 +324,14 @@ func (r *RerankerService) calculateMultiDimensionalScore(query string, result mo
 		config.RecencyWeight*scored.RecencyScore +
 		config.EntityWeight*scored.EntityScore
 
-	// 6. 答案提升（如果包含答案，提升分数）
+	// 6. 答案提升（如果包含答案，提升分数，倍数可配置，默认1.5倍）
 	if scored.HasAnswer && !scored.IsQuestionOnly {
-		scored.FinalScore *= 1.5 // 提升50%
+		scored.FinalScore *= effectiveBoostMultiplier(config.AnswerBoostMultiplier, defaultAnswerBoostMultiplier)
 	}
 
-	// 7. 实体提升（如果是个人信息查询且包含实体）
+	// 7. 实体提升（如果是个人信息查询且包含实体，倍数可配置，默认1.3倍）
 	if config.UseEntityBoost && intent.Type == "personal_info" && scored.EntityScore > 0.5 {
-		scored.FinalScore *= 1.3 // 提升30%
+		scored.FinalScore *= effectiveBoostMultiplier(config.EntityBoostMultiplier, defaultEntityBoostMultiplier)
 	}
 
 	return scored
@@ -275,10 +359,10 @@ func (r *RerankerService) calculateKeywordScore(query, content string, intent Qu
 func (r *RerankerService) calculateEntityScore(content string, intent QueryIntent) float64 {
 	// 检测常见实体模式
 	entityPatterns := []string{
-		`[一-龥]{2,4}`, // 中文姓名（2-4个字）
-		`1[3-9]\d{9}`,          // 手机号
-		`\w+@\w+\.\w+`,         // 邮箱
-		`\d{15,18}`,            // 身份证号
+		`[一-龥]{2,4}`,   // 中文姓名（2-4个字）
+		`1[3-9]\d{9}`,  // 手机号
+		`\w+@\w+\.\w+`, // 邮箱
+		`\d{15,18}`,    // 身份证号
 	}
 
 	score := 0.0
@@ -336,17 +420,158 @@ func (r *RerankerService) hasAnswer(content string, intent QueryIntent) bool {
 	return false
 }
 
-// sortByFinalScore 按最终分数排序
+// sortByFinalScore 按最终分数降序排序。
+// 使用稳定排序，分数相同时保持候选的原始相对顺序，保证结果确定性。
 func (r *RerankerService) sortByFinalScore(results []ScoredResult) {
-	// 使用冒泡排序（简单实现）
-	n := len(results)
-	for i := 0; i < n-1; i++ {
-		for j := 0; j < n-i-1; j++ {
-			if results[j].FinalScore < results[j+1].FinalScore {
-				results[j], results[j+1] = results[j+1], results[j]
-			}
+	sort.SliceStable(results, func(left, right int) bool {
+		return results[left].FinalScore > results[right].FinalScore
+	})
+}
+
+// applyLLMRerank 使用LLM对候选结果做相关性打分，并与规则分数加权融合。
+// 融合前先将规则分 min-max 归一化到[0,1]，与LLM分统一量纲，避免规则分超过1时稀释LLM权重。
+// 任何LLM调用或解析失败都会降级为纯规则打分并记录降级原因，不影响主流程。
+func (r *RerankerService) applyLLMRerank(ctx context.Context, query string, scoredResults []ScoredResult, config RerankConfig) {
+	client := r.resolveLLMClient()
+	if client == nil {
+		log.Printf("[重排序] LLM重排序已启用但LLM客户端不可用，降级为纯规则打分")
+		return
+	}
+
+	maxDocChars := config.LLMMaxDocChars
+	if maxDocChars <= 0 {
+		maxDocChars = defaultLLMMaxDocChars
+	}
+
+	llmScores, err := r.scoreRelevanceWithLLM(ctx, client, query, scoredResults, maxDocChars)
+	if err != nil {
+		log.Printf("[重排序] LLM重排序降级为纯规则打分，原因: %v", err)
+		return
+	}
+	if len(llmScores) != len(scoredResults) {
+		log.Printf("[重排序] LLM重排序降级为纯规则打分，原因: LLM返回分数数量(%d)与候选数(%d)不一致",
+			len(llmScores), len(scoredResults))
+		return
+	}
+
+	weight := effectiveLLMFusionWeight(config.LLMFusionWeight)
+	normalizedRules := normalizeRuleScores(scoredResults)
+	for index := range scoredResults {
+		llmScore := clampUnitInterval(llmScores[index])
+		scoredResults[index].FinalScore = (1-weight)*normalizedRules[index] + weight*llmScore
+	}
+	log.Printf("[重排序] LLM重排序完成，融合权重: %.2f，候选数: %d", weight, len(scoredResults))
+}
+
+// normalizeRuleScores 将本轮候选的规则分数按 min-max 归一化到[0,1]，
+// 使规则分与[0,1]区间的LLM分处于同一量纲后再加权融合。
+// 当所有规则分相同（无区分度）时，统一映射为1.0。
+func normalizeRuleScores(results []ScoredResult) []float64 {
+	normalized := make([]float64, len(results))
+	if len(results) == 0 {
+		return normalized
+	}
+
+	minScore, maxScore := results[0].FinalScore, results[0].FinalScore
+	for _, result := range results {
+		if result.FinalScore < minScore {
+			minScore = result.FinalScore
+		}
+		if result.FinalScore > maxScore {
+			maxScore = result.FinalScore
 		}
 	}
+	if maxScore == minScore {
+		for index := range normalized {
+			normalized[index] = 1.0
+		}
+		return normalized
+	}
+
+	span := maxScore - minScore
+	for index, result := range results {
+		normalized[index] = (result.FinalScore - minScore) / span
+	}
+	return normalized
+}
+
+// scoreRelevanceWithLLM 调用LLM为每个候选输出[0,1]相关性分数，返回顺序与候选一致。
+func (r *RerankerService) scoreRelevanceWithLLM(ctx context.Context, client llm.LLMClient, query string, scoredResults []ScoredResult, maxDocChars int) ([]float64, error) {
+	var builder strings.Builder
+	builder.WriteString("请评估下列文档与用户问题的相关性，输出0到1之间的小数（数值越大越相关）。\n")
+	builder.WriteString("用户问题: ")
+	builder.WriteString(query)
+	builder.WriteString("\n\n待评估文档:\n")
+	for index, scored := range scoredResults {
+		content, _ := scored.Result.Fields["content"].(string)
+		if maxDocChars > 0 && len(content) > maxDocChars {
+			content = content[:maxDocChars]
+		}
+		fmt.Fprintf(&builder, "[%d] %s\n", index, content)
+	}
+	builder.WriteString("\n仅返回JSON，格式为 {\"scores\":[...]}，数组长度必须等于文档数量，顺序与文档编号一致。")
+
+	response, err := client.Complete(ctx, &llm.LLMRequest{
+		Prompt:       builder.String(),
+		SystemPrompt: "你是一个检索结果相关性打分器，只输出JSON。",
+		Temperature:  0,
+		MaxTokens:    512,
+		Format:       "json",
+	})
+	if err != nil {
+		return nil, fmt.Errorf("LLM调用失败: %w", err)
+	}
+	if response == nil {
+		return nil, errors.New("LLM返回空响应")
+	}
+
+	return parseLLMRelevanceScores(response.Content, len(scoredResults))
+}
+
+// parseLLMRelevanceScores 解析LLM返回的相关性分数，
+// 兼容 {"scores":[...]} 与纯数组 [...] 两种结构，并校验数量与候选数一致。
+func parseLLMRelevanceScores(content string, expected int) ([]float64, error) {
+	cleaned := cleanCodeFence(content)
+
+	var wrapped struct {
+		Scores []float64 `json:"scores"`
+	}
+	if err := json.Unmarshal([]byte(cleaned), &wrapped); err == nil && len(wrapped.Scores) > 0 {
+		if len(wrapped.Scores) != expected {
+			return nil, fmt.Errorf("LLM相关性分数数量(%d)与候选数(%d)不一致", len(wrapped.Scores), expected)
+		}
+		return wrapped.Scores, nil
+	}
+
+	var raw []float64
+	if err := json.Unmarshal([]byte(cleaned), &raw); err == nil && len(raw) > 0 {
+		if len(raw) != expected {
+			return nil, fmt.Errorf("LLM相关性分数数量(%d)与候选数(%d)不一致", len(raw), expected)
+		}
+		return raw, nil
+	}
+
+	return nil, errors.New("无法解析LLM相关性分数")
+}
+
+// cleanCodeFence 去除LLM响应可能包裹的markdown代码块标记
+func cleanCodeFence(content string) string {
+	cleaned := strings.TrimSpace(content)
+	cleaned = strings.TrimPrefix(cleaned, "```json")
+	cleaned = strings.TrimPrefix(cleaned, "```")
+	cleaned = strings.TrimSuffix(cleaned, "```")
+	return strings.TrimSpace(cleaned)
+}
+
+// clampUnitInterval 将分数限制在[0,1]区间
+func clampUnitInterval(value float64) float64 {
+	if value < 0 {
+		return 0
+	}
+	if value > 1 {
+		return 1
+	}
+	return value
 }
 
 // logTopResults 记录前N个结果
