@@ -90,6 +90,14 @@ services:
       # 注释掉初始化脚本挂载，Neo4j不支持docker-entrypoint-initdb.d机制
       # - ./scripts/init/neo4j:/docker-entrypoint-initdb.d
 
+    # /var/lib/neo4j/run 只存放 pid 与锁文件。把它从容器可写层改为 tmpfs：
+    # 每次容器启动都是全新目录，残留的 neo4j.pid 不会再让下一次重启误判成
+    # 「Neo4j is already running (pid:7)」而陷入崩溃循环（此前只有
+    # --force-recreate 才能恢复，2026-09-20 已由容器内取证确认）。
+    # 数据卷（/data /logs /plugins）不受影响。
+    tmpfs:
+      - /var/lib/neo4j/run
+
     networks:
       - context-keeper-network
 
