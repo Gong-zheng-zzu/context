@@ -72,3 +72,11 @@ experiments/results/demo_runs/
 # Evaluation runtime environments may contain credentials or encryption keys.
 experiments/runtime_env/*.env
 experiments/results/runs/**/effective.env
+
+# Backup copies are never sources of truth, and an env backup carries the very
+# same credentials/keys as the file it was copied from. `.env.backup` was already
+# covered above; this closes the whole class (.bak/.backup) repository-wide, which
+# is exactly the invariant test_gitignore and release_guard assert.
+*.bak
+*.backup
+

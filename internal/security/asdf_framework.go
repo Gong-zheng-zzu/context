@@ -184,6 +184,25 @@ type SpaceSeparationDetector struct{}
 
 const minimumObfuscatedIdentifierDigits = 10
 
+// maximumSingleIdentifierDigits 是「单个」受支持标识符可能达到的最大位数。
+//
+// 依据：本项目支持的最长标识符是中国银行卡（16~19 位），其后依次是身份证
+// 18 位、手机号 11 位。分隔符合一化的用途是把「某一个」被拆散的标识符还原成
+// 连续数字，所以候选里的数字位数不可能超过该上限。
+//
+// 一旦超过上限，候选必然是「多个不同标识符被分隔符连在一起」——这在真实
+// 第三方文本里非常常见（例如 `电话/身份证/银行卡` 用 `/` 串成一行）。此时
+// 按分隔符合并会把它们糊成一整串数字，令所有带边界约束的检测器同时失配，
+// 原本能被检出的值反而被"洗掉"。这类候选必须原样保留，也不应被声明为混淆样本。
+//
+// 该缺口由第三方语料评测暴露（内部语料每条只有一个被混淆的值，永远测不出来）。
+const maximumSingleIdentifierDigits = 19
+
+// plausibleObfuscationCandidate 判定一个「数字 + 分隔符」候选是否可能对应单个标识符。
+func plausibleObfuscationCandidate(digits int) bool {
+	return digits >= minimumObfuscatedIdentifierDigits && digits <= maximumSingleIdentifierDigits
+}
+
 var (
 	spaceSeparatedDigitPattern   = regexp.MustCompile(`[0-9]+(?:[\t ]+[0-9]+)+`)
 	specialSeparatedDigitPattern = regexp.MustCompile(`[0-9]+(?:[-_./\\|]+[0-9]+)+`)
@@ -195,7 +214,7 @@ func (d *SpaceSeparationDetector) Detect(text string) (bool, float64, string) {
 	// ordinary nursing records to be classified as attacks.
 	for _, candidate := range spaceSeparatedDigitPattern.FindAllString(text, -1) {
 		digitCount, separatorCount := digitAndSeparatorCounts(candidate)
-		if digitCount < minimumObfuscatedIdentifierDigits {
+		if !plausibleObfuscationCandidate(digitCount) {
 			continue
 		}
 		confidence := float64(separatorCount) / float64(digitCount)
@@ -213,7 +232,7 @@ func (d *SpaceSeparationDetector) Detect(text string) (bool, float64, string) {
 
 func (d *SpaceSeparationDetector) Normalize(text string) string {
 	return spaceSeparatedDigitPattern.ReplaceAllStringFunc(text, func(candidate string) string {
-		if digitCount, _ := digitAndSeparatorCounts(candidate); digitCount < minimumObfuscatedIdentifierDigits {
+		if digitCount, _ := digitAndSeparatorCounts(candidate); !plausibleObfuscationCandidate(digitCount) {
 			return candidate
 		}
 		return strings.Map(func(r rune) rune {
@@ -230,7 +249,7 @@ type SpecialCharDetector struct{}
 
 func (d *SpecialCharDetector) Detect(text string) (bool, float64, string) {
 	for _, candidate := range specialSeparatedDigitPattern.FindAllString(text, -1) {
-		if digitCount, _ := digitAndSeparatorCounts(candidate); digitCount >= minimumObfuscatedIdentifierDigits {
+		if digitCount, _ := digitAndSeparatorCounts(candidate); plausibleObfuscationCandidate(digitCount) {
 			return true, 0.6, "special_char_obfuscation"
 		}
 	}
@@ -241,7 +260,7 @@ func (d *SpecialCharDetector) Detect(text string) (bool, float64, string) {
 func (d *SpecialCharDetector) Normalize(text string) string {
 	return specialSeparatedDigitPattern.ReplaceAllStringFunc(text, func(candidate string) string {
 		digitCount, _ := digitAndSeparatorCounts(candidate)
-		if digitCount < minimumObfuscatedIdentifierDigits {
+		if !plausibleObfuscationCandidate(digitCount) {
 			return candidate
 		}
 		return strings.Map(func(r rune) rune {

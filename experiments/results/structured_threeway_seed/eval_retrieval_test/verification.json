@@ -1,6 +1,6 @@
 {
   "schema": "structured-threeway-verification-v2",
-  "verified_at": "2026-09-18T15:43:12Z",
+  "verified_at": "2026-09-20T11:34:04Z",
   "manifest": "D:\\context\\context-keeper-main\\experiments\\results\\structured_threeway_seed\\eval_retrieval_test\\manifest.json",
   "scope": {
     "user_id": "eval_user_001",
@@ -11,112 +11,112 @@
     "errors": []
   },
   "vector": {
-    "status": "verified",
-    "verified": 30,
+    "status": "incomplete",
+    "verified": 4,
     "expected": 30,
     "results": [
       {
         "doc_id": "elder_020_2026-06-06T03:43:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 28,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_025_2026-06-06T02:40:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 27,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_033_2026-06-06T03:33:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 23,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_047_2026-06-06T03:59:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 33,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_080_2026-06-06T02:10:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 23,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
@@ -126,12 +126,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 4,
+            "count": 1,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 4,
+            "count": 1,
             "status": "verified"
           },
           "graph": {
@@ -147,228 +147,228 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 10,
+            "count": 1,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 10,
+            "count": 1,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 31,
+            "count": 16,
             "status": "verified"
           }
         }
       },
       {
         "doc_id": "elder_014_2026-06-28T03:06:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 16,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_079_2026-07-02T07:55:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 5,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 5,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 34,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_013_2026-06-20T18:09:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 30,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_081_2026-07-02T21:49:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 32,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_008_2026-07-01T10:25:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 25,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_078_2026-06-30T10:34:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 27,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_047_2026-06-27T06:48:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 28,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_010_2026-07-02T07:51:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 14,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_038_2026-06-14T14:31:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 26,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_034_2026-06-25T16:47:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 16,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
@@ -378,123 +378,123 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 11,
+            "count": 1,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 11,
+            "count": 1,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 30,
+            "count": 13,
             "status": "verified"
           }
         }
       },
       {
         "doc_id": "elder_100_2026-06-23T21:30:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 13,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_091_2026-06-18T11:18:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 28,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_027_2026-07-04T17:58:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 25,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_002_2026-07-02T06:45:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 39,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_093_2026-06-17T07:12:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 13,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
@@ -504,12 +504,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 5,
+            "count": 1,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 4,
+            "count": 1,
             "status": "verified"
           },
           "graph": {
@@ -521,127 +521,127 @@
       },
       {
         "doc_id": "elder_041_2026-06-25T08:36:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 16,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_053_2026-06-29T07:47:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 35,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_079_2026-06-13T21:16:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 35,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_023_2026-06-16T17:04:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 29,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_028_2026-06-13T18:44:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 28,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_013_2026-06-20T06:57:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 18,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       }
@@ -649,113 +649,113 @@
   },
   "three_way": {
     "http_status": 200,
-    "response_sha256": "c3ddd13030b089ff30270578471b2481135c4f3a58af7fac76ce293deb0aed82",
-    "status": "verified",
-    "verified": 30,
+    "response_sha256": "900c095b419898c3d1fda57d70fc68d42a4a0e46b3e47d381332d5800b61d6cb",
+    "status": "incomplete",
+    "verified": 4,
     "expected": 30,
     "results": [
       {
         "doc_id": "elder_020_2026-06-06T03:43:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 28,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_025_2026-06-06T02:40:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 27,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_033_2026-06-06T03:33:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 23,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_047_2026-06-06T03:59:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 33,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_080_2026-06-06T02:10:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 12,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 23,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
@@ -765,12 +765,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 4,
+            "count": 1,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 4,
+            "count": 1,
             "status": "verified"
           },
           "graph": {
@@ -786,228 +786,228 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 10,
+            "count": 1,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 10,
+            "count": 1,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 31,
+            "count": 16,
             "status": "verified"
           }
         }
       },
       {
         "doc_id": "elder_014_2026-06-28T03:06:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 16,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_079_2026-07-02T07:55:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 5,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 5,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 34,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_013_2026-06-20T18:09:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 30,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_081_2026-07-02T21:49:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 32,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_008_2026-07-01T10:25:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 25,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_078_2026-06-30T10:34:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 27,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_047_2026-06-27T06:48:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 28,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_010_2026-07-02T07:51:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 14,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_038_2026-06-14T14:31:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 26,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_034_2026-06-25T16:47:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 16,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
@@ -1017,123 +1017,123 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 11,
+            "count": 1,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 11,
+            "count": 1,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 30,
+            "count": 13,
             "status": "verified"
           }
         }
       },
       {
         "doc_id": "elder_100_2026-06-23T21:30:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 13,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_091_2026-06-18T11:18:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 28,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_027_2026-07-04T17:58:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 25,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_002_2026-07-02T06:45:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 11,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 39,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_093_2026-06-17T07:12:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 6,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 9,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 13,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
@@ -1143,12 +1143,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 5,
+            "count": 1,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 4,
+            "count": 1,
             "status": "verified"
           },
           "graph": {
@@ -1160,127 +1160,127 @@
       },
       {
         "doc_id": "elder_041_2026-06-25T08:36:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 7,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 16,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_053_2026-06-29T07:47:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 35,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_079_2026-06-13T21:16:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 35,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_023_2026-06-16T17:04:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 29,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_028_2026-06-13T18:44:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 28,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       },
       {
         "doc_id": "elder_013_2026-06-20T06:57:43.194500",
-        "verified": true,
+        "verified": false,
         "lanes": {
           "vector": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "timeline": {
-            "verified": true,
-            "count": 10,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           },
           "graph": {
-            "verified": true,
-            "count": 18,
-            "status": "verified"
+            "verified": false,
+            "count": 0,
+            "status": "not_found"
           }
         }
       }
