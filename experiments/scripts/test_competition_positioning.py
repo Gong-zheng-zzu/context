@@ -29,7 +29,13 @@ class CompetitionPositioningTests(unittest.TestCase):
         cls.memory_graph = MEMORY_GRAPH.read_text(encoding="utf-8")
 
     def test_governance_first_title_and_boundaries_are_present(self):
-        self.assertIn("护理数据智能治理与可信辅助决策平台", self.positioning)
+        # The positioning document was deliberately retitled on 2026-09-17 from
+        # "护理数据智能治理与可信辅助决策平台" to "AI Agent 记忆安全治理底座"
+        # (elderly care is now framed as the first demonstration scenario rather
+        # than the whole product). This assertion tracks the current title; the
+        # three assertions below are the governance boundaries that must survive
+        # any future rewording.
+        self.assertIn("AI Agent 记忆安全治理底座", self.positioning)
         self.assertIn("不替代护工、医生", self.positioning)
         self.assertIn("离线夹具模式", self.positioning)
         self.assertIn("不宣称已经实现梯度投影式模型遗忘", self.positioning)
