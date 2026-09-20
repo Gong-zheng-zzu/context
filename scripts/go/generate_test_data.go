@@ -291,7 +291,10 @@ func main() {
 	// ---------------------------------------------------------------- standard
 	standardSubtypes := []string{"id_card", "phone", "medical_record", "blood_pressure"}
 	standardPlan := plan(*perCategory, standardSubtypes)
-	for subtype, quota := range standardPlan {
+	// 按声明顺序遍历，而不是遍历 map：Go 的 map 迭代顺序未定义，用它决定发射
+	// 顺序会让同一 seed 的两次运行产出不同字节，数据集就不可复现。
+	for _, subtype := range standardSubtypes {
+		quota := standardPlan[subtype]
 		for index := 0; index < quota; index++ {
 			switch subtype {
 			case "id_card":
@@ -313,7 +316,8 @@ func main() {
 	// ----------------------------------------------------------- bypass_attack
 	bypassSubtypes := []string{"space_separation", "separator", "chinese_number", "homophone", "base64", "semantic"}
 	bypassPlan := plan(*perCategory, bypassSubtypes)
-	for subtype, quota := range bypassPlan {
+	for _, subtype := range bypassSubtypes {
+		quota := bypassPlan[subtype]
 		for index := 0; index < quota; index++ {
 			switch subtype {
 			case "space_separation":
@@ -351,7 +355,11 @@ func main() {
 					fmt.Sprintf("%s在%s记录中提到的血压是一百二十比八十", person, eventLabels[event]),
 					fmt.Sprintf("%s的身份证前六位是%s，后面是出生日期加四位顺序码", person, administrativeCodes[index%len(administrativeCodes)]),
 				}
-				appendCase(templates[index%len(templates)], true, []string{"id_card", "phone", "medical_record", "blood_pressure"},
+				// 每个模板只对应一种敏感类型。此前这里一律打上全部四类，与模板
+				// 内容不符（例如只讲手机号的样本也被标成同时含身份证/病历号/血压），
+				// 会让按类型的分解失真。
+				semanticTypes := []string{"id_card", "phone", "medical_record", "blood_pressure", "id_card"}
+				appendCase(templates[index%len(templates)], true, []string{semanticTypes[index%len(semanticTypes)]},
 					"semantic", "bypass_attack", subtype, fmt.Sprintf("语义描述绕过攻击 #%d", index+1))
 			}
 		}
@@ -360,7 +368,8 @@ func main() {
 	// ---------------------------------------------------------------- confusing
 	confusingSubtypes := []string{"postal_code", "employee_id", "order_id", "ratio"}
 	confusingPlan := plan(*perCategory, confusingSubtypes)
-	for subtype, quota := range confusingPlan {
+	for _, subtype := range confusingSubtypes {
+		quota := confusingPlan[subtype]
 		for index := 0; index < quota; index++ {
 			// Each lookalike reuses the exact shape of a positive sample of the same
 			// kind (six digits like an identity prefix, digits/digits like a blood
