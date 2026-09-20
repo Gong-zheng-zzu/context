@@ -1,0 +1,117 @@
+{
+  "schema": "external-dataset-import-manifest-v1",
+  "imported_at_utc": "2026-09-20T04:01:58.077363+00:00",
+  "importer": "experiments/scripts/import_public_dataset.py",
+  "dataset": {
+    "name": "pii-bench-zh",
+    "publisher": "wan9yu (Hugging Face)",
+    "url": "https://huggingface.co/datasets/wan9yu/pii-bench-zh",
+    "license": "Apache-2.0",
+    "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+    "citation": "@dataset{pii_bench_zh_2026,\n  title={PII Bench ZH: Chinese PII Detection Benchmark},\n  author={wan9yu},\n  year={2026},\n  url={https://huggingface.co/datasets/wan9yu/pii-bench-zh},\n  publisher={Hugging Face}\n}",
+    "attribution_required": true,
+    "provenance_note": "Third-party, template-generated synthetic data. Independent of this repository's own generators, but still synthetic: it does not substitute for a human-annotated corpus when arguing external validity."
+  },
+  "source_files": [
+    {
+      "subset": "formal",
+      "url": "https://huggingface.co/datasets/wan9yu/pii-bench-zh/resolve/main/data/pii_bench_zh.jsonl",
+      "filename": "pii_bench_zh.jsonl",
+      "bytes": 1834636,
+      "sha256": "bcaa54909fd69c6737b8e442c4d740ce1bf5b95b7d4af70b2f2692010e1ff7a5",
+      "source_records": 5000
+    },
+    {
+      "subset": "chat",
+      "url": "https://huggingface.co/datasets/wan9yu/pii-bench-zh/resolve/main/data/pii_bench_zh_chat.jsonl",
+      "filename": "pii_bench_zh_chat.jsonl",
+      "bytes": 853574,
+      "sha256": "4ddacd78dfac49b723032de5e1c29c432a44049245e03a8ea960c86bbf3b765c",
+      "source_records": 3000
+    }
+  ],
+  "cache_policy": "Raw files are cached under the cache directory and reused on later runs. The recorded sha256 is a first-observation digest: verify it against the upstream release before treating it as an integrity guarantee.",
+  "mapping": {
+    "label_map": {
+      "id_number": "id_card",
+      "phone": "phone"
+    },
+    "target_labels": [
+      "id_number",
+      "phone"
+    ],
+    "unmapped_external_labels": [
+      "address",
+      "bank_card",
+      "email",
+      "license_plate",
+      "passport",
+      "person"
+    ],
+    "inclusion_rule": "A record is included when it contains at least one entity whose label maps to a target type. Co-occurring non-target entities do not change the expectation."
+  },
+  "counts": {
+    "samples": 6677,
+    "by_category": {
+      "bypass_attack": 2271,
+      "standard": 4406
+    },
+    "by_target_type": {
+      "id_card": 2334,
+      "phone": 5991
+    },
+    "per_subset": [
+      {
+        "subset": "formal",
+        "records_scanned": 5000,
+        "records_without_target_type": 594,
+        "samples_emitted": 4406,
+        "observed_external_labels": {
+          "address": 1429,
+          "bank_card": 862,
+          "email": 931,
+          "id_number": 1812,
+          "license_plate": 455,
+          "passport": 463,
+          "person": 5310,
+          "phone": 4400
+        },
+        "mapped_type_counts": {
+          "id_card": 1812,
+          "phone": 3979
+        }
+      },
+      {
+        "subset": "chat",
+        "records_scanned": 3000,
+        "records_without_target_type": 729,
+        "samples_emitted": 2271,
+        "observed_external_labels": {
+          "address": 255,
+          "bank_card": 504,
+          "email": 493,
+          "id_number": 522,
+          "license_plate": 239,
+          "passport": 260,
+          "person": 3010,
+          "phone": 2261
+        },
+        "mapped_type_counts": {
+          "id_card": 522,
+          "phone": 2012
+        }
+      }
+    ]
+  },
+  "produced_dataset": {
+    "path": "experiments/datasets/external/pii_bench_zh/external_pii_positive.json",
+    "sha256": "2adc354144c67fea4757224ac040c2eaffad5cbb8ec4849bc9b56a5e89cda57e",
+    "sample_count": 6677
+  },
+  "known_limits": [
+    "Positive-only: the file contains no negative samples, so it can measure recall but must never be used to report a false-positive rate.",
+    "Covers only the target types id_card and phone; medical_record and blood_pressure have no counterpart in this dataset.",
+    "The dataset is synthetic and template-generated, so it is not a human-annotated reference and does not by itself establish external validity.",
+    "About the external dataset's remaining labels (person, address, email, bank_card, passport, license_plate): several are sensitive under this project's own taxonomy, so they are deliberately not converted into negative samples."
+  ]
+}

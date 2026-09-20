@@ -135,7 +135,10 @@ try {
     Copy-Item -LiteralPath $EffectiveEnv -Destination $TargetEnv -Force
 
     Push-Location $ProjectRoot
-    & docker-compose up -d --force-recreate --no-deps context-keeper
+    # docker-compose writes progress lines to stderr, which Windows PowerShell 5.1
+    # promotes to a terminating error under $ErrorActionPreference = 'Stop'.
+    # Wrapping in cmd.exe keeps the exit code while avoiding that false failure.
+    cmd /c "docker-compose up -d --force-recreate --no-deps context-keeper >nul 2>&1"
     if ($LASTEXITCODE -ne 0) { throw "docker-compose restart failed with exit code $LASTEXITCODE" }
     $healthy = $false
     foreach ($unused in 1..60) {
@@ -192,6 +195,8 @@ finally {
     Copy-Item -LiteralPath $BackupEnv -Destination $TargetEnv -Force
     Write-Manifest
     Push-Location $ProjectRoot
-    & docker-compose up -d --force-recreate --no-deps context-keeper | Out-Null
+    # Same Windows PowerShell 5.1 stderr promotion as above; exit code is not
+    # consumed here, so the output is simply discarded inside cmd.exe.
+    cmd /c "docker-compose up -d --force-recreate --no-deps context-keeper >nul 2>&1"
     Pop-Location
 }

@@ -3,6 +3,9 @@ package security
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -100,8 +103,9 @@ type MultiLayerConfiguration struct {
 
 // NewMultiLayerDetector 创建多层检测器
 func NewMultiLayerDetector(ollamaURL, llmModel string) *MultiLayerDetector {
-	// PCCM-S 配置唯一来源：环境变量覆盖默认值，模型与配置快照共享同一份。
-	pccmConfig := PCCMSecurityConfigFromEnv()
+	// PCCM-S 配置唯一来源：显式校准产物 > 环境变量覆盖 > 默认值。
+	// 模型与配置快照必须共享同一份配置，否则审计上报的权重会与实际计算不一致。
+	pccmConfig := resolvePCCMConfig()
 
 	return &MultiLayerDetector{
 		regexDetector: NewDetector(),
@@ -124,11 +128,67 @@ func NewMultiLayerDetector(ollamaURL, llmModel string) *MultiLayerDetector {
 		parallelLayers: []int{1, 2, 4}, // L1, L2, L4可并行
 		usePCCM:        true,           // 🆕 默认启用PCCM
 		useCASIA:       true,           // 🆕 默认启用CASIA
-		pccmConfig:     DefaultPCCMSecurityConfig(),
+		pccmConfig:     pccmConfig,
 		stats: &DetectionStats{
 			LayerUsage: make(map[int]int64),
 		},
 	}
+}
+
+// pccmCalibrationArtifactEnv 指定显式校准产物路径。
+//
+// 未设置时，配置来源与环境变量/默认值完全一致，检测结果不受影响。
+const pccmCalibrationArtifactEnv = "PCCM_CALIBRATION_ARTIFACT"
+
+// PCCMCalibrationProvider 由 calibration 包在 init 阶段注册，用于按路径加载校准产物。
+//
+// 设计约束：internal/security/calibration 依赖 internal/security（使用
+// PCCMSecurityConfig），因此 security 不能反向 import calibration。这里只暴露一个
+// 注册钩子，实现由 calibration 包注入。
+type PCCMCalibrationProvider func(path string) (PCCMSecurityConfig, error)
+
+var (
+	pccmCalibrationProviderMu sync.RWMutex
+	pccmCalibrationProvider   PCCMCalibrationProvider
+)
+
+// RegisterPCCMCalibrationProvider 注册校准产物加载实现（由 calibration 包调用）。
+// 重复注册以最后一次为准；传入 nil 表示注销。
+func RegisterPCCMCalibrationProvider(provider PCCMCalibrationProvider) {
+	pccmCalibrationProviderMu.Lock()
+	defer pccmCalibrationProviderMu.Unlock()
+	pccmCalibrationProvider = provider
+}
+
+// resolvePCCMConfig 按「显式校准产物 → 环境变量 → 默认值」的顺序解析 PCCM-S 配置。
+//
+// 任何一步失败都记录日志并继续回退，保证服务不会因为配置缺失或产物损坏而启动失败。
+func resolvePCCMConfig() PCCMSecurityConfig {
+	config := PCCMSecurityConfigFromEnv()
+
+	artifactPath := strings.TrimSpace(os.Getenv(pccmCalibrationArtifactEnv))
+	if artifactPath == "" {
+		return config
+	}
+
+	pccmCalibrationProviderMu.RLock()
+	provider := pccmCalibrationProvider
+	pccmCalibrationProviderMu.RUnlock()
+
+	if provider == nil {
+		log.Printf("⚠️ [PCCM校准] 已设置 %s 但未注册校准加载实现，回退到环境变量/默认权重", pccmCalibrationArtifactEnv)
+		return config
+	}
+
+	fromArtifact, err := provider(artifactPath)
+	if err != nil {
+		log.Printf("⚠️ [PCCM校准] 校准产物加载失败，回退到环境变量/默认权重: path=%s, err=%v", artifactPath, err)
+		return config
+	}
+
+	log.Printf("✅ [PCCM校准] 已加载校准产物: path=%s, source=%s, version=%s",
+		artifactPath, fromArtifact.CalibrationSource, fromArtifact.Version)
+	return fromArtifact
 }
 
 // Detect 多层检测
@@ -216,7 +276,7 @@ func (mld *MultiLayerDetector) executeLayer1(text string) *LayerResult {
 
 	// 🆕 如果启用CASIA算法，对正则检测结果进行上下文感知调整
 	if mld.useCASIA && mld.casiaAlgorithm != nil {
-		items = mld.applyCASIA(text, items)
+		items = mld.applyCASIA(text, items, true)
 	}
 
 	return &LayerResult{
@@ -235,7 +295,7 @@ func (mld *MultiLayerDetector) executeLayer2(text string) *LayerResult {
 
 	// 🆕 如果启用CASIA算法，对词典匹配结果进行上下文感知调整
 	if mld.useCASIA && mld.casiaAlgorithm != nil {
-		items = mld.applyCASIA(text, items)
+		items = mld.applyCASIA(text, items, true)
 	}
 
 	return &LayerResult{
@@ -258,9 +318,11 @@ func (mld *MultiLayerDetector) executeLayer4(text string, nerResults []NERResult
 		items[i] = match.SensitiveInfo
 	}
 
-	// 🆕 如果启用CASIA算法，对每个检测结果进行上下文感知调整
+	// 🆕 如果启用CASIA算法，对每个检测结果进行上下文感知调整。
+	// 上下文规则层是推断型：必须传 false，让 CASIA 继续抑制弱匹配，
+	// 否则"邮政编码 110101"会被当成密码而产生误报。
 	if mld.useCASIA && mld.casiaAlgorithm != nil {
-		items = mld.applyCASIA(text, items)
+		items = mld.applyCASIA(text, items, false)
 	}
 
 	return &LayerResult{
@@ -272,7 +334,14 @@ func (mld *MultiLayerDetector) executeLayer4(text string, nerResults []NERResult
 }
 
 // 🆕 applyCASIA 应用CASIA算法调整置信度
-func (mld *MultiLayerDetector) applyCASIA(text string, items []SensitiveInfo) []SensitiveInfo {
+//
+// confirmed 表示这批候选项来自"确证型"检测层（正则 L1 / 词典 L2），其命中
+// 本身就是可靠证据：上下文里恰好没有该类型关键词时，不应因此被压到过滤阈值
+// 之下（这正是 Base64 / 特殊字符混淆样本暴露的缺陷）。
+//
+// 推断型层（上下文规则 L4）必须传 false：那里的匹配只是弱推断，必须继续接受
+// CASIA 的抑制，否则会把"邮政编码 110101"这类正常文本误判为敏感。
+func (mld *MultiLayerDetector) applyCASIA(text string, items []SensitiveInfo, confirmed bool) []SensitiveInfo {
 	adjustedItems := make([]SensitiveInfo, 0, len(items))
 
 	for _, item := range items {
@@ -286,6 +355,15 @@ func (mld *MultiLayerDetector) applyCASIA(text string, items []SensitiveInfo) []
 		)
 		evidence.BaseConfidence = item.Confidence
 		adjustedConf := item.Confidence * evidence.NormalizedWeight
+		// 保底：上下文里没有该类型的任何关键词时 NormalizedWeight = 0.5，
+		// 直接相乘会把已被正则/词典确证的匹配压到过滤阈值以下而误杀真阳性。
+		// 保底只限制"上下文缺失导致的衰减幅度"，正面/负面关键词的相对
+		// 增强与抑制仍然保留；推断型层（context）不享受保底。
+		if confirmed {
+			if floor := item.Confidence * casiaConfidenceFloor(mld.casiaAlgorithm.config); adjustedConf < floor {
+				adjustedConf = floor
+			}
+		}
 		evidence.AdjustedScore = adjustedConf
 
 		// 更新置信度

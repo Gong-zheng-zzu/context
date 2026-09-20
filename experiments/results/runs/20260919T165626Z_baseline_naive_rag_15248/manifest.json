@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260919T165626Z_baseline_naive_rag_15248",
+    "started_at":  "2026-09-19T16:56:26.8687547Z",
+    "ended_at":  "2026-09-19T16:56:33.6967759Z",
+    "outcome":  "succeeded",
+    "error":  null,
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260920_005633.json",
+    "command":  "python experiments/scripts/retrieval_eval.py --queries 30 --configs baseline_naive_rag --retrieval-mode vector --base-url http://127.0.0.1:8088 --corpus-file experiments/datasets/retrieval_corpus/retrieval_corpus_30.json",
+    "command_sha256":  "ca67d1c04fd6edf6cfecc741b8d29f061e987846df5338b796c2c8df4cd3ad70",
+    "configuration":  {
+                          "name":  "baseline_naive_rag",
+                          "base_env_sha256":  "715e0b4255d09e92b2d670e59e4b2614c46c2989b71e7124b4bbac3fa52390a4",
+                          "overlay_env_sha256":  "4a2dea91004ce6479740b35670bd6e7ce25fa20e2a28637e3987d7f8b83c0490",
+                          "effective_env_sha256":  "687e70afdd6da29e01565923dd570773d4bfb838d3c21c42179c61eda5a3c1f0"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "d7c63b5c17e0ee02b13149bbbfaa2e8c1cc9419936d799aefcbca21c5dd10b00"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260919T165626Z_baseline_naive_rag_15248\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260919T165626Z_baseline_naive_rag_15248\\evaluation.log"
+                  }
+}

@@ -320,14 +320,27 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 
 	localResult := SessionDeletionStoreResult{Store: "session_file_cache"}
 	before, err := s.sessionStore.SessionArtifactCount(sessionID)
-	localResult.Before = before
-	if err != nil {
+	// A missing local artifact must not abort the cascade. The local session file
+	// lives inside the application container while the durable replicas (vector,
+	// timeline, graph) live in their own stores, so recreating the container
+	// routinely leaves the local lane absent next to replicas that still hold the
+	// session's records. Propagating store.ErrSessionNotFound made the handler
+	// answer 404, and callers read 404 as "already clean" — so the replicas were
+	// never cleaned and a newly seeded corpus silently shared the session with the
+	// previous one, which invalidates every retrieval metric measured afterwards.
+	// Treating "absent" as the verified-empty state keeps the not-found answer
+	// reserved for a session that is genuinely gone everywhere.
+	if err != nil && !errors.Is(err, store.ErrSessionNotFound) {
 		localResult.Status = "failed"
 		localResult.Error = err.Error()
 		result.Stores = append(result.Stores, localResult)
 		s.audit(result)
 		return result, fmt.Errorf("count session file/cache: %w", err)
 	}
+	if err != nil {
+		before = 0
+	}
+	localResult.Before = before
 	if dryRun {
 		localResult.Status = "dry_run"
 		localResult.After = before

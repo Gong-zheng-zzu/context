@@ -33,6 +33,15 @@ const (
 	SensitiveTypeOAuth       SensitiveType = "oauth_token"
 )
 
+// 医疗场景补充的敏感类型。
+//
+// 单独成块声明：这两个标识符比上方任一常量都长，若并入同一 const 块，gofmt 会
+// 重排整块的 `=` 对齐，使 diff 无谓放大。
+const (
+	SensitiveTypeMedicalRecord SensitiveType = "medical_record"
+	SensitiveTypeBloodPressure SensitiveType = "blood_pressure"
+)
+
 type SensitiveInfo struct {
 	Type       SensitiveType  `json:"type"`
 	Value      string         `json:"value"`
@@ -124,6 +133,17 @@ func (d *Detector) initRules() {
 	d.rules[SensitiveTypeJWT] = regexp.MustCompile(`\beyJ[a-zA-Z0-9_-]+\.eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\b`)
 	d.rules[SensitiveTypeOAuth] = regexp.MustCompile(`(?i)(oauth[_-]?token|refresh[_-]?token)\s*[:=]\s*['"]?([a-zA-Z0-9_\-\.]{20,128})['"]?`)
 
+	// 🔥 医疗场景补充：病历号与血压读数。
+	//
+	// 两条规则都做「标签锚定」而非裸值匹配，原因有二：
+	//  1. 血压的裸形态（\d+/\d+）会广泛命中正常文本。OutputFilter 复用同一份规则表
+	//     （output_filter.go 通过 NewDetector 构造同一款 Detector），裸形态会把
+	//     「您的血压是120/80 mmHg」这类正常输出判为敏感并触发警告，破坏既有行为
+	//     契约（output_filter_test.go 已有该反例）。
+	//  2. 病历号带业务前缀（字母 + 数字编号），锚定标签可避免与其它编号混淆。
+	d.rules[SensitiveTypeMedicalRecord] = regexp.MustCompile(`(?:病历号|病案号|门诊号|住院号)\s*[:：]\s*[A-Za-z]{1,4}\d{6,12}`)
+	d.rules[SensitiveTypeBloodPressure] = regexp.MustCompile(`血压\s*[:：]\s*\d{2,3}\s*/\s*\d{2,3}`)
+
 	d.labels = map[SensitiveType]string{
 		SensitiveTypeAPIKey:      "API 密钥",
 		SensitiveTypePassword:    "密码",
@@ -143,6 +163,9 @@ func (d *Detector) initRules() {
 		SensitiveTypePassport:    "护照号",
 		SensitiveTypeJWT:         "JWT 令牌",
 		SensitiveTypeOAuth:       "OAuth 令牌",
+
+		SensitiveTypeMedicalRecord: "病历号",
+		SensitiveTypeBloodPressure: "血压读数",
 	}
 }
 
@@ -489,6 +512,10 @@ func (d *Detector) calculateEnhancedConfidence(infoType SensitiveType, value, te
 		SensitiveTypePassport:    0.9,
 		SensitiveTypeJWT:         0.95,
 		SensitiveTypeOAuth:       0.9,
+
+		// 标签锚定形态，误报面很窄，给与偏高的基础置信度。
+		SensitiveTypeMedicalRecord: 0.9,
+		SensitiveTypeBloodPressure: 0.9,
 	}
 
 	if conf, ok := typeConfidence[infoType]; ok {

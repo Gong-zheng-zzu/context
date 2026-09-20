@@ -8,7 +8,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"sort"
 	"strconv"
@@ -25,12 +27,20 @@ import (
 // applyCrossEncoderRerank）。对融合后的 top-N 候选调用云端 cross-encoder
 // （Cohere Rerank / OpenAI 兼容端点）得到相关性分数并重排。
 //
-// 降级策略：未启用（RERANK_ENABLED!=true）时 NewCrossEncoderRerankerFromEnv
-// 返回 nil，调用方直接跳过精排，保留 RRF 排序；调用失败时返回 error，调用方
-// 记录降级原因并保留 RRF 排序，不阻断主流程。
+// 降级策略（任一情形均不 panic、不阻塞主流程，失败时保留 RRF 排序）：
+//   - 未启用（RERANK_ENABLED!=true）：NewCrossEncoderRerankerFromEnv 返回 nil，
+//     调用方直接跳过精排（不写任何 rerank_* 审计，行为与改动前完全一致）。
+//   - 已启用但配置不完整（缺 API Key / URL 为空 / URL 非法）：构造函数仍返回非
+//     nil 客户端，RerankResults 直接记录可区分的 rerank_degraded 并回退，不发请求。
+//   - 已启用且配置完整：运行时 HTTP 非 2xx / 响应体非法 / 超时 / 网络不可达等
+//     由 callRerankAPI 分类标记 rerank_degraded 后回退。
 //
-// 审计：精排状态写入 RetrievalResults.FusionMetadata（rerank_applied /
-// rerank_model / rerank_top_n / rerank_latency_ms，失败时 rerank_degraded）。
+// 审计：精排状态写入 RetrievalResults.FusionMetadata：
+//   - 成功：rerank_applied=true / rerank_model / rerank_top_n / rerank_latency_ms
+//   - 降级：rerank_applied=false / rerank_degraded / rerank_error / rerank_attempts
+//     / rerank_latency_ms
+//
+// 安全：API Key 仅写入请求头，绝不进入日志或审计元数据（错误文本经 redact 处理）。
 // =============================================================================
 
 const (
@@ -38,6 +48,24 @@ const (
 	defaultCrossEncoderTimeout    = 30 * time.Second
 	defaultCrossEncoderMaxRetries = 2
 	defaultCrossEncoderModel      = "rerank-v3.5"
+)
+
+// 精排降级原因码，写入 FusionMetadata["rerank_degraded"]，值彼此可区分。
+const (
+	// rerankDegradedMissingAPIURL 已启用但 RERANK_API_URL 为空
+	rerankDegradedMissingAPIURL = "missing_api_url"
+	// rerankDegradedInvalidAPIURL 已启用但 RERANK_API_URL 非法（非 http/https 或缺 host）
+	rerankDegradedInvalidAPIURL = "invalid_api_url"
+	// rerankDegradedMissingAPIKey 已启用但 RERANK_API_KEY 为空
+	rerankDegradedMissingAPIKey = "missing_api_key"
+	// rerankDegradedHTTPError 精排服务返回非 2xx
+	rerankDegradedHTTPError = "http_error"
+	// rerankDegradedInvalidResponse 响应体不是预期结构（解析失败 / results 为空）
+	rerankDegradedInvalidResponse = "invalid_response"
+	// rerankDegradedTimeout 请求超时（客户端超时 / 上下文超时）
+	rerankDegradedTimeout = "timeout"
+	// rerankDegradedAPIUnavailable 连接失败等其它网络错误（兜底原因）
+	rerankDegradedAPIUnavailable = "api_unavailable"
 )
 
 // CrossEncoderRerankerConfig 云端 cross-encoder 精排配置
@@ -96,27 +124,60 @@ func LoadCrossEncoderRerankerConfigFromEnv() CrossEncoderRerankerConfig {
 }
 
 // CrossEncoderReranker 云端 cross-encoder 精排客户端。
-// nil 值表示精排关闭或配置不完整，调用方据此跳过精排。
+// nil 值表示精排关闭，调用方据此跳过精排。
 type CrossEncoderReranker struct {
 	config CrossEncoderRerankerConfig
 	client *http.Client
+	// degradedReason 非空表示客户端虽被创建（RERANK_ENABLED=true）但配置不完整，
+	// 每次精排将直接记录该降级原因并回退，不发起任何请求。
+	degradedReason string
 }
 
-// NewCrossEncoderRerankerFromEnv 依据环境变量创建精排客户端。
-// 未启用（RERANK_ENABLED!=true）或缺少 API 地址/密钥时返回 nil（表示关闭或降级）。
+// NewCrossEncoderRerankerFromEnv 依据环境变量创建精排客户端：
+//   - 未启用（RERANK_ENABLED!=true）：返回 nil（调用方跳过精排，行为与改动前一致）。
+//   - 已启用但缺 URL/Key 或 URL 非法：返回非 nil 客户端并标记降级原因，
+//     运行时记录可区分的 rerank_degraded，不发起请求。
 func NewCrossEncoderRerankerFromEnv() *CrossEncoderReranker {
 	config := LoadCrossEncoderRerankerConfigFromEnv()
 	if !config.Enabled {
 		return nil
 	}
-	if config.APIURL == "" || config.APIKey == "" {
-		log.Printf("[CrossEncoder精排] RERANK_ENABLED=true 但缺少 RERANK_API_URL/RERANK_API_KEY，精排关闭")
-		return nil
-	}
-	return &CrossEncoderReranker{
+	reranker := &CrossEncoderReranker{
 		config: config,
 		client: &http.Client{Timeout: config.Timeout},
 	}
+	if reason := crossEncoderConfigDegradation(config); reason != "" {
+		reranker.degradedReason = reason
+		log.Printf("[CrossEncoder精排] RERANK_ENABLED=true 但配置不完整(%s)，精排降级并保留 RRF 排序", reason)
+	}
+	return reranker
+}
+
+// crossEncoderConfigDegradation 返回配置不完整时的降级原因码；配置完整返回空串。
+// 校验顺序：URL 为空 > URL 非法 > Key 为空（保证原因可区分）。
+func crossEncoderConfigDegradation(config CrossEncoderRerankerConfig) string {
+	if strings.TrimSpace(config.APIURL) == "" {
+		return rerankDegradedMissingAPIURL
+	}
+	if !isValidRerankURL(config.APIURL) {
+		return rerankDegradedInvalidAPIURL
+	}
+	if strings.TrimSpace(config.APIKey) == "" {
+		return rerankDegradedMissingAPIKey
+	}
+	return ""
+}
+
+// isValidRerankURL 校验精排地址为带 host 的 http/https URL。
+func isValidRerankURL(raw string) bool {
+	parsed, err := url.Parse(strings.TrimSpace(raw))
+	if err != nil {
+		return false
+	}
+	if parsed.Scheme != "http" && parsed.Scheme != "https" {
+		return false
+	}
+	return parsed.Host != ""
 }
 
 // rerankRequest 精排请求体（兼容 Cohere v2 与主流 OpenAI 兼容实现）
@@ -135,16 +196,69 @@ type rerankResponse struct {
 	} `json:"results"`
 }
 
+// rerankRequestError 携带可区分的降级原因码，供 RerankResults 写入审计元数据
+type rerankRequestError struct {
+	reason string
+	err    error
+}
+
+func (e *rerankRequestError) Error() string { return e.err.Error() }
+func (e *rerankRequestError) Unwrap() error { return e.err }
+
+func newRerankRequestError(reason string, err error) error {
+	return &rerankRequestError{reason: reason, err: err}
+}
+
+// rerankDegradedReason 从错误链中提取降级原因码；未标注时兜底为 api_unavailable
+func rerankDegradedReason(err error) string {
+	var target *rerankRequestError
+	if errors.As(err, &target) {
+		return target.reason
+	}
+	return rerankDegradedAPIUnavailable
+}
+
+// isRerankTimeoutError 判断错误是否为超时（客户端超时或上下文 DeadlineExceeded）
+func isRerankTimeoutError(err error) bool {
+	if err == nil {
+		return false
+	}
+	if errors.Is(err, context.DeadlineExceeded) {
+		return true
+	}
+	var netErr net.Error
+	if errors.As(err, &netErr) {
+		return netErr.Timeout()
+	}
+	return false
+}
+
 // RerankResults 对 retrieval.Results 的前 TopN 条候选执行云端 cross-encoder 精排，
-// 按 relevance_score 重排并注入审计元数据；失败时返回错误，由调用方降级保留 RRF 排序。
+// 按 relevance_score 重排并注入审计元数据；失败时返回 error，由调用方降级保留 RRF 排序。
 func (r *CrossEncoderReranker) RerankResults(ctx context.Context, query string, retrieval *RetrievalResults) error {
-	if r == nil || retrieval == nil || len(retrieval.Results) == 0 {
+	if r == nil || retrieval == nil {
 		return nil
 	}
+
+	// 已启用但配置不完整：不发请求，记录可区分的降级原因后保留原顺序
+	if r.degradedReason != "" {
+		r.recordRerankAudit(retrieval, map[string]interface{}{
+			"rerank_applied":  false,
+			"rerank_degraded": r.degradedReason,
+			"rerank_error":    fmt.Sprintf("精排配置不完整: %s", r.degradedReason),
+		})
+		return fmt.Errorf("cross-encoder 精排不可用: %s", r.degradedReason)
+	}
+
+	// 候选数为 0/1 时无精排意义：不发起请求，直接保持原顺序
+	if len(retrieval.Results) <= 1 {
+		return nil
+	}
+
 	startedAt := time.Now()
 
 	limit := r.config.TopN
-	if limit > len(retrieval.Results) {
+	if limit <= 0 || limit > len(retrieval.Results) {
 		limit = len(retrieval.Results)
 	}
 
@@ -157,15 +271,16 @@ func (r *CrossEncoderReranker) RerankResults(ctx context.Context, query string, 
 		documents = append(documents, text)
 	}
 
-	scores, err := r.callRerankAPI(ctx, query, documents)
+	scores, attempts, err := r.callRerankAPI(ctx, query, documents)
 	if err != nil {
 		r.recordRerankAudit(retrieval, map[string]interface{}{
 			"rerank_applied":    false,
-			"rerank_degraded":   "api_unavailable",
-			"rerank_error":      err.Error(),
+			"rerank_degraded":   rerankDegradedReason(err),
+			"rerank_error":      r.redact(err.Error()),
+			"rerank_attempts":   attempts,
 			"rerank_latency_ms": time.Since(startedAt).Milliseconds(),
 		})
-		return fmt.Errorf("cross-encoder 精排调用失败: %w", err)
+		return fmt.Errorf("cross-encoder 精排调用失败: %s", r.redact(err.Error()))
 	}
 
 	// 仅重排前 limit 条候选，其余保持原有相对顺序
@@ -215,8 +330,9 @@ func (r *CrossEncoderReranker) RerankResults(ctx context.Context, query string, 
 	return nil
 }
 
-// callRerankAPI 调用云端精排接口，带指数退避重试，返回与 documents 同序的 relevance 分数。
-func (r *CrossEncoderReranker) callRerankAPI(ctx context.Context, query string, documents []string) ([]float64, error) {
+// callRerankAPI 调用云端精排接口，带指数退避重试，返回与 documents 同序的 relevance 分数、
+// 实际尝试次数与（失败时的）最后一个错误。超时不重试（重试只会再次超时）。
+func (r *CrossEncoderReranker) callRerankAPI(ctx context.Context, query string, documents []string) ([]float64, int, error) {
 	payload, err := json.Marshal(rerankRequest{
 		Model:     r.config.Model,
 		Query:     query,
@@ -224,58 +340,73 @@ func (r *CrossEncoderReranker) callRerankAPI(ctx context.Context, query string, 
 		TopN:      len(documents),
 	})
 	if err != nil {
-		return nil, fmt.Errorf("序列化精排请求失败: %w", err)
+		return nil, 0, newRerankRequestError(rerankDegradedAPIUnavailable, fmt.Errorf("序列化精排请求失败: %w", err))
 	}
 
-	var lastErr error
 	attempts := r.config.MaxRetries + 1
+	if attempts < 1 {
+		attempts = 1
+	}
+	made := 0
+	var lastErr error
 	for attempt := 0; attempt < attempts; attempt++ {
 		if attempt > 0 {
 			backoff := time.Duration(attempt) * 500 * time.Millisecond
 			select {
 			case <-ctx.Done():
-				return nil, ctx.Err()
+				return nil, made, newRerankRequestError(rerankDegradedTimeout, ctx.Err())
 			case <-time.After(backoff):
 			}
 		}
+		made++
 		scores, err := r.doRerankRequest(ctx, payload, len(documents))
 		if err == nil {
-			return scores, nil
+			return scores, made, nil
 		}
 		lastErr = err
+		if rerankDegradedReason(err) == rerankDegradedTimeout {
+			break
+		}
 	}
-	return nil, lastErr
+	if lastErr == nil {
+		lastErr = newRerankRequestError(rerankDegradedAPIUnavailable, errors.New("精排请求未执行"))
+	}
+	return nil, made, lastErr
 }
 
-// doRerankRequest 执行单次精排 HTTP 请求并解析分数
+// doRerankRequest 执行单次精排 HTTP 请求并解析分数，所有错误均带可区分的降级原因码。
 func (r *CrossEncoderReranker) doRerankRequest(ctx context.Context, payload []byte, documentCount int) ([]float64, error) {
 	request, err := http.NewRequestWithContext(ctx, http.MethodPost, r.config.APIURL, bytes.NewReader(payload))
 	if err != nil {
-		return nil, err
+		return nil, newRerankRequestError(rerankDegradedInvalidAPIURL, fmt.Errorf("构造精排请求失败: %w", err))
 	}
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Authorization", "Bearer "+r.config.APIKey)
 
 	response, err := r.client.Do(request)
 	if err != nil {
-		return nil, err
+		if isRerankTimeoutError(err) {
+			return nil, newRerankRequestError(rerankDegradedTimeout, err)
+		}
+		return nil, newRerankRequestError(rerankDegradedAPIUnavailable, err)
 	}
 	defer response.Body.Close()
 
 	body, err := io.ReadAll(io.LimitReader(response.Body, 1<<20))
 	if err != nil {
-		return nil, err
+		return nil, newRerankRequestError(rerankDegradedInvalidResponse, err)
 	}
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		return nil, fmt.Errorf("精排服务返回 %d: %s", response.StatusCode, strings.TrimSpace(string(body)))
+		return nil, newRerankRequestError(rerankDegradedHTTPError,
+			fmt.Errorf("精排服务返回 %d: %s", response.StatusCode, r.redact(strings.TrimSpace(string(body)))))
 	}
 
 	var parsed rerankResponse
 	if err := json.Unmarshal(body, &parsed); err != nil {
-		return nil, fmt.Errorf("解析精排响应失败: %w", err)
+		return nil, newRerankRequestError(rerankDegradedInvalidResponse, fmt.Errorf("解析精排响应失败: %w", err))
 	}
 	if len(parsed.Results) == 0 {
-		return nil, errors.New("精排响应为空")
+		return nil, newRerankRequestError(rerankDegradedInvalidResponse, errors.New("精排响应为空"))
 	}
 
 	scores := make([]float64, documentCount)
@@ -310,6 +441,15 @@ func crossEncoderDocumentText(result interface{}) string {
 		}
 	}
 	return ""
+}
+
+// redact 将 API Key 从文本中移除，确保密钥绝不出现在日志或审计元数据中
+func (r *CrossEncoderReranker) redact(text string) string {
+	key := strings.TrimSpace(r.config.APIKey)
+	if key == "" || !strings.Contains(text, key) {
+		return text
+	}
+	return strings.ReplaceAll(text, key, "[REDACTED]")
 }
 
 // recordRerankAudit 将精排审计字段合并写入检索结果的融合元数据

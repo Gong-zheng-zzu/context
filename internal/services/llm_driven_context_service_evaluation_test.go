@@ -198,8 +198,11 @@ func TestBuildEvaluationRRFResponseReportsSingleSourceFallback(t *testing.T) {
 	}
 }
 
+// TestMarkEvaluationVectorFallbackEmitsEvidenceContractWithoutResults 覆盖基线配置
+// （关闭图谱/时间线）走的向量回退路径：即使没有结果也必须下发完整证据字段，
+// 否则门禁的 retrieval contract 检查会失败，使基线配置无法产出 eligible 结果。
 func TestMarkEvaluationVectorFallbackEmitsEvidenceContractWithoutResults(t *testing.T) {
-	response := markEvaluationVectorFallback(models.ContextResponse{})
+	response := markEvaluationVectorFallback(models.ContextResponse{}, 42)
 	if got, want := response.RetrievalMetadata["retrieval_fusion_mode"], "vector_only_fallback"; got != want {
 		t.Fatalf("retrieval_fusion_mode = %#v, want %#v", got, want)
 	}
@@ -208,5 +211,45 @@ func TestMarkEvaluationVectorFallbackEmitsEvidenceContractWithoutResults(t *test
 	}
 	if got, want := response.RetrievalMetadata["source_candidate_counts"], map[string]int{"vector": 0, "knowledge": 0, "timeline": 0}; !reflect.DeepEqual(got, want) {
 		t.Fatalf("source_candidate_counts = %#v, want %#v", got, want)
+	}
+	// 证据契约要求这两个字段必须存在；图谱/时间线被配置显式关闭，延迟如实记为 0。
+	if got, want := response.RetrievalMetadata["source_latency_ms"], map[string]int64{"vector": 42, "knowledge": 0, "timeline": 0}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("source_latency_ms = %#v, want %#v", got, want)
+	}
+	if got, want := response.RetrievalMetadata["wall_clock_latency_ms"], int64(42); got != want {
+		t.Fatalf("wall_clock_latency_ms = %#v, want %#v", got, want)
+	}
+	// 零结果时 Contexts/RetrievedContexts 必须是非 nil 空切片：nil slice 会被
+	// encoding/json 序列化成 `null`，使 smoke 契约的 contexts 列表检查失败。
+	if response.Contexts == nil {
+		t.Fatal("Contexts must be a non-nil empty slice when there are no results")
+	}
+	if len(response.Contexts) != 0 {
+		t.Fatalf("Contexts = %#v, want empty", response.Contexts)
+	}
+	if response.RetrievedContexts == nil {
+		t.Fatal("RetrievedContexts must be a non-nil empty slice when there are no results")
+	}
+	if len(response.RetrievedContexts) != 0 {
+		t.Fatalf("RetrievedContexts = %#v, want empty", response.RetrievedContexts)
+	}
+}
+
+// TestMarkEvaluationVectorFallbackPropagatesLatencyToContexts 确认逐条上下文也带上与
+// RRF 通道同名的审计字段，使两条通道的证据结构保持一致。
+func TestMarkEvaluationVectorFallbackPropagatesLatencyToContexts(t *testing.T) {
+	response := markEvaluationVectorFallback(models.ContextResponse{
+		Contexts: []models.ContextItem{{DocID: "doc-1", Source: "vector"}},
+	}, 17)
+
+	if len(response.Contexts) != 1 {
+		t.Fatalf("contexts = %#v", response.Contexts)
+	}
+	metadata := response.Contexts[0].Metadata
+	if got, want := metadata["retrieval_source_latency_ms"], map[string]int64{"vector": 17, "knowledge": 0, "timeline": 0}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("retrieval_source_latency_ms = %#v, want %#v", got, want)
+	}
+	if got, want := metadata["retrieval_wall_clock_latency_ms"], int64(17); got != want {
+		t.Fatalf("retrieval_wall_clock_latency_ms = %#v, want %#v", got, want)
 	}
 }

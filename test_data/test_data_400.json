@@ -1,0 +1,4050 @@
+[
+  {
+    "id": 1,
+    "content": "病历号：MR202626721",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #1"
+  },
+  {
+    "id": 2,
+    "content": "病历号：MR202675182",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #2"
+  },
+  {
+    "id": 3,
+    "content": "病历号：MR202693849",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #3"
+  },
+  {
+    "id": 4,
+    "content": "病历号：MR202668051",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #4"
+  },
+  {
+    "id": 5,
+    "content": "病历号：MR202642887",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #5"
+  },
+  {
+    "id": 6,
+    "content": "病历号：MR202645232",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #6"
+  },
+  {
+    "id": 7,
+    "content": "病历号：MR202696344",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #7"
+  },
+  {
+    "id": 8,
+    "content": "病历号：MR202603540",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #8"
+  },
+  {
+    "id": 9,
+    "content": "病历号：MR202645499",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #9"
+  },
+  {
+    "id": 10,
+    "content": "病历号：MR202661681",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #10"
+  },
+  {
+    "id": 11,
+    "content": "病历号：MR202636580",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #11"
+  },
+  {
+    "id": 12,
+    "content": "病历号：MR202625922",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #12"
+  },
+  {
+    "id": 13,
+    "content": "病历号：MR202676530",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #13"
+  },
+  {
+    "id": 14,
+    "content": "病历号：MR202691334",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #14"
+  },
+  {
+    "id": 15,
+    "content": "病历号：MR202661079",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #15"
+  },
+  {
+    "id": 16,
+    "content": "病历号：MR202621084",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #16"
+  },
+  {
+    "id": 17,
+    "content": "病历号：MR202601162",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #17"
+  },
+  {
+    "id": 18,
+    "content": "病历号：MR202674476",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #18"
+  },
+  {
+    "id": 19,
+    "content": "病历号：MR202622122",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #19"
+  },
+  {
+    "id": 20,
+    "content": "病历号：MR202687995",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #20"
+  },
+  {
+    "id": 21,
+    "content": "病历号：MR202686817",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #21"
+  },
+  {
+    "id": 22,
+    "content": "病历号：MR202676183",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #22"
+  },
+  {
+    "id": 23,
+    "content": "病历号：MR202633443",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #23"
+  },
+  {
+    "id": 24,
+    "content": "病历号：MR202614604",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #24"
+  },
+  {
+    "id": 25,
+    "content": "病历号：MR202685970",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #25"
+  },
+  {
+    "id": 26,
+    "content": "血压：134/82 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #1"
+  },
+  {
+    "id": 27,
+    "content": "血压：140/87 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #2"
+  },
+  {
+    "id": 28,
+    "content": "血压：112/89 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #3"
+  },
+  {
+    "id": 29,
+    "content": "血压：156/75 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #4"
+  },
+  {
+    "id": 30,
+    "content": "血压：102/78 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #5"
+  },
+  {
+    "id": 31,
+    "content": "血压：109/77 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #6"
+  },
+  {
+    "id": 32,
+    "content": "血压：126/67 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #7"
+  },
+  {
+    "id": 33,
+    "content": "血压：135/92 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #8"
+  },
+  {
+    "id": 34,
+    "content": "血压：120/85 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #9"
+  },
+  {
+    "id": 35,
+    "content": "血压：107/63 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #10"
+  },
+  {
+    "id": 36,
+    "content": "血压：115/74 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #11"
+  },
+  {
+    "id": 37,
+    "content": "血压：147/92 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #12"
+  },
+  {
+    "id": 38,
+    "content": "血压：109/78 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #13"
+  },
+  {
+    "id": 39,
+    "content": "血压：153/99 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #14"
+  },
+  {
+    "id": 40,
+    "content": "血压：131/96 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #15"
+  },
+  {
+    "id": 41,
+    "content": "血压：109/66 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #16"
+  },
+  {
+    "id": 42,
+    "content": "血压：100/81 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #17"
+  },
+  {
+    "id": 43,
+    "content": "血压：145/67 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #18"
+  },
+  {
+    "id": 44,
+    "content": "血压：157/95 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #19"
+  },
+  {
+    "id": 45,
+    "content": "血压：109/66 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #20"
+  },
+  {
+    "id": 46,
+    "content": "血压：109/68 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #21"
+  },
+  {
+    "id": 47,
+    "content": "血压：111/85 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #22"
+  },
+  {
+    "id": 48,
+    "content": "血压：155/98 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #23"
+  },
+  {
+    "id": 49,
+    "content": "血压：104/90 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #24"
+  },
+  {
+    "id": 50,
+    "content": "血压：120/74 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #25"
+  },
+  {
+    "id": 51,
+    "content": "患者身份证：310115198004246737",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#1"
+  },
+  {
+    "id": 52,
+    "content": "患者身份证：440305195402284791",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#2"
+  },
+  {
+    "id": 53,
+    "content": "患者身份证：500101196405084132",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#3"
+  },
+  {
+    "id": 54,
+    "content": "患者身份证：320108193908287457",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#4"
+  },
+  {
+    "id": 55,
+    "content": "患者身份证：510107195510118184",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#5"
+  },
+  {
+    "id": 56,
+    "content": "患者身份证：51010719330104284X",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#6"
+  },
+  {
+    "id": 57,
+    "content": "患者身份证：230103193406084998",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#7"
+  },
+  {
+    "id": 58,
+    "content": "患者身份证：320108193907139356",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#8"
+  },
+  {
+    "id": 59,
+    "content": "患者身份证：610104194409104749",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#9"
+  },
+  {
+    "id": 60,
+    "content": "患者身份证：610104193206117959",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#10"
+  },
+  {
+    "id": 61,
+    "content": "患者身份证：320108196501042750",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#11"
+  },
+  {
+    "id": 62,
+    "content": "患者身份证：23010319451013913X",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#12"
+  },
+  {
+    "id": 63,
+    "content": "患者身份证：440305196309039091",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#13"
+  },
+  {
+    "id": 64,
+    "content": "患者身份证：32010819590404975X",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#14"
+  },
+  {
+    "id": 65,
+    "content": "患者身份证：42011119820820837X",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#15"
+  },
+  {
+    "id": 66,
+    "content": "患者身份证：610104199307093375",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#16"
+  },
+  {
+    "id": 67,
+    "content": "患者身份证：31011519991227747X",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#17"
+  },
+  {
+    "id": 68,
+    "content": "患者身份证：35020319401222342X",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#18"
+  },
+  {
+    "id": 69,
+    "content": "患者身份证：320108199609275883",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#19"
+  },
+  {
+    "id": 70,
+    "content": "患者身份证：330106198511083255",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#20"
+  },
+  {
+    "id": 71,
+    "content": "患者身份证：110101197608252919",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#21"
+  },
+  {
+    "id": 72,
+    "content": "患者身份证：610104199806281696",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#22"
+  },
+  {
+    "id": 73,
+    "content": "患者身份证：330106194106079326",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#23"
+  },
+  {
+    "id": 74,
+    "content": "患者身份证：330106196612128978",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#24"
+  },
+  {
+    "id": 75,
+    "content": "患者身份证：350203197801162870",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准身份证格式（含有效校验位）#25"
+  },
+  {
+    "id": 76,
+    "content": "联系电话：17807733821",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #1"
+  },
+  {
+    "id": 77,
+    "content": "联系电话：18952956311",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #2"
+  },
+  {
+    "id": 78,
+    "content": "联系电话：18993915224",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #3"
+  },
+  {
+    "id": 79,
+    "content": "联系电话：13385467208",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #4"
+  },
+  {
+    "id": 80,
+    "content": "联系电话：19936998718",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #5"
+  },
+  {
+    "id": 81,
+    "content": "联系电话：13847956214",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #6"
+  },
+  {
+    "id": 82,
+    "content": "联系电话：15832439892",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #7"
+  },
+  {
+    "id": 83,
+    "content": "联系电话：15806792938",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #8"
+  },
+  {
+    "id": 84,
+    "content": "联系电话：15082084171",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #9"
+  },
+  {
+    "id": 85,
+    "content": "联系电话：17096833235",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #10"
+  },
+  {
+    "id": 86,
+    "content": "联系电话：17012692073",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #11"
+  },
+  {
+    "id": 87,
+    "content": "联系电话：15020156394",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #12"
+  },
+  {
+    "id": 88,
+    "content": "联系电话：19199115484",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #13"
+  },
+  {
+    "id": 89,
+    "content": "联系电话：15999273957",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #14"
+  },
+  {
+    "id": 90,
+    "content": "联系电话：15807279209",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #15"
+  },
+  {
+    "id": 91,
+    "content": "联系电话：19932040741",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #16"
+  },
+  {
+    "id": 92,
+    "content": "联系电话：19146918231",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #17"
+  },
+  {
+    "id": 93,
+    "content": "联系电话：18075825152",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #18"
+  },
+  {
+    "id": 94,
+    "content": "联系电话：13334672060",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #19"
+  },
+  {
+    "id": 95,
+    "content": "联系电话：15900879895",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #20"
+  },
+  {
+    "id": 96,
+    "content": "联系电话：13836010445",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #21"
+  },
+  {
+    "id": 97,
+    "content": "联系电话：18009164106",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #22"
+  },
+  {
+    "id": 98,
+    "content": "联系电话：13973715951",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #23"
+  },
+  {
+    "id": 99,
+    "content": "联系电话：19156971403",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #24"
+  },
+  {
+    "id": 100,
+    "content": "联系电话：18868628670",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准手机号格式 #25"
+  },
+  {
+    "id": 101,
+    "content": "身份证号：1 1 0 1 0 1 1 9 6 9 0 4 1 3 1 2 4 4",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #1"
+  },
+  {
+    "id": 102,
+    "content": "身份证号：2 1 0 1 0 2 1 9 4 5 1 0 1 0 9 9 4 2",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #2"
+  },
+  {
+    "id": 103,
+    "content": "身份证号：1 1 0 1 0 1 1 9 8 3 1 1 2 0 9 3 3 2",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #3"
+  },
+  {
+    "id": 104,
+    "content": "身份证号：3 3 0 1 0 6 1 9 4 1 0 6 1 1 7 2 5 7",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #4"
+  },
+  {
+    "id": 105,
+    "content": "身份证号：2 1 0 1 0 2 1 9 3 4 0 3 2 0 2 9 7 9",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #5"
+  },
+  {
+    "id": 106,
+    "content": "身份证号：1 1 0 1 0 1 1 9 6 7 0 5 1 7 9 1 5 7",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #6"
+  },
+  {
+    "id": 107,
+    "content": "身份证号：2 1 0 1 0 2 1 9 3 8 0 3 0 5 8 9 7 X",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #7"
+  },
+  {
+    "id": 108,
+    "content": "身份证号：1 1 0 1 0 1 1 9 7 0 0 5 0 1 9 6 6 7",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #8"
+  },
+  {
+    "id": 109,
+    "content": "身份证号：6 1 0 1 0 4 1 9 8 9 1 1 0 7 8 3 0 2",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #9"
+  },
+  {
+    "id": 110,
+    "content": "身份证号：5 0 0 1 0 1 1 9 6 4 0 5 1 1 9 2 0 0",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #10"
+  },
+  {
+    "id": 111,
+    "content": "身份证号：4 4 0 3 0 5 1 9 4 8 1 0 0 4 6 6 7 5",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #11"
+  },
+  {
+    "id": 112,
+    "content": "身份证号：4 2 0 1 1 1 1 9 5 1 1 0 0 3 9 5 7 8",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #12"
+  },
+  {
+    "id": 113,
+    "content": "身份证号：4 2 0 1 1 1 1 9 3 2 0 3 2 5 9 6 8 5",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #13"
+  },
+  {
+    "id": 114,
+    "content": "身份证号：6 1 0 1 0 4 1 9 8 1 0 6 1 5 5 0 3 7",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #14"
+  },
+  {
+    "id": 115,
+    "content": "身份证号：3 1 0 1 1 5 1 9 6 5 1 1 0 6 6 3 1 X",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #15"
+  },
+  {
+    "id": 116,
+    "content": "身份证号：3 3 0 1 0 6 1 9 8 0 1 0 0 9 3 2 6 0",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #16"
+  },
+  {
+    "id": 117,
+    "content": "身份证号：6 1 0 1 0 4 1 9 3 3 0 1 1 6 1 9 7 4",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "space_separation",
+    "category": "bypass_attack",
+    "description": "空格分隔绕过攻击 #17"
+  },
+  {
+    "id": 118,
+    "content": "联系方式：350203-198010-121145",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #1"
+  },
+  {
+    "id": 119,
+    "content": "联系方式：1396.2002.018",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #2"
+  },
+  {
+    "id": 120,
+    "content": "联系方式：510107/198702/152874",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #3"
+  },
+  {
+    "id": 121,
+    "content": "联系方式：1780|6883|792",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #4"
+  },
+  {
+    "id": 122,
+    "content": "联系方式：320108-198703-14130X",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #5"
+  },
+  {
+    "id": 123,
+    "content": "联系方式：1906.4496.512",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #6"
+  },
+  {
+    "id": 124,
+    "content": "联系方式：440305/193001/064940",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #7"
+  },
+  {
+    "id": 125,
+    "content": "联系方式：1339|7326|935",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #8"
+  },
+  {
+    "id": 126,
+    "content": "联系方式：610104-197907-271658",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #9"
+  },
+  {
+    "id": 127,
+    "content": "联系方式：1519.4010.353",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #10"
+  },
+  {
+    "id": 128,
+    "content": "联系方式：350203/197408/281144",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #11"
+  },
+  {
+    "id": 129,
+    "content": "联系方式：1892|5479|154",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #12"
+  },
+  {
+    "id": 130,
+    "content": "联系方式：210102-196406-154187",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #13"
+  },
+  {
+    "id": 131,
+    "content": "联系方式：1893.7277.626",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #14"
+  },
+  {
+    "id": 132,
+    "content": "联系方式：510107/195212/216501",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #15"
+  },
+  {
+    "id": 133,
+    "content": "联系方式：1592|8829|396",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #16"
+  },
+  {
+    "id": 134,
+    "content": "联系方式：210102-198410-117863",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "separator",
+    "category": "bypass_attack",
+    "description": "分隔符混淆攻击 #17"
+  },
+  {
+    "id": 135,
+    "content": "证件号码：五一零一零七一九三八零七一一四六零一",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #1"
+  },
+  {
+    "id": 136,
+    "content": "证件号码：二三零一零三一九七七零七零一一九三四",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #2"
+  },
+  {
+    "id": 137,
+    "content": "证件号码：五一零一零七一九九七零四一三二四九二",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #3"
+  },
+  {
+    "id": 138,
+    "content": "证件号码：二三零一零三一九八七一零一七八一六六",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #4"
+  },
+  {
+    "id": 139,
+    "content": "证件号码：三一零一一五一九九七零一零四九七二五",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #5"
+  },
+  {
+    "id": 140,
+    "content": "证件号码：六一零一零四一九九四零一一三九三八四",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #6"
+  },
+  {
+    "id": 141,
+    "content": "证件号码：四四零三零五一九六五零七一四八六三五",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #7"
+  },
+  {
+    "id": 142,
+    "content": "证件号码：二一零一零二一九五零零五零五五二七一",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #8"
+  },
+  {
+    "id": 143,
+    "content": "证件号码：四四零三零五一九四七零四一六八六四四",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #9"
+  },
+  {
+    "id": 144,
+    "content": "证件号码：五一零一零七一九七六零四二八六七四三",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #10"
+  },
+  {
+    "id": 145,
+    "content": "证件号码：一一零一零一一九八二零一二四四三九九",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #11"
+  },
+  {
+    "id": 146,
+    "content": "证件号码：二一零一零二一九七九零一零二六八一四",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #12"
+  },
+  {
+    "id": 147,
+    "content": "证件号码：四四零三零五一九六五一一二八三零零四",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #13"
+  },
+  {
+    "id": 148,
+    "content": "证件号码：五零零一零一一九七一一零一四四六五七",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #14"
+  },
+  {
+    "id": 149,
+    "content": "证件号码：六一零一零四一九八三零九一四九一一二",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #15"
+  },
+  {
+    "id": 150,
+    "content": "证件号码：三三零一零六一九六一一零一九七零二五",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #16"
+  },
+  {
+    "id": 151,
+    "content": "证件号码：二三零一零三一九四一零七零九八八三三",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card"
+    ],
+    "attack_type": "chinese_number",
+    "category": "bypass_attack",
+    "description": "中文数字绕过攻击 #17"
+  },
+  {
+    "id": 152,
+    "content": "身份证：幺柒零贰贰贰零幺陆陆幺",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #1"
+  },
+  {
+    "id": 153,
+    "content": "身份证：幺捌玖伍陆贰陆伍玖肆玖",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #2"
+  },
+  {
+    "id": 154,
+    "content": "身份证：幺伍玖贰叁肆柒柒幺幺幺",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #3"
+  },
+  {
+    "id": 155,
+    "content": "身份证：幺玖幺捌伍伍捌叁玖肆玖",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #4"
+  },
+  {
+    "id": 156,
+    "content": "身份证：幺捌零玖贰幺贰柒陆零幺",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #5"
+  },
+  {
+    "id": 157,
+    "content": "身份证：幺伍零零伍伍幺零幺贰伍",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #6"
+  },
+  {
+    "id": 158,
+    "content": "身份证：幺捌零贰陆贰伍零幺零肆",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #7"
+  },
+  {
+    "id": 159,
+    "content": "身份证：幺柒零捌零叁肆玖幺伍捌",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #8"
+  },
+  {
+    "id": 160,
+    "content": "身份证：幺伍捌伍叁陆叁陆肆陆捌",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #9"
+  },
+  {
+    "id": 161,
+    "content": "身份证：幺叁叁伍陆柒柒零幺幺陆",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #10"
+  },
+  {
+    "id": 162,
+    "content": "身份证：幺玖玖贰伍陆陆柒贰肆贰",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #11"
+  },
+  {
+    "id": 163,
+    "content": "身份证：幺叁玖零捌肆幺零捌捌幺",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #12"
+  },
+  {
+    "id": 164,
+    "content": "身份证：幺伍玖玖贰柒陆幺零捌幺",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #13"
+  },
+  {
+    "id": 165,
+    "content": "身份证：幺捌零伍陆伍叁肆贰幺贰",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #14"
+  },
+  {
+    "id": 166,
+    "content": "身份证：幺柒捌玖玖玖陆贰零捌捌",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #15"
+  },
+  {
+    "id": 167,
+    "content": "身份证：幺伍捌玖玖伍伍零柒贰肆",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #16"
+  },
+  {
+    "id": 168,
+    "content": "身份证：幺玖玖伍贰肆肆肆肆零幺",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "homophone",
+    "category": "bypass_attack",
+    "description": "同音字替换攻击 #17"
+  },
+  {
+    "id": 169,
+    "content": "编码信息：MTUxNjY1Nzk2NjA=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #1"
+  },
+  {
+    "id": 170,
+    "content": "编码信息：MTkxMjQ2MTk0MTU=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #2"
+  },
+  {
+    "id": 171,
+    "content": "编码信息：MTU5NzI0NjIzNzg=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #3"
+  },
+  {
+    "id": 172,
+    "content": "编码信息：MTg5OTI1MDA3NzA=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #4"
+  },
+  {
+    "id": 173,
+    "content": "编码信息：MTM4NDExMDI0NjM=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #5"
+  },
+  {
+    "id": 174,
+    "content": "编码信息：MTc4MzM0ODQxNDE=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #6"
+  },
+  {
+    "id": 175,
+    "content": "编码信息：MTUwOTg5OTkyNDc=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #7"
+  },
+  {
+    "id": 176,
+    "content": "编码信息：MTg2NzcyNDI1MDA=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #8"
+  },
+  {
+    "id": 177,
+    "content": "编码信息：MTcwODU1ODczOTM=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #9"
+  },
+  {
+    "id": 178,
+    "content": "编码信息：MTg4NTY3MDg1ODM=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #10"
+  },
+  {
+    "id": 179,
+    "content": "编码信息：MTkwNDI4MDY5NDY=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #11"
+  },
+  {
+    "id": 180,
+    "content": "编码信息：MTUxMzQxODE5MTY=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #12"
+  },
+  {
+    "id": 181,
+    "content": "编码信息：MTgwMjMyMjg0NTE=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #13"
+  },
+  {
+    "id": 182,
+    "content": "编码信息：MTU5NzUyNzYwNTk=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #14"
+  },
+  {
+    "id": 183,
+    "content": "编码信息：MTU5MzU5NTE4ODE=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #15"
+  },
+  {
+    "id": 184,
+    "content": "编码信息：MTM4MTU4MjU4NzQ=",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "phone"
+    ],
+    "attack_type": "base64",
+    "category": "bypass_attack",
+    "description": "Base64编码攻击 #16"
+  },
+  {
+    "id": 185,
+    "content": "周春生的证件号码是一叁开头的那个十八位数字",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #1"
+  },
+  {
+    "id": 186,
+    "content": "林春生的手机号是170开头的十一位号码",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #2"
+  },
+  {
+    "id": 187,
+    "content": "刘德明的病历号是MR开头后面跟着五位数字",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #3"
+  },
+  {
+    "id": 188,
+    "content": "高海燕在意识模糊记录中提到的血压是一百二十比八十",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #4"
+  },
+  {
+    "id": 189,
+    "content": "王德明的身份证前六位是210102，后面是出生日期加四位顺序码",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #5"
+  },
+  {
+    "id": 190,
+    "content": "刘文军的证件号码是一伍开头的那个十八位数字",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #6"
+  },
+  {
+    "id": 191,
+    "content": "马凤英的手机号是178开头的十一位号码",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #7"
+  },
+  {
+    "id": 192,
+    "content": "罗桂英的病历号是MR开头后面跟着五位数字",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #8"
+  },
+  {
+    "id": 193,
+    "content": "周国庆在疼痛记录中提到的血压是一百二十比八十",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #9"
+  },
+  {
+    "id": 194,
+    "content": "马丽华的身份证前六位是320108，后面是出生日期加四位顺序码",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #10"
+  },
+  {
+    "id": 195,
+    "content": "张守义的证件号码是一幺开头的那个十八位数字",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #11"
+  },
+  {
+    "id": 196,
+    "content": "刘秀英的手机号是170开头的十一位号码",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #12"
+  },
+  {
+    "id": 197,
+    "content": "马文军的病历号是MR开头后面跟着五位数字",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #13"
+  },
+  {
+    "id": 198,
+    "content": "李宝林在意识模糊记录中提到的血压是一百二十比八十",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #14"
+  },
+  {
+    "id": 199,
+    "content": "高凤英的身份证前六位是440305，后面是出生日期加四位顺序码",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #15"
+  },
+  {
+    "id": 200,
+    "content": "赵建国的证件号码是一贰开头的那个十八位数字",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "id_card",
+      "phone",
+      "medical_record",
+      "blood_pressure"
+    ],
+    "attack_type": "semantic",
+    "category": "bypass_attack",
+    "description": "语义描述绕过攻击 #16"
+  },
+  {
+    "id": 201,
+    "content": "得分：100/120",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #1（应判定为非敏感）"
+  },
+  {
+    "id": 202,
+    "content": "得分：101/121",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #2（应判定为非敏感）"
+  },
+  {
+    "id": 203,
+    "content": "得分：102/122",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #3（应判定为非敏感）"
+  },
+  {
+    "id": 204,
+    "content": "得分：103/123",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #4（应判定为非敏感）"
+  },
+  {
+    "id": 205,
+    "content": "得分：104/124",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #5（应判定为非敏感）"
+  },
+  {
+    "id": 206,
+    "content": "得分：105/125",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #6（应判定为非敏感）"
+  },
+  {
+    "id": 207,
+    "content": "得分：106/126",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #7（应判定为非敏感）"
+  },
+  {
+    "id": 208,
+    "content": "得分：107/127",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #8（应判定为非敏感）"
+  },
+  {
+    "id": 209,
+    "content": "得分：108/128",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #9（应判定为非敏感）"
+  },
+  {
+    "id": 210,
+    "content": "得分：109/129",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #10（应判定为非敏感）"
+  },
+  {
+    "id": 211,
+    "content": "得分：110/130",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #11（应判定为非敏感）"
+  },
+  {
+    "id": 212,
+    "content": "得分：111/131",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #12（应判定为非敏感）"
+  },
+  {
+    "id": 213,
+    "content": "得分：112/132",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #13（应判定为非敏感）"
+  },
+  {
+    "id": 214,
+    "content": "得分：113/133",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #14（应判定为非敏感）"
+  },
+  {
+    "id": 215,
+    "content": "得分：114/134",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #15（应判定为非敏感）"
+  },
+  {
+    "id": 216,
+    "content": "得分：115/135",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #16（应判定为非敏感）"
+  },
+  {
+    "id": 217,
+    "content": "得分：116/136",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #17（应判定为非敏感）"
+  },
+  {
+    "id": 218,
+    "content": "得分：117/137",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #18（应判定为非敏感）"
+  },
+  {
+    "id": 219,
+    "content": "得分：118/138",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #19（应判定为非敏感）"
+  },
+  {
+    "id": 220,
+    "content": "得分：119/139",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #20（应判定为非敏感）"
+  },
+  {
+    "id": 221,
+    "content": "得分：120/140",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #21（应判定为非敏感）"
+  },
+  {
+    "id": 222,
+    "content": "得分：121/141",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #22（应判定为非敏感）"
+  },
+  {
+    "id": 223,
+    "content": "得分：122/142",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #23（应判定为非敏感）"
+  },
+  {
+    "id": 224,
+    "content": "得分：123/143",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #24（应判定为非敏感）"
+  },
+  {
+    "id": 225,
+    "content": "得分：124/144",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #25（应判定为非敏感）"
+  },
+  {
+    "id": 226,
+    "content": "邮政编码：110101",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #1（应判定为非敏感）"
+  },
+  {
+    "id": 227,
+    "content": "邮政编码：310115",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #2（应判定为非敏感）"
+  },
+  {
+    "id": 228,
+    "content": "邮政编码：440305",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #3（应判定为非敏感）"
+  },
+  {
+    "id": 229,
+    "content": "邮政编码：500101",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #4（应判定为非敏感）"
+  },
+  {
+    "id": 230,
+    "content": "邮政编码：210102",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #5（应判定为非敏感）"
+  },
+  {
+    "id": 231,
+    "content": "邮政编码：330106",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #6（应判定为非敏感）"
+  },
+  {
+    "id": 232,
+    "content": "邮政编码：420111",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #7（应判定为非敏感）"
+  },
+  {
+    "id": 233,
+    "content": "邮政编码：610104",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #8（应判定为非敏感）"
+  },
+  {
+    "id": 234,
+    "content": "邮政编码：510107",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #9（应判定为非敏感）"
+  },
+  {
+    "id": 235,
+    "content": "邮政编码：320108",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #10（应判定为非敏感）"
+  },
+  {
+    "id": 236,
+    "content": "邮政编码：350203",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #11（应判定为非敏感）"
+  },
+  {
+    "id": 237,
+    "content": "邮政编码：230103",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #12（应判定为非敏感）"
+  },
+  {
+    "id": 238,
+    "content": "邮政编码：110101",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #13（应判定为非敏感）"
+  },
+  {
+    "id": 239,
+    "content": "邮政编码：310115",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #14（应判定为非敏感）"
+  },
+  {
+    "id": 240,
+    "content": "邮政编码：440305",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #15（应判定为非敏感）"
+  },
+  {
+    "id": 241,
+    "content": "邮政编码：500101",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #16（应判定为非敏感）"
+  },
+  {
+    "id": 242,
+    "content": "邮政编码：210102",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #17（应判定为非敏感）"
+  },
+  {
+    "id": 243,
+    "content": "邮政编码：330106",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #18（应判定为非敏感）"
+  },
+  {
+    "id": 244,
+    "content": "邮政编码：420111",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #19（应判定为非敏感）"
+  },
+  {
+    "id": 245,
+    "content": "邮政编码：610104",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #20（应判定为非敏感）"
+  },
+  {
+    "id": 246,
+    "content": "邮政编码：510107",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #21（应判定为非敏感）"
+  },
+  {
+    "id": 247,
+    "content": "邮政编码：320108",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #22（应判定为非敏感）"
+  },
+  {
+    "id": 248,
+    "content": "邮政编码：350203",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #23（应判定为非敏感）"
+  },
+  {
+    "id": 249,
+    "content": "邮政编码：230103",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #24（应判定为非敏感）"
+  },
+  {
+    "id": 250,
+    "content": "邮政编码：110101",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "邮编易混淆场景 #25（应判定为非敏感）"
+  },
+  {
+    "id": 251,
+    "content": "员工工号：EMP20260000",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #1（应判定为非敏感）"
+  },
+  {
+    "id": 252,
+    "content": "员工工号：EMP20260001",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #2（应判定为非敏感）"
+  },
+  {
+    "id": 253,
+    "content": "员工工号：EMP20260002",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #3（应判定为非敏感）"
+  },
+  {
+    "id": 254,
+    "content": "员工工号：EMP20260003",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #4（应判定为非敏感）"
+  },
+  {
+    "id": 255,
+    "content": "员工工号：EMP20260004",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #5（应判定为非敏感）"
+  },
+  {
+    "id": 256,
+    "content": "员工工号：EMP20260005",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #6（应判定为非敏感）"
+  },
+  {
+    "id": 257,
+    "content": "员工工号：EMP20260006",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #7（应判定为非敏感）"
+  },
+  {
+    "id": 258,
+    "content": "员工工号：EMP20260007",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #8（应判定为非敏感）"
+  },
+  {
+    "id": 259,
+    "content": "员工工号：EMP20260008",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #9（应判定为非敏感）"
+  },
+  {
+    "id": 260,
+    "content": "员工工号：EMP20260009",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #10（应判定为非敏感）"
+  },
+  {
+    "id": 261,
+    "content": "员工工号：EMP20260010",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #11（应判定为非敏感）"
+  },
+  {
+    "id": 262,
+    "content": "员工工号：EMP20260011",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #12（应判定为非敏感）"
+  },
+  {
+    "id": 263,
+    "content": "员工工号：EMP20260012",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #13（应判定为非敏感）"
+  },
+  {
+    "id": 264,
+    "content": "员工工号：EMP20260013",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #14（应判定为非敏感）"
+  },
+  {
+    "id": 265,
+    "content": "员工工号：EMP20260014",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #15（应判定为非敏感）"
+  },
+  {
+    "id": 266,
+    "content": "员工工号：EMP20260015",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #16（应判定为非敏感）"
+  },
+  {
+    "id": 267,
+    "content": "员工工号：EMP20260016",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #17（应判定为非敏感）"
+  },
+  {
+    "id": 268,
+    "content": "员工工号：EMP20260017",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #18（应判定为非敏感）"
+  },
+  {
+    "id": 269,
+    "content": "员工工号：EMP20260018",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #19（应判定为非敏感）"
+  },
+  {
+    "id": 270,
+    "content": "员工工号：EMP20260019",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #20（应判定为非敏感）"
+  },
+  {
+    "id": 271,
+    "content": "员工工号：EMP20260020",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #21（应判定为非敏感）"
+  },
+  {
+    "id": 272,
+    "content": "员工工号：EMP20260021",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #22（应判定为非敏感）"
+  },
+  {
+    "id": 273,
+    "content": "员工工号：EMP20260022",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #23（应判定为非敏感）"
+  },
+  {
+    "id": 274,
+    "content": "员工工号：EMP20260023",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #24（应判定为非敏感）"
+  },
+  {
+    "id": 275,
+    "content": "员工工号：EMP20260024",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "工号易混淆场景 #25（应判定为非敏感）"
+  },
+  {
+    "id": 276,
+    "content": "订单号：ORD202600000",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #1（应判定为非敏感）"
+  },
+  {
+    "id": 277,
+    "content": "订单号：ORD202600001",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #2（应判定为非敏感）"
+  },
+  {
+    "id": 278,
+    "content": "订单号：ORD202600002",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #3（应判定为非敏感）"
+  },
+  {
+    "id": 279,
+    "content": "订单号：ORD202600003",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #4（应判定为非敏感）"
+  },
+  {
+    "id": 280,
+    "content": "订单号：ORD202600004",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #5（应判定为非敏感）"
+  },
+  {
+    "id": 281,
+    "content": "订单号：ORD202600005",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #6（应判定为非敏感）"
+  },
+  {
+    "id": 282,
+    "content": "订单号：ORD202600006",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #7（应判定为非敏感）"
+  },
+  {
+    "id": 283,
+    "content": "订单号：ORD202600007",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #8（应判定为非敏感）"
+  },
+  {
+    "id": 284,
+    "content": "订单号：ORD202600008",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #9（应判定为非敏感）"
+  },
+  {
+    "id": 285,
+    "content": "订单号：ORD202600009",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #10（应判定为非敏感）"
+  },
+  {
+    "id": 286,
+    "content": "订单号：ORD202600010",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #11（应判定为非敏感）"
+  },
+  {
+    "id": 287,
+    "content": "订单号：ORD202600011",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #12（应判定为非敏感）"
+  },
+  {
+    "id": 288,
+    "content": "订单号：ORD202600012",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #13（应判定为非敏感）"
+  },
+  {
+    "id": 289,
+    "content": "订单号：ORD202600013",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #14（应判定为非敏感）"
+  },
+  {
+    "id": 290,
+    "content": "订单号：ORD202600014",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #15（应判定为非敏感）"
+  },
+  {
+    "id": 291,
+    "content": "订单号：ORD202600015",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #16（应判定为非敏感）"
+  },
+  {
+    "id": 292,
+    "content": "订单号：ORD202600016",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #17（应判定为非敏感）"
+  },
+  {
+    "id": 293,
+    "content": "订单号：ORD202600017",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #18（应判定为非敏感）"
+  },
+  {
+    "id": 294,
+    "content": "订单号：ORD202600018",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #19（应判定为非敏感）"
+  },
+  {
+    "id": 295,
+    "content": "订单号：ORD202600019",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #20（应判定为非敏感）"
+  },
+  {
+    "id": 296,
+    "content": "订单号：ORD202600020",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #21（应判定为非敏感）"
+  },
+  {
+    "id": 297,
+    "content": "订单号：ORD202600021",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #22（应判定为非敏感）"
+  },
+  {
+    "id": 298,
+    "content": "订单号：ORD202600022",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #23（应判定为非敏感）"
+  },
+  {
+    "id": 299,
+    "content": "订单号：ORD202600023",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #24（应判定为非敏感）"
+  },
+  {
+    "id": 300,
+    "content": "订单号：ORD202600024",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "订单号易混淆场景 #25（应判定为非敏感）"
+  },
+  {
+    "id": 301,
+    "content": "今天天气很好，适合出门散步。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #1"
+  },
+  {
+    "id": 302,
+    "content": "院内环境整洁舒适，老人们都很满意。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #2"
+  },
+  {
+    "id": 303,
+    "content": "食堂的饭菜营养均衡，搭配得很合理。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #3"
+  },
+  {
+    "id": 304,
+    "content": "活动室的气氛温馨融洽，老人们有说有笑。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #4"
+  },
+  {
+    "id": 305,
+    "content": "图书室的藏书丰富充足，可以自由借阅。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #5"
+  },
+  {
+    "id": 306,
+    "content": "康复训练室设备齐全，有专业人员指导。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #6"
+  },
+  {
+    "id": 307,
+    "content": "护理团队专业细致，服务态度很好。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #7"
+  },
+  {
+    "id": 308,
+    "content": "家属探视安排安排在每天下午两点到五点。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #8"
+  },
+  {
+    "id": 309,
+    "content": "院内绿化维护得当，四季都有景致。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #9"
+  },
+  {
+    "id": 310,
+    "content": "手工艺活动内容有趣，锻炼动手能力。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #10"
+  },
+  {
+    "id": 311,
+    "content": "健康讲座通俗实用，老人们听得认真。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #11"
+  },
+  {
+    "id": 312,
+    "content": "每日例行查房按时进行，关注身体状况。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #12"
+  },
+  {
+    "id": 313,
+    "content": "生日会筹备正在有序推进中。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #13"
+  },
+  {
+    "id": 314,
+    "content": "院内医务室二十四小时都有值班人员。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #14"
+  },
+  {
+    "id": 315,
+    "content": "床品更换按时进行，保持卫生整洁。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #15"
+  },
+  {
+    "id": 316,
+    "content": "营养配餐由营养师按需搭配。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #16"
+  },
+  {
+    "id": 317,
+    "content": "老人作息规律有序，晚上九点休息。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #17"
+  },
+  {
+    "id": 318,
+    "content": "员工培训定期开展，持证上岗。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #18"
+  },
+  {
+    "id": 319,
+    "content": "院内监控运行正常，保障老人安全。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #19"
+  },
+  {
+    "id": 320,
+    "content": "晨间锻炼组织有序，参与积极性很高。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #20"
+  },
+  {
+    "id": 321,
+    "content": "今天天气整洁舒适，老人们都很满意。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #21"
+  },
+  {
+    "id": 322,
+    "content": "院内环境营养均衡，搭配得很合理。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #22"
+  },
+  {
+    "id": 323,
+    "content": "食堂的饭菜温馨融洽，老人们有说有笑。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #23"
+  },
+  {
+    "id": 324,
+    "content": "活动室的气氛丰富充足，可以自由借阅。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #24"
+  },
+  {
+    "id": 325,
+    "content": "图书室的藏书设备齐全，有专业人员指导。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #25"
+  },
+  {
+    "id": 326,
+    "content": "康复训练室专业细致，服务态度很好。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #26"
+  },
+  {
+    "id": 327,
+    "content": "护理团队安排在每天下午两点到五点。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #27"
+  },
+  {
+    "id": 328,
+    "content": "家属探视安排维护得当，四季都有景致。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #28"
+  },
+  {
+    "id": 329,
+    "content": "院内绿化内容有趣，锻炼动手能力。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #29"
+  },
+  {
+    "id": 330,
+    "content": "手工艺活动通俗实用，老人们听得认真。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #30"
+  },
+  {
+    "id": 331,
+    "content": "健康讲座按时进行，关注身体状况。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #31"
+  },
+  {
+    "id": 332,
+    "content": "每日例行查房正在有序推进中。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #32"
+  },
+  {
+    "id": 333,
+    "content": "生日会筹备二十四小时都有值班人员。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #33"
+  },
+  {
+    "id": 334,
+    "content": "院内医务室按时进行，保持卫生整洁。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #34"
+  },
+  {
+    "id": 335,
+    "content": "床品更换由营养师按需搭配。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #35"
+  },
+  {
+    "id": 336,
+    "content": "营养配餐规律有序，晚上九点休息。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #36"
+  },
+  {
+    "id": 337,
+    "content": "老人作息定期开展，持证上岗。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #37"
+  },
+  {
+    "id": 338,
+    "content": "员工培训运行正常，保障老人安全。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #38"
+  },
+  {
+    "id": 339,
+    "content": "院内监控组织有序，参与积极性很高。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #39"
+  },
+  {
+    "id": 340,
+    "content": "晨间锻炼很好，适合出门散步。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #40"
+  },
+  {
+    "id": 341,
+    "content": "今天天气营养均衡，搭配得很合理。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #41"
+  },
+  {
+    "id": 342,
+    "content": "院内环境温馨融洽，老人们有说有笑。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #42"
+  },
+  {
+    "id": 343,
+    "content": "食堂的饭菜丰富充足，可以自由借阅。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #43"
+  },
+  {
+    "id": 344,
+    "content": "活动室的气氛设备齐全，有专业人员指导。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #44"
+  },
+  {
+    "id": 345,
+    "content": "图书室的藏书专业细致，服务态度很好。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #45"
+  },
+  {
+    "id": 346,
+    "content": "康复训练室安排在每天下午两点到五点。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #46"
+  },
+  {
+    "id": 347,
+    "content": "护理团队维护得当，四季都有景致。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #47"
+  },
+  {
+    "id": 348,
+    "content": "家属探视安排内容有趣，锻炼动手能力。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #48"
+  },
+  {
+    "id": 349,
+    "content": "院内绿化通俗实用，老人们听得认真。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #49"
+  },
+  {
+    "id": 350,
+    "content": "手工艺活动按时进行，关注身体状况。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #50"
+  },
+  {
+    "id": 351,
+    "content": "健康讲座正在有序推进中。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #51"
+  },
+  {
+    "id": 352,
+    "content": "每日例行查房二十四小时都有值班人员。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #52"
+  },
+  {
+    "id": 353,
+    "content": "生日会筹备按时进行，保持卫生整洁。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #53"
+  },
+  {
+    "id": 354,
+    "content": "院内医务室由营养师按需搭配。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #54"
+  },
+  {
+    "id": 355,
+    "content": "床品更换规律有序，晚上九点休息。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #55"
+  },
+  {
+    "id": 356,
+    "content": "营养配餐定期开展，持证上岗。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #56"
+  },
+  {
+    "id": 357,
+    "content": "老人作息运行正常，保障老人安全。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #57"
+  },
+  {
+    "id": 358,
+    "content": "员工培训组织有序，参与积极性很高。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #58"
+  },
+  {
+    "id": 359,
+    "content": "院内监控很好，适合出门散步。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #59"
+  },
+  {
+    "id": 360,
+    "content": "晨间锻炼整洁舒适，老人们都很满意。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #60"
+  },
+  {
+    "id": 361,
+    "content": "今天天气温馨融洽，老人们有说有笑。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #61"
+  },
+  {
+    "id": 362,
+    "content": "院内环境丰富充足，可以自由借阅。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #62"
+  },
+  {
+    "id": 363,
+    "content": "食堂的饭菜设备齐全，有专业人员指导。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #63"
+  },
+  {
+    "id": 364,
+    "content": "活动室的气氛专业细致，服务态度很好。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #64"
+  },
+  {
+    "id": 365,
+    "content": "图书室的藏书安排在每天下午两点到五点。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #65"
+  },
+  {
+    "id": 366,
+    "content": "康复训练室维护得当，四季都有景致。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #66"
+  },
+  {
+    "id": 367,
+    "content": "护理团队内容有趣，锻炼动手能力。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #67"
+  },
+  {
+    "id": 368,
+    "content": "家属探视安排通俗实用，老人们听得认真。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #68"
+  },
+  {
+    "id": 369,
+    "content": "院内绿化按时进行，关注身体状况。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #69"
+  },
+  {
+    "id": 370,
+    "content": "手工艺活动正在有序推进中。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #70"
+  },
+  {
+    "id": 371,
+    "content": "健康讲座二十四小时都有值班人员。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #71"
+  },
+  {
+    "id": 372,
+    "content": "每日例行查房按时进行，保持卫生整洁。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #72"
+  },
+  {
+    "id": 373,
+    "content": "生日会筹备由营养师按需搭配。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #73"
+  },
+  {
+    "id": 374,
+    "content": "院内医务室规律有序，晚上九点休息。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #74"
+  },
+  {
+    "id": 375,
+    "content": "床品更换定期开展，持证上岗。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #75"
+  },
+  {
+    "id": 376,
+    "content": "营养配餐运行正常，保障老人安全。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #76"
+  },
+  {
+    "id": 377,
+    "content": "老人作息组织有序，参与积极性很高。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #77"
+  },
+  {
+    "id": 378,
+    "content": "员工培训很好，适合出门散步。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #78"
+  },
+  {
+    "id": 379,
+    "content": "院内监控整洁舒适，老人们都很满意。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #79"
+  },
+  {
+    "id": 380,
+    "content": "晨间锻炼营养均衡，搭配得很合理。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #80"
+  },
+  {
+    "id": 381,
+    "content": "今天天气丰富充足，可以自由借阅。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #81"
+  },
+  {
+    "id": 382,
+    "content": "院内环境设备齐全，有专业人员指导。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #82"
+  },
+  {
+    "id": 383,
+    "content": "食堂的饭菜专业细致，服务态度很好。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #83"
+  },
+  {
+    "id": 384,
+    "content": "活动室的气氛安排在每天下午两点到五点。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #84"
+  },
+  {
+    "id": 385,
+    "content": "图书室的藏书维护得当，四季都有景致。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #85"
+  },
+  {
+    "id": 386,
+    "content": "康复训练室内容有趣，锻炼动手能力。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #86"
+  },
+  {
+    "id": 387,
+    "content": "护理团队通俗实用，老人们听得认真。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #87"
+  },
+  {
+    "id": 388,
+    "content": "家属探视安排按时进行，关注身体状况。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #88"
+  },
+  {
+    "id": 389,
+    "content": "院内绿化正在有序推进中。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #89"
+  },
+  {
+    "id": 390,
+    "content": "手工艺活动二十四小时都有值班人员。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #90"
+  },
+  {
+    "id": 391,
+    "content": "健康讲座按时进行，保持卫生整洁。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #91"
+  },
+  {
+    "id": 392,
+    "content": "每日例行查房由营养师按需搭配。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #92"
+  },
+  {
+    "id": 393,
+    "content": "生日会筹备规律有序，晚上九点休息。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #93"
+  },
+  {
+    "id": 394,
+    "content": "院内医务室定期开展，持证上岗。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #94"
+  },
+  {
+    "id": 395,
+    "content": "床品更换运行正常，保障老人安全。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #95"
+  },
+  {
+    "id": 396,
+    "content": "营养配餐组织有序，参与积极性很高。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #96"
+  },
+  {
+    "id": 397,
+    "content": "老人作息很好，适合出门散步。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #97"
+  },
+  {
+    "id": 398,
+    "content": "员工培训整洁舒适，老人们都很满意。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #98"
+  },
+  {
+    "id": 399,
+    "content": "院内监控营养均衡，搭配得很合理。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #99"
+  },
+  {
+    "id": 400,
+    "content": "晨间锻炼温馨融洽，老人们有说有笑。",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "normal",
+    "description": "正常非敏感文本 #100"
+  }
+]

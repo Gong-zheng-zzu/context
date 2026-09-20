@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260920T030624Z_full_system_29652",
+    "started_at":  "2026-09-20T03:06:24.6513262Z",
+    "ended_at":  "2026-09-20T03:06:25.1689957Z",
+    "outcome":  "runner_failed",
+    "error":  "docker-compose restart failed with exit code 1",
+    "smoke_status":  "not_run",
+    "evaluator_exit_code":  null,
+    "result_file":  null,
+    "command":  "python experiments/scripts/ablation_adversarial_eval.py --config-label full_system --config-evidence $env:EVAL_RUNTIME_CONFIG_HASH",
+    "command_sha256":  "8fa4ec08aed638ec925de935ab1891713195fa14abb0af39d105024ed73bc19b",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "715e0b4255d09e92b2d670e59e4b2614c46c2989b71e7124b4bbac3fa52390a4",
+                          "overlay_env_sha256":  "8824028e20b117c1a0577fd019baca95195e756bc60cad00b96d1f3eca784db7",
+                          "effective_env_sha256":  "ad134e696c4523d859d31c32cff6197417a635a257739d09eb19ba46dcd7bf7e"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "d7c63b5c17e0ee02b13149bbbfaa2e8c1cc9419936d799aefcbca21c5dd10b00"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260920T030624Z_full_system_29652\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260920T030624Z_full_system_29652\\evaluation.log"
+                  }
+}

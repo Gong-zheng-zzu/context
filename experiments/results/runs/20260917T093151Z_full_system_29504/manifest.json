@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260917T093151Z_full_system_29504",
+    "started_at":  "2026-09-17T09:31:51.3380511Z",
+    "ended_at":  "2026-09-17T09:46:25.7510434Z",
+    "outcome":  "runner_failed",
+    "error":  "expected exactly one new raw JSON result, found 0",
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  null,
+    "command":  "python experiments/scripts/seed_vector_data.py --base-url http://127.0.0.1:8088 --session-id eval_retrieval_test --corpus-file experiments/datasets/retrieval_corpus/retrieval_corpus_30.json --verify",
+    "command_sha256":  "a4f74e5a74adcaa142702cb0439b00946ca3ed1458b3111ecd823bfe8bbeb10e",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "2ffe5ef8275bce3abf62a4f3152ca07e316acfb2c517fc1a49a26c61d85bba4e",
+                          "overlay_env_sha256":  "40f74971b0c828bcc94ef99f3a8da52f59ed5175b635af8f924409e86ab34a60",
+                          "effective_env_sha256":  "715e0b4255d09e92b2d670e59e4b2614c46c2989b71e7124b4bbac3fa52390a4"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "6a05d29d820e5970644460bc59272b573f3f3fe7c73b528051f69dfabcd8426d"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260917T093151Z_full_system_29504\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260917T093151Z_full_system_29504\\evaluation.log"
+                  }
+}

@@ -1,0 +1,138 @@
+{
+  "schema": "paired_retrieval_stats_v1",
+  "pairing": {
+    "parseable": true,
+    "paired_queries": 300,
+    "scorable_only_in_a": [],
+    "scorable_only_in_b": [],
+    "scorable_only_in_a_count": 0,
+    "scorable_only_in_b_count": 0,
+    "ground_truth_sha256": "d5463deae0bf82d8b1d21c38cc7f5e4eae3a97219a5a1bca2e8f018058cf5ca0",
+    "corpus_sha256": "6766cc1e958381e4df0b5bcaf8af03e167e07f7c6b0caa61a6092cbc3422b3b8"
+  },
+  "comparison": {
+    "label_a": "vector",
+    "label_b": "rrf",
+    "evaluation_mode_a": "vector_contexts_only",
+    "evaluation_mode_b": "multi_source_rrf_evaluation_only",
+    "session_id_a": "eval_retrieval_test",
+    "session_id_b": "eval_retrieval_test",
+    "annotation_status_a": "auto_derived_unreviewed",
+    "annotation_status_b": "auto_derived_unreviewed",
+    "report_eligible_a": false,
+    "report_eligible_b": false,
+    "total_queries_a": 300,
+    "total_queries_b": 300
+  },
+  "statistics": {
+    "method": "paired_bootstrap_percentile_with_exact_mcnemar",
+    "resamples": 10000,
+    "seed": 20260920,
+    "confidence_level": 0.95,
+    "paired_queries": 300
+  },
+  "metrics": {
+    "mrr": {
+      "mean_diff": 0.3481666666666667,
+      "ci_low": 0.29794305555555556,
+      "ci_high": 0.3971138888888889,
+      "paired_sample_size": 300,
+      "resamples": 10000,
+      "seed": 20260920,
+      "confidence_level": 0.95,
+      "crosses_zero": false
+    },
+    "precision_at_5": {
+      "mean_diff": 0.09,
+      "ci_low": 0.07866666666666668,
+      "ci_high": 0.10133333333333334,
+      "paired_sample_size": 300,
+      "resamples": 10000,
+      "seed": 20260920,
+      "confidence_level": 0.95,
+      "crosses_zero": false
+    },
+    "recall_at_5": {
+      "mean_diff": 0.45,
+      "ci_low": 0.3933333333333333,
+      "ci_high": 0.5066666666666667,
+      "paired_sample_size": 300,
+      "resamples": 10000,
+      "seed": 20260920,
+      "confidence_level": 0.95,
+      "crosses_zero": false
+    },
+    "hit_at_5": {
+      "difference": {
+        "mean_diff": 0.45,
+        "ci_low": 0.3933333333333333,
+        "ci_high": 0.5066666666666667,
+        "paired_sample_size": 300,
+        "resamples": 10000,
+        "seed": 20260920,
+        "confidence_level": 0.95,
+        "crosses_zero": false
+      },
+      "mcnemar_exact": {
+        "wins": 136,
+        "losses": 1,
+        "discordant": 137,
+        "one_sided_exact_p": 7.920811543626742e-40,
+        "two_sided_exact_p": 1.5841623087253484e-39,
+        "method": "exact_binomial_integer_arithmetic"
+      },
+      "rate_a": 0.3433333333333333,
+      "rate_b": 0.7933333333333333
+    }
+  },
+  "wilcoxon_mrr": {
+    "n_non_zero": 199,
+    "statistic": 18452.5,
+    "two_sided_p": 0.0,
+    "two_sided_p_underflow": true,
+    "method": "wilcoxon_signed_rank_normal_approximation",
+    "note": "normal approximation with tie and continuity correction; two_sided_p underflowed below double precision"
+  },
+  "by_query_type_mrr": {
+    "causal": {
+      "mean_diff": 0.23366666666666666,
+      "ci_low": 0.16466666666666666,
+      "ci_high": 0.3036708333333333,
+      "paired_sample_size": 100,
+      "resamples": 10000,
+      "seed": 20260920,
+      "confidence_level": 0.95,
+      "crosses_zero": false,
+      "query_count": 100
+    },
+    "general": {
+      "mean_diff": 0.4321666666666667,
+      "ci_low": 0.3508291666666667,
+      "ci_high": 0.5166708333333332,
+      "paired_sample_size": 100,
+      "resamples": 10000,
+      "seed": 20260920,
+      "confidence_level": 0.95,
+      "crosses_zero": false,
+      "query_count": 100
+    },
+    "temporal": {
+      "mean_diff": 0.37866666666666665,
+      "ci_low": 0.2833333333333333,
+      "ci_high": 0.47350000000000003,
+      "paired_sample_size": 100,
+      "resamples": 10000,
+      "seed": 20260920,
+      "confidence_level": 0.95,
+      "crosses_zero": false,
+      "query_count": 100
+    }
+  },
+  "config_hashes_a": {
+    "full_system": "4a52234f87c579285fe7ee633507f65ce6f30846ea536aba954bdc5909a065cb"
+  },
+  "config_hashes_b": {
+    "full_system": "4a52234f87c579285fe7ee633507f65ce6f30846ea536aba954bdc5909a065cb"
+  },
+  "interpretation": "A difference is inconsistent with 'no difference' only when the confidence interval excludes zero, or when the paired test's p-value is below the declared significance level. Both are conditional on this query set."
+}

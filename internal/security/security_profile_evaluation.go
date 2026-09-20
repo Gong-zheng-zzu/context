@@ -95,14 +95,14 @@ func (s *SecurityService) EvaluateSecurityProfile(_ context.Context, profile, te
 		casiaConfig := s.multiLayerDetector.casiaAlgorithm.GetConfiguration()
 		result.CASIA = &casiaConfig
 		layerStarted := time.Now()
-		regexItems := s.multiLayerDetector.applyCASIA(normalized, s.multiLayerDetector.regexDetector.Detect(normalized))
+		regexItems := s.multiLayerDetector.applyCASIA(normalized, s.multiLayerDetector.regexDetector.Detect(normalized), true)
 		result.Layers = append(result.Layers, securityLayerEvidence("regex_casia", regexItems, time.Since(layerStarted), "normalized"))
 		items = regexItems
 		result.EarlyStopReason = "profile_complete_after_casia"
 
 		if profile == "asdf_casia_pccm" {
 			dictionaryStarted := time.Now()
-			dictionaryItems := s.multiLayerDetector.applyCASIA(normalized, s.multiLayerDetector.dictMatcher.Match(normalized))
+			dictionaryItems := s.multiLayerDetector.applyCASIA(normalized, s.multiLayerDetector.dictMatcher.Match(normalized), true)
 			result.Layers = append(result.Layers, securityLayerEvidence("dictionary_casia", dictionaryItems, time.Since(dictionaryStarted), "normalized"))
 
 			contextStarted := time.Now()
@@ -111,7 +111,8 @@ func (s *SecurityService) EvaluateSecurityProfile(_ context.Context, profile, te
 			for _, match := range matches {
 				contextItems = append(contextItems, match.SensitiveInfo)
 			}
-			contextItems = s.multiLayerDetector.applyCASIA(normalized, contextItems)
+			// 上下文规则层是推断型，不享受保底，避免"邮政编码"类正常文本被误判。
+			contextItems = s.multiLayerDetector.applyCASIA(normalized, contextItems, false)
 			result.Layers = append(result.Layers, securityLayerEvidence("context_casia", contextItems, time.Since(contextStarted), "normalized"))
 
 			layers := []LayerResult{

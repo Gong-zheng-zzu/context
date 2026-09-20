@@ -206,6 +206,45 @@ func TestLoadRRFConfigFromEnv(t *testing.T) {
 	})
 }
 
+// TestParseRRFSourceWeightsRejectsUnusableValues 覆盖收紧后的解析边界。
+//
+// 背景：此前 strconv.ParseFloat 会接受 NaN/Inf，且不拒绝非正权重 —— NaN 会传染整个
+// RRF 分数，0 权重等价于静默排除该来源。这类取值不应悄悄改变融合行为，而应让整串
+// 解析失败、由调用方回退默认权重并告警。
+func TestParseRRFSourceWeightsRejectsUnusableValues(t *testing.T) {
+	valid, err := parseRRFSourceWeights("vector:1.0,knowledge:0.3")
+	if err != nil || valid["vector"] != 1.0 || valid["knowledge"] != 0.3 {
+		t.Fatalf("合法输入解析失败: weights=%v err=%v", valid, err)
+	}
+
+	for _, raw := range []string{
+		"vector:NaN",
+		"vector:Inf",
+		"vector:-Inf",
+		"vector:0",
+		"vector:-1",
+		"vector:1.0,timeline:0",
+		"broken-format",
+	} {
+		if weights, err := parseRRFSourceWeights(raw); err == nil {
+			t.Errorf("输入 %q 应被拒绝，实际得到 %v", raw, weights)
+		}
+	}
+}
+
+// TestLoadRRFConfigFromEnvEmptyWeightsKeepsDefault 覆盖「非空但不含任何有效片段」的边角。
+//
+// 此前形如 " , " 的取值既不覆盖配置也不告警（parse 返回空表且无 error），会让调用方
+// 误以为覆盖已生效；现在必须显式告警并保留默认权重。
+func TestLoadRRFConfigFromEnvEmptyWeightsKeepsDefault(t *testing.T) {
+	t.Setenv("RRF_SOURCE_WEIGHTS", " , ")
+
+	config := LoadRRFConfigFromEnv()
+	if config.SourceWeights["vector"] != 1.0 || config.SourceWeights["knowledge"] != 1.2 || config.SourceWeights["timeline"] != 0.8 {
+		t.Fatalf("空权重表时应保留默认权重，实际 %v", config.SourceWeights)
+	}
+}
+
 // TestApplyRRFFusionToRetrievalDisabled 基线对照语义：Enabled=false 时返回 nil 且不改变结果顺序
 func TestApplyRRFFusionToRetrievalDisabled(t *testing.T) {
 	matchA := &models.VectorMatch{ID: "a", Content: "a", Score: 0.3, Metadata: map[string]interface{}{"doc_id": "docA"}}

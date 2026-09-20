@@ -130,6 +130,22 @@ func (mdr *MultiDimensionalRetrieverImpl) ParallelRetrieve(ctx context.Context, 
 		}
 	}
 
+	// 关键词通道兜底：时间线的 keywords/title/content ILIKE 与知识图谱的
+	// node.name/description/keywords CONTAINS 都依赖 KeyConcepts。若调用方未提供
+	// （例如确定性评测路径不做 LLM 查询分析），两路会退化为"整句匹配"，在中文
+	// 语料上必然 0 命中。这里用确定性 CJK 词元补齐，只扩充 OR 条件。
+	if queries != nil && len(queries.KeyConcepts) == 0 {
+		candidates := make([]string, 0,
+			len(queries.VectorQueries)+len(queries.TimelineQueries)+len(queries.KnowledgeQueries))
+		candidates = append(candidates, queries.VectorQueries...)
+		candidates = append(candidates, queries.TimelineQueries...)
+		candidates = append(candidates, queries.KnowledgeQueries...)
+		if terms := ComposeCJKRetrievalTerms(candidates...); len(terms) > 0 {
+			queries.KeyConcepts = terms
+			log.Printf("🔤 [多维度检索] KeyConcepts 为空，改用确定性 CJK 词元兜底（%d 个）", len(terms))
+		}
+	}
+
 	// 创建结果通道
 	timelineResultChan := make(chan *TimelineRetrievalResult, 1)
 	knowledgeResultChan := make(chan *KnowledgeRetrievalResult, 1)
@@ -673,7 +689,11 @@ func getDefaultMultiDimensionalConfig() *MultiDimensionalConfig {
 		VectorTimeout:       5, // 5秒
 		TimelineMaxResults:  20,
 		KnowledgeMaxResults: 15,
-		VectorMaxResults:    25,
+		// 向量库按多向量方式存储：同一篇文档会写入多个表示点（实测约 6 个/文档）。
+		// 候选池必须覆盖「目标文档数 × 每文档点数」，否则按 doc_id 去重后剩下的
+		// 唯一文档会少于请求条数（25 个点只能还原出约 4 篇），使多源融合的输出
+		// 与 contextsOnly 向量基线不可比。60 可稳定支撑 5 篇以上的唯一文档。
+		VectorMaxResults: 60,
 		MinSimilarityScore:  0.6,
 		MinRelevanceScore:   0.5,
 		MaxRetries:          1,

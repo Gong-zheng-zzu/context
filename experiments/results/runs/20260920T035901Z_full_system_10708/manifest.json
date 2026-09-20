@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260920T035901Z_full_system_10708",
+    "started_at":  "2026-09-20T03:59:01.6406824Z",
+    "ended_at":  "2026-09-20T03:59:11.4242160Z",
+    "outcome":  "succeeded",
+    "error":  null,
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  "D:\\context\\context-keeper-main\\experiments\\results\\raw\\ablation_adversarial_security_20260920_035910Z.json",
+    "command":  "python experiments/scripts/ablation_adversarial_eval.py --dataset test_data/test_data_400.json --config-label full_system --config-evidence $env:EVAL_RUNTIME_CONFIG_HASH",
+    "command_sha256":  "f1b664d6864b7699fc2fa67517997760c6e72777b8a329fd78585a065c638e95",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "715e0b4255d09e92b2d670e59e4b2614c46c2989b71e7124b4bbac3fa52390a4",
+                          "overlay_env_sha256":  "8824028e20b117c1a0577fd019baca95195e756bc60cad00b96d1f3eca784db7",
+                          "effective_env_sha256":  "ad134e696c4523d859d31c32cff6197417a635a257739d09eb19ba46dcd7bf7e"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "dbc91c617d266eaf0975b2b40aa672bf501ece18a0ab1f0e215d4b6ad5c05e7e"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260920T035901Z_full_system_10708\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260920T035901Z_full_system_10708\\evaluation.log"
+                  }
+}

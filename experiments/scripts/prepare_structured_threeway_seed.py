@@ -13,6 +13,11 @@ from experiment_integrity import IntegrityConfigurationError, dual_digest_bytes,
 
 import requests
 
+# 复用已审计的级联删除校验，而不是在这里重新实现一套：清理必须同时覆盖向量、
+# 时间线、图谱与会话文件缓存，且要求四者在删除后计数为 0。两套实现一旦分叉，
+# 「清理成功」的判定就会失真，而整轮评测都建立在这个判定之上。
+import cleanup_eval_session  # noqa: E402
+
 
 ALLOWED_USER_ID = "eval_user_001"
 ALLOWED_SESSION_ID = "eval_retrieval_test"
@@ -204,6 +209,58 @@ def submit_requests(base_url: str, token: str, requests_to_submit: List[Dict[str
     return accepted
 
 
+def purge_session(base_url: str, token: str, session_id: str, timeout: int) -> Dict[str, Any]:
+    """在播种前清空同一会话，避免上一批语料残留污染新语料。
+
+    为什么必须清：本脚本只会向 ``create_context`` 追加写入，``--overwrite`` 仅作用于
+    本地 manifest。若把新语料播进已有旧语料的同一会话，旧语料的向量点、时间线事件与
+    图谱节点会一并留存，检回的文档会与当前语料的真值不相交，整轮评测随之作废。
+    这不是理论风险：此前已实际观测到陈旧会话表示点混入检回结果。
+
+    清理走服务端级联端点（``DELETE /api/sessions/{id}``），并复用
+    ``cleanup_eval_session`` 的校验，要求四个存储在删除后计数为 0。任一存储未清空即
+    抛错，从而强制「清理失败不得继续播种」。
+    """
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+    endpoint = f"{base_url.rstrip('/')}/api/sessions/{session_id}"
+
+    preflight = requests.delete(endpoint, params={"dry_run": "true"}, headers=headers, timeout=timeout)
+    # 会话从未存在时服务端返回 404，等价于「已经是干净的」。
+    if preflight.status_code == 404:
+        return {"status": "already_clean", "skipped": True, "session_id": session_id}
+    if preflight.status_code != 200:
+        raise RuntimeError(f"session purge preflight failed with HTTP {preflight.status_code}")
+    try:
+        preflight_payload = preflight.json()
+    except ValueError as exc:
+        raise RuntimeError("session purge preflight did not return JSON") from exc
+    preflight_errors = cleanup_eval_session.validate_result(preflight_payload, "dry_run")
+    if preflight_errors:
+        raise RuntimeError("session purge preflight rejected: " + "; ".join(preflight_errors))
+
+    deletion = requests.delete(endpoint, headers=headers, timeout=timeout)
+    if deletion.status_code != 200:
+        raise RuntimeError(f"session purge failed with HTTP {deletion.status_code}")
+    try:
+        deletion_payload = deletion.json()
+    except ValueError as exc:
+        raise RuntimeError("session purge did not return JSON") from exc
+
+    deletion_errors = cleanup_eval_session.validate_result(deletion_payload, "deleted")
+    if deletion_payload.get("complete") is not True:
+        deletion_errors.append("server did not mark the cascade complete")
+    if deletion_errors:
+        raise RuntimeError("session purge did not reach a clean state: " + "; ".join(deletion_errors))
+
+    stores = (deletion_payload.get("result") or {}).get("stores", [])
+    return {
+        "status": "purged",
+        "skipped": False,
+        "session_id": session_id,
+        "stores": stores,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--corpus-file", type=Path, default=DEFAULT_CORPUS)
@@ -214,6 +271,12 @@ def main() -> int:
     parser.add_argument("--submit", action="store_true", help="Authenticate and submit prepared requests to the unified API")
     parser.add_argument("--dry-run", action="store_true", help="Generate artifacts without authenticating or calling HTTP APIs")
     parser.add_argument("--overwrite", action="store_true", help="Allow replacing an existing manifest in output-dir")
+    parser.add_argument(
+        "--purge-session",
+        action="store_true",
+        help="Delete every stored artefact of this session before submitting, so a new corpus "
+             "cannot be contaminated by a previously seeded one; requires --submit",
+    )
     args = parser.parse_args()
 
     try:
@@ -221,6 +284,8 @@ def main() -> int:
         validate_scope(user_id, args.session_id)
         if args.dry_run and args.submit:
             raise ValueError("--dry-run cannot be combined with --submit")
+        if args.purge_session and not args.submit:
+            raise ValueError("--purge-session requires --submit; purging without seeding would leave the session empty")
         if not args.corpus_file.is_file():
             raise ValueError(f"corpus file does not exist: {args.corpus_file}")
         manifest, requests_to_submit = build_requests(args.corpus_file, args.session_id)
@@ -242,6 +307,13 @@ def main() -> int:
             if not password:
                 raise ValueError("EVAL_PASSWORD is required with --submit")
             token = authenticate(args.base_url, user_id, password, args.timeout)
+            # 清理必须在写入之前完成：先写后清会把刚写入的新语料一起删掉，而「先清后写」
+            # 才能保证会话中只存在当前这一批语料。
+            if args.purge_session:
+                manifest["session_purge"] = purge_session(
+                    args.base_url, token, args.session_id, args.timeout
+                )
+                print(f"session_purge={manifest['session_purge']['status']}")
             submission_path = args.output_dir / "submission.jsonl"
             accepted = submit_requests(args.base_url, token, requests_to_submit, submission_path, args.timeout)
             manifest["submission"] = {

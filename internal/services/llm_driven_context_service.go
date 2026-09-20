@@ -223,24 +223,9 @@ func (adapter *SimpleTimelineAdapter) SearchByID(ctx context.Context, eventID st
 	return event, nil
 }
 
-// convertTimelineEventToModel 转换时间线事件到模型
-func convertTimelineEventToModel(event *timeline.TimelineEvent) *models.TimelineEvent {
-	return &models.TimelineEvent{
-		ID:              event.ID,
-		UserID:          event.UserID,
-		SessionID:       event.SessionID,
-		WorkspaceID:     event.WorkspaceID,
-		Timestamp:       event.Timestamp,
-		EventType:       event.EventType,
-		Title:           event.Title,
-		Content:         event.Content,
-		Summary:         event.Summary,
-		ImportanceScore: event.ImportanceScore,
-		RelevanceScore:  event.RelevanceScore,
-		CreatedAt:       event.CreatedAt,
-		UpdatedAt:       event.UpdatedAt,
-	}
-}
+// 说明：此处原有 convertTimelineEventToModel，经全仓库检索确认**零调用点**后删除。
+// 时间线事件的实际转换在 convertTimelineResultToEvents（TimelineStoreAdapter.SearchByQuery
+// 内调用），该函数已正确复制 SourceDocID，是唯一在用的转换路径。
 
 // GetTimelineAdapter 实现MultiDimensionalRetriever接口
 func (adapter *MultiDimensionalRetrieverAdapter) GetTimelineAdapter() TimelineAdapter {
@@ -729,11 +714,12 @@ func (lds *LLMDrivenContextService) RetrieveContext(ctx context.Context, req mod
 		// Baseline configurations deliberately disable semantic/multi-source
 		// retrieval. They must still be evaluated through the real vector path,
 		// with explicit evidence that graph and timeline were unavailable.
+		vectorStarted := time.Now()
 		response, err := lds.contextService.RetrieveContext(ctx, req)
 		if err != nil {
 			return models.ContextResponse{}, err
 		}
-		return markEvaluationVectorFallback(response), nil
+		return markEvaluationVectorFallback(response, time.Since(vectorStarted).Milliseconds()), nil
 	}
 	if req.ContextsOnly {
 		log.Printf("⚡ [评测模式] ContextsOnly=true，跳过LLM分析与内容生成")
@@ -795,8 +781,11 @@ func (lds *LLMDrivenContextService) retrieveEvaluationRRF(ctx context.Context, r
 	}
 	response := buildEvaluationRRFResponse(retrievalResults, req.Limit)
 	response.RetrievalMetadata["retrieval_execution_path"] = "direct_rrf"
+	// 与 engines.getDefaultMultiDimensionalConfig 的 MaxResults 保持一致：
+	// 向量库是多向量存储（约 6 点/文档），候选池需足够大才能在按 doc_id 去重后
+	// 还原出请求条数的唯一文档。
 	response.RetrievalMetadata["candidate_pool_limits"] = map[string]int{
-		"vector":    25,
+		"vector":    60,
 		"knowledge": 15,
 		"timeline":  20,
 	}
@@ -806,7 +795,13 @@ func (lds *LLMDrivenContextService) retrieveEvaluationRRF(ctx context.Context, r
 	return response, nil
 }
 
-func markEvaluationVectorFallback(response models.ContextResponse) models.ContextResponse {
+// markEvaluationVectorFallback 为基线配置（关闭图谱/时间线）的检索结果补齐证据字段。
+//
+// vectorLatencyMs 由调用方测量并传入：证据契约要求响应同时携带 source_latency_ms 与
+// wall_clock_latency_ms，缺失会使门禁的 retrieval contract 检查失败，进而导致基线配置
+// 无法产出 eligible 结果。图谱与时间线在本路径下被配置显式关闭，延迟如实记为 0，
+// 状态记为 skipped（而不是假装成功）。
+func markEvaluationVectorFallback(response models.ContextResponse, vectorLatencyMs int64) models.ContextResponse {
 	contexts := response.Contexts
 	if len(contexts) == 0 {
 		contexts = response.RetrievedContexts
@@ -818,6 +813,7 @@ func markEvaluationVectorFallback(response models.ContextResponse) models.Contex
 	if response.RetrievalMetadata == nil {
 		response.RetrievalMetadata = make(map[string]interface{})
 	}
+	sourceLatencies := evaluationSourceLatencies(map[string]int64{"vector": vectorLatencyMs})
 	response.RetrievalMetadata["retrieval_execution_path"] = "vector_fallback"
 	response.RetrievalMetadata["retrieval_active_sources"] = []string{"vector"}
 	response.RetrievalMetadata["retrieval_empty_sources"] = []string{"knowledge", "timeline"}
@@ -828,12 +824,20 @@ func markEvaluationVectorFallback(response models.ContextResponse) models.Contex
 	response.RetrievalMetadata["source_candidate_counts"] = map[string]int{
 		"vector": len(contexts), "knowledge": 0, "timeline": 0,
 	}
+	response.RetrievalMetadata["source_latency_ms"] = sourceLatencies
+	response.RetrievalMetadata["wall_clock_latency_ms"] = vectorLatencyMs
 	if len(contexts) == 0 {
+		// 归一化为非 nil 空切片：nil slice 经 encoding/json 会序列化为 `null`，
+		// 使评测 smoke 契约（contexts 必须是 list）失败。RRF 通道
+		// （buildEvaluationRRFResponse）已用 make(...) 非 nil 空切片，此处保持一致。
+		emptyContexts := []models.ContextItem{}
+		response.Contexts = emptyContexts
+		response.RetrievedContexts = emptyContexts
 		return response
 	}
 
 	for index := range contexts {
-		metadata := make(map[string]interface{}, len(contexts[index].Metadata)+4)
+		metadata := make(map[string]interface{}, len(contexts[index].Metadata)+8)
 		for key, value := range contexts[index].Metadata {
 			metadata[key] = value
 		}
@@ -845,6 +849,8 @@ func markEvaluationVectorFallback(response models.ContextResponse) models.Contex
 		metadata["retrieval_source_statuses"] = map[string]string{
 			"vector": vectorStatus, "knowledge": "skipped", "timeline": "skipped",
 		}
+		metadata["retrieval_source_latency_ms"] = sourceLatencies
+		metadata["retrieval_wall_clock_latency_ms"] = vectorLatencyMs
 		if contexts[index].DocID == "" {
 			contexts[index].DocID = contexts[index].ID
 		}
@@ -2007,57 +2013,9 @@ func convertPropertiesToMap(properties interface{}) map[string]interface{} {
 	return map[string]interface{}{}
 }
 
-// 🔥 完善：转换知识图谱关系为标准格式
-func convertRelationshipsToModels(relationships []knowledge.KnowledgeRelationship, nodeID string) []map[string]interface{} {
-	var result []map[string]interface{}
-
-	for _, rel := range relationships {
-		// 只包含与当前节点相关的关系
-		if rel.StartNodeID == nodeID || rel.EndNodeID == nodeID {
-			relationship := map[string]interface{}{
-				"id":            rel.ID,
-				"type":          rel.Type,
-				"start_node_id": rel.StartNodeID,
-				"end_node_id":   rel.EndNodeID,
-				"strength":      rel.Strength,
-				"description":   rel.Description,
-				"properties":    convertPropertiesToMap(rel.Properties),
-				// 添加关系方向指示
-				"direction": getRelationshipDirection(rel, nodeID),
-				// 添加关系权重评估
-				"weight_category": categorizeRelationshipWeight(rel.Strength),
-			}
-			result = append(result, relationship)
-		}
-	}
-
-	log.Printf("🔗 [关系转换] 为节点 %s 转换了 %d 个关系", nodeID, len(result))
-	return result
-}
-
-// 获取关系方向
-func getRelationshipDirection(rel knowledge.KnowledgeRelationship, nodeID string) string {
-	if rel.StartNodeID == nodeID {
-		return "outgoing" // 出度关系
-	} else if rel.EndNodeID == nodeID {
-		return "incoming" // 入度关系
-	}
-	return "unknown"
-}
-
-// 分类关系权重
-func categorizeRelationshipWeight(strength float64) string {
-	switch {
-	case strength >= 0.8:
-		return "strong"
-	case strength >= 0.5:
-		return "medium"
-	case strength >= 0.2:
-		return "weak"
-	default:
-		return "minimal"
-	}
-}
+// 说明：此处原有 convertRelationshipsToModels 及其专用 helper
+// getRelationshipDirection / categorizeRelationshipWeight，经全仓库检索确认
+// **零调用点**（两个 helper 仅被 convertRelationshipsToModels 调用）后一并删除。
 
 // 从查询中提取分类
 func extractCategoriesFromQuery(query string) []string {
@@ -2430,10 +2388,30 @@ func (adapter *VectorStoreAdapter) SetEngine(engine interface{}) {
 }
 
 // convertSearchResultsToVectorMatches 转换SearchResult到VectorMatch
+//
+// 只保留可追溯到源文档的点。向量库按多向量方式存储：同一篇文档会写入多个表示点，
+// 同时还混有会话消息等内部表示点（payload 里没有 doc_id）。ContextService 的
+// contextsOnly 通道会按 doc_id 把这些内部点过滤掉（见 RetrieveContext 中的
+// filteredResults 组装），这里必须采用同一规则，否则内部点会以向量库的 point id
+// 冒充文档标识进入融合结果，使多源检索的评测口径与向量基线不可比。
+//
+// 判定顺序与 contextsOnly 一致：Fields["doc_id"] > Fields["id"]。
 func convertSearchResultsToVectorMatches(results []models.SearchResult) []*models.VectorMatch {
 	matches := make([]*models.VectorMatch, 0, len(results))
 
 	for _, result := range results {
+		docID := ""
+		if result.Fields != nil {
+			if value, ok := result.Fields["doc_id"].(string); ok && value != "" {
+				docID = value
+			} else if value, ok := result.Fields["id"].(string); ok && value != "" {
+				docID = value
+			}
+		}
+		if docID == "" {
+			continue
+		}
+
 		match := &models.VectorMatch{
 			ID:    result.ID,
 			Score: result.Score,
@@ -2454,12 +2432,13 @@ func convertSearchResultsToVectorMatches(results []models.SearchResult) []*model
 					match.Metadata[k] = v
 				}
 			}
+			match.Metadata["doc_id"] = docID
 		}
 
 		matches = append(matches, match)
 	}
 
-	log.Printf("🔄 [结果转换] 转换了 %d 个SearchResult到VectorMatch", len(matches))
+	log.Printf("🔄 [结果转换] 转换了 %d/%d 个可追溯SearchResult到VectorMatch", len(matches), len(results))
 	return matches
 }
 
@@ -2500,37 +2479,10 @@ func buildProjectContextFilter(userID, query string) string {
 	return ""
 }
 
-// convertToVectorMatches 转换搜索结果为向量匹配格式
-func convertToVectorMatches(results []models.SearchResult) []*models.VectorMatch {
-	var matches []*models.VectorMatch
-
-	for _, result := range results {
-		// 🔥 修复：从Fields中提取内容，因为SearchResult的内容在Fields中
-		content := ""
-		title := ""
-		if result.Fields != nil {
-			if c, ok := result.Fields["content"].(string); ok {
-				content = c
-			}
-			if t, ok := result.Fields["title"].(string); ok {
-				title = t
-			}
-		}
-
-		match := &models.VectorMatch{
-			ID:      result.ID,
-			Content: content,
-			Title:   title,
-			Score:   result.Score,
-			// 可以添加更多字段映射
-			Metadata: result.Fields, // 保留原始字段信息
-		}
-		matches = append(matches, match)
-	}
-
-	log.Printf("🔄 [向量适配器] 转换了%d个搜索结果为向量匹配", len(matches))
-	return matches
-}
+// 说明：此处原有 convertToVectorMatches，经全仓库检索确认**零调用点**后删除。
+// 它是最早的实现，缺少 doc_id 归一化与内部表示点剔除，一旦被误接线就会重现
+// 「UUID 冒充文档标识」的检索缺陷。实际在用的是 convertSearchResultsToVectorMatches
+// （VectorStoreAdapter.SearchByQuery 内调用），后者已包含完整溯源规则。
 
 // GetUserSessionStore 获取用户会话存储
 func (lds *LLMDrivenContextService) GetUserSessionStore(userID string) (*store.SessionStore, error) {

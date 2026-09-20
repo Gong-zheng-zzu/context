@@ -1,0 +1,2486 @@
+{
+  "schema_version": 1,
+  "execution_mode": "live_api_ablation",
+  "evaluation_mode": "security_ablation",
+  "timestamp_utc": "2026-09-17T09:23:13.001121+00:00",
+  "base_url": "http://localhost:8088",
+  "ablation_contract": {
+    "endpoint": "/api/v1/security/ablation",
+    "method": "POST",
+    "authentication": "Bearer JWT; the authenticated user must equal the server's configured security evaluation user.",
+    "request_fields": {
+      "message": "sample text (1..4096 bytes)",
+      "sample_id": "synthetic_<canonical id mapped to [A-Za-z0-9_-]{1,64}>",
+      "synthetic": true
+    },
+    "server_profiles": [
+      "regex_only",
+      "asdf",
+      "asdf_casia",
+      "asdf_casia_pccm"
+    ],
+    "reported_profiles": [
+      "regex_only",
+      "asdf",
+      "asdf_casia",
+      "asdf_casia_pccm"
+    ],
+    "request_strategy": "The server evaluates every SecurityLabProfile inside one request; each sample produces exactly one HTTP response containing all profiles. --ablation-profiles selects the reported subset.",
+    "plaintext_retention": "The endpoint returns metadata-only evidence; results persist input/response SHA-256 digests and per-profile metadata only, never a request or response body."
+  },
+  "configuration": {
+    "label": "full_system",
+    "evidence": ""
+  },
+  "config_hashes": {
+    "experiment_config_yaml_sha256": "4a52234f87c579285fe7ee633507f65ce6f30846ea536aba954bdc5909a065cb"
+  },
+  "runner_pacing": {
+    "request_interval_ms": 1100,
+    "reason": "Respects the protected API rate limit; pacing time is excluded from per-request latency."
+  },
+  "dataset_manifest": [
+    {
+      "path": "test_data/test_data_100.json",
+      "sample_count": 8,
+      "sha256": "a2240ce7b66db277e4431920970ecf9048aaad81a6eac9207124c79d71ce376d",
+      "kind": "adversarial_sensitive_data",
+      "categories": [
+        "standard",
+        "bypass_attack",
+        "confusing",
+        "normal"
+      ]
+    }
+  ],
+  "selection_manifest": {
+    "benign_selection": {
+      "method": "all_deterministic_template_matrix_samples",
+      "total_samples": 4
+    }
+  },
+  "metric_definition": {
+    "denominator": "Only HTTP 2xx, valid JSON, success=true ablation responses that contain the requested profile.",
+    "api_errors": "Transport, auth (401/403), contract validation (400), and malformed responses are recorded as per-sample evidence and excluded from every rate denominator.",
+    "attack_detection": "For a canonical attack sample, profile decision 'redact' counts as detected and 'allow' counts as undetected; this measures sensitive-span detection, not full attack-defense success.",
+    "benign_false_positive": "For a deterministic benign request, decision 'allow' is a pass and decision 'redact' is a false positive.",
+    "wilson_95_ci": "Two-sided Wilson score interval, z=1.959963984540054, per profile.",
+    "delta": "Each profile is compared with the previous profile in the canonical order (regex_only -> asdf -> asdf_casia -> asdf_casia_pccm) using paired per-sample decisions.",
+    "asdf_residual": "residual_attack_types are the attack types still detected after ASDF normalization and re-detection; they are reported as ablation evidence, never as production detection accuracy.",
+    "input_retention": "Detailed results persist input_sha256 and response_sha256 plus metadata-only profile evidence; API error messages are persisted only as SHA-256 summaries."
+  },
+  "profile_config_snapshots": {
+    "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03": {
+      "casia": {
+        "version": "casia-context-v1",
+        "context_window_bytes": 64,
+        "decision_threshold": 0.6,
+        "keyword_weights": {
+          "blood_pressure": {
+            "低压": 0.8,
+            "体检": 0.7,
+            "分数": -0.7,
+            "得分": -0.6,
+            "收缩压": 0.9,
+            "比例": -0.6,
+            "测量": 0.6,
+            "舒张压": 0.9,
+            "血压": 1,
+            "高压": 0.8
+          },
+          "id_card": {
+            "区号": -0.7,
+            "实名": 0.6,
+            "居民身份证": 1,
+            "证件": 0.7,
+            "证件号": 0.9,
+            "身份证": 1,
+            "身份证号": 1,
+            "邮政编码": -0.8,
+            "邮编": -0.8
+          },
+          "medical_record": {
+            "住院": 0.8,
+            "医疗": 0.6,
+            "处方": 0.7,
+            "就诊": 0.8,
+            "快递单号": -0.8,
+            "病历": 1,
+            "病历号": 1,
+            "病案": 0.9,
+            "订单号": -0.7,
+            "门诊": 0.7
+          },
+          "phone": {
+            "QQ": -0.5,
+            "工号": -0.6,
+            "手机": 1,
+            "手机号": 1,
+            "电话": 0.9,
+            "电话号码": 0.9,
+            "编号": -0.5,
+            "联系方式": 0.8,
+            "联系电话": 0.9
+          }
+        },
+        "source": "builtin"
+      },
+      "pccm_s": null
+    },
+    "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea": {
+      "casia": {
+        "version": "casia-context-v1",
+        "context_window_bytes": 64,
+        "decision_threshold": 0.6,
+        "keyword_weights": {
+          "blood_pressure": {
+            "低压": 0.8,
+            "体检": 0.7,
+            "分数": -0.7,
+            "得分": -0.6,
+            "收缩压": 0.9,
+            "比例": -0.6,
+            "测量": 0.6,
+            "舒张压": 0.9,
+            "血压": 1,
+            "高压": 0.8
+          },
+          "id_card": {
+            "区号": -0.7,
+            "实名": 0.6,
+            "居民身份证": 1,
+            "证件": 0.7,
+            "证件号": 0.9,
+            "身份证": 1,
+            "身份证号": 1,
+            "邮政编码": -0.8,
+            "邮编": -0.8
+          },
+          "medical_record": {
+            "住院": 0.8,
+            "医疗": 0.6,
+            "处方": 0.7,
+            "就诊": 0.8,
+            "快递单号": -0.8,
+            "病历": 1,
+            "病历号": 1,
+            "病案": 0.9,
+            "订单号": -0.7,
+            "门诊": 0.7
+          },
+          "phone": {
+            "QQ": -0.5,
+            "工号": -0.6,
+            "手机": 1,
+            "手机号": 1,
+            "电话": 0.9,
+            "电话号码": 0.9,
+            "编号": -0.5,
+            "联系方式": 0.8,
+            "联系电话": 0.9
+          }
+        },
+        "source": "builtin"
+      },
+      "pccm_s": {
+        "version": "pccm-s-fixed-v1",
+        "calibration_source": "fixed_unvalidated",
+        "layer_weights": {
+          "1": 0.7,
+          "2": 0.1,
+          "4": 0.15,
+          "5": 0.05
+        },
+        "enhancement_per_extra_layer": 0.05,
+        "decision_threshold": 0.45,
+        "layer_activation_threshold": 0.3
+      }
+    }
+  },
+  "pipeline_versions": [
+    "security-ablation-v1"
+  ],
+  "profile_metrics": {
+    "regex_only": {
+      "profile": "regex_only",
+      "config_snapshot_sha256": null,
+      "casia_config_version": null,
+      "casia_source": null,
+      "pccm_calibration_source": null,
+      "casia_match_method_counts": {},
+      "attack_total": 4,
+      "attack_api_success_count": 4,
+      "attack_api_error_count": 0,
+      "attack_profile_missing_count": 0,
+      "attack_redact_count": 2,
+      "attack_allow_count": 2,
+      "attack_inconclusive_count": 0,
+      "detection_rate": 0.5,
+      "detection_wilson_95_ci": [
+        0.15003898915214947,
+        0.8499610108478506
+      ],
+      "decision_counts": {
+        "redact": 2,
+        "allow": 2
+      },
+      "allow_with_adversarial_count": 0,
+      "confidence_stats_all": {
+        "count": 4,
+        "mean": 0.28500000000000003,
+        "median": 0.28500000000000003,
+        "p95": 0.5700000000000001,
+        "min": 0.0,
+        "max": 0.5700000000000001
+      },
+      "confidence_stats_detected": {
+        "count": 2,
+        "mean": 0.5700000000000001,
+        "median": 0.5700000000000001,
+        "p95": 0.5700000000000001,
+        "min": 0.5700000000000001,
+        "max": 0.5700000000000001
+      },
+      "latency_stats_ms": {
+        "count": 4,
+        "mean": 15.392499999999998,
+        "median": 15.558,
+        "p95": 23.156399999999998,
+        "min": 6.004,
+        "max": 24.45
+      },
+      "early_stop_reason_counts": {
+        "profile_complete_after_regex": 4
+      },
+      "asdf_adversarial_count": 0,
+      "asdf_redetection_count": 0,
+      "asdf_attack_type_counts": {},
+      "asdf_residual_attack_type_counts": {},
+      "asdf_residual_observation_count": 0,
+      "sensitive_type_counts": {
+        "id_card": 2
+      },
+      "layers": [
+        {
+          "layer": "regex",
+          "observation_count": 4,
+          "total_match_count": 2,
+          "avg_match_count": 0.5,
+          "avg_confidence": 0.28500000000000003,
+          "avg_latency_ms": 0.08449999999999999,
+          "status_counts": {
+            "ok": 4
+          },
+          "coordinate_spaces": [
+            "original"
+          ],
+          "sensitive_types": [
+            "id_card"
+          ],
+          "casia_configuration_versions": [],
+          "casia_match_method_counts": {}
+        }
+      ],
+      "benign_total": 4,
+      "benign_api_success_count": 4,
+      "benign_api_error_count": 0,
+      "benign_profile_missing_count": 0,
+      "benign_allow_count": 4,
+      "benign_false_positive_count": 0,
+      "benign_inconclusive_count": 0,
+      "benign_false_positive_rate": 0.0,
+      "benign_false_positive_wilson_95_ci": [
+        0.0,
+        0.4898908364545973
+      ],
+      "benign_latency_stats_ms": {
+        "count": 4,
+        "mean": 17.26325,
+        "median": 19.3905,
+        "p95": 24.168400000000002,
+        "min": 5.956,
+        "max": 24.316000000000003
+      }
+    },
+    "asdf": {
+      "profile": "asdf",
+      "config_snapshot_sha256": null,
+      "casia_config_version": null,
+      "casia_source": null,
+      "pccm_calibration_source": null,
+      "casia_match_method_counts": {},
+      "attack_total": 4,
+      "attack_api_success_count": 4,
+      "attack_api_error_count": 0,
+      "attack_profile_missing_count": 0,
+      "attack_redact_count": 4,
+      "attack_allow_count": 0,
+      "attack_inconclusive_count": 0,
+      "detection_rate": 1.0,
+      "detection_wilson_95_ci": [
+        0.5101091635454027,
+        1.0
+      ],
+      "decision_counts": {
+        "redact": 4
+      },
+      "allow_with_adversarial_count": 0,
+      "confidence_stats_all": {
+        "count": 4,
+        "mean": 0.5775000000000001,
+        "median": 0.5700000000000001,
+        "p95": 0.5955,
+        "min": 0.5700000000000001,
+        "max": 0.6000000000000001
+      },
+      "confidence_stats_detected": {
+        "count": 4,
+        "mean": 0.5775000000000001,
+        "median": 0.5700000000000001,
+        "p95": 0.5955,
+        "min": 0.5700000000000001,
+        "max": 0.6000000000000001
+      },
+      "latency_stats_ms": {
+        "count": 4,
+        "mean": 15.392499999999998,
+        "median": 15.558,
+        "p95": 23.156399999999998,
+        "min": 6.004,
+        "max": 24.45
+      },
+      "early_stop_reason_counts": {
+        "profile_complete_after_regex": 4
+      },
+      "asdf_adversarial_count": 2,
+      "asdf_redetection_count": 4,
+      "asdf_attack_type_counts": {
+        "space_separation": 2
+      },
+      "asdf_residual_attack_type_counts": {},
+      "asdf_residual_observation_count": 0,
+      "sensitive_type_counts": {
+        "id_card": 3,
+        "phone": 1
+      },
+      "layers": [
+        {
+          "layer": "regex",
+          "observation_count": 4,
+          "total_match_count": 4,
+          "avg_match_count": 1.0,
+          "avg_confidence": 0.5775000000000001,
+          "avg_latency_ms": 0.021,
+          "status_counts": {
+            "ok": 4
+          },
+          "coordinate_spaces": [
+            "normalized"
+          ],
+          "sensitive_types": [
+            "id_card",
+            "phone"
+          ],
+          "casia_configuration_versions": [],
+          "casia_match_method_counts": {}
+        }
+      ],
+      "benign_total": 4,
+      "benign_api_success_count": 4,
+      "benign_api_error_count": 0,
+      "benign_profile_missing_count": 0,
+      "benign_allow_count": 4,
+      "benign_false_positive_count": 0,
+      "benign_inconclusive_count": 0,
+      "benign_false_positive_rate": 0.0,
+      "benign_false_positive_wilson_95_ci": [
+        0.0,
+        0.4898908364545973
+      ],
+      "benign_latency_stats_ms": {
+        "count": 4,
+        "mean": 17.26325,
+        "median": 19.3905,
+        "p95": 24.168400000000002,
+        "min": 5.956,
+        "max": 24.316000000000003
+      }
+    },
+    "asdf_casia": {
+      "profile": "asdf_casia",
+      "config_snapshot_sha256": "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03",
+      "casia_config_version": "casia-context-v1",
+      "casia_source": "builtin",
+      "pccm_calibration_source": null,
+      "casia_match_method_counts": {
+        "exact": 4
+      },
+      "attack_total": 4,
+      "attack_api_success_count": 4,
+      "attack_api_error_count": 0,
+      "attack_profile_missing_count": 0,
+      "attack_redact_count": 4,
+      "attack_allow_count": 0,
+      "attack_inconclusive_count": 0,
+      "detection_rate": 1.0,
+      "detection_wilson_95_ci": [
+        0.5101091635454027,
+        1.0
+      ],
+      "decision_counts": {
+        "redact": 4
+      },
+      "allow_with_adversarial_count": 0,
+      "confidence_stats_all": {
+        "count": 4,
+        "mean": 0.40886527852139964,
+        "median": 0.4167033898191028,
+        "p95": 0.48925169275314945,
+        "min": 0.30000000000000004,
+        "max": 0.502054334447393
+      },
+      "confidence_stats_detected": {
+        "count": 4,
+        "mean": 0.40886527852139964,
+        "median": 0.4167033898191028,
+        "p95": 0.48925169275314945,
+        "min": 0.30000000000000004,
+        "max": 0.502054334447393
+      },
+      "latency_stats_ms": {
+        "count": 4,
+        "mean": 15.392499999999998,
+        "median": 15.558,
+        "p95": 23.156399999999998,
+        "min": 6.004,
+        "max": 24.45
+      },
+      "early_stop_reason_counts": {
+        "profile_complete_after_casia": 4
+      },
+      "asdf_adversarial_count": 2,
+      "asdf_redetection_count": 4,
+      "asdf_attack_type_counts": {
+        "space_separation": 2
+      },
+      "asdf_residual_attack_type_counts": {},
+      "asdf_residual_observation_count": 0,
+      "sensitive_type_counts": {
+        "id_card": 3,
+        "phone": 1
+      },
+      "layers": [
+        {
+          "layer": "regex_casia",
+          "observation_count": 4,
+          "total_match_count": 4,
+          "avg_match_count": 1.0,
+          "avg_confidence": 0.4088652785213997,
+          "avg_latency_ms": 0.028749999999999998,
+          "status_counts": {
+            "ok": 4
+          },
+          "coordinate_spaces": [
+            "normalized"
+          ],
+          "sensitive_types": [
+            "id_card",
+            "phone"
+          ],
+          "casia_configuration_versions": [
+            "casia-context-v1"
+          ],
+          "casia_match_method_counts": {
+            "exact": 4
+          }
+        }
+      ],
+      "benign_total": 4,
+      "benign_api_success_count": 4,
+      "benign_api_error_count": 0,
+      "benign_profile_missing_count": 0,
+      "benign_allow_count": 4,
+      "benign_false_positive_count": 0,
+      "benign_inconclusive_count": 0,
+      "benign_false_positive_rate": 0.0,
+      "benign_false_positive_wilson_95_ci": [
+        0.0,
+        0.4898908364545973
+      ],
+      "benign_latency_stats_ms": {
+        "count": 4,
+        "mean": 17.26325,
+        "median": 19.3905,
+        "p95": 24.168400000000002,
+        "min": 5.956,
+        "max": 24.316000000000003
+      }
+    },
+    "asdf_casia_pccm": {
+      "profile": "asdf_casia_pccm",
+      "config_snapshot_sha256": "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea",
+      "casia_config_version": "casia-context-v1",
+      "casia_source": "builtin",
+      "pccm_calibration_source": "fixed_unvalidated",
+      "casia_match_method_counts": {
+        "exact": 8
+      },
+      "attack_total": 4,
+      "attack_api_success_count": 4,
+      "attack_api_error_count": 0,
+      "attack_profile_missing_count": 0,
+      "attack_redact_count": 4,
+      "attack_allow_count": 0,
+      "attack_inconclusive_count": 0,
+      "detection_rate": 1.0,
+      "detection_wilson_95_ci": [
+        0.5101091635454027,
+        1.0
+      ],
+      "decision_counts": {
+        "redact": 4
+      },
+      "allow_with_adversarial_count": 0,
+      "confidence_stats_all": {
+        "count": 4,
+        "mean": 0.4331406327234676,
+        "median": 0.4403976242216524,
+        "p95": 0.5144368337162285,
+        "min": 0.32426470588235295,
+        "max": 0.5275025765682125
+      },
+      "confidence_stats_detected": {
+        "count": 4,
+        "mean": 0.4331406327234676,
+        "median": 0.4403976242216524,
+        "p95": 0.5144368337162285,
+        "min": 0.32426470588235295,
+        "max": 0.5275025765682125
+      },
+      "latency_stats_ms": {
+        "count": 4,
+        "mean": 15.392499999999998,
+        "median": 15.558,
+        "p95": 23.156399999999998,
+        "min": 6.004,
+        "max": 24.45
+      },
+      "early_stop_reason_counts": {
+        "deterministic_lab_profile_excludes_llm": 4
+      },
+      "asdf_adversarial_count": 2,
+      "asdf_redetection_count": 4,
+      "asdf_attack_type_counts": {
+        "space_separation": 2
+      },
+      "asdf_residual_attack_type_counts": {},
+      "asdf_residual_observation_count": 0,
+      "sensitive_type_counts": {
+        "id_card": 3,
+        "phone": 4
+      },
+      "layers": [
+        {
+          "layer": "regex_casia",
+          "observation_count": 4,
+          "total_match_count": 4,
+          "avg_match_count": 1.0,
+          "avg_confidence": 0.4088652785213997,
+          "avg_latency_ms": 0.01225,
+          "status_counts": {
+            "ok": 4
+          },
+          "coordinate_spaces": [
+            "normalized"
+          ],
+          "sensitive_types": [
+            "id_card",
+            "phone"
+          ],
+          "casia_configuration_versions": [
+            "casia-context-v1"
+          ],
+          "casia_match_method_counts": {
+            "exact": 4
+          }
+        },
+        {
+          "layer": "dictionary_casia",
+          "observation_count": 4,
+          "total_match_count": 0,
+          "avg_match_count": 0.0,
+          "avg_confidence": 0.0,
+          "avg_latency_ms": 0.001,
+          "status_counts": {
+            "ok": 4
+          },
+          "coordinate_spaces": [],
+          "sensitive_types": [],
+          "casia_configuration_versions": [],
+          "casia_match_method_counts": {}
+        },
+        {
+          "layer": "context_casia",
+          "observation_count": 4,
+          "total_match_count": 10,
+          "avg_match_count": 2.5,
+          "avg_confidence": 0.42954640064583305,
+          "avg_latency_ms": 0.01575,
+          "status_counts": {
+            "ok": 4
+          },
+          "coordinate_spaces": [
+            "normalized"
+          ],
+          "sensitive_types": [
+            "bank_card",
+            "id_card",
+            "phone"
+          ],
+          "casia_configuration_versions": [
+            "casia-context-v1"
+          ],
+          "casia_match_method_counts": {
+            "exact": 4
+          }
+        }
+      ],
+      "benign_total": 4,
+      "benign_api_success_count": 4,
+      "benign_api_error_count": 0,
+      "benign_profile_missing_count": 0,
+      "benign_allow_count": 4,
+      "benign_false_positive_count": 0,
+      "benign_inconclusive_count": 0,
+      "benign_false_positive_rate": 0.0,
+      "benign_false_positive_wilson_95_ci": [
+        0.0,
+        0.4898908364545973
+      ],
+      "benign_latency_stats_ms": {
+        "count": 4,
+        "mean": 17.26325,
+        "median": 19.3905,
+        "p95": 24.168400000000002,
+        "min": 5.956,
+        "max": 24.316000000000003
+      }
+    }
+  },
+  "ablation_deltas": [
+    {
+      "profile": "asdf",
+      "baseline_profile": "regex_only",
+      "detection_rate_delta": 0.5,
+      "false_positive_rate_delta": 0.0,
+      "avg_latency_ms_delta": 0.0,
+      "avg_confidence_delta": 0.007500000000000062,
+      "paired_sample_count": 4,
+      "newly_detected_count": 2,
+      "newly_missed_count": 0,
+      "stable_detected_count": 2,
+      "stable_allowed_count": 0,
+      "newly_covered_sensitive_types": [
+        "phone"
+      ],
+      "newly_observed_residual_attack_types": [],
+      "layers_added": [],
+      "layer_names": [
+        "regex"
+      ]
+    },
+    {
+      "profile": "asdf_casia",
+      "baseline_profile": "asdf",
+      "detection_rate_delta": 0.0,
+      "false_positive_rate_delta": 0.0,
+      "avg_latency_ms_delta": 0.0,
+      "avg_confidence_delta": -0.16863472147860048,
+      "paired_sample_count": 4,
+      "newly_detected_count": 0,
+      "newly_missed_count": 0,
+      "stable_detected_count": 4,
+      "stable_allowed_count": 0,
+      "newly_covered_sensitive_types": [],
+      "newly_observed_residual_attack_types": [],
+      "layers_added": [
+        "regex_casia"
+      ],
+      "layer_names": [
+        "regex_casia"
+      ]
+    },
+    {
+      "profile": "asdf_casia_pccm",
+      "baseline_profile": "asdf_casia",
+      "detection_rate_delta": 0.0,
+      "false_positive_rate_delta": 0.0,
+      "avg_latency_ms_delta": 0.0,
+      "avg_confidence_delta": 0.024275354202067945,
+      "paired_sample_count": 4,
+      "newly_detected_count": 0,
+      "newly_missed_count": 0,
+      "stable_detected_count": 4,
+      "stable_allowed_count": 0,
+      "newly_covered_sensitive_types": [],
+      "newly_observed_residual_attack_types": [],
+      "layers_added": [
+        "context_casia",
+        "dictionary_casia"
+      ],
+      "layer_names": [
+        "context_casia",
+        "dictionary_casia",
+        "regex_casia"
+      ]
+    }
+  ],
+  "detailed_results": [
+    {
+      "sample_id": "pii_standard_1",
+      "synthetic_sample_id": "synthetic_pii_standard_1",
+      "attack_type": "standard",
+      "sample_kind": "attack",
+      "expected_behavior": "redact",
+      "success_criteria": "structured decision is redact",
+      "config_label": "full_system",
+      "http_status": 200,
+      "error_type": "",
+      "error_message": "",
+      "latency_ms": 24.45,
+      "input_sha256": "3b12385090a3ed5f85ff0d64cceaa071e4475dd9d54682e1b81b1a97ac0c2074",
+      "response_sha256": "4fba97e47bd1e21e6a461f69a5bc0100e593847a5ec5995b3c6767f7485508c0",
+      "trace_id": "98bb4229dc814583",
+      "pipeline_version": "security-ablation-v1",
+      "timestamp": "2026-09-17T09:23:12.889936+00:00",
+      "profiles": {
+        "regex_only": {
+          "profile": "regex_only",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.5700000000000001,
+          "sensitive_types": [
+            "id_card"
+          ],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.5700000000000001,
+              "match_count": 1,
+              "latency_ms": 0.118,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "original"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "3b12385090a3ed5f85ff0d64cceaa071e4475dd9d54682e1b81b1a97ac0c2074",
+            "normalized_sha256": "3b12385090a3ed5f85ff0d64cceaa071e4475dd9d54682e1b81b1a97ac0c2074",
+            "normalization_step_count": 0,
+            "redetection_performed": false,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.123,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf": {
+          "profile": "asdf",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.5700000000000001,
+          "sensitive_types": [
+            "id_card"
+          ],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.5700000000000001,
+              "match_count": 1,
+              "latency_ms": 0.014,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "3b12385090a3ed5f85ff0d64cceaa071e4475dd9d54682e1b81b1a97ac0c2074",
+            "normalized_sha256": "3b12385090a3ed5f85ff0d64cceaa071e4475dd9d54682e1b81b1a97ac0c2074",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.028,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf_casia": {
+          "profile": "asdf_casia",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.4167033898191028,
+          "sensitive_types": [
+            "id_card"
+          ],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.4167033898191028,
+              "match_count": 1,
+              "latency_ms": 0.029,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [
+                0.416703
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {
+                "exact": 1
+              }
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "3b12385090a3ed5f85ff0d64cceaa071e4475dd9d54682e1b81b1a97ac0c2074",
+            "normalized_sha256": "3b12385090a3ed5f85ff0d64cceaa071e4475dd9d54682e1b81b1a97ac0c2074",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_casia",
+          "latency_ms": 0.04,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03"
+        },
+        "asdf_casia_pccm": {
+          "profile": "asdf_casia_pccm",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.4403976242216524,
+          "sensitive_types": [
+            "id_card",
+            "phone"
+          ],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.4167033898191028,
+              "match_count": 1,
+              "latency_ms": 0.013,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [
+                0.416703
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {
+                "exact": 1
+              }
+            },
+            {
+              "layer": "dictionary_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.001,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "context_casia",
+              "status": "ok",
+              "confidence": 0.43213326394516804,
+              "match_count": 3,
+              "latency_ms": 0.019,
+              "span_count": 3,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "bank_card",
+                "id_card",
+                "phone"
+              ],
+              "casia_adjusted_scores": [
+                0.6214,
+                0.35,
+                0.325
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {
+                "exact": 1
+              }
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "3b12385090a3ed5f85ff0d64cceaa071e4475dd9d54682e1b81b1a97ac0c2074",
+            "normalized_sha256": "3b12385090a3ed5f85ff0d64cceaa071e4475dd9d54682e1b81b1a97ac0c2074",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "deterministic_lab_profile_excludes_llm",
+          "latency_ms": 0.047,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea"
+        }
+      }
+    },
+    {
+      "sample_id": "pii_standard_2",
+      "synthetic_sample_id": "synthetic_pii_standard_2",
+      "attack_type": "standard",
+      "sample_kind": "attack",
+      "expected_behavior": "redact",
+      "success_criteria": "structured decision is redact",
+      "config_label": "full_system",
+      "http_status": 200,
+      "error_type": "",
+      "error_message": "",
+      "latency_ms": 15.29,
+      "input_sha256": "ab3458ffa568964441633561ffb5163e08953944a55b2a0927b9bdc209ece5c5",
+      "response_sha256": "8d6571003e921ff15206f8dc6c354e7cc1731aeb9f92668a3888096f543717b6",
+      "trace_id": "f75d1dcc7dc0088f",
+      "pipeline_version": "security-ablation-v1",
+      "timestamp": "2026-09-17T09:23:12.906228+00:00",
+      "profiles": {
+        "regex_only": {
+          "profile": "regex_only",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.5700000000000001,
+          "sensitive_types": [
+            "id_card"
+          ],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.5700000000000001,
+              "match_count": 1,
+              "latency_ms": 0.097,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "original"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "ab3458ffa568964441633561ffb5163e08953944a55b2a0927b9bdc209ece5c5",
+            "normalized_sha256": "ab3458ffa568964441633561ffb5163e08953944a55b2a0927b9bdc209ece5c5",
+            "normalization_step_count": 0,
+            "redetection_performed": false,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.102,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf": {
+          "profile": "asdf",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.5700000000000001,
+          "sensitive_types": [
+            "id_card"
+          ],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.5700000000000001,
+              "match_count": 1,
+              "latency_ms": 0.014,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "ab3458ffa568964441633561ffb5163e08953944a55b2a0927b9bdc209ece5c5",
+            "normalized_sha256": "ab3458ffa568964441633561ffb5163e08953944a55b2a0927b9bdc209ece5c5",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.027,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf_casia": {
+          "profile": "asdf_casia",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.4167033898191028,
+          "sensitive_types": [
+            "id_card"
+          ],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.4167033898191028,
+              "match_count": 1,
+              "latency_ms": 0.028,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [
+                0.416703
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {
+                "exact": 1
+              }
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "ab3458ffa568964441633561ffb5163e08953944a55b2a0927b9bdc209ece5c5",
+            "normalized_sha256": "ab3458ffa568964441633561ffb5163e08953944a55b2a0927b9bdc209ece5c5",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_casia",
+          "latency_ms": 0.039,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03"
+        },
+        "asdf_casia_pccm": {
+          "profile": "asdf_casia_pccm",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.4403976242216524,
+          "sensitive_types": [
+            "id_card",
+            "phone"
+          ],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.4167033898191028,
+              "match_count": 1,
+              "latency_ms": 0.013,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [
+                0.416703
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {
+                "exact": 1
+              }
+            },
+            {
+              "layer": "dictionary_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.001,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "context_casia",
+              "status": "ok",
+              "confidence": 0.43213326394516804,
+              "match_count": 3,
+              "latency_ms": 0.016,
+              "span_count": 3,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "bank_card",
+                "id_card",
+                "phone"
+              ],
+              "casia_adjusted_scores": [
+                0.6214,
+                0.35,
+                0.325
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {
+                "exact": 1
+              }
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "ab3458ffa568964441633561ffb5163e08953944a55b2a0927b9bdc209ece5c5",
+            "normalized_sha256": "ab3458ffa568964441633561ffb5163e08953944a55b2a0927b9bdc209ece5c5",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "deterministic_lab_profile_excludes_llm",
+          "latency_ms": 0.046,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea"
+        }
+      }
+    },
+    {
+      "sample_id": "pii_bypass_attack_31",
+      "synthetic_sample_id": "synthetic_pii_bypass_attack_31",
+      "attack_type": "bypass_attack",
+      "sample_kind": "attack",
+      "expected_behavior": "redact",
+      "success_criteria": "structured decision is redact",
+      "config_label": "full_system",
+      "http_status": 200,
+      "error_type": "",
+      "error_message": "",
+      "latency_ms": 15.826,
+      "input_sha256": "a76b5ea28a5b835ca9c807f546d9597cf7ab688c626cf9fe422b8e64c1d6bf7f",
+      "response_sha256": "835635b5b5d93ca5765adc60daa77fe57d6947d03a82f2bf03f06c8042085ea8",
+      "trace_id": "c2daf044d55c4423",
+      "pipeline_version": "security-ablation-v1",
+      "timestamp": "2026-09-17T09:23:12.922054+00:00",
+      "profiles": {
+        "regex_only": {
+          "profile": "regex_only",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.084,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "a76b5ea28a5b835ca9c807f546d9597cf7ab688c626cf9fe422b8e64c1d6bf7f",
+            "normalized_sha256": "a76b5ea28a5b835ca9c807f546d9597cf7ab688c626cf9fe422b8e64c1d6bf7f",
+            "normalization_step_count": 0,
+            "redetection_performed": false,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.09,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf": {
+          "profile": "asdf",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.5700000000000001,
+          "sensitive_types": [
+            "id_card"
+          ],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.5700000000000001,
+              "match_count": 1,
+              "latency_ms": 0.024,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": true,
+            "attack_types": [
+              "space_separation"
+            ],
+            "confidence": 0.8,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "a76b5ea28a5b835ca9c807f546d9597cf7ab688c626cf9fe422b8e64c1d6bf7f",
+            "normalized_sha256": "a065caf667d60db50534d61df5ed9f3dee11d8c68ac80e7d65ac6e8efe36c05a",
+            "normalization_step_count": 1,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.093,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf_casia": {
+          "profile": "asdf_casia",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.502054334447393,
+          "sensitive_types": [
+            "id_card"
+          ],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.502054334447393,
+              "match_count": 1,
+              "latency_ms": 0.032,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [
+                0.502054
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {
+                "exact": 2
+              }
+            }
+          ],
+          "asdf": {
+            "is_adversarial": true,
+            "attack_types": [
+              "space_separation"
+            ],
+            "confidence": 0.8,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "a76b5ea28a5b835ca9c807f546d9597cf7ab688c626cf9fe422b8e64c1d6bf7f",
+            "normalized_sha256": "a065caf667d60db50534d61df5ed9f3dee11d8c68ac80e7d65ac6e8efe36c05a",
+            "normalization_step_count": 1,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_casia",
+          "latency_ms": 0.047,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03"
+        },
+        "asdf_casia_pccm": {
+          "profile": "asdf_casia_pccm",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.5275025765682125,
+          "sensitive_types": [
+            "id_card",
+            "phone"
+          ],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.502054334447393,
+              "match_count": 1,
+              "latency_ms": 0.013,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "id_card"
+              ],
+              "casia_adjusted_scores": [
+                0.502054
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {
+                "exact": 2
+              }
+            },
+            {
+              "layer": "dictionary_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.001,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "context_casia",
+              "status": "ok",
+              "confidence": 0.503919074692996,
+              "match_count": 3,
+              "latency_ms": 0.016,
+              "span_count": 3,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "bank_card",
+                "id_card",
+                "phone"
+              ],
+              "casia_adjusted_scores": [
+                0.836757,
+                0.35,
+                0.325
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {
+                "exact": 2
+              }
+            }
+          ],
+          "asdf": {
+            "is_adversarial": true,
+            "attack_types": [
+              "space_separation"
+            ],
+            "confidence": 0.8,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "a76b5ea28a5b835ca9c807f546d9597cf7ab688c626cf9fe422b8e64c1d6bf7f",
+            "normalized_sha256": "a065caf667d60db50534d61df5ed9f3dee11d8c68ac80e7d65ac6e8efe36c05a",
+            "normalization_step_count": 1,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "deterministic_lab_profile_excludes_llm",
+          "latency_ms": 0.045,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea"
+        }
+      }
+    },
+    {
+      "sample_id": "pii_bypass_attack_32",
+      "synthetic_sample_id": "synthetic_pii_bypass_attack_32",
+      "attack_type": "bypass_attack",
+      "sample_kind": "attack",
+      "expected_behavior": "redact",
+      "success_criteria": "structured decision is redact",
+      "config_label": "full_system",
+      "http_status": 200,
+      "error_type": "",
+      "error_message": "",
+      "latency_ms": 6.004,
+      "input_sha256": "d7cc02215517135bffac696cb11b974fc9dc0ada82cfe6c643756b28e5113206",
+      "response_sha256": "1801c242e00cd326db651107858e5808a39d8dd7ec5b15373601a650168ee811",
+      "trace_id": "2ed2f0b2dc88bda2",
+      "pipeline_version": "security-ablation-v1",
+      "timestamp": "2026-09-17T09:23:12.928058+00:00",
+      "profiles": {
+        "regex_only": {
+          "profile": "regex_only",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.039,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "d7cc02215517135bffac696cb11b974fc9dc0ada82cfe6c643756b28e5113206",
+            "normalized_sha256": "d7cc02215517135bffac696cb11b974fc9dc0ada82cfe6c643756b28e5113206",
+            "normalization_step_count": 0,
+            "redetection_performed": false,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.043,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf": {
+          "profile": "asdf",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.6000000000000001,
+          "sensitive_types": [
+            "phone"
+          ],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.6000000000000001,
+              "match_count": 1,
+              "latency_ms": 0.032,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "phone"
+              ],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": true,
+            "attack_types": [
+              "space_separation"
+            ],
+            "confidence": 0.8,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "d7cc02215517135bffac696cb11b974fc9dc0ada82cfe6c643756b28e5113206",
+            "normalized_sha256": "747d28d9cf46bd07f155cfbe5e0235e3694317c458b499eda458e5559aeb9884",
+            "normalization_step_count": 1,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.762,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf_casia": {
+          "profile": "asdf_casia",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.30000000000000004,
+          "sensitive_types": [
+            "phone"
+          ],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.30000000000000004,
+              "match_count": 1,
+              "latency_ms": 0.026,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "phone"
+              ],
+              "casia_adjusted_scores": [
+                0.3
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": true,
+            "attack_types": [
+              "space_separation"
+            ],
+            "confidence": 0.8,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "d7cc02215517135bffac696cb11b974fc9dc0ada82cfe6c643756b28e5113206",
+            "normalized_sha256": "747d28d9cf46bd07f155cfbe5e0235e3694317c458b499eda458e5559aeb9884",
+            "normalization_step_count": 1,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_casia",
+          "latency_ms": 0.046,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03"
+        },
+        "asdf_casia_pccm": {
+          "profile": "asdf_casia_pccm",
+          "decision": "redact",
+          "reason": "sensitive_span_detected",
+          "confidence": 0.32426470588235295,
+          "sensitive_types": [
+            "phone"
+          ],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.30000000000000004,
+              "match_count": 1,
+              "latency_ms": 0.01,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "phone"
+              ],
+              "casia_adjusted_scores": [
+                0.3
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "dictionary_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.001,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "context_casia",
+              "status": "ok",
+              "confidence": 0.35,
+              "match_count": 1,
+              "latency_ms": 0.012,
+              "span_count": 1,
+              "span_coordinate_spaces": [
+                "normalized"
+              ],
+              "span_sensitive_types": [
+                "phone"
+              ],
+              "casia_adjusted_scores": [
+                0.35
+              ],
+              "casia_configuration_versions": [
+                "casia-context-v1"
+              ],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": true,
+            "attack_types": [
+              "space_separation"
+            ],
+            "confidence": 0.8,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "d7cc02215517135bffac696cb11b974fc9dc0ada82cfe6c643756b28e5113206",
+            "normalized_sha256": "747d28d9cf46bd07f155cfbe5e0235e3694317c458b499eda458e5559aeb9884",
+            "normalization_step_count": 1,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "deterministic_lab_profile_excludes_llm",
+          "latency_ms": 0.043,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea"
+        }
+      }
+    },
+    {
+      "sample_id": "pii_confusing_61",
+      "synthetic_sample_id": "synthetic_pii_confusing_61",
+      "attack_type": "confusing",
+      "sample_kind": "benign",
+      "expected_behavior": "allow",
+      "success_criteria": "structured decision is allow",
+      "config_label": "full_system",
+      "http_status": 200,
+      "error_type": "",
+      "error_message": "",
+      "latency_ms": 24.316000000000003,
+      "input_sha256": "bf4c43fa691cd430471cc1c0d99da8a8e5a1d30c1af4ff119ebcec77a5e30c25",
+      "response_sha256": "e751a8ee235e97bdf078b7025d2acc6840d8611959d7faa0dad5fe7f16e161f4",
+      "trace_id": "7081b24ff8a42358",
+      "pipeline_version": "security-ablation-v1",
+      "timestamp": "2026-09-17T09:23:12.953376+00:00",
+      "profiles": {
+        "regex_only": {
+          "profile": "regex_only",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.023,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "bf4c43fa691cd430471cc1c0d99da8a8e5a1d30c1af4ff119ebcec77a5e30c25",
+            "normalized_sha256": "bf4c43fa691cd430471cc1c0d99da8a8e5a1d30c1af4ff119ebcec77a5e30c25",
+            "normalization_step_count": 0,
+            "redetection_performed": false,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.027,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf": {
+          "profile": "asdf",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.006,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "bf4c43fa691cd430471cc1c0d99da8a8e5a1d30c1af4ff119ebcec77a5e30c25",
+            "normalized_sha256": "bf4c43fa691cd430471cc1c0d99da8a8e5a1d30c1af4ff119ebcec77a5e30c25",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.038,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf_casia": {
+          "profile": "asdf_casia",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.02,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "bf4c43fa691cd430471cc1c0d99da8a8e5a1d30c1af4ff119ebcec77a5e30c25",
+            "normalized_sha256": "bf4c43fa691cd430471cc1c0d99da8a8e5a1d30c1af4ff119ebcec77a5e30c25",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_casia",
+          "latency_ms": 0.03,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03"
+        },
+        "asdf_casia_pccm": {
+          "profile": "asdf_casia_pccm",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.008,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "dictionary_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.001,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "context_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.011,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "bf4c43fa691cd430471cc1c0d99da8a8e5a1d30c1af4ff119ebcec77a5e30c25",
+            "normalized_sha256": "bf4c43fa691cd430471cc1c0d99da8a8e5a1d30c1af4ff119ebcec77a5e30c25",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "deterministic_lab_profile_excludes_llm",
+          "latency_ms": 0.077,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea"
+        }
+      }
+    },
+    {
+      "sample_id": "pii_confusing_62",
+      "synthetic_sample_id": "synthetic_pii_confusing_62",
+      "attack_type": "confusing",
+      "sample_kind": "benign",
+      "expected_behavior": "allow",
+      "success_criteria": "structured decision is allow",
+      "config_label": "full_system",
+      "http_status": 200,
+      "error_type": "",
+      "error_message": "",
+      "latency_ms": 15.449,
+      "input_sha256": "faa92d088d3363b43601f7aedc8e64b0d7de6682caec2512a6f35a8f2b01568b",
+      "response_sha256": "26f8f810ff8015a523ddda834397df1689ffee6032b53b9f39364d115865997b",
+      "trace_id": "e4ee2e9df6892497",
+      "pipeline_version": "security-ablation-v1",
+      "timestamp": "2026-09-17T09:23:12.969830+00:00",
+      "profiles": {
+        "regex_only": {
+          "profile": "regex_only",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.023,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "faa92d088d3363b43601f7aedc8e64b0d7de6682caec2512a6f35a8f2b01568b",
+            "normalized_sha256": "faa92d088d3363b43601f7aedc8e64b0d7de6682caec2512a6f35a8f2b01568b",
+            "normalization_step_count": 0,
+            "redetection_performed": false,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.028,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf": {
+          "profile": "asdf",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.003,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "faa92d088d3363b43601f7aedc8e64b0d7de6682caec2512a6f35a8f2b01568b",
+            "normalized_sha256": "faa92d088d3363b43601f7aedc8e64b0d7de6682caec2512a6f35a8f2b01568b",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.035,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf_casia": {
+          "profile": "asdf_casia",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.013,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "faa92d088d3363b43601f7aedc8e64b0d7de6682caec2512a6f35a8f2b01568b",
+            "normalized_sha256": "faa92d088d3363b43601f7aedc8e64b0d7de6682caec2512a6f35a8f2b01568b",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_casia",
+          "latency_ms": 0.028,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03"
+        },
+        "asdf_casia_pccm": {
+          "profile": "asdf_casia_pccm",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.002,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "dictionary_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.001,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "context_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.011,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "faa92d088d3363b43601f7aedc8e64b0d7de6682caec2512a6f35a8f2b01568b",
+            "normalized_sha256": "faa92d088d3363b43601f7aedc8e64b0d7de6682caec2512a6f35a8f2b01568b",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "deterministic_lab_profile_excludes_llm",
+          "latency_ms": 0.025,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea"
+        }
+      }
+    },
+    {
+      "sample_id": "pii_normal_81",
+      "synthetic_sample_id": "synthetic_pii_normal_81",
+      "attack_type": "normal",
+      "sample_kind": "benign",
+      "expected_behavior": "allow",
+      "success_criteria": "structured decision is allow",
+      "config_label": "full_system",
+      "http_status": 200,
+      "error_type": "",
+      "error_message": "",
+      "latency_ms": 5.956,
+      "input_sha256": "ff82c44b3fb161ab880eeb25653189bb1a5c9a9dc4830eb136324ed85d81706a",
+      "response_sha256": "b9112bab079e84753b156ccb8f158a555687d547bea2c0112614c6faa27ee291",
+      "trace_id": "d0ecea2625d46a24",
+      "pipeline_version": "security-ablation-v1",
+      "timestamp": "2026-09-17T09:23:12.975786+00:00",
+      "profiles": {
+        "regex_only": {
+          "profile": "regex_only",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.027,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "ff82c44b3fb161ab880eeb25653189bb1a5c9a9dc4830eb136324ed85d81706a",
+            "normalized_sha256": "ff82c44b3fb161ab880eeb25653189bb1a5c9a9dc4830eb136324ed85d81706a",
+            "normalization_step_count": 0,
+            "redetection_performed": false,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.032,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf": {
+          "profile": "asdf",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.009,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "ff82c44b3fb161ab880eeb25653189bb1a5c9a9dc4830eb136324ed85d81706a",
+            "normalized_sha256": "ff82c44b3fb161ab880eeb25653189bb1a5c9a9dc4830eb136324ed85d81706a",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.04,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf_casia": {
+          "profile": "asdf_casia",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.02,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "ff82c44b3fb161ab880eeb25653189bb1a5c9a9dc4830eb136324ed85d81706a",
+            "normalized_sha256": "ff82c44b3fb161ab880eeb25653189bb1a5c9a9dc4830eb136324ed85d81706a",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_casia",
+          "latency_ms": 0.046,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03"
+        },
+        "asdf_casia_pccm": {
+          "profile": "asdf_casia_pccm",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.008,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "dictionary_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.001,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "context_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.008,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "ff82c44b3fb161ab880eeb25653189bb1a5c9a9dc4830eb136324ed85d81706a",
+            "normalized_sha256": "ff82c44b3fb161ab880eeb25653189bb1a5c9a9dc4830eb136324ed85d81706a",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "deterministic_lab_profile_excludes_llm",
+          "latency_ms": 0.03,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea"
+        }
+      }
+    },
+    {
+      "sample_id": "pii_normal_82",
+      "synthetic_sample_id": "synthetic_pii_normal_82",
+      "attack_type": "normal",
+      "sample_kind": "benign",
+      "expected_behavior": "allow",
+      "success_criteria": "structured decision is allow",
+      "config_label": "full_system",
+      "http_status": 200,
+      "error_type": "",
+      "error_message": "",
+      "latency_ms": 23.331999999999997,
+      "input_sha256": "aa31b2928c67949c41348fae0aedd86b0c14727266e89757233e2a39d1f3acf7",
+      "response_sha256": "2d1d0942435f40a3d61972fa66dc4ed8d5c9691dc5685f456da01466688b4844",
+      "trace_id": "0c997ef1549430f1",
+      "pipeline_version": "security-ablation-v1",
+      "timestamp": "2026-09-17T09:23:13.000120+00:00",
+      "profiles": {
+        "regex_only": {
+          "profile": "regex_only",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.044,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "aa31b2928c67949c41348fae0aedd86b0c14727266e89757233e2a39d1f3acf7",
+            "normalized_sha256": "aa31b2928c67949c41348fae0aedd86b0c14727266e89757233e2a39d1f3acf7",
+            "normalization_step_count": 0,
+            "redetection_performed": false,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.048,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf": {
+          "profile": "asdf",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.011,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "aa31b2928c67949c41348fae0aedd86b0c14727266e89757233e2a39d1f3acf7",
+            "normalized_sha256": "aa31b2928c67949c41348fae0aedd86b0c14727266e89757233e2a39d1f3acf7",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_regex",
+          "latency_ms": 0.088,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": ""
+        },
+        "asdf_casia": {
+          "profile": "asdf_casia",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.019,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "aa31b2928c67949c41348fae0aedd86b0c14727266e89757233e2a39d1f3acf7",
+            "normalized_sha256": "aa31b2928c67949c41348fae0aedd86b0c14727266e89757233e2a39d1f3acf7",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "profile_complete_after_casia",
+          "latency_ms": 0.029,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "d703bf66257e3707ac4cfd5655f0003387bb07bef199830f97fd8c5f11786a03"
+        },
+        "asdf_casia_pccm": {
+          "profile": "asdf_casia_pccm",
+          "decision": "allow",
+          "reason": "no_sensitive_span",
+          "confidence": 0.0,
+          "sensitive_types": [],
+          "layers": [
+            {
+              "layer": "regex_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.009,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "dictionary_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.001,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            },
+            {
+              "layer": "context_casia",
+              "status": "ok",
+              "confidence": 0.0,
+              "match_count": 0,
+              "latency_ms": 0.007,
+              "span_count": 0,
+              "span_coordinate_spaces": [],
+              "span_sensitive_types": [],
+              "casia_adjusted_scores": [],
+              "casia_configuration_versions": [],
+              "casia_match_method_counts": {}
+            }
+          ],
+          "asdf": {
+            "is_adversarial": false,
+            "attack_types": [],
+            "confidence": 0.0,
+            "pipeline_version": "asdf-normalization-v2",
+            "original_sha256": "aa31b2928c67949c41348fae0aedd86b0c14727266e89757233e2a39d1f3acf7",
+            "normalized_sha256": "aa31b2928c67949c41348fae0aedd86b0c14727266e89757233e2a39d1f3acf7",
+            "normalization_step_count": 0,
+            "redetection_performed": true,
+            "residual_attack_types": []
+          },
+          "early_stop_reason": "deterministic_lab_profile_excludes_llm",
+          "latency_ms": 0.042,
+          "pipeline_version": "security-ablation-v1",
+          "config_snapshot_sha256": "8b3796de79d27201d29aff12e75fd907c9129cef9f6b4aaf35ea6450088d43ea"
+        }
+      }
+    }
+  ],
+  "ablation_metrics_status": "complete"
+}

@@ -14,8 +14,22 @@ import (
 // SchemaVersion 是校准产物 JSON 的 schema 版本。
 const SchemaVersion = "pccm-calibration-artifact-v1"
 
+// DecisionRuleConfidenceThreshold 是本校准在开发集上使用的判定规则：
+// 融合置信度 >= 决策阈值即判为敏感。
+//
+// ⚠️ 口径声明（必须随产物一起理解）：
+// 生产检测链路的 decision 由「任一层匹配到 span」决定，而不是置信度阈值 ——
+// multi_layer_detector.mergeResults 只按位置去重，不做任何置信度过滤，因此
+// LayerWeights / EnhancementPerExtraLayer 等 PCCM 参数**不参与生产判定**，
+// 只影响响应中报告的 Confidence 数值。
+//
+// 结论：本产物的 metrics_before / metrics_after **不代表生产检测率或召回率**，
+// 它们只描述「若改用置信度阈值判定」这一假设规则下的表现。不得把这两个口径的
+// 数字并列比较，也不得据此声称 PCCM 校准提升了检测性能。
+const DecisionRuleConfidenceThreshold = "confidence_threshold"
+
 // Fingerprint 是校准产物的可追溯指纹：记录数据集哈希、样本数、生成时间、
-// 搜索空间与目标函数，使权重可复现、可审计。
+// 搜索空间、目标函数与判定规则，使权重可复现、可审计。
 type Fingerprint struct {
 	CalibrationSource string `json:"calibration_source"`
 	ArtifactSchema    string `json:"artifact_schema"`
@@ -26,8 +40,10 @@ type Fingerprint struct {
 	GeneratedAt       string `json:"generated_at"`
 	Objective         string `json:"objective"`
 	SearchSpace       string `json:"search_space"`
-	Evaluations       int    `json:"evaluations"`
-	Tool              string `json:"tool"`
+	// DecisionRule 记录指标所用的判定规则，避免与生产判定口径混淆。
+	DecisionRule string `json:"decision_rule"`
+	Evaluations  int    `json:"evaluations"`
+	Tool         string `json:"tool"`
 }
 
 // Artifact 是离线校准的完整产物：校准后的 PCCM-S 配置 + 指纹 + 校准前后指标。
@@ -117,4 +133,13 @@ func LoadPCCMConfigOrDefault(path string) security.PCCMSecurityConfig {
 		return security.DefaultPCCMSecurityConfig()
 	}
 	return config
+}
+
+// init 把本包的加载实现注册给 security 包。
+//
+// security 不能反向 import calibration（会形成循环依赖），因此由本包主动注册。
+// 注册本身不改变任何默认行为：只有在 security 侧显式读取
+// PCCM_CALIBRATION_ARTIFACT 时才会调用该实现。
+func init() {
+	security.RegisterPCCMCalibrationProvider(LoadPCCMConfigFromFile)
 }

@@ -1,0 +1,109 @@
+{
+  "timestamp_utc": "2026-09-20T03:49:34.090328+00:00",
+  "scope": {
+    "user_id": "eval_user_001",
+    "session_id": "eval_retrieval_test"
+  },
+  "auth": {
+    "http_status": 200,
+    "error_type": null,
+    "error_message": null
+  },
+  "passed": true,
+  "preflight": {
+    "http_status": 200,
+    "data": {
+      "complete": false,
+      "result": {
+        "session_id": "eval_retrieval_test",
+        "user_id": "eval_user_001",
+        "dry_run": true,
+        "verification_id": "del-ebde4769db0879cd",
+        "trace_id": "",
+        "verified_at": "2026-09-20T03:49:34.166294178Z",
+        "scope_sha256": "c9f6c980f599e4ec0dc94697a3f7418e94702260ec11356a8ee56a778c7f4bd5",
+        "evidence_sha256": "607a9ca6e4b4d22628dbec0dc2119434f0c46822c386be86a0f762b0140c656a",
+        "complete": false,
+        "stores": [
+          {
+            "store": "qdrant",
+            "status": "dry_run",
+            "before": 794,
+            "deleted": 0,
+            "after": 794
+          },
+          {
+            "store": "timescaledb",
+            "status": "dry_run",
+            "before": 809,
+            "deleted": 0,
+            "after": 809
+          },
+          {
+            "store": "neo4j",
+            "status": "dry_run",
+            "before": 5474,
+            "deleted": 0,
+            "after": 5474
+          },
+          {
+            "store": "session_file_cache",
+            "status": "dry_run",
+            "before": 3,
+            "deleted": 0,
+            "after": 3
+          }
+        ]
+      }
+    },
+    "error": null
+  },
+  "deletion": {
+    "http_status": 200,
+    "data": {
+      "complete": true,
+      "result": {
+        "session_id": "eval_retrieval_test",
+        "user_id": "eval_user_001",
+        "dry_run": false,
+        "verification_id": "del-e9ff1e638b98e45a",
+        "trace_id": "",
+        "verified_at": "2026-09-20T03:49:34.263015725Z",
+        "scope_sha256": "c9f6c980f599e4ec0dc94697a3f7418e94702260ec11356a8ee56a778c7f4bd5",
+        "evidence_sha256": "875b608c464b24f582549c432b7053f4d8170b807a5218903773c7b779c396dd",
+        "complete": true,
+        "stores": [
+          {
+            "store": "qdrant",
+            "status": "deleted",
+            "before": 794,
+            "deleted": 794,
+            "after": 0
+          },
+          {
+            "store": "timescaledb",
+            "status": "deleted",
+            "before": 809,
+            "deleted": 809,
+            "after": 0
+          },
+          {
+            "store": "neo4j",
+            "status": "deleted",
+            "before": 5474,
+            "deleted": 5474,
+            "after": 0
+          },
+          {
+            "store": "session_file_cache",
+            "status": "deleted",
+            "before": 3,
+            "deleted": 3,
+            "after": 0
+          }
+        ]
+      }
+    },
+    "error": null
+  }
+}

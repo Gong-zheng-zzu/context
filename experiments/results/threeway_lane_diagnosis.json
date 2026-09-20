@@ -1,0 +1,572 @@
+{
+  "user_id": "eval_user_001",
+  "session_id": "eval_retrieval_test",
+  "documents": [
+    {
+      "doc_id": "elder_020_2026-06-06T03:43:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 28,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_025_2026-06-06T02:40:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 27,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_033_2026-06-06T03:33:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 23,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_047_2026-06-06T03:59:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 33,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_080_2026-06-06T02:10:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 23,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_082_2026-06-06T03:54:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 4,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 4,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 16,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_084_2026-06-06T03:36:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 31,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_014_2026-06-28T03:06:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 4,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 4,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 16,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_079_2026-07-02T07:55:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 34,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_013_2026-06-20T18:09:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 30,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_081_2026-07-02T21:49:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 5,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 5,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 32,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_008_2026-07-01T10:25:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 25,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_078_2026-06-30T10:34:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 27,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_047_2026-06-27T06:48:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 28,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_010_2026-07-02T07:51:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 5,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 5,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 14,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_038_2026-06-14T14:31:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 26,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_034_2026-06-25T16:47:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 16,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_061_2026-06-07T12:18:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 30,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_100_2026-06-23T21:30:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 13,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_091_2026-06-18T11:18:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 28,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_027_2026-07-04T17:58:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 25,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_002_2026-07-02T06:45:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 39,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_093_2026-06-17T07:12:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 4,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 5,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 13,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_005_2026-06-14T02:56:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 16,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_041_2026-06-25T08:36:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 3,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 16,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_053_2026-06-29T07:47:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 35,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_079_2026-06-13T21:16:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 35,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_023_2026-06-16T17:04:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 6,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 29,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_028_2026-06-13T18:44:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 5,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 5,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 28,
+        "status": "verified"
+      }
+    },
+    {
+      "doc_id": "elder_013_2026-06-20T06:57:43.194500",
+      "vector": {
+        "verified": true,
+        "count": 5,
+        "status": "verified"
+      },
+      "timeline": {
+        "verified": true,
+        "count": 5,
+        "status": "verified"
+      },
+      "graph": {
+        "verified": true,
+        "count": 18,
+        "status": "verified"
+      }
+    }
+  ],
+  "summary": {
+    "vector": {
+      "present": 30,
+      "verified": 30,
+      "errors": 0,
+      "statuses": {
+        "verified": 30
+      }
+    },
+    "timeline": {
+      "present": 30,
+      "verified": 30,
+      "errors": 0,
+      "statuses": {
+        "verified": 30
+      }
+    },
+    "graph": {
+      "present": 30,
+      "verified": 30,
+      "errors": 0,
+      "statuses": {
+        "verified": 30
+      }
+    }
+  }
+}

@@ -5269,6 +5269,13 @@ func (s *ContextService) RetrieveContext(ctx context.Context, req models.Retriev
 	}
 
 	// 构建响应
+	//
+	// 零结果时把 contexts 归一化为非 nil 空切片：nil slice 经 encoding/json 会
+	// 序列化为 `null`，而检索评测契约要求 contexts 必须是数组（list）。此处单点
+	// 归一化，避免在每个 handler 里重复打补丁。
+	if contexts == nil {
+		contexts = []models.ContextItem{}
+	}
 	response := models.ContextResponse{
 		SessionState:      sessionState,
 		ShortTermMemory:   formatMemories(recentHistory, "最近对话"),

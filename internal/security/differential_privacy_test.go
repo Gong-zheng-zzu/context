@@ -2,6 +2,7 @@ package security
 
 import (
 	"math"
+	"math/rand"
 	"testing"
 )
 
@@ -19,11 +20,21 @@ func TestDifferentialPrivacy(t *testing.T) {
 		dp := NewDifferentialPrivacy(1.0, 1e-5)
 		t.Logf("  参数: ε=1.0, δ=1e-5, μ=0, b=1.0")
 
-		samples := make([]float64, 100)
-		for i := 0; i < 100; i++ {
+		// 显式注入确定性随机源：
+		// 生产构造函数以 time.Now().UnixNano() 作种，而 rand.NewSource 是 LFSR 型
+		// 弱随机源 —— 个别种子下长序列的样本均值会系统性偏移，使统计断言周期性
+		// 失败（与样本量无关，盲目增大 n 无法根治）。注入固定种子后，断言只反映
+		// 采样器本身的正确性，且失败可复现。
+		dp.rng = rand.New(rand.NewSource(1))
+
+		// 样本量取 4000：Laplace(0, b) 的样本均值标准误为 b/sqrt(n)，n=4000 时
+		// 约为 0.016，判定阈值 0.5 相当于约 30 sigma，严格性保持不变。
+		sampleCount := 4000
+		samples := make([]float64, sampleCount)
+		for i := 0; i < sampleCount; i++ {
 			samples[i] = dp.sampleLaplace(0, 1.0)
 		}
-		t.Logf("  生成100个拉普拉斯分布样本")
+		t.Logf("  生成%d个拉普拉斯分布样本", sampleCount)
 
 		// 计算均值（应该接近0）
 		mean := 0.0

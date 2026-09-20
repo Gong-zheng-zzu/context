@@ -516,3 +516,39 @@ feature_flags:
   enable_adaptive_timeout: true  # 自适应超时
   enable_cost_optimization: true  # 成本优化（优先使用便宜模型）
   enable_quality_monitoring: true  # 输出质量监控
+
+# ============================================
+# 八、云端 Cross-Encoder 精排 (Cross-Encoder Rerank)
+# ============================================
+# 使用说明
+# ---------
+# 位置：在生产链路中位于 RRF 融合之后、内容合成之前，仅对 top-N 候选重排
+#       （internal/services/cross_encoder_reranker.go，由 llm_driven_context_service.go
+#        的 applyCrossEncoderRerank 调用）。
+# 怎么开：运行时实际读取的是【环境变量】，本段仅作为可操作样例与运维说明。
+#       在 config/.env 或进程环境中设置：
+#         RERANK_ENABLED=true
+#         RERANK_API_URL=https://api.cohere.com/v2/rerank   # 或任何 OpenAI 兼容 /rerank 端点
+#         RERANK_API_KEY=...                                # 切勿写入代码或日志
+#         RERANK_MODEL=rerank-v3.5        （可选，默认 rerank-v3.5）
+#         RERANK_TOP_N=20                 （可选，默认 20）
+#         RERANK_TIMEOUT_SECONDS=30       （可选，默认 30）
+#         RERANK_MAX_RETRIES=2            （可选，默认 2）
+# 支持形态：Cohere Rerank（请求体 {model,query,documents,top_n}，响应
+#       {results:[{index,relevance_score}]}）与主流 OpenAI 兼容精排端点（同结构）。
+# 如何确认生效：检索结果的 FusionMetadata 中可见审计字段——
+#       成功：rerank_applied=true、rerank_model、rerank_top_n、rerank_latency_ms
+#       降级：rerank_applied=false、rerank_degraded（原因码）、rerank_attempts、rerank_latency_ms
+# 不配时的行为（默认关闭）：RERANK_ENABLED 未设或非 true 时完全不启用，不发任何请求、
+#       不写入任何 rerank_* 审计字段，检索保持 RRF 排序，与改动前完全一致。
+# 降级原因码（rerank_degraded）：missing_api_url / invalid_api_url / missing_api_key /
+#       http_error / invalid_response / timeout / api_unavailable。任一下降级均保留原排序，
+#       绝不阻断对话主流程；API Key 绝不进入日志或审计元数据。
+rerank:
+  enabled: false          # 默认关闭；置 true 并在环境中提供 base_url/api_key 后启用
+  base_url: ""            # 精排服务地址（Cohere /v2/rerank 或 OpenAI 兼容端点），对应 RERANK_API_URL
+  model: "rerank-v3.5"    # 对应 RERANK_MODEL
+  api_key: "${RERANK_API_KEY}"  # 占位：由环境变量注入，对应 RERANK_API_KEY
+  top_n: 20               # 参与精排的候选数，对应 RERANK_TOP_N
+  timeout_seconds: 30     # 单次请求超时（秒），对应 RERANK_TIMEOUT_SECONDS
+  max_retries: 2          # 失败重试次数，对应 RERANK_MAX_RETRIES

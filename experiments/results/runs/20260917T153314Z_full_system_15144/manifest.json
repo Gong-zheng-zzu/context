@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260917T153314Z_full_system_15144",
+    "started_at":  "2026-09-17T15:33:14.6818069Z",
+    "ended_at":  "2026-09-17T15:58:15.2483877Z",
+    "outcome":  "succeeded",
+    "error":  null,
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260917_235814.json",
+    "command":  "python experiments/scripts/seed_vector_data.py --base-url http://127.0.0.1:8088 --session-id eval_retrieval_test --corpus-file experiments/datasets/retrieval_corpus/retrieval_corpus_30.json; python experiments/scripts/retrieval_eval.py --queries 30 --configs full_system --retrieval-mode rrf --base-url http://127.0.0.1:8088 --corpus-file experiments/datasets/retrieval_corpus/retrieval_corpus_30.json",
+    "command_sha256":  "4efe0e7f8dee3ba9eadecbde7e476677c6b52c639afc968b59d261c7134e4b6a",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "702982ae67bbeb89fee9400efdb92bf82b009ec3d1dc2a1e3cc4a09bf4baa0c5",
+                          "overlay_env_sha256":  "40f74971b0c828bcc94ef99f3a8da52f59ed5175b635af8f924409e86ab34a60",
+                          "effective_env_sha256":  "702982ae67bbeb89fee9400efdb92bf82b009ec3d1dc2a1e3cc4a09bf4baa0c5"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "6a05d29d820e5970644460bc59272b573f3f3fe7c73b528051f69dfabcd8426d"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260917T153314Z_full_system_15144\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260917T153314Z_full_system_15144\\evaluation.log"
+                  }
+}

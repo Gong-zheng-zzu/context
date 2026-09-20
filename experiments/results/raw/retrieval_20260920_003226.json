@@ -1,0 +1,1571 @@
+{
+    "execution_mode":  "live_api",
+    "evaluation_mode":  "vector_contexts_only",
+    "timestamp":  "20260920_003226",
+    "total_queries":  30,
+    "configs":  [
+                    "baseline_rag_with_filter"
+                ],
+    "config_hashes":  {
+                          "baseline_rag_with_filter":  "b8fa50b08bcfa4e7e965b41b67e36bfbadb1160ced7456348aa203d584d17ce0"
+                      },
+    "runtime_config":  {
+                           "config_name":  "baseline_rag_with_filter",
+                           "config_file":  "D:\\context\\context-keeper-main\\experiments\\runtime_env\\baseline_rag_with_filter.env",
+                           "config_hash":  "975e3851dc1eccc7eeeafbebe3e533eba3c16bd08534cd8c3bf8e6b8c2fc7852",
+                           "service_start_time":  "2026-09-19T16:32:20.1611788Z"
+                       },
+    "dataset":  {
+                    "ground_truth_file":  "D:\\context\\context-keeper-main\\experiments\\datasets\\retrieval_groundtruth\\query_answer_pairs.json",
+                    "ground_truth_sha256":  "b764713a00300a6bb81dd246077707f30cca3b467787c6f283974080c2a19ee6",
+                    "corpus_file":  "experiments\\datasets\\retrieval_corpus\\retrieval_corpus_30.json",
+                    "corpus_sha256":  "751572402e7923a37dfd9d8f8008ca51640bd3916368eb248bae9a5db6efa6ef"
+                },
+    "detailed_results":  [
+                             {
+                                 "query_id":  "temporal_001",
+                                 "query_text":  "王明最近的健康记录和变化趋势是什么？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  219.97,
+                                 "retrieved_docs":  [
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_047_2026-06-27T06:48:43.194500",
+                                                        "elder_047_2026-06-06T03:59:43.194500",
+                                                        "elder_028_2026-06-13T18:44:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  1.0,
+                                 "precision_at_5":  0.25,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:24.732292",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  41,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  9
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_002",
+                                 "query_text":  "李国强最近的健康记录和变化趋势是什么？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  123.219,
+                                 "retrieved_docs":  [
+                                                        "elder_025_2026-06-06T02:40:43.194500",
+                                                        "elder_028_2026-06-13T18:44:43.194500",
+                                                        "elder_093_2026-06-17T07:12:43.194500",
+                                                        "elder_082_2026-06-06T03:54:43.194500",
+                                                        "elder_091_2026-06-18T11:18:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  1.0,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:24.856176",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  42,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  8
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_003",
+                                 "query_text":  "赵志强最近的健康记录和变化趋势是什么？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  65.446,
+                                 "retrieved_docs":  [
+                                                        "elder_033_2026-06-06T03:33:43.194500",
+                                                        "elder_013_2026-06-20T18:09:43.194500",
+                                                        "elder_013_2026-06-20T06:57:43.194500",
+                                                        "elder_079_2026-06-13T21:16:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  1.0,
+                                 "precision_at_5":  0.25,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:24.922141",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  41,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  9
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_004",
+                                 "query_text":  "杨桂英最近的健康记录和变化趋势是什么？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  35.051,
+                                 "retrieved_docs":  [
+                                                        "elder_079_2026-07-02T07:55:43.194500",
+                                                        "elder_084_2026-06-06T03:36:43.194500",
+                                                        "elder_014_2026-06-28T03:06:43.194500",
+                                                        "elder_079_2026-06-13T21:16:43.194500",
+                                                        "elder_091_2026-06-18T11:18:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.5,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:24.957192",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  42,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  8
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_005",
+                                 "query_text":  "周玲最近的健康记录和变化趋势是什么？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  50.382999999999996,
+                                 "retrieved_docs":  [
+                                                        "live-1789303142782",
+                                                        "live-1789303139522",
+                                                        "live-1789303136920",
+                                                        "live-1789303138293",
+                                                        "live-1789303139732"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.007575",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_006",
+                                 "query_text":  "李娟最近的健康记录和变化趋势是什么？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  63.192,
+                                 "retrieved_docs":  [
+                                                        "elder_028_2026-06-13T18:44:43.194500",
+                                                        "elder_093_2026-06-17T07:12:43.194500",
+                                                        "elder_082_2026-06-06T03:54:43.194500",
+                                                        "elder_025_2026-06-06T02:40:43.194500",
+                                                        "elder_091_2026-06-18T11:18:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.3333333333333333,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:25.070767",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  43,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  7
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_007",
+                                 "query_text":  "王桂英最近的健康记录和变化趋势是什么？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  35.043,
+                                 "retrieved_docs":  [
+                                                        "elder_047_2026-06-06T03:59:43.194500",
+                                                        "elder_047_2026-06-27T06:48:43.194500",
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_079_2026-07-02T07:55:43.194500",
+                                                        "elder_084_2026-06-06T03:36:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  1.0,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:25.105810",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  47,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  3
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_008",
+                                 "query_text":  "患者最近7天的认知障碍发作频率？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  55.834,
+                                 "retrieved_docs":  [
+                                                        "live-1789303142782",
+                                                        "live-1789303115127",
+                                                        "live-1789303139342",
+                                                        "live-1789303139522",
+                                                        "live-1789303139732"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.161644",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  49,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  1
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_009",
+                                 "query_text":  "夜间谵妄事件的时间分布规律？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  90.413,
+                                 "retrieved_docs":  [
+                                                        "elder_078_2026-06-30T10:34:43.194500",
+                                                        "elder_027_2026-07-04T17:58:43.194500",
+                                                        "elder_038_2026-06-14T14:31:43.194500",
+                                                        "elder_028_2026-06-13T18:44:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.252583",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_010",
+                                 "query_text":  "阿尔茨海默病患者用药后的效果变化？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  60.592,
+                                 "retrieved_docs":  [
+                                                        "elder_020_2026-06-06T03:43:43.194500",
+                                                        "elder_014_2026-06-28T03:06:43.194500",
+                                                        "elder_084_2026-06-06T03:36:43.194500",
+                                                        "elder_005_2026-06-14T02:56:43.194500",
+                                                        "elder_047_2026-06-06T03:59:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.3333333333333333,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  0.5,
+                                 "timestamp":  "2026-09-20T00:32:25.313698",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  44,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  6
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_011",
+                                 "query_text":  "最近一个月血压波动超过20mmHg的患者统计？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  49.446,
+                                 "retrieved_docs":  [
+                                                        "live-1789303164293",
+                                                        "live-1789303139342",
+                                                        "live-1789303115127",
+                                                        "live-1789303142782",
+                                                        "live-1789303136920"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.363144",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  49,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  1
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_012",
+                                 "query_text":  "夜间2-4点谵妄事件的时间分布规律？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  37.19,
+                                 "retrieved_docs":  [
+                                                        "elder_027_2026-07-04T17:58:43.194500",
+                                                        "elder_014_2026-06-28T03:06:43.194500",
+                                                        "elder_084_2026-06-06T03:36:43.194500",
+                                                        "elder_034_2026-06-25T16:47:43.194500",
+                                                        "elder_028_2026-06-13T18:44:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.400873",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  41,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  9
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_013",
+                                 "query_text":  "用药后48小时内副作用监测记录汇总？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  36.771,
+                                 "retrieved_docs":  [
+                                                        "live-1789303164293",
+                                                        "live-1789303136920",
+                                                        "live-1789303139732",
+                                                        "live-1789303139522",
+                                                        "live-1789303139342"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.437644",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  42,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  8
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_014",
+                                 "query_text":  "跌倒风险评分的3个月变化趋势？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  61.538000000000004,
+                                 "retrieved_docs":  [
+                                                        "elder_023_2026-06-16T17:04:43.194500",
+                                                        "elder_047_2026-06-27T06:48:43.194500",
+                                                        "elder_008_2026-07-01T10:25:43.194500",
+                                                        "elder_028_2026-06-13T18:44:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.499182",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_015",
+                                 "query_text":  "情绪波动与时段关联分析（早中晚夜）？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  39.503,
+                                 "retrieved_docs":  [
+                                                        "elder_028_2026-06-13T18:44:43.194500",
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_027_2026-07-04T17:58:43.194500",
+                                                        "elder_038_2026-06-14T14:31:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.539731",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_016",
+                                 "query_text":  "认知功能MMSE评分的月度对比？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  37.502,
+                                 "retrieved_docs":  [
+                                                        "live-1789303115127",
+                                                        "live-1789303136920",
+                                                        "live-1789303139342",
+                                                        "live-1789303139522",
+                                                        "live-1789303138293"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.577760",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "temporal_017",
+                                 "query_text":  "护理干预前后7天的行为改善对比？",
+                                 "query_type":  "temporal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  52.28,
+                                 "retrieved_docs":  [
+                                                        "elder_079_2026-07-02T07:55:43.194500",
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_082_2026-06-06T03:54:43.194500",
+                                                        "elder_047_2026-06-06T03:59:43.194500",
+                                                        "elder_025_2026-06-06T02:40:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.2,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  0.5,
+                                 "timestamp":  "2026-09-20T00:32:25.630566",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  43,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  7
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_001",
+                                 "query_text":  "李国强的夜间谵妄是什么原因引起的？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  62.377,
+                                 "retrieved_docs":  [
+                                                        "elder_025_2026-06-06T02:40:43.194500",
+                                                        "elder_082_2026-06-06T03:54:43.194500",
+                                                        "elder_028_2026-06-13T18:44:43.194500",
+                                                        "elder_093_2026-06-17T07:12:43.194500",
+                                                        "elder_091_2026-06-18T11:18:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  1.0,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:25.692943",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  47,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  3
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_002",
+                                 "query_text":  "为什么杨桂英会出现情绪激动？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  41.532,
+                                 "retrieved_docs":  [
+                                                        "elder_079_2026-07-02T07:55:43.194500",
+                                                        "elder_079_2026-06-13T21:16:43.194500",
+                                                        "elder_091_2026-06-18T11:18:43.194500",
+                                                        "elder_084_2026-06-06T03:36:43.194500",
+                                                        "elder_047_2026-06-06T03:59:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.25,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:25.735107",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  43,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  7
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_003",
+                                 "query_text":  "周玲试图离开病房的诱因是什么？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  40.873,
+                                 "retrieved_docs":  [
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_038_2026-06-14T14:31:43.194500",
+                                                        "elder_025_2026-06-06T02:40:43.194500",
+                                                        "elder_014_2026-06-28T03:06:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:25.776526",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_004",
+                                 "query_text":  "多奈哌齐用药与谵妄发作的关系？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  60.816,
+                                 "retrieved_docs":  [
+                                                        "elder_082_2026-06-06T03:54:43.194500",
+                                                        "elder_025_2026-06-06T02:40:43.194500",
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_047_2026-06-06T03:59:43.194500",
+                                                        "elder_020_2026-06-06T03:43:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.5,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  0.5,
+                                 "timestamp":  "2026-09-20T00:32:25.837342",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  41,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  9
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_005",
+                                 "query_text":  "定向力障碍的诱发因素有哪些？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  32.695,
+                                 "retrieved_docs":  [
+                                                        "elder_038_2026-06-14T14:31:43.194500",
+                                                        "elder_028_2026-06-13T18:44:43.194500",
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_091_2026-06-18T11:18:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.3333333333333333,
+                                 "precision_at_5":  0.25,
+                                 "recall_at_5":  0.5,
+                                 "timestamp":  "2026-09-20T00:32:25.871123",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_006",
+                                 "query_text":  "怀旧疗法为什么能稳定患者情绪？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  55.379999999999995,
+                                 "retrieved_docs":  [
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_038_2026-06-14T14:31:43.194500",
+                                                        "elder_033_2026-06-06T03:33:43.194500",
+                                                        "live-1789303138293",
+                                                        "live-1789303136920"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  1.0,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:25.927027",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  43,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  7
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_007",
+                                 "query_text":  "夜间活动增加与谵妄的因果关系？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  30.858,
+                                 "retrieved_docs":  [
+                                                        "elder_038_2026-06-14T14:31:43.194500",
+                                                        "elder_025_2026-06-06T02:40:43.194500",
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_084_2026-06-06T03:36:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.5,
+                                 "precision_at_5":  0.25,
+                                 "recall_at_5":  0.5,
+                                 "timestamp":  "2026-09-20T00:32:25.957885",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_008",
+                                 "query_text":  "认知障碍导致的行为异常有哪些？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  31.281999999999996,
+                                 "retrieved_docs":  [
+                                                        "elder_079_2026-07-02T07:55:43.194500",
+                                                        "elder_041_2026-06-25T08:36:43.194500",
+                                                        "elder_027_2026-07-04T17:58:43.194500",
+                                                        "elder_078_2026-06-30T10:34:43.194500",
+                                                        "elder_080_2026-06-06T02:10:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.2,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  0.5,
+                                 "timestamp":  "2026-09-20T00:32:25.989699",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_009",
+                                 "query_text":  "非药物干预原则在紧急处理中的作用？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  53.524,
+                                 "retrieved_docs":  [
+                                                        "elder_038_2026-06-14T14:31:43.194500",
+                                                        "elder_025_2026-06-06T02:40:43.194500",
+                                                        "elder_020_2026-06-06T03:43:43.194500",
+                                                        "elder_047_2026-06-06T03:59:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.5,
+                                 "precision_at_5":  0.25,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:26.043755",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  45,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  5
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_010",
+                                 "query_text":  "安抚技术如何平复患者情绪？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  64.405,
+                                 "retrieved_docs":  [
+                                                        "elder_008_2026-07-01T10:25:43.194500",
+                                                        "elder_023_2026-06-16T17:04:43.194500",
+                                                        "elder_082_2026-06-06T03:54:43.194500",
+                                                        "elder_091_2026-06-18T11:18:43.194500",
+                                                        "elder_025_2026-06-06T02:40:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.2,
+                                 "precision_at_5":  0.2,
+                                 "recall_at_5":  0.5,
+                                 "timestamp":  "2026-09-20T00:32:26.108160",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  46,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  4
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_011",
+                                 "query_text":  "睡眠质量下降导致认知功能恶化的因果链？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  36.983000000000004,
+                                 "retrieved_docs":  [
+                                                        "elder_079_2026-07-02T07:55:43.194500",
+                                                        "elder_038_2026-06-14T14:31:43.194500",
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_033_2026-06-06T03:33:43.194500",
+                                                        "elder_025_2026-06-06T02:40:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  true,
+                                 "reciprocal_rank":  0.3333333333333333,
+                                 "precision_at_5":  0.4,
+                                 "recall_at_5":  1.0,
+                                 "timestamp":  "2026-09-20T00:32:26.145686",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  42,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  8
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_012",
+                                 "query_text":  "室温过高与夜间躁动的关联分析？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  103.416,
+                                 "retrieved_docs":  [
+                                                        "live-1789303139522",
+                                                        "live-1789303139732",
+                                                        "live-1789303136920",
+                                                        "live-1789303142782",
+                                                        "live-1789303138293"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:26.250156",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  39,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  11
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             },
+                             {
+                                 "query_id":  "causal_013",
+                                 "query_text":  "家属探访频率对患者情绪稳定性的影响？",
+                                 "query_type":  "causal",
+                                 "config_name":  "baseline_rag_with_filter",
+                                 "http_status":  200,
+                                 "error_type":  "None",
+                                 "error_message":  "",
+                                 "latency_ms":  50.61,
+                                 "retrieved_docs":  [
+                                                        "elder_038_2026-06-14T14:31:43.194500",
+                                                        "elder_080_2026-06-06T02:10:43.194500",
+                                                        "elder_033_2026-06-06T03:33:43.194500",
+                                                        "elder_084_2026-06-06T03:36:43.194500"
+                                                    ],
+                                 "response_text":  "",
+                                 "is_scorable":  true,
+                                 "unscorable_reason":  "",
+                                 "found_ground_truth":  false,
+                                 "reciprocal_rank":  0.0,
+                                 "precision_at_5":  0.0,
+                                 "recall_at_5":  0.0,
+                                 "timestamp":  "2026-09-20T00:32:26.301310",
+                                 "retrieval_metadata":  {
+                                                            "candidate_filter":  {
+                                                                                     "enabled":  true,
+                                                                                     "ruleset_version":  "v2",
+                                                                                     "ruleset_sha256":  "2b0451d5aecadaae5a5c7404faaa19633a7317e2b2c554e55f8ecff34e07dd36",
+                                                                                     "before":  50,
+                                                                                     "after":  42,
+                                                                                     "removal_reasons":  {
+                                                                                                             "empty_doc_id":  8
+                                                                                                         }
+                                                                                 }
+                                                        },
+                                 "fusion_mode":  "not_captured",
+                                 "source_statuses":  {
+
+                                                     },
+                                 "source_candidate_counts":  {
+
+                                                             },
+                                 "rrf_sources_seen":  [
+
+                                                      ],
+                                 "doc_source_map":  {
+
+                                                    }
+                             }
+                         ],
+    "aggregated_metrics":  {
+                               "baseline_rag_with_filter":  {
+                                                                "config_name":  "baseline_rag_with_filter",
+                                                                "total_queries":  30,
+                                                                "api_success_count":  30,
+                                                                "api_error_count":  0,
+                                                                "scorable_count":  30,
+                                                                "unscorable_count":  0,
+                                                                "mrr":  0.3394444444444444,
+                                                                "precision_at_5":  0.13500000000000004,
+                                                                "recall_at_5":  0.48333333333333334,
+                                                                "avg_latency_ms":  59.2708,
+                                                                "p50_latency_ms":  51.445,
+                                                                "p95_latency_ms":  114.30765000000001,
+                                                                "temporal_mrr":  0.31568627450980397,
+                                                                "causal_mrr":  0.3705128205128205,
+                                                                "general_mrr":  0.0,
+                                                                "fusion_mode_counts":  {
+
+                                                                                       },
+                                                                "source_status_counts":  {
+
+                                                                                         },
+                                                                "source_candidate_total":  {
+
+                                                                                           },
+                                                                "source_hit_query_count":  {
+
+                                                                                           },
+                                                                "captured_query_count":  30
+                                                            }
+                           },
+    "runner_provenance":  {
+                              "run_id":  "20260919T163220Z_baseline_rag_with_filter_15472",
+                              "manifest":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260919T163220Z_baseline_rag_with_filter_15472\\manifest.json",
+                              "outcome":  "succeeded",
+                              "report_eligible":  true,
+                              "error":  null,
+                              "configuration":  {
+                                                    "name":  "baseline_rag_with_filter",
+                                                    "base_env_sha256":  "715e0b4255d09e92b2d670e59e4b2614c46c2989b71e7124b4bbac3fa52390a4",
+                                                    "overlay_env_sha256":  "8fa476f3b85ed6c2aa470326907c05ea590ef69caed55649c863458995a887bb",
+                                                    "effective_env_sha256":  "975e3851dc1eccc7eeeafbebe3e533eba3c16bd08534cd8c3bf8e6b8c2fc7852"
+                                                },
+                              "data":  {
+                                           "datasets_tree_sha256":  "d7c63b5c17e0ee02b13149bbbfaa2e8c1cc9419936d799aefcbca21c5dd10b00"
+                                       },
+                              "environment":  {
+                                                  "powershell":  "5.1.26100.6899",
+                                                  "docker_compose":  "Docker Compose version v5.1.2",
+                                                  "platform":  "Microsoft Windows NT 10.0.26100.0"
+                                              },
+                              "evaluator_exit_code":  0,
+                              "smoke_status":  "passed"
+                          }
+}

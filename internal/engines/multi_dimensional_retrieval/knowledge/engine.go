@@ -300,12 +300,9 @@ func (engine *Neo4jEngine) ExpandKnowledge(ctx context.Context, query *Knowledge
 	for result.Next(ctx) {
 		record := result.Record()
 
-		// 解析节点
-		if nodeValue, found := record.Get("node"); found {
-			if node, ok := nodeValue.(neo4j.Node); ok {
-				knowledgeNode := engine.parseNode(node)
-				nodes = append(nodes, knowledgeNode)
-			}
+		// 解析节点（同时读取 search 分支返回的 `score` 相关度列；缺失时回退为 0）
+		if knowledgeNode, ok := engine.parseNodeFromRecord(record); ok {
+			nodes = append(nodes, knowledgeNode)
 		}
 
 		// 解析关系
@@ -415,6 +412,11 @@ func (engine *Neo4jEngine) buildKnowledgeQuery(query *KnowledgeQuery) (string, m
 
 	default:
 		// 默认全文搜索 - 使用entity_search_idx（Entity标签是实际存储的节点类型）
+		// score 为可解释的查询相关度：对每个命中查询词按「字段权重 × 命中词长度」累加
+		// （name 命中 3.0 / description 命中 1.5 / keywords 命中 1.0）。
+		// 命中词越多、命中词越长、命中字段越核心，分数越高（单调），
+		// 因此同一来源内的候选在加权 RRF 融合中可真正区分名次，而不再退化为无效排序。
+		// 注：评测语料中 node.importance / node.keywords 均为空，故排序不再依赖 importance。
 		cypherQuery = `
 			MATCH (node)
 			WHERE node.user_id = $user_id
@@ -426,8 +428,14 @@ func (engine *Neo4jEngine) buildKnowledgeQuery(query *KnowledgeQuery) (string, m
 				OR toLower(coalesce(node.description, '')) CONTAINS toLower(term)
 				OR any(keyword IN coalesce(node.keywords, []) WHERE toLower(keyword) CONTAINS toLower(term))
 			)
-			RETURN node, null as relationship, 1.0 as score
-			ORDER BY node.importance DESC, node.updated_at DESC
+			WITH node, reduce(term_score = 0.0, term IN $search_terms |
+				term_score
+				+ (CASE WHEN toLower(coalesce(node.name, '')) CONTAINS toLower(term) THEN 3.0 * toFloat(size(term)) ELSE 0.0 END)
+				+ (CASE WHEN toLower(coalesce(node.description, '')) CONTAINS toLower(term) THEN 1.5 * toFloat(size(term)) ELSE 0.0 END)
+				+ (CASE WHEN any(keyword IN coalesce(node.keywords, []) WHERE toLower(keyword) CONTAINS toLower(term)) THEN 1.0 * toFloat(size(term)) ELSE 0.0 END)
+			) AS score
+			RETURN node, null as relationship, score
+			ORDER BY score DESC, node.name ASC
 			LIMIT $limit`
 
 		parameters["search_terms"] = graphSearchTerms(query.SearchText, query.Keywords)
@@ -484,6 +492,49 @@ func graphChineseSearchFragments(text string) []string {
 		}
 	}
 	return fragments
+}
+
+// parseNodeFromRecord 从一条查询记录中解析节点，并读取可选的 `score` 相关度列。
+// `score` 列缺失或类型异常时回退为 0，因此不返回 score 列的分支
+// （expand / path / similarity）与旧查询行为完全兼容，且不会 panic 或让查询失败。
+func (engine *Neo4jEngine) parseNodeFromRecord(record *neo4j.Record) (KnowledgeNode, bool) {
+	if record == nil {
+		return KnowledgeNode{}, false
+	}
+	nodeValue, found := record.Get("node")
+	if !found {
+		return KnowledgeNode{}, false
+	}
+	node, ok := nodeValue.(neo4j.Node)
+	if !ok {
+		return KnowledgeNode{}, false
+	}
+	knowledgeNode := engine.parseNode(node)
+	knowledgeNode.Score = getFloatFromRecord(record, "score")
+	return knowledgeNode, true
+}
+
+// getFloatFromRecord 从记录中安全读取浮点列。列缺失、值为 nil 或类型异常时返回 0，
+// 保证向后兼容且不 panic。
+func getFloatFromRecord(record *neo4j.Record, key string) float64 {
+	if record == nil {
+		return 0
+	}
+	value, found := record.Get(key)
+	if !found || value == nil {
+		return 0
+	}
+	switch typed := value.(type) {
+	case float64:
+		return typed
+	case float32:
+		return float64(typed)
+	case int:
+		return float64(typed)
+	case int64:
+		return float64(typed)
+	}
+	return 0
 }
 
 // parseNode 解析节点

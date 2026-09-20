@@ -1,0 +1,70 @@
+{
+  "schema_version": "pccm-calibration-artifact-v1",
+  "fingerprint": {
+    "calibration_source": "devset_calibrated_v1",
+    "artifact_schema": "pccm-calibration-artifact-v1",
+    "dataset_name": "pccm_calibration_repository_devset_v1",
+    "dataset_source": "repository",
+    "dataset_hash": "421baeb6a25f07b5ea84612e8032631e887c1a30e7029f91f1b1c9fc9dd6179b",
+    "sample_count": 100,
+    "generated_at": "2026-09-20T03:12:32Z",
+    "objective": "f1",
+    "search_space": "coordinate_descent[layer1=[0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9], layer2=[0 0.05 0.1 0.15 0.2 0.3], layer4=[0.05 0.1 0.15 0.2 0.25 0.3], layer5=[0 0.05 0.1 0.15 0.2]];max_rounds=4",
+    "decision_rule": "confidence_threshold",
+    "evaluations": 21,
+    "tool": "internal/security/calibration"
+  },
+  "config": {
+    "version": "pccm-s-devset-v1",
+    "calibration_source": "devset_calibrated_v1",
+    "layer_weights": {
+      "1": 0.7,
+      "2": 0.1,
+      "4": 0.15,
+      "5": 0.05
+    },
+    "enhancement_per_extra_layer": 0.05,
+    "decision_threshold": 0.45,
+    "layer_activation_threshold": 0.3
+  },
+  "search": {
+    "method": "coordinate_descent",
+    "rounds": 1,
+    "evaluations": 21,
+    "improved_steps": null,
+    "search_space": "coordinate_descent[layer1=[0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9], layer2=[0 0.05 0.1 0.15 0.2 0.3], layer4=[0.05 0.1 0.15 0.2 0.25 0.3], layer5=[0 0.05 0.1 0.15 0.2]];max_rounds=4",
+    "objective": "f1",
+    "false_positive_penalty": 1,
+    "false_negative_penalty": 1,
+    "decision_threshold": 0.45,
+    "layer_activation_threshold": 0.3,
+    "enhancement_per_extra_layer": 0.05
+  },
+  "metrics_before": {
+    "total": 100,
+    "true_positives": 31,
+    "false_positives": 0,
+    "true_negatives": 40,
+    "false_negatives": 29,
+    "precision": 1,
+    "recall": 0.5166666666666667,
+    "f1": 0.6813186813186815,
+    "false_positive_rate": 0,
+    "false_negative_rate": 0.48333333333333334,
+    "accuracy": 0.71
+  },
+  "metrics_after": {
+    "total": 100,
+    "true_positives": 31,
+    "false_positives": 0,
+    "true_negatives": 40,
+    "false_negatives": 29,
+    "precision": 1,
+    "recall": 0.5166666666666667,
+    "f1": 0.6813186813186815,
+    "false_positive_rate": 0,
+    "false_negative_rate": 0.48333333333333334,
+    "accuracy": 0.71
+  },
+  "notes": "离线开发集校准产物：默认配置不变，需调用方显式加载方生效；不代表运行时自适应训练。判定口径：metrics_before/metrics_after 按 decision_rule=confidence_threshold（融合置信度\u003e=阈值）计算，而生产判定由「任一层命中 span」决定、与 PCCM 权重无关，故这些指标不代表生产检测率或召回率。"
+}

@@ -23,6 +23,10 @@ import (
 	"github.com/contextkeeper/service/internal/middleware"
 	"github.com/contextkeeper/service/internal/models"
 	"github.com/contextkeeper/service/internal/security"
+	// 该包在 init 阶段把「PCCM 校准产物加载」实现注册给 security 包。
+	// 注册本身不改变任何默认行为：只有在显式设置 PCCM_CALIBRATION_ARTIFACT
+	// 时才会被调用，未设置时配置来源与环境变量/默认值完全一致。
+	_ "github.com/contextkeeper/service/internal/security/calibration"
 	"github.com/contextkeeper/service/internal/services"
 	"github.com/contextkeeper/service/internal/store"
 	"github.com/contextkeeper/service/internal/utils"

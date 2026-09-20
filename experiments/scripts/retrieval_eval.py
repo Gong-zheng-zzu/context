@@ -13,14 +13,32 @@ import os
 import sys
 from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Tuple
-from dataclasses import dataclass, asdict
+from typing import List, Dict, Tuple, Any
+from dataclasses import dataclass, asdict, field
 
 # 添加当前目录到Python路径
 sys.path.insert(0, str(Path(__file__).parent))
 
 # 导入基础评估器
 from base_evaluator import BaseEvaluator, APIResponse
+
+# 统计原语：bootstrap 区间与 Wilson 区间。放在本目录，避免评测链路依赖训练管线。
+import stat_tools
+
+DEFAULT_SESSION_ID = "eval_retrieval_test"
+
+# 重采样次数与种子固定，使同一批结果每次重算都得到相同区间。
+STAT_BOOTSTRAP_RESAMPLES = 10000
+STAT_BOOTSTRAP_SEED = 20260920
+
+# 真值标注状态。只有经人工单评审人批准的查询集才可声明为可报告真值；由构造自动
+# 推导的标注必须走独立门禁，并在结果中明确记录「未经人工复核」，两者不可混用。
+REVIEWED_ANNOTATION_STATUS = "approved_single_reviewer"
+AUTO_DERIVED_ANNOTATION_STATUS = "auto_derived_unreviewed"
+
+# 自动标注数据集必须自述其相关性来源：本项目的构造式真值来自「查询由目标文档生成」，
+# 即相关性是定义性的，而不是人工相关性判定。门禁据此确认数据集没有冒充人工标注。
+AUTO_DERIVED_DERIVATION_METHOD = "query_constructed_from_source_document"
 
 
 @dataclass
@@ -51,6 +69,17 @@ class RetrievalResult:
 
     timestamp: str = ""
 
+    # 融合审计证据（用于归因 RRF 与其他多源结果）。
+    # 响应未携带对应字段时保持 "not_captured"，绝不臆造，也不影响既有字段。
+    retrieval_metadata: Dict[str, Any] = field(default_factory=dict)
+    fusion_mode: str = "not_captured"
+    source_statuses: Dict[str, str] = field(default_factory=dict)
+    source_candidate_counts: Dict[str, int] = field(default_factory=dict)
+    # rrf_sources_seen：本次响应中每个 doc 命中的来源集合（去重后按首次出现顺序）
+    rrf_sources_seen: List[str] = field(default_factory=list)
+    # doc_source_map：doc_id -> 该 doc 的来源集合（来自行级 rrf_sources）
+    doc_source_map: Dict[str, List[str]] = field(default_factory=dict)
+
 
 @dataclass
 class ConfigMetrics:
@@ -75,6 +104,14 @@ class ConfigMetrics:
     causal_mrr: float = 0.0
     general_mrr: float = 0.0
 
+    # 融合审计聚合：用于解释「融合到底做了什么」。
+    # 响应未携带证据时保持空字典/not_captured，既有指标不受影响。
+    fusion_mode_counts: Dict[str, int] = field(default_factory=dict)
+    source_status_counts: Dict[str, Dict[str, int]] = field(default_factory=dict)
+    source_candidate_total: Dict[str, int] = field(default_factory=dict)
+    source_hit_query_count: Dict[str, int] = field(default_factory=dict)
+    captured_query_count: int = 0
+
 
 class RetrievalEvaluator(BaseEvaluator):
     """检索融合评估器"""
@@ -85,6 +122,9 @@ class RetrievalEvaluator(BaseEvaluator):
         retrieval_mode: str = "vector",
         ground_truth_file: Path = None,
         corpus_file: Path = None,
+        session_id: str = DEFAULT_SESSION_ID,
+        bootstrap_resamples: int = STAT_BOOTSTRAP_RESAMPLES,
+        bootstrap_seed: int = STAT_BOOTSTRAP_SEED,
     ):
         super().__init__(base_url)
         self.project_root = Path(__file__).parent.parent
@@ -93,6 +133,12 @@ class RetrievalEvaluator(BaseEvaluator):
         self.results_dir.mkdir(parents=True, exist_ok=True)
         self.ground_truth_file = ground_truth_file or self.datasets_dir / "retrieval_groundtruth" / "query_answer_pairs.json"
         self.corpus_file = corpus_file
+        # 会话可配置：换语料时必须先清空同一会话。旧语料若残留在会话中，检回的文档会
+        # 与当前语料的真值不相交，指标随之失真。
+        self.session_id = session_id
+        # 区间参数进入结果文件，使区间本身可复算、可审计。
+        self.bootstrap_resamples = bootstrap_resamples
+        self.bootstrap_seed = bootstrap_seed
         self._using_sample_data = False
         if retrieval_mode not in {"vector", "rrf"}:
             raise ValueError(f"Unsupported retrieval mode: {retrieval_mode}")
@@ -142,7 +188,7 @@ class RetrievalEvaluator(BaseEvaluator):
     def query_retrieval_api(
         self,
         query_text: str,
-        session_id: str = "eval_retrieval_test",
+        session_id: str = None,
         config_name: str = None
     ) -> APIResponse:
         """
@@ -152,7 +198,7 @@ class RetrievalEvaluator(BaseEvaluator):
         请求字段使用 sessionId（驼峰命名）
         """
         payload = {
-            "sessionId": session_id,  # 使用驼峰命名，对齐Go后端
+            "sessionId": session_id or self.session_id,  # 使用驼峰命名，对齐Go后端
             "query": query_text,
             "maxResults": 5,
         }
@@ -239,12 +285,27 @@ class RetrievalEvaluator(BaseEvaluator):
                 return result
 
             invalid_doc_ids = 0
+            sources_seen: List[str] = []
+            doc_source_map: Dict[str, List[str]] = {}
             for context in contexts:
                 doc_id = context.get("doc_id") if isinstance(context, dict) else None
                 if not isinstance(doc_id, str) or not doc_id.strip():
                     invalid_doc_ids += 1
                     continue
                 retrieved_docs.append(doc_id.strip())
+
+                # 行级融合证据：每个 doc 命中的来源集合（rrf_sources）。
+                # 该字段由 Go 侧 ApplyFusionAuditMetadata 注入；缺失时静默跳过。
+                metadata = context.get("metadata") if isinstance(context, dict) else None
+                if isinstance(metadata, dict):
+                    doc_sources = metadata.get("rrf_sources")
+                    if isinstance(doc_sources, list):
+                        normalized_sources = [s for s in doc_sources if isinstance(s, str) and s]
+                        if normalized_sources:
+                            doc_source_map[doc_id.strip()] = normalized_sources
+                            for source in normalized_sources:
+                                if source not in sources_seen:
+                                    sources_seen.append(source)
 
             if invalid_doc_ids:
                 result.is_scorable = False
@@ -264,6 +325,29 @@ class RetrievalEvaluator(BaseEvaluator):
 
             result.retrieved_docs = retrieved_docs
             result.response_text = response_text
+            result.rrf_sources_seen = sources_seen
+            result.doc_source_map = doc_source_map
+
+            # 响应级融合证据：融合模式、各路状态与各路候选数。
+            # 这些字段是判断「RRF 是否真的融合了某些来源」的唯一依据，
+            # 缺失时保持 not_captured，绝不臆造。
+            retrieval_metadata = data.get("retrieval_metadata")
+            if isinstance(retrieval_metadata, dict):
+                result.retrieval_metadata = retrieval_metadata
+
+                fusion_mode = retrieval_metadata.get("retrieval_fusion_mode")
+                if isinstance(fusion_mode, str) and fusion_mode:
+                    result.fusion_mode = fusion_mode
+
+                statuses = retrieval_metadata.get("source_statuses")
+                if isinstance(statuses, dict):
+                    result.source_statuses = {str(k): str(v) for k, v in statuses.items()}
+
+                counts = retrieval_metadata.get("source_candidate_counts")
+                if isinstance(counts, dict):
+                    result.source_candidate_counts = {
+                        str(k): v for k, v in counts.items() if isinstance(v, int) and not isinstance(v, bool)
+                    }
 
             # 计算指标
             if retrieved_docs:
@@ -380,6 +464,32 @@ class RetrievalEvaluator(BaseEvaluator):
                 mrr = precision = recall = avg_latency = p50_latency = p95_latency = 0.0
                 temporal_mrr = causal_mrr = general_mrr = 0.0
 
+            # 融合审计聚合：把「融合模式 / 各路状态 / 各路候选数 / 各路命中查询数」
+            # 汇总起来，使 RRF 的收益或负收益可以被归因到具体来源。
+            fusion_mode_counts: Dict[str, int] = {}
+            source_status_counts: Dict[str, Dict[str, int]] = {}
+            source_candidate_total: Dict[str, int] = {}
+            source_hit_query_count: Dict[str, int] = {}
+            captured_query_count = 0
+
+            for r in api_success:
+                if not isinstance(r.retrieval_metadata, dict) or not r.retrieval_metadata:
+                    continue
+                captured_query_count += 1
+
+                if r.fusion_mode and r.fusion_mode != "not_captured":
+                    fusion_mode_counts[r.fusion_mode] = fusion_mode_counts.get(r.fusion_mode, 0) + 1
+
+                for source, status in r.source_statuses.items():
+                    bucket = source_status_counts.setdefault(source, {})
+                    bucket[status] = bucket.get(status, 0) + 1
+
+                for source, count in r.source_candidate_counts.items():
+                    source_candidate_total[source] = source_candidate_total.get(source, 0) + count
+
+                for source in set(r.rrf_sources_seen):
+                    source_hit_query_count[source] = source_hit_query_count.get(source, 0) + 1
+
             metrics[config_name] = ConfigMetrics(
                 config_name=config_name,
                 total_queries=total,
@@ -395,7 +505,12 @@ class RetrievalEvaluator(BaseEvaluator):
                 p95_latency_ms=p95_latency,
                 temporal_mrr=temporal_mrr,
                 causal_mrr=causal_mrr,
-                general_mrr=general_mrr
+                general_mrr=general_mrr,
+                fusion_mode_counts=fusion_mode_counts,
+                source_status_counts=source_status_counts,
+                source_candidate_total=source_candidate_total,
+                source_hit_query_count=source_hit_query_count,
+                captured_query_count=captured_query_count
             )
 
         return metrics
@@ -411,11 +526,80 @@ class RetrievalEvaluator(BaseEvaluator):
             return values[lower]
         return values[lower] + (values[upper] - values[lower]) * (index - lower)
 
+    def load_ground_truth_metadata(self) -> Dict[str, Any]:
+        """读取真值文件的 metadata 块，用于记录标注状态与来源指纹。
+
+        文件缺失或结构不符时返回空字典：门禁据此拒绝运行，而不是静默放行。
+        """
+        if not self.ground_truth_file.exists():
+            return {}
+        try:
+            payload = json.loads(self.ground_truth_file.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return {}
+        if not isinstance(payload, dict):
+            return {}
+        metadata = payload.get("metadata")
+        return metadata if isinstance(metadata, dict) else {}
+
+    def build_statistical_analysis(
+        self,
+        results: List[RetrievalResult],
+        resamples: int = None,
+        seed: int = None,
+    ) -> Dict[str, Any]:
+        """为排名指标计算 bootstrap 区间，并为命中率附 Wilson 区间。
+
+        只用可评分响应（``is_scorable``）：结构不完整的响应不进入分母，避免把响应
+        格式问题混进检索质量。区间与点估计必须同口径，否则区间无法解释。
+
+        MRR / P@5 / R@5 的逐样本取值不是 0/1 比例量（MRR 可取 1/2、1/3…），比例检验
+        不适用，因此用 bootstrap。命中率（hit@5）本身是比例量，额外给出 Wilson 区间，
+        以便与同一批数据上的其它比例指标直接比较。
+        """
+        resamples = self.bootstrap_resamples if resamples is None else resamples
+        seed = self.bootstrap_seed if seed is None else seed
+
+        scorable = [r for r in results if r.error_type == "None" and r.is_scorable]
+        analysis: Dict[str, Any] = {
+            "method": "bootstrap_percentile",
+            "resamples": resamples,
+            "seed": seed,
+            "confidence_level": 0.95,
+            "sample_size": len(scorable),
+            "metrics": {},
+        }
+        if not scorable:
+            return analysis
+
+        metric_intervals = analysis["metrics"]
+        metric_intervals["mrr"] = stat_tools.mean_bootstrap_ci(
+            [r.reciprocal_rank for r in scorable], resamples=resamples, seed=seed
+        )
+        metric_intervals["precision_at_5"] = stat_tools.mean_bootstrap_ci(
+            [r.precision_at_5 for r in scorable], resamples=resamples, seed=seed
+        )
+        metric_intervals["recall_at_5"] = stat_tools.mean_bootstrap_ci(
+            [r.recall_at_5 for r in scorable], resamples=resamples, seed=seed
+        )
+
+        hit_count = sum(1 for r in scorable if r.found_ground_truth)
+        hit_interval = stat_tools.mean_bootstrap_ci(
+            [1.0 if r.found_ground_truth else 0.0 for r in scorable],
+            resamples=resamples,
+            seed=seed,
+        )
+        hit_interval["hit_count"] = hit_count
+        hit_interval["wilson_95_ci"] = stat_tools.wilson_ci(hit_count, len(scorable))
+        metric_intervals["hit_at_5"] = hit_interval
+        return analysis
+
     def save_results(
         self,
         results: List[RetrievalResult],
         metrics: Dict[str, ConfigMetrics],
         output_file: Path = None,
+        statistical_analysis: Dict[str, Any] = None,
     ):
         """保存结果"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -437,11 +621,27 @@ class RetrievalEvaluator(BaseEvaluator):
 
         ground_truth_file = self.ground_truth_file
         dataset_hash = self._calculate_file_hash(ground_truth_file)
+        ground_truth_metadata = self.load_ground_truth_metadata()
         runtime_config = {
             "config_name": os.getenv("EVAL_RUNTIME_CONFIG_NAME", "not_captured"),
             "config_file": os.getenv("EVAL_RUNTIME_CONFIG_FILE", "not_captured"),
             "config_hash": os.getenv("EVAL_RUNTIME_CONFIG_HASH", "not_captured"),
             "service_start_time": os.getenv("EVAL_SERVICE_START_TIME", "not_captured"),
+        }
+
+        # 真值的标注状态与来源指纹必须随结果落盘：机器推导的标注与人工复核的标注在
+        # 结论强度上并不相同，仅凭文件路径无法区分，事后也无法审计。
+        dataset_block: Dict[str, Any] = {
+            "ground_truth_file": str(ground_truth_file),
+            "ground_truth_sha256": dataset_hash,
+            "corpus_file": str(self.corpus_file) if self.corpus_file else "not_captured",
+            "corpus_sha256": self._calculate_file_hash(self.corpus_file) if self.corpus_file else "not_captured",
+            "session_id": self.session_id,
+            "annotation_status": ground_truth_metadata.get("annotation_status", "not_captured"),
+            "report_eligible": ground_truth_metadata.get("report_eligible", "not_captured"),
+            "derivation_method": ground_truth_metadata.get("derivation_method", "not_captured"),
+            "source_corpus_sha256": ground_truth_metadata.get("source_corpus_sha256", "not_captured"),
+            "annotation_caveat": ground_truth_metadata.get("annotation_caveat", ""),
         }
 
         output = {
@@ -452,12 +652,9 @@ class RetrievalEvaluator(BaseEvaluator):
             "configs": list(metrics.keys()),
             "config_hashes": config_hashes,  # 🔥 新增：配置文件hash
             "runtime_config": runtime_config,
-            "dataset": {
-                "ground_truth_file": str(ground_truth_file),
-                "ground_truth_sha256": dataset_hash,
-                "corpus_file": str(self.corpus_file) if self.corpus_file else "not_captured",
-                "corpus_sha256": self._calculate_file_hash(self.corpus_file) if self.corpus_file else "not_captured",
-            },
+            "dataset": dataset_block,
+            # 新键追加，既有聚合键保持不变，避免影响下游消费者。
+            "statistical_analysis": statistical_analysis or self.build_statistical_analysis(results),
             "detailed_results": [asdict(r) for r in results],
             "aggregated_metrics": {name: asdict(m) for name, m in metrics.items()}
         }
@@ -480,7 +677,11 @@ class RetrievalEvaluator(BaseEvaluator):
             return "file_not_found"
         return hashlib.sha256(path.read_bytes()).hexdigest()
 
-    def print_summary(self, metrics: Dict[str, ConfigMetrics]):
+    def print_summary(
+        self,
+        metrics: Dict[str, ConfigMetrics],
+        statistical_analysis: Dict[str, Any] = None,
+    ):
         """打印摘要"""
         print("\n" + "=" * 60)
         print("检索融合实验结果摘要")
@@ -503,6 +704,47 @@ class RetrievalEvaluator(BaseEvaluator):
             else:
                 print(f"  [警告] 无可评分响应，无法计算排名指标")
 
+            # 融合审计摘要：解释「融合到底做了什么」，用于归因收益或负收益。
+            if m.captured_query_count > 0:
+                print(f"  融合证据: {m.captured_query_count}/{m.api_success_count} 条响应携带检索元数据")
+                if m.fusion_mode_counts:
+                    modes = ", ".join(f"{name}={count}" for name, count in sorted(m.fusion_mode_counts.items()))
+                    print(f"    融合模式: {modes}")
+                if m.source_status_counts:
+                    for source in sorted(m.source_status_counts):
+                        statuses = ", ".join(
+                            f"{name}={count}" for name, count in sorted(m.source_status_counts[source].items())
+                        )
+                        candidates = m.source_candidate_total.get(source, 0)
+                        hits = m.source_hit_query_count.get(source, 0)
+                        print(f"    {source}: 状态[{statuses}] 候选总数={candidates} 命中查询数={hits}")
+            else:
+                print("  融合证据: not_captured（响应未携带 retrieval_metadata）")
+
+            # 统计区间：没有区间时，点估计之间的小差距无法判断是真实差异还是样本波动。
+            if statistical_analysis:
+                print(
+                    f"\n  统计区间（{statistical_analysis.get('method')}, "
+                    f"重采样={statistical_analysis.get('resamples')}, "
+                    f"seed={statistical_analysis.get('seed')}, "
+                    f"n={statistical_analysis.get('sample_size')}）"
+                )
+                for metric_name, interval in (statistical_analysis.get("metrics") or {}).items():
+                    if not isinstance(interval, dict):
+                        continue
+                    point = interval.get("point")
+                    low = interval.get("ci_low")
+                    high = interval.get("ci_high")
+                    if point is None or low is None or high is None:
+                        continue
+                    print(f"    {metric_name}: {point:.4f} [{low:.4f}, {high:.4f}]")
+                    wilson = interval.get("wilson_95_ci")
+                    if wilson:
+                        print(
+                            f"      Wilson 95%: [{wilson[0]:.4f}, {wilson[1]:.4f}]"
+                            f" (hit={interval.get('hit_count')})"
+                        )
+
 
 def main():
     parser = argparse.ArgumentParser(description="检索融合实验")
@@ -521,6 +763,15 @@ def main():
                        help="Corpus JSON used to seed this run; recorded with the result hash.")
     parser.add_argument("--require-reviewed-ground-truth", action="store_true",
                        help="Refuse to run unless query metadata is approved for single-reviewer reporting.")
+    parser.add_argument("--allow-auto-derived-ground-truth", action="store_true",
+                       help="Permit query metadata that declares machine-derived, unreviewed labels; "
+                            "the caveat is recorded with the result.")
+    parser.add_argument("--session-id", default=DEFAULT_SESSION_ID,
+                       help="Session whose seeded corpus this run measures; recorded with the result.")
+    parser.add_argument("--bootstrap-resamples", type=int, default=STAT_BOOTSTRAP_RESAMPLES,
+                       help="Bootstrap resample count for the reported confidence intervals.")
+    parser.add_argument("--bootstrap-seed", type=int, default=STAT_BOOTSTRAP_SEED,
+                       help="Bootstrap seed; fixed so the intervals are reproducible.")
 
     args = parser.parse_args()
 
@@ -529,6 +780,9 @@ def main():
         retrieval_mode=args.retrieval_mode,
         ground_truth_file=args.ground_truth_file,
         corpus_file=args.corpus_file,
+        session_id=args.session_id,
+        bootstrap_resamples=args.bootstrap_resamples,
+        bootstrap_seed=args.bootstrap_seed,
     )
 
     # 检查服务健康
@@ -548,12 +802,41 @@ def main():
     print("[LOAD] 加载检索ground truth...")
     queries = evaluator.load_ground_truth()
 
+    if args.require_reviewed_ground_truth and args.allow_auto_derived_ground_truth:
+        print("[ERROR] --require-reviewed-ground-truth and --allow-auto-derived-ground-truth "
+              "are mutually exclusive.")
+        sys.exit(2)
+
+    metadata = evaluator.load_ground_truth_metadata()
+
     if args.require_reviewed_ground_truth:
-        raw_ground_truth = json.loads(evaluator.ground_truth_file.read_text(encoding="utf-8"))
-        metadata = raw_ground_truth.get("metadata", {}) if isinstance(raw_ground_truth, dict) else {}
-        if metadata.get("annotation_status") != "approved_single_reviewer" or metadata.get("report_eligible") is not True:
+        if metadata.get("annotation_status") != REVIEWED_ANNOTATION_STATUS or metadata.get("report_eligible") is not True:
             print("[ERROR] Ground truth is not approved by the declared single reviewer; formal metrics are blocked.")
             sys.exit(2)
+    elif args.allow_auto_derived_ground_truth:
+        # 自动标注分支不放松判据，只是承认一种**弱于**人工复核的明确标注状态，并要求
+        # 数据集自述为不可报告。任何含糊或「看起来像已复核」的声明都会被拒绝，避免机器
+        # 推导的标签被当成人工标注来用。
+        status = metadata.get("annotation_status")
+        if status != AUTO_DERIVED_ANNOTATION_STATUS:
+            print(f"[ERROR] --allow-auto-derived-ground-truth expects annotation_status="
+                  f"{AUTO_DERIVED_ANNOTATION_STATUS}, got {status!r}.")
+            sys.exit(2)
+        if metadata.get("report_eligible") is not False:
+            print("[ERROR] Auto-derived ground truth must declare report_eligible=false.")
+            sys.exit(2)
+        if metadata.get("derivation_method") != AUTO_DERIVED_DERIVATION_METHOD:
+            print("[ERROR] Auto-derived ground truth must declare "
+                  f"derivation_method={AUTO_DERIVED_DERIVATION_METHOD}.")
+            sys.exit(2)
+        print(f"[WARN] Ground truth is machine-derived and unreviewed ({status}). "
+              "Metrics are recorded with this caveat and must not be described as human-verified.\n")
+    elif metadata and metadata.get("report_eligible") is not True:
+        print(f"[INFO] Ground truth is not report-eligible "
+              f"(annotation_status={metadata.get('annotation_status')!r}); the provenance will be "
+              "recorded with the result. Use --allow-auto-derived-ground-truth to acknowledge "
+              "auto-derived labels explicitly, or --require-reviewed-ground-truth to demand "
+              "reviewed ones.\n")
 
     if not queries:
         print("[ERROR] 无可用查询数据")
@@ -582,11 +865,15 @@ def main():
     # 聚合指标
     metrics = evaluator.aggregate_metrics(results)
 
+    # 统计区间（bootstrap 与 Wilson）。只算一次并同时交给落盘与打印，
+    # 避免同一批结果被重复重采样而浪费算力。
+    statistical_analysis = evaluator.build_statistical_analysis(results)
+
     # 保存结果
-    evaluator.save_results(results, metrics, args.output)
+    evaluator.save_results(results, metrics, args.output, statistical_analysis)
 
     # 打印摘要
-    evaluator.print_summary(metrics)
+    evaluator.print_summary(metrics, statistical_analysis)
 
 
 if __name__ == "__main__":

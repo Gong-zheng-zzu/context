@@ -11,6 +11,13 @@ import (
 const defaultCASIAContextWindow = 64
 const CASIAConfigVersion = "casia-context-v1"
 
+// DefaultCASIAConfidenceFloor 是上下文调整相对基础置信度的默认保底比例。
+//
+// 数值来源：上下文缺失时 NormalizedWeight = 0.5。取 0.7 可让一个
+// 基础置信度略高于 0.42 的匹配（例如正则确证的 0.52）稳健地停留在
+// applyCASIA 的 0.3 过滤阈值之上，同时仍然保留负面上下文带来的相对抑制。
+const DefaultCASIAConfidenceFloor = 0.7
+
 // DefaultCASIASimilarityThreshold 是可选 embedding 语义匹配路径的默认相似度阈值。
 // 仅在该路径被显式启用且调用方注入相似度函数时生效。
 const DefaultCASIASimilarityThreshold = 0.86
@@ -34,9 +41,31 @@ type CASIAConfig struct {
 	ContextWindow     int                           `json:"context_window_bytes"`
 	DecisionThreshold float64                       `json:"decision_threshold"`
 	KeywordWeights    map[string]map[string]float64 `json:"keyword_weights"`
+	// ConfidenceFloor 是上下文调整后相对基础置信度的保底比例。
+	//
+	// 背景：AnalyzeContext 在上下文里找不到该类型的任何关键词时返回
+	// NormalizedWeight = 0.5（sigmoid(0)）。若把它直接乘到基础置信度上，
+	// 一个已被正则确证的匹配（例如 0.52）会被压到 0.26，进而低于
+	// applyCASIA 的过滤阈值，造成真阳性被丢弃。
+	//
+	// 保底只限制"上下文缺失导致的衰减幅度"，不改变 CASIA 的宣传公式：
+	// 上下文权重仍按 1/(1+e^(-Σw)) 计算，正面关键词依然提升置信度、
+	// 负面关键词依然抑制置信度，只是抑制不会低过 base × ConfidenceFloor。
+	//
+	// 取值 <= 0 时回退到 DefaultCASIAConfidenceFloor。
+	ConfidenceFloor float64 `json:"confidence_floor"`
 	// Source 记录关键词表来源："builtin"（内置默认）或 "file"（外部配置文件）。
 	// 与 Version 后缀一起，使审计信息能反映配置是否来自外部文件。
 	Source string `json:"source,omitempty"`
+
+	// 以下三个字段是可选 embedding 语义路径的【运行时快照】，由 GetConfiguration
+	// 按实际注入状态填充，构造 CASIAConfig 时无需设置：
+	//   - EmbeddingSimilarityEnabled  ：语义路径当前是否启用（默认 false）；
+	//   - EmbeddingSimilarityThreshold：生效的相似度阈值；
+	//   - EmbeddingSimilarityModel    ：所注入实现/模型的标识。
+	EmbeddingSimilarityEnabled   bool    `json:"embedding_similarity_enabled"`
+	EmbeddingSimilarityThreshold float64 `json:"embedding_similarity_threshold,omitempty"`
+	EmbeddingSimilarityModel     string  `json:"embedding_similarity_model,omitempty"`
 }
 
 // CASIAKeywordEvidence identifies one context feature that affected a
@@ -78,6 +107,8 @@ type ContextAwareSensitiveInfoAlgorithm struct {
 	similarityFunc      ContextSimilarityFunc
 	similarityEnabled   bool
 	similarityThreshold float64
+	// similarityModel 记录所注入实现/模型的标识，仅用于审计快照。
+	similarityModel string
 }
 
 // NewContextAwareSensitiveInfoAlgorithm 创建上下文感知算法
@@ -115,8 +146,20 @@ func DefaultCASIAConfig() CASIAConfig {
 		Version:           CASIAConfigVersion,
 		ContextWindow:     defaultCASIAContextWindow,
 		DecisionThreshold: 0.6,
+		ConfidenceFloor:   DefaultCASIAConfidenceFloor,
 		Source:            CASIAKeywordSourceBuiltin,
 	}
+}
+
+// casiaConfidenceFloor 解析实际生效的保底比例，兼容未声明该字段的外部配置。
+func casiaConfidenceFloor(config CASIAConfig) float64 {
+	if config.ConfidenceFloor <= 0 {
+		return DefaultCASIAConfidenceFloor
+	}
+	if config.ConfidenceFloor > 1 {
+		return 1
+	}
+	return config.ConfidenceFloor
 }
 
 func cloneCASIAKeywords(source map[string]map[string]float64) map[string]map[string]float64 {
@@ -133,6 +176,14 @@ func cloneCASIAKeywords(source map[string]map[string]float64) map[string]map[str
 func (a *ContextAwareSensitiveInfoAlgorithm) GetConfiguration() CASIAConfig {
 	configuration := a.config
 	configuration.KeywordWeights = cloneCASIAKeywords(a.contextKeywords)
+
+	// 附加可选语义路径的运行时快照，使审计输出如实反映其启用状态。
+	a.mu.RLock()
+	configuration.EmbeddingSimilarityEnabled = a.similarityEnabled
+	configuration.EmbeddingSimilarityThreshold = a.similarityThreshold
+	configuration.EmbeddingSimilarityModel = a.similarityModel
+	a.mu.RUnlock()
+
 	return configuration
 }
 
@@ -302,7 +353,7 @@ func (a *ContextAwareSensitiveInfoAlgorithm) matchContextKeyword(contextText, ke
 //
 // 调用方（services 层）注入 FastEmbed 实现。传入 nil 函数或非法阈值时保持关闭，
 // 从而不影响默认行为。threshold ∈ (0,1]，越界时回退到 DefaultCASIASimilarityThreshold。
-func (a *ContextAwareSensitiveInfoAlgorithm) EnableEmbeddingSimilarity(similarityFunc ContextSimilarityFunc, threshold float64) {
+func (a *ContextAwareSensitiveInfoAlgorithm) EnableEmbeddingSimilarity(similarityFunc ContextSimilarityFunc, threshold float64, model ...string) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 	if threshold <= 0 || threshold > 1 {
@@ -311,6 +362,12 @@ func (a *ContextAwareSensitiveInfoAlgorithm) EnableEmbeddingSimilarity(similarit
 	a.similarityFunc = similarityFunc
 	a.similarityThreshold = threshold
 	a.similarityEnabled = similarityFunc != nil
+	if similarityFunc == nil {
+		// 未注入实现 → 保持关闭，并清空模型标识避免审计信息残留。
+		a.similarityModel = ""
+	} else if len(model) > 0 {
+		a.similarityModel = strings.TrimSpace(model[0])
+	}
 }
 
 // DisableEmbeddingSimilarity 关闭 embedding 语义路径，回到纯 strings.Contains 行为。
@@ -319,6 +376,7 @@ func (a *ContextAwareSensitiveInfoAlgorithm) DisableEmbeddingSimilarity() {
 	defer a.mu.Unlock()
 	a.similarityEnabled = false
 	a.similarityFunc = nil
+	a.similarityModel = ""
 }
 
 // EmbeddingSimilarityEnabled 报告语义路径当前是否启用。

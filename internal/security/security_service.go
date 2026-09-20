@@ -85,6 +85,48 @@ type MultiLayerSecurityConfiguration struct {
 	CASIA        CASIAConfig        `json:"casia"`
 }
 
+// CASIAEmbeddingSimilarityProvider 由 services 层在 init 阶段注册，用于在【显式启用】时
+// 向 CASIA 注入一套基于 FastEmbed 的语义相似度实现。
+//
+// 设计约束：internal/security 不能依赖 internal/services（循环依赖），因此这里只暴露一个
+// 注册钩子；具体实现（FastEmbed 客户端）由 services 层提供。provider 返回：
+//   - similarity：语义相似度函数；返回 nil 表示"未启用"，此时默认行为完全不变；
+//   - threshold ：相似度阈值（∈(0,1]，越界回退到 DefaultCASIASimilarityThreshold）；
+//   - model     ：用于审计的模型/实现标识。
+type CASIAEmbeddingSimilarityProvider func() (similarity ContextSimilarityFunc, threshold float64, model string)
+
+var (
+	casiaEmbeddingProviderMu         sync.RWMutex
+	casiaEmbeddingSimilarityProvider CASIAEmbeddingSimilarityProvider
+)
+
+// RegisterCASIAEmbeddingSimilarityProvider 注册语义相似度实现提供方（由 services 层调用）。
+// 重复注册以最后一次为准；传入 nil 表示注销。
+func RegisterCASIAEmbeddingSimilarityProvider(provider CASIAEmbeddingSimilarityProvider) {
+	casiaEmbeddingProviderMu.Lock()
+	defer casiaEmbeddingProviderMu.Unlock()
+	casiaEmbeddingSimilarityProvider = provider
+}
+
+// applyCASIAEmbeddingSimilarityProvider 在构造流程中尝试注入可选语义路径。
+// 未注册、provider 返回 nil、或算法实例为空时保持关闭，行为与改动前完全一致。
+func applyCASIAEmbeddingSimilarityProvider(algorithm *ContextAwareSensitiveInfoAlgorithm) {
+	if algorithm == nil {
+		return
+	}
+	casiaEmbeddingProviderMu.RLock()
+	provider := casiaEmbeddingSimilarityProvider
+	casiaEmbeddingProviderMu.RUnlock()
+	if provider == nil {
+		return
+	}
+	similarity, threshold, model := provider()
+	if similarity == nil {
+		return // 未启用：保持纯 strings.Contains 行为
+	}
+	algorithm.EnableEmbeddingSimilarity(similarity, threshold, model)
+}
+
 // NewSecurityService 创建安全服务
 func NewSecurityService(configPath string, auditLogPath string) (*SecurityService, error) {
 	detector := NewDetector()
@@ -126,6 +168,10 @@ func NewSecurityService(configPath string, auditLogPath string) (*SecurityServic
 		getSecurityEnvAsBool("SECURITY_ENABLE_PCCM", true),
 		getSecurityEnvAsBool("SECURITY_ENABLE_CASIA", true),
 	)
+
+	// 可选：若 services 层已注册提供方且环境变量显式启用，则注入 FastEmbed 语义
+	// 相似度实现；否则保持默认（纯 strings.Contains）行为，与改动前完全一致。
+	applyCASIAEmbeddingSimilarityProvider(multiLayerDetector.casiaAlgorithm)
 
 	// 🆕 创建ASDF对抗样本防御框架
 	asdfFramework := NewAdversarialSampleDefenseFramework()

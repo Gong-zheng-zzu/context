@@ -165,6 +165,210 @@ func TestConfigureMultiLayerAlgorithmsUsesConfiguredSwitches(t *testing.T) {
 	}
 }
 
+// TestResolvePCCMConfigWithoutArtifactKeepsDefault 确认未指定校准产物时，
+// 配置来源与环境变量/默认值完全一致（默认路径零影响）。
+func TestResolvePCCMConfigWithoutArtifactKeepsDefault(t *testing.T) {
+	t.Setenv(pccmCalibrationArtifactEnv, "")
+
+	config := resolvePCCMConfig()
+	if config.CalibrationSource != "fixed_unvalidated" {
+		t.Fatalf("calibration source = %q, want fixed_unvalidated", config.CalibrationSource)
+	}
+	if config.LayerWeights[1] != 0.70 || config.LayerWeights[5] != 0.05 {
+		t.Fatalf("layer weights = %+v, want the default fixed weights", config.LayerWeights)
+	}
+}
+
+// TestResolvePCCMConfigWithoutProviderFallsBack 确认设置了产物路径但未注册
+// 加载实现时安全回退，不 panic、不改变默认权重。
+func TestResolvePCCMConfigWithoutProviderFallsBack(t *testing.T) {
+	t.Setenv(pccmCalibrationArtifactEnv, "/nonexistent/pccm-artifact.json")
+
+	previous := pccmCalibrationProvider
+	RegisterPCCMCalibrationProvider(nil)
+	defer RegisterPCCMCalibrationProvider(previous)
+
+	config := resolvePCCMConfig()
+	if config.CalibrationSource != "fixed_unvalidated" {
+		t.Fatalf("calibration source = %q, want fallback to fixed_unvalidated", config.CalibrationSource)
+	}
+}
+
+// TestResolvePCCMConfigUsesProviderResult 确认注册了实现时采用产物配置，
+// 且产物配置同时进入模型与配置快照（避免二者不一致）。
+func TestResolvePCCMConfigUsesProviderResult(t *testing.T) {
+	t.Setenv(pccmCalibrationArtifactEnv, "/tmp/pccm-artifact.json")
+
+	calibrated := PCCMSecurityConfig{
+		Version:                  "pccm-s-devset-v1",
+		CalibrationSource:        "devset_calibrated_v1",
+		LayerWeights:             map[int]float64{1: 0.55, 2: 0.20, 4: 0.20, 5: 0.05},
+		EnhancementPerExtraLayer: 0.05,
+		DecisionThreshold:        0.45,
+		LayerActivationThreshold: 0.3,
+	}
+
+	previous := pccmCalibrationProvider
+	RegisterPCCMCalibrationProvider(func(path string) (PCCMSecurityConfig, error) {
+		return calibrated, nil
+	})
+	defer RegisterPCCMCalibrationProvider(previous)
+
+	config := resolvePCCMConfig()
+	if config.CalibrationSource != "devset_calibrated_v1" {
+		t.Fatalf("calibration source = %q, want devset_calibrated_v1", config.CalibrationSource)
+	}
+	if config.LayerWeights[1] != 0.55 {
+		t.Fatalf("layer weights = %+v, want the calibrated weights", config.LayerWeights)
+	}
+}
+
+// TestResolvePCCMConfigFallsBackOnProviderError 确认加载失败时回退到默认权重。
+func TestResolvePCCMConfigFallsBackOnProviderError(t *testing.T) {
+	t.Setenv(pccmCalibrationArtifactEnv, "/tmp/broken-artifact.json")
+
+	previous := pccmCalibrationProvider
+	RegisterPCCMCalibrationProvider(func(path string) (PCCMSecurityConfig, error) {
+		return PCCMSecurityConfig{}, fmt.Errorf("artifact is corrupt")
+	})
+	defer RegisterPCCMCalibrationProvider(previous)
+
+	config := resolvePCCMConfig()
+	if config.CalibrationSource != "fixed_unvalidated" || config.LayerWeights[1] != 0.70 {
+		t.Fatalf("config = %+v, want a fallback to the default fixed weights", config)
+	}
+}
+
+// TestNewMultiLayerDetectorSharesOnePCCMConfig 确认检测器把同一份配置同时用于
+// 模型计算与审计快照（此前二者不一致：模型用 env 配置、快照恒定用默认值）。
+func TestNewMultiLayerDetectorSharesOnePCCMConfig(t *testing.T) {
+	t.Setenv("PCCM_LAYER_WEIGHT_1", "0.66")
+	defer t.Setenv("PCCM_LAYER_WEIGHT_1", "")
+
+	detector := NewMultiLayerDetector("http://localhost:11434", "qwen2.5:7b")
+	snapshot := detector.GetConfiguration().PCCM
+	model := detector.pccmModel.Config()
+
+	if snapshot.LayerWeights[1] != model.LayerWeights[1] {
+		t.Fatalf("snapshot weight %v != model weight %v; the two must share one config",
+			snapshot.LayerWeights[1], model.LayerWeights[1])
+	}
+	if snapshot.LayerWeights[1] != 0.66 {
+		t.Fatalf("layer 1 weight = %v, want the env override 0.66 reflected in the snapshot", snapshot.LayerWeights[1])
+	}
+}
+
+func TestCASIAConfidenceFloorDefaultsAndClamps(t *testing.T) {
+	if got := casiaConfidenceFloor(CASIAConfig{}); got != DefaultCASIAConfidenceFloor {
+		t.Fatalf("unset floor = %v, want default %v", got, DefaultCASIAConfidenceFloor)
+	}
+	if got := casiaConfidenceFloor(CASIAConfig{ConfidenceFloor: 0}); got != DefaultCASIAConfidenceFloor {
+		t.Fatalf("zero floor = %v, want default %v", got, DefaultCASIAConfidenceFloor)
+	}
+	if got := casiaConfidenceFloor(CASIAConfig{ConfidenceFloor: 0.4}); got != 0.4 {
+		t.Fatalf("explicit floor = %v, want 0.4", got)
+	}
+	if got := casiaConfidenceFloor(CASIAConfig{ConfidenceFloor: 2}); got != 1 {
+		t.Fatalf("oversized floor = %v, want clamped to 1", got)
+	}
+}
+
+// TestCASIAKeepsConfirmedMatchWhenContextHasNoKeywords 覆盖消融实验暴露的缺陷：
+// 当上下文里没有该类型的任何关键词时 NormalizedWeight 为 0.5，纯乘法会把已被
+// 正则确证的匹配压到过滤阈值以下。保底必须让这条结果存活下来。
+func TestCASIAKeepsConfirmedMatchWhenContextHasNoKeywords(t *testing.T) {
+	detector := NewMultiLayerDetector("http://127.0.0.1:1", "unused")
+
+	// "联系方式" 是 phone 的正向词，不在 id_card 关键词表内，因此 id_card 的
+	// 上下文权重为中性（0.5）。这正是 Base64/特殊字符混淆样本的形状。
+	text := "联系方式:110101199001011234"
+
+	regexItems := detector.regexDetector.Detect(text)
+	if len(regexItems) == 0 {
+		t.Fatal("regex layer should confirm an 18-digit ID card")
+	}
+	var baseConfidence float64
+	for _, item := range regexItems {
+		if item.Type == SensitiveTypeIDCard {
+			baseConfidence = item.Confidence
+		}
+	}
+	if baseConfidence == 0 {
+		t.Fatalf("regex layer matched %d items but none was an ID card: %#v", len(regexItems), regexItems)
+	}
+
+	adjusted := detector.applyCASIA(text, regexItems, true)
+	if len(adjusted) == 0 {
+		t.Fatal("CASIA dropped a regex-confirmed match whose context carries no ID-card keyword")
+	}
+
+	// 中性上下文下应恰好落在保底线上，而不再是无保底的 base*0.5。
+	expected := baseConfidence * DefaultCASIAConfidenceFloor
+	for _, item := range adjusted {
+		if item.Type != SensitiveTypeIDCard {
+			continue
+		}
+		if item.Confidence < expected-1e-9 {
+			t.Fatalf("adjusted confidence = %v, want at least the floor %v", item.Confidence, expected)
+		}
+		if item.CASIA == nil || item.CASIA.AdjustedScore != item.Confidence {
+			t.Fatalf("CASIA evidence does not mirror the final confidence: %+v", item.CASIA)
+		}
+	}
+}
+
+// TestCASIAFloorDoesNotApplyToInferredLayers 覆盖保底的适用范围：确证型层
+// （正则/词典）享受保底，推断型层（上下文规则）必须继续被抑制，否则
+// "邮政编码 110101" 这类正常文本会被误判为敏感。
+func TestCASIAFloorDoesNotApplyToInferredLayers(t *testing.T) {
+	detector := NewMultiLayerDetector("http://127.0.0.1:1", "unused")
+
+	text := "联系方式:110101199001011234"
+	items := detector.regexDetector.Detect(text)
+	if len(items) == 0 {
+		t.Fatal("regex layer should confirm an 18-digit ID card")
+	}
+
+	confirmed := detector.applyCASIA(text, items, true)
+	inferred := detector.applyCASIA(text, items, false)
+
+	if len(confirmed) == 0 {
+		t.Fatal("confirmed layer must keep the match")
+	}
+	if len(inferred) == 0 {
+		// 推断型层被判为弱匹配并被过滤，同样说明保底没有生效。
+		return
+	}
+	if inferred[0].Confidence >= confirmed[0].Confidence {
+		t.Fatalf("inferred confidence %v must stay below the floored confirmed confidence %v",
+			inferred[0].Confidence, confirmed[0].Confidence)
+	}
+}
+
+// TestCASIASNegativeContextStillSuppresses 确认保底没有把负面上下文的作用抹掉：
+// 抑制后的分数应低于正向上下文，且不低于 base × floor。
+func TestCASIANegativeContextStillSuppresses(t *testing.T) {
+	detector := NewMultiLayerDetector("http://127.0.0.1:1", "unused")
+
+	positive := detector.regexDetector.Detect("身份证号 110101199001011234")
+	negative := detector.regexDetector.Detect("快递单号 110101199001011234")
+	if len(positive) == 0 || len(negative) == 0 {
+		t.Skip("regex layer did not confirm the probe value in both contexts")
+	}
+
+	positiveAdjusted := detector.applyCASIA("身份证号 110101199001011234", positive, true)
+	negativeAdjusted := detector.applyCASIA("快递单号 110101199001011234", negative, true)
+	if len(positiveAdjusted) == 0 || len(negativeAdjusted) == 0 {
+		t.Skip("CASIA filtered one of the probes; comparison is not meaningful")
+	}
+
+	positiveScore := positiveAdjusted[0].Confidence
+	negativeScore := negativeAdjusted[0].Confidence
+	if negativeScore > positiveScore {
+		t.Fatalf("negative context score %v should not exceed positive context score %v", negativeScore, positiveScore)
+	}
+}
+
 func TestSecurityServiceConfigurationIncludesEnabledPath(t *testing.T) {
 	service := &SecurityService{
 		multiLayerDetector: NewMultiLayerDetector("http://localhost:11434", "qwen2.5:3b"),

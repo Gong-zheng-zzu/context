@@ -435,6 +435,7 @@ func Run(devSet DevSet, options CalibrationOptions, generatedAt time.Time) (Arti
 			GeneratedAt:       generatedAt.UTC().Format(time.RFC3339),
 			Objective:         options.Objective,
 			SearchSpace:       summary.SearchSpace,
+			DecisionRule:      DecisionRuleConfidenceThreshold,
 			Evaluations:       summary.Evaluations,
 			Tool:              toolIdentifier,
 		},
@@ -442,6 +443,8 @@ func Run(devSet DevSet, options CalibrationOptions, generatedAt time.Time) (Arti
 		Search:        summary,
 		MetricsBefore: before,
 		MetricsAfter:  after,
-		Notes:         "离线开发集校准产物：默认配置不变，需调用方显式加载方生效；不代表运行时自适应训练。",
+		Notes: "离线开发集校准产物：默认配置不变，需调用方显式加载方生效；不代表运行时自适应训练。" +
+			"判定口径：metrics_before/metrics_after 按 decision_rule=confidence_threshold（融合置信度>=阈值）计算，" +
+			"而生产判定由「任一层命中 span」决定、与 PCCM 权重无关，故这些指标不代表生产检测率或召回率。",
 	}, nil
 }

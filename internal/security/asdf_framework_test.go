@@ -122,6 +122,74 @@ func TestASDFHomophoneDetectorRequiresSuspiciousSequence(t *testing.T) {
 	}
 }
 
+// TestASDFHomophoneExtensionRequiresLongerLowConfidenceRun 覆盖分层阈值：
+// 低置信同音字（护理文本中的日常用词）必须成串出现才会被判定为混淆。
+func TestASDFHomophoneExtensionRequiresLongerLowConfidenceRun(t *testing.T) {
+	detector := &HomophoneDetector{}
+
+	for _, input := range []string{
+		"需要留观并联系家属",
+		"医生开了退烧药",
+		"留医观察",
+		"要要要",
+	} {
+		if detected, _, _ := detector.Detect(input); detected {
+			t.Fatalf("HomophoneDetector flagged ordinary text %q", input)
+		}
+		if got := detector.Normalize(input); got != input {
+			t.Fatalf("Normalize(%q) rewrote ordinary text to %q", input, got)
+		}
+	}
+
+	obfuscated := "联系方式要要要要"
+	if detected, _, attackType := detector.Detect(obfuscated); !detected || attackType != "homophone_substitution" {
+		t.Fatalf("Detect(%q) = detected=%v type=%q, want homophone_substitution", obfuscated, detected, attackType)
+	}
+	if got, want := detector.Normalize(obfuscated), "联系方式1111"; got != want {
+		t.Fatalf("Normalize(%q) = %q, want %q", obfuscated, got, want)
+	}
+
+	if detected, _, _ := detector.Detect("联系方式幺幺零"); !detected {
+		t.Fatal("HomophoneDetector missed a three-character high-confidence run")
+	}
+}
+
+// TestASDFHomophoneNormalizeOnlyRewritesSuspiciousRun 覆盖 span 限定：
+// 归一化不得改写可疑片段之外的同音字。
+func TestASDFHomophoneNormalizeOnlyRewritesSuspiciousRun(t *testing.T) {
+	detector := &HomophoneDetector{}
+	input := "护理备注：老人吃了一片药，联系电话幺幺零幺零幺，请核验"
+	want := "护理备注：老人吃了一片药，联系电话110101，请核验"
+	if got := detector.Normalize(input); got != want {
+		t.Fatalf("Normalize(%q) = %q, want %q", input, got, want)
+	}
+}
+
+// TestASDFHomophoneRunThresholdIsLevelAware 覆盖阈值解析的分层语义：
+// 只要 run 中含低置信字符，就应采用更严格的阈值。
+func TestASDFHomophoneRunThresholdIsLevelAware(t *testing.T) {
+	levels := map[rune]homophoneConfidence{'幺': homophoneHigh, '要': homophoneLow}
+	if got := homophoneRunThreshold([]rune("幺幺幺"), levels); got != minHomophoneRun(homophoneHigh) {
+		t.Fatalf("high-confidence threshold = %d, want %d", got, minHomophoneRun(homophoneHigh))
+	}
+	if got := homophoneRunThreshold([]rune("幺要幺"), levels); got != minHomophoneRun(homophoneLow) {
+		t.Fatalf("mixed-run threshold = %d, want the stricter %d", got, minHomophoneRun(homophoneLow))
+	}
+}
+
+// TestASDFHomophoneAuditRemainsIdempotent 确认扩展后审计仍满足幂等性。
+func TestASDFHomophoneAuditRemainsIdempotent(t *testing.T) {
+	framework := NewAdversarialSampleDefenseFramework()
+	first := framework.DefendAndNormalizeWithAudit("联系方式幺幺零幺零幺")
+	if !first.IsAdversarial {
+		t.Fatal("expected the obfuscated sequence to be classified as adversarial")
+	}
+	second := framework.DefendAndNormalizeWithAudit(first.NormalizedText)
+	if second.IsAdversarial {
+		t.Fatalf("normalized output %q was re-flagged as adversarial", first.NormalizedText)
+	}
+}
+
 func TestASDFBase64DetectorDecodesEmbeddedToken(t *testing.T) {
 	detector := &Base64Detector{}
 	payload := base64.StdEncoding.EncodeToString([]byte("身份证110101199001011234"))
@@ -142,6 +210,30 @@ func TestASDFBase64DetectorRejectsInvalidOrShortTokens(t *testing.T) {
 		}
 		if got := detector.Normalize(input); got != input {
 			t.Fatalf("Normalize(%q) changed invalid input to %q", input, got)
+		}
+	}
+}
+
+// TestASDFBase64DetectorCoversShortPaddedNumericPayload 覆盖评测数据集里暴露的漏检形态。
+//
+// test_data/test_data_100.json 的 bypass_attack 样本 `编码信息：MTM4MTIzNDU2Nzg=` /
+// `编码信息：MTUwMTIzNDU2Nzg=` 解码后是 11 位手机号，编码形态为「15 个正文字符 + 1 个 =」。
+// 此前 base64TokenPattern 的下限是 16 个正文字符，这类形态根本进不了候选，故 2/2 漏检。
+func TestASDFBase64DetectorCoversShortPaddedNumericPayload(t *testing.T) {
+	detector := &Base64Detector{}
+
+	for _, tc := range []struct {
+		encoded string
+		decoded string
+	}{
+		{"编码信息：MTM4MTIzNDU2Nzg=", "编码信息：13812345678"},
+		{"编码信息：MTUwMTIzNDU2Nzg=", "编码信息：15012345678"},
+	} {
+		if detected, _, attackType := detector.Detect(tc.encoded); !detected || attackType != "base64_encoding" {
+			t.Fatalf("Detect(%q) = detected=%v type=%q, want base64_encoding", tc.encoded, detected, attackType)
+		}
+		if got := detector.Normalize(tc.encoded); got != tc.decoded {
+			t.Fatalf("Normalize(%q) = %q, want %q", tc.encoded, got, tc.decoded)
 		}
 	}
 }

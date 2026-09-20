@@ -264,20 +264,41 @@ func digitAndSeparatorCounts(candidate string) (digits, separators int) {
 	return digits, separators
 }
 
+// homophoneConfidence 表示一条同音字映射的置信分层。
+//
+// 分层的目的是让「扩展覆盖面」与「不误伤正常文本」同时成立：
+//   - 高置信字（幺/壹/洞 等）几乎不用于正常叙述，连续 3 个即可判定为混淆；
+//   - 低置信字（要/医/留 等）在护理文本中是普通用词，必须要求更长的连续
+//     序列（见 minHomophoneRun）才会被当作混淆并参与归一化。
+type homophoneConfidence int
+
+const (
+	homophoneLow homophoneConfidence = iota
+	homophoneHigh
+)
+
+// minHomophoneRun 返回该置信层触发「判定 + 归一化」所需的最短连续长度。
+func minHomophoneRun(level homophoneConfidence) int {
+	if level == homophoneHigh {
+		return 3
+	}
+	return 4
+}
+
 // HomophoneDetector 同音字检测器
 type HomophoneDetector struct {
 	homophoneMap map[rune]rune
+	runeLevel    map[rune]homophoneConfidence
 }
 
 func (d *HomophoneDetector) Detect(text string) (bool, float64, string) {
-	if d.homophoneMap == nil {
-		d.initHomophoneMap()
-	}
+	d.ensureHomophoneMaps()
 
 	// A single Chinese numeral is ordinary care language ("一片药",
-	// "两次测量"). Require a contiguous run of at least three numeral-like
-	// characters before treating it as an obfuscated identifier.
-	if longestMappedRun(text, d.homophoneMap) >= 3 {
+	// "两次测量"). Require a contiguous run of numeral-like characters --
+	// longer when the run contains a low-confidence character -- before
+	// treating it as an obfuscated identifier.
+	if longestQualifiedHomophoneRun([]rune(text), d.runeLevel) >= 3 {
 		confidence := 0.75
 		return true, confidence, "homophone_substitution"
 	}
@@ -285,23 +306,96 @@ func (d *HomophoneDetector) Detect(text string) (bool, float64, string) {
 	return false, 0.0, ""
 }
 
+// Normalize 只重写「满足分层阈值」的连续同音字片段，其余正文原样保留。
+//
+// 这一点与历史上「全文逐字符替换」的做法不同：当一段文本里既有混淆序列
+// （例："幺幺零幺零幺"）又有普通用词（例："一片药"）时，旧实现会把后者也
+// 改写成 "1片药"。按 run 限定后，只有达到阈值的片段会被改写。
 func (d *HomophoneDetector) Normalize(text string) string {
-	if d.homophoneMap == nil {
-		d.initHomophoneMap()
+	d.ensureHomophoneMaps()
+
+	runes := []rune(text)
+	result := make([]rune, 0, len(runes))
+
+	for index := 0; index < len(runes); {
+		_, mapped := d.runeLevel[runes[index]]
+		if !mapped {
+			result = append(result, runes[index])
+			index++
+			continue
+		}
+
+		end := index
+		for end < len(runes) {
+			if _, ok := d.runeLevel[runes[end]]; !ok {
+				break
+			}
+			end++
+		}
+
+		if homophoneRunThreshold(runes[index:end], d.runeLevel) <= end-index {
+			for _, ch := range runes[index:end] {
+				result = append(result, d.homophoneMap[ch])
+			}
+		} else {
+			result = append(result, runes[index:end]...)
+		}
+		index = end
 	}
 
-	// 将同音字替换为数字
-	result := []rune(text)
-	for i, ch := range result {
-		if digit, exists := d.homophoneMap[ch]; exists {
-			result[i] = digit
-		}
-	}
 	return string(result)
 }
 
+func (d *HomophoneDetector) ensureHomophoneMaps() {
+	if d.homophoneMap != nil && d.runeLevel != nil {
+		return
+	}
+	d.initHomophoneMap()
+}
+
+// homophoneRunThreshold 返回该 run 触发归一化所需的最短长度：
+// 只要其中包含任一个低置信字符，就要求更长的连续序列。
+func homophoneRunThreshold(run []rune, levels map[rune]homophoneConfidence) int {
+	threshold := minHomophoneRun(homophoneHigh)
+	for _, ch := range run {
+		if levels[ch] == homophoneLow {
+			return minHomophoneRun(homophoneLow)
+		}
+	}
+	return threshold
+}
+
+// longestQualifiedHomophoneRun 返回满足分层阈值的最长连续同音字片段长度。
+func longestQualifiedHomophoneRun(runes []rune, levels map[rune]homophoneConfidence) int {
+	longest := 0
+	for index := 0; index < len(runes); {
+		if _, ok := levels[runes[index]]; !ok {
+			index++
+			continue
+		}
+		end := index
+		for end < len(runes) {
+			if _, ok := levels[runes[end]]; !ok {
+				break
+			}
+			end++
+		}
+		if length := end - index; length >= homophoneRunThreshold(runes[index:end], levels) && length > longest {
+			longest = length
+		}
+		index = end
+	}
+	return longest
+}
+
+// initHomophoneMap 初始化同音字映射。
+//
+// 高置信层沿用历史数字同音字；低置信层为本次扩展，覆盖在护理文本中常见、
+// 但一旦成串出现即强烈指向号码混淆的同音字。低置信层要求更长的连续序列
+// （见 minHomophoneRun），因此单独出现时不会改写正文。
 func (d *HomophoneDetector) initHomophoneMap() {
 	d.homophoneMap = map[rune]rune{
+		// 高置信：几乎不用于正常叙述的数字同音字
 		'幺': '1', '壹': '1', '一': '1',
 		'贰': '2', '二': '2', '两': '2',
 		'叁': '3', '三': '3',
@@ -312,6 +406,39 @@ func (d *HomophoneDetector) initHomophoneMap() {
 		'捌': '8', '八': '8',
 		'玖': '9', '九': '9',
 		'零': '0', '〇': '0', '洞': '0',
+
+		// 低置信：日常用语中的常见同音字，仅在成串出现时参与归一化
+		'要': '1', '医': '1', '依': '1',
+		'儿': '2', '鸥': '2',
+		'散': '3', '伞': '3',
+		'死': '4', '撕': '4', '寺': '4',
+		'舞': '5', '捂': '5',
+		'留': '6', '溜': '6',
+		'妻': '7', '凄': '7',
+		'霸': '8', '发': '8',
+		'久': '9', '救': '9', '酒': '9',
+		'灵': '0',
+	}
+
+	d.runeLevel = make(map[rune]homophoneConfidence, len(d.homophoneMap))
+	highConfidence := map[rune]struct{}{
+		'幺': {}, '壹': {}, '一': {},
+		'贰': {}, '二': {}, '两': {},
+		'叁': {}, '三': {},
+		'肆': {}, '四': {},
+		'伍': {}, '五': {},
+		'陆': {}, '六': {},
+		'柒': {}, '七': {},
+		'捌': {}, '八': {},
+		'玖': {}, '九': {},
+		'零': {}, '〇': {}, '洞': {},
+	}
+	for ch := range d.homophoneMap {
+		if _, high := highConfidence[ch]; high {
+			d.runeLevel[ch] = homophoneHigh
+			continue
+		}
+		d.runeLevel[ch] = homophoneLow
 	}
 }
 
@@ -372,7 +499,18 @@ func (d *ChineseNumberDetector) Normalize(text string) string {
 // Base64Detector Base64编码检测器
 type Base64Detector struct{}
 
-var base64TokenPattern = regexp.MustCompile(`[A-Za-z0-9+/]{16,}={0,2}`)
+// base64TokenPattern 提取候选 Base64 token。
+//
+// 下限取 15 个 Base64 正文字符（`=` 填充不计入）：11~12 位数字编码后正好是
+// 「15 个正文字符 + 1 个 `=`」，例如 11 位手机号 13812345678 -> MTM4MTIzNDU2Nzg=。
+// 此前下限为 16，导致这类形态根本进不了候选，从而漏检（已由评测数据集
+// test_data/test_data_100.json 的 bypass_attack 样本 `编码信息：MTM4MTIzNDU2Nzg=` 暴露）。
+//
+// 边界说明：更短的数值（如 10 位，编码为 14 正文字符 + `==`）仍不在覆盖范围内——
+// 继续下调会扩大候选面，需另行评估误报，故本次不做。
+// 候选仍要经过 validBase64Token（长度对齐/可解码/UTF-8/无控制字符）与
+// isSensitiveDecodedPayload（数字密度或敏感关键词）两级精筛才判定命中。
+var base64TokenPattern = regexp.MustCompile(`[A-Za-z0-9+/]{15,}={0,2}`)
 var sensitiveDecodedPattern = regexp.MustCompile(`(?:\d[\s-]*){6,}`)
 
 func validBase64Token(token string) ([]byte, bool) {

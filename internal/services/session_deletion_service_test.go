@@ -213,3 +213,85 @@ func TestSessionDeletionVectorReplicaUsesConfiguredCollectionAndSessionScope(t *
 		t.Fatalf("another session's vector was affected: %#v", vectorStore.records)
 	}
 }
+
+// A session's durable replicas can outlive its local artifacts: the session file
+// lives inside the application container while the vector, timeline and graph
+// stores live in their own stores. Recreating the container therefore leaves the
+// local lane absent next to replicas that still hold the session's records.
+//
+// The cascade must clean those replicas instead of answering "not found". Callers
+// read not-found as "already clean" and then skip the cleanup entirely, which
+// lets a newly seeded corpus silently share the session with the previous one and
+// invalidates every retrieval metric measured afterwards.
+func TestSessionDeletionCleansOrphanedReplicasWhenLocalArtifactsAreAbsent(t *testing.T) {
+	sessionStore, err := store.NewSessionStore(t.TempDir())
+	if err != nil {
+		t.Fatalf("create session store: %v", err)
+	}
+	// Deliberately no SetSessionMetadata: the local session file is gone.
+	timelineReplica := &fakeSessionReplica{count: 3}
+	graphReplica := &fakeSessionReplica{count: 2}
+	service := NewSessionDeletionService(sessionStore,
+		sessionReplicaBinding{name: "timescaledb", replica: timelineReplica},
+		sessionReplicaBinding{name: "neo4j", replica: graphReplica},
+	)
+
+	result, err := service.Delete(context.Background(), "owner", "session-orphaned", false)
+	if err != nil {
+		t.Fatalf("an absent local session must not fail the cascade: %v", err)
+	}
+	if !result.Complete {
+		t.Fatal("a verified replica cleanup must be marked complete")
+	}
+	if timelineReplica.count != 0 || graphReplica.count != 0 {
+		t.Fatalf("replica records survived: timeline=%d graph=%d", timelineReplica.count, graphReplica.count)
+	}
+	for _, storeResult := range result.Stores {
+		if storeResult.Status != "deleted" || storeResult.After != 0 {
+			t.Fatalf("unexpected store result: %#v", storeResult)
+		}
+		if storeResult.Store == "session_file_cache" && storeResult.Before != 0 {
+			t.Fatalf("an absent local lane must report before=0, got %d", storeResult.Before)
+		}
+	}
+}
+
+// The preflight must reach the same verdict. A false "already clean" dry-run is
+// precisely what let stale records survive in production, because the cleanup
+// tooling treats a not-found preflight as proof that nothing needs deleting.
+func TestSessionDeletionDryRunReportsOrphanedReplicasInsteadOfNotBeingFound(t *testing.T) {
+	sessionStore, err := store.NewSessionStore(t.TempDir())
+	if err != nil {
+		t.Fatalf("create session store: %v", err)
+	}
+	replica := &fakeSessionReplica{count: 5}
+	service := NewSessionDeletionService(sessionStore,
+		sessionReplicaBinding{name: "qdrant", replica: replica},
+	)
+
+	result, err := service.Delete(context.Background(), "owner", "session-orphaned-dry", true)
+	if err != nil {
+		t.Fatalf("dry-run over orphaned replicas must not fail: %v", err)
+	}
+	if result.Complete {
+		t.Fatal("dry-run must never report completion")
+	}
+	if replica.count != 5 {
+		t.Fatalf("dry-run modified the replica: %d", replica.count)
+	}
+
+	var local SessionDeletionStoreResult
+	foundLocal := false
+	for _, storeResult := range result.Stores {
+		if storeResult.Store == "session_file_cache" {
+			local = storeResult
+			foundLocal = true
+		}
+	}
+	if !foundLocal {
+		t.Fatal("dry-run did not report the local lane")
+	}
+	if local.Status != "dry_run" || local.Before != 0 || local.After != 0 || local.Deleted != 0 {
+		t.Fatalf("unexpected local lane in dry-run: %#v", local)
+	}
+}

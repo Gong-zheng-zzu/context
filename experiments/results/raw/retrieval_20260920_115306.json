@@ -1,0 +1,199 @@
+{
+  "execution_mode": "live_api",
+  "evaluation_mode": "vector_contexts_only",
+  "timestamp": "20260920_115306",
+  "total_queries": 3,
+  "configs": [
+    "full_system"
+  ],
+  "config_hashes": {
+    "full_system": "4a52234f87c579285fe7ee633507f65ce6f30846ea536aba954bdc5909a065cb"
+  },
+  "runtime_config": {
+    "config_name": "not_captured",
+    "config_file": "not_captured",
+    "config_hash": "not_captured",
+    "service_start_time": "not_captured"
+  },
+  "dataset": {
+    "ground_truth_file": "experiments\\datasets\\retrieval_groundtruth\\competition_queries_300_auto.json",
+    "ground_truth_sha256": "d5463deae0bf82d8b1d21c38cc7f5e4eae3a97219a5a1bca2e8f018058cf5ca0",
+    "corpus_file": "experiments\\datasets\\retrieval_corpus\\retrieval_corpus_500_v2.json",
+    "corpus_sha256": "6766cc1e958381e4df0b5bcaf8af03e167e07f7c6b0caa61a6092cbc3422b3b8",
+    "session_id": "eval_retrieval_test",
+    "annotation_status": "auto_derived_unreviewed",
+    "report_eligible": false,
+    "derivation_method": "query_constructed_from_source_document",
+    "source_corpus_sha256": "6766cc1e958381e4df0b5bcaf8af03e167e07f7c6b0caa61a6092cbc3422b3b8",
+    "annotation_caveat": "Relevance is definitional: each query is generated from its ground-truth document. No human relevance judgement was performed, and the label was not reviewed. Do not describe metrics from this set as human-verified."
+  },
+  "statistical_analysis": {
+    "method": "bootstrap_percentile",
+    "resamples": 10000,
+    "seed": 20260920,
+    "confidence_level": 0.95,
+    "sample_size": 3,
+    "metrics": {
+      "mrr": {
+        "point": 0.3333333333333333,
+        "ci_low": 0.0,
+        "ci_high": 1.0,
+        "sample_size": 3,
+        "resamples": 10000,
+        "seed": 20260920,
+        "confidence_level": 0.95
+      },
+      "precision_at_5": {
+        "point": 0.06666666666666667,
+        "ci_low": 0.0,
+        "ci_high": 0.20000000000000004,
+        "sample_size": 3,
+        "resamples": 10000,
+        "seed": 20260920,
+        "confidence_level": 0.95
+      },
+      "recall_at_5": {
+        "point": 0.3333333333333333,
+        "ci_low": 0.0,
+        "ci_high": 1.0,
+        "sample_size": 3,
+        "resamples": 10000,
+        "seed": 20260920,
+        "confidence_level": 0.95
+      },
+      "hit_at_5": {
+        "point": 0.3333333333333333,
+        "ci_low": 0.0,
+        "ci_high": 1.0,
+        "sample_size": 3,
+        "resamples": 10000,
+        "seed": 20260920,
+        "confidence_level": 0.95,
+        "hit_count": 1,
+        "wilson_95_ci": [
+          0.06149194472039621,
+          0.7923403991979522
+        ]
+      }
+    }
+  },
+  "detailed_results": [
+    {
+      "query_id": "competition_temporal_001",
+      "query_text": "请查询李敏在2026-06-10前后的sleep护理记录与变化。",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 161.576,
+      "retrieved_docs": [
+        "elder_068_2026-06-21T06:02:43.194500",
+        "elder_068_2026-06-22T06:17:43.194500",
+        "elder_068_2026-06-07T06:25:43.194500",
+        "elder_068_2026-06-24T06:34:43.194500",
+        "elder_015_2026-06-22T06:42:43.194500"
+      ],
+      "response_text": "",
+      "is_scorable": true,
+      "unscorable_reason": "",
+      "found_ground_truth": false,
+      "reciprocal_rank": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-09-20T11:53:05.759059",
+      "retrieval_metadata": {},
+      "fusion_mode": "not_captured",
+      "source_statuses": {},
+      "source_candidate_counts": {},
+      "rrf_sources_seen": [],
+      "doc_source_map": {}
+    },
+    {
+      "query_id": "competition_temporal_002",
+      "query_text": "请查询赵玲在2026-06-26前后的confusion护理记录与变化。",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 115.958,
+      "retrieved_docs": [
+        "elder_005_2026-06-26T03:40:43.194500",
+        "elder_005_2026-06-14T14:30:43.194500",
+        "elder_024_2026-06-17T03:12:43.194500",
+        "elder_005_2026-07-01T02:42:43.194500",
+        "elder_005_2026-06-08T14:13:43.194500"
+      ],
+      "response_text": "",
+      "is_scorable": true,
+      "unscorable_reason": "",
+      "found_ground_truth": true,
+      "reciprocal_rank": 1.0,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "timestamp": "2026-09-20T11:53:05.875600",
+      "retrieval_metadata": {},
+      "fusion_mode": "not_captured",
+      "source_statuses": {},
+      "source_candidate_counts": {},
+      "rrf_sources_seen": [],
+      "doc_source_map": {}
+    },
+    {
+      "query_id": "competition_temporal_003",
+      "query_text": "请查询赵鹏在2026-07-03前后的meal护理记录与变化。",
+      "query_type": "temporal",
+      "config_name": "full_system",
+      "http_status": 200,
+      "error_type": "None",
+      "error_message": "",
+      "latency_ms": 100.048,
+      "retrieved_docs": [
+        "elder_074_2026-06-22T18:06:43.194500",
+        "elder_097_2026-07-04T07:18:43.194500",
+        "elder_004_2026-07-01T07:13:43.194500",
+        "elder_076_2026-06-18T07:07:43.194500",
+        "elder_057_2026-06-20T18:40:43.194500"
+      ],
+      "response_text": "",
+      "is_scorable": true,
+      "unscorable_reason": "",
+      "found_ground_truth": false,
+      "reciprocal_rank": 0.0,
+      "precision_at_5": 0.0,
+      "recall_at_5": 0.0,
+      "timestamp": "2026-09-20T11:53:05.975648",
+      "retrieval_metadata": {},
+      "fusion_mode": "not_captured",
+      "source_statuses": {},
+      "source_candidate_counts": {},
+      "rrf_sources_seen": [],
+      "doc_source_map": {}
+    }
+  ],
+  "aggregated_metrics": {
+    "full_system": {
+      "config_name": "full_system",
+      "total_queries": 3,
+      "api_success_count": 3,
+      "api_error_count": 0,
+      "scorable_count": 3,
+      "unscorable_count": 0,
+      "mrr": 0.3333333333333333,
+      "precision_at_5": 0.06666666666666667,
+      "recall_at_5": 0.3333333333333333,
+      "avg_latency_ms": 125.86066666666666,
+      "p50_latency_ms": 115.958,
+      "p95_latency_ms": 157.0142,
+      "temporal_mrr": 0.3333333333333333,
+      "causal_mrr": 0.0,
+      "general_mrr": 0.0,
+      "fusion_mode_counts": {},
+      "source_status_counts": {},
+      "source_candidate_total": {},
+      "source_hit_query_count": {},
+      "captured_query_count": 0
+    }
+  }
+}

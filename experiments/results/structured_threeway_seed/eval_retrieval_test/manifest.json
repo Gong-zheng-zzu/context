@@ -1,6 +1,6 @@
 {
   "schema": "structured-threeway-seed-manifest-v1",
-  "created_at": "2026-09-13T12:32:00Z",
+  "created_at": "2026-09-20T03:11:23Z",
   "scope": {
     "user_id": "eval_user_001",
     "session_id": "eval_retrieval_test"
@@ -19,7 +19,7 @@
         "provider": "hashlib_openssl",
         "value": "cbbc62c764a73019a2ee13ed0e250ebeed4db8ecfadc1dc1c0ad91aff38620bf"
       },
-      "generated_at": "2026-09-13T12:32:00Z"
+      "generated_at": "2026-09-20T03:11:23Z"
     },
     "document_count": 30,
     "corpus_metadata": {
@@ -490,25 +490,25 @@
         "provider": "hashlib_openssl",
         "value": "ff2d62c611cafce0290eaad839c8bee1f931e81f7fdaf426555f49e146e89d06"
       },
-      "generated_at": "2026-09-13T12:32:00Z"
+      "generated_at": "2026-09-20T03:11:23Z"
     }
   },
   "mode": "submit",
   "submission": {
     "path": "submission.jsonl",
-    "sha256": "a48595e9d6bc3aa0a83e4b7940dcac5a9e3c749930a6a312b82fd047c28ec1ac",
+    "sha256": "09abf0c472ef5fb15a79e0287acde90cd70ae3e754a61b7d1dda007157ae3820",
     "dual_digest": {
       "hash_algorithms": [
         "SHA-256",
         "SM3"
       ],
-      "sha256": "a48595e9d6bc3aa0a83e4b7940dcac5a9e3c749930a6a312b82fd047c28ec1ac",
+      "sha256": "09abf0c472ef5fb15a79e0287acde90cd70ae3e754a61b7d1dda007157ae3820",
       "sm3": {
         "status": "available",
         "provider": "hashlib_openssl",
-        "value": "1f0947b29506a78dcba6ecd53200644168497cec1444c13f3e1cb19e64bd9d20"
+        "value": "e7da2cc8a757e14d870cec6eafa6d335192276daece0c30def72a2a051d19e43"
       },
-      "generated_at": "2026-09-13T12:32:31Z"
+      "generated_at": "2026-09-20T03:11:32Z"
     },
     "accepted_by_unified_ingestion": 30,
     "attempted": 30,

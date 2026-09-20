@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"sort"
 	"strconv"
@@ -26,7 +27,25 @@ import (
 // defaultRRFK 默认 RRF 常数 K（与历史评测常量一致）
 const defaultRRFK = 60.0
 
-// defaultRRFSourceWeights 返回默认来源权重（与历史评测常量一致）
+// defaultRRFSourceWeights 返回默认来源权重。
+//
+// 取值来源说明：这组数字**继承自历史常量**（最早定义在
+// internal/engines/multi_dimensional_retrieval/knowledge/retrieval_strategy.go 的
+// DefaultRRFConfig，仅把 graph/time 改名为 knowledge/timeline），不是搜索或标定的
+// 结果。本注释此前只引用另一处同样引用本函数的常量，属循环引用、无独立依据，故补充
+// 现有实测证据如下。
+//
+// 实测证据（`experiments/scripts/retrieval_eval.py`，30 条查询，语料
+// `retrieval_corpus_30.json` sha256=75157240…efa6ef，经 `run_configured_eval.ps1` 门禁产出）：
+//   - 本默认权重下三路融合 MRR 0.4172 / P@5 0.1533 / R@5 0.6000，全面优于向量单路
+//     基线（0.3461 / 0.1333 / 0.5167）；结果文件
+//     `experiments/results/raw/retrieval_20260920_010138.json`。
+//   - 该正收益的前提是知识图谱通道按查询相关度打分。此前该通道候选分数恒为 0、
+//     来源内排序退化，同一组默认权重表现为**负收益**（MRR 0.2717）；详见
+//     `docs/competition/对比实验报告.md` 的缺陷清单第 7 项。
+//
+// 结论：本组默认值在当前评测语料上已被验证为有效，但**仍是继承值而非搜索所得**。
+// 如需重新标定，应通过 `RRF_SOURCE_WEIGHTS` 做门禁对照，不要直接修改本函数。
 func defaultRRFSourceWeights() map[string]float64 {
 	return map[string]float64{
 		"vector":    1.0,
@@ -76,16 +95,25 @@ func LoadRRFConfigFromEnv() RRFConfig {
 		}
 	}
 	if raw := strings.TrimSpace(os.Getenv("RRF_SOURCE_WEIGHTS")); raw != "" {
-		if weights, err := parseRRFSourceWeights(raw); err == nil && len(weights) > 0 {
-			config.SourceWeights = weights
-		} else if err != nil {
+		if weights, err := parseRRFSourceWeights(raw); err != nil {
 			log.Printf("⚠️ [RRF配置] RRF_SOURCE_WEIGHTS 解析失败，回退默认权重: %v", err)
+		} else if len(weights) == 0 {
+			// 形如 "," 或 " , " 的取值会解析出空权重表。此前该分支既不覆盖也不告警，
+			// 会让调用方误以为覆盖已生效，故显式告警并保留默认权重。
+			log.Printf("⚠️ [RRF配置] RRF_SOURCE_WEIGHTS=%q 未解析出任何来源权重，保留默认权重 %v", raw, config.SourceWeights)
+		} else {
+			config.SourceWeights = weights
 		}
 	}
 	return config
 }
 
-// parseRRFSourceWeights 解析 "key:value,key:value" 格式的来源权重
+// parseRRFSourceWeights 解析 "key:value,key:value" 格式的来源权重。
+//
+// 校验边界：拒绝 NaN/Inf 与非正权重。这两类取值在融合中都会产生无意义结果
+// （NaN 会传染整个 RRF 分数；0 权重等价于把该来源静默排除，若确实想排除，正确做法
+// 是直接不写该 key）。因此宁可让整串解析失败、由调用方回退默认权重并告警，
+// 也不接受这类取值悄悄改变融合行为。
 func parseRRFSourceWeights(raw string) (map[string]float64, error) {
 	weights := make(map[string]float64)
 	for _, part := range strings.Split(raw, ",") {
@@ -101,6 +129,12 @@ func parseRRFSourceWeights(raw string) (map[string]float64, error) {
 		value, err := strconv.ParseFloat(strings.TrimSpace(keyValue[1]), 64)
 		if err != nil || key == "" {
 			return nil, fmt.Errorf("无效的权重片段: %q", part)
+		}
+		if math.IsNaN(value) || math.IsInf(value, 0) {
+			return nil, fmt.Errorf("来源 %q 的权重不是有限数值: %v", key, value)
+		}
+		if value <= 0 {
+			return nil, fmt.Errorf("来源 %q 的权重必须为正数（当前 %v；若要排除该来源，请勿写入该 key）", key, value)
 		}
 		weights[key] = value
 	}

@@ -84,6 +84,165 @@ func TestParseNodePropagatesDocIDs(t *testing.T) {
 	}
 }
 
+// TestSearchQueryComputesRelevanceScoreInsteadOfConstant 确认 search 分支不再返回常量分数，
+// 而是把 $search_terms 的命中情况聚合成可解释的 score，同时保留既有权限/来源边界过滤。
+func TestSearchQueryComputesRelevanceScoreInsteadOfConstant(t *testing.T) {
+	engine := &Neo4jEngine{}
+	query := &KnowledgeQuery{
+		QueryType:   "search",
+		SearchText:  "缓存故障",
+		Keywords:    []string{"Redis"},
+		UserID:      "user-1",
+		SessionID:   "session-1",
+		WorkspaceID: "workspace-1",
+		Limit:       10,
+	}
+
+	cypherQuery, _ := engine.buildKnowledgeQuery(query)
+
+	if strings.Contains(cypherQuery, "1.0 as score") || strings.Contains(cypherQuery, "1.0 AS score") {
+		t.Fatalf("search query must not return a constant score:\n%s", cypherQuery)
+	}
+	if !strings.Contains(cypherQuery, "AS score") {
+		t.Fatalf("search query must alias the computed relevance as score:\n%s", cypherQuery)
+	}
+	if !strings.Contains(cypherQuery, "reduce(") {
+		t.Fatalf("search query must aggregate $search_terms hits into score:\n%s", cypherQuery)
+	}
+	if !strings.Contains(cypherQuery, "size(term)") {
+		t.Fatalf("search query must weight score by matched term length:\n%s", cypherQuery)
+	}
+	if !strings.Contains(cypherQuery, "ORDER BY score DESC") {
+		t.Fatalf("search query must order by the computed score:\n%s", cypherQuery)
+	}
+	// 次级排序键必须是确定性且**不带时间偏好**的：此前用 node.updated_at DESC，
+	// 会让同分候选由"较新者优先"这一与查询无关的因素决定名次（recency 偏差）。
+	if !strings.Contains(cypherQuery, "ORDER BY score DESC, node.name ASC") {
+		t.Fatalf("search query must use a deterministic, recency-free tiebreaker:\n%s", cypherQuery)
+	}
+	if strings.Contains(cypherQuery, "node.updated_at DESC") {
+		t.Fatalf("search query must not rank by recency:\n%s", cypherQuery)
+	}
+	// 评测语料中 node.importance 全为 NULL，排序不得再依赖它。
+	if strings.Contains(cypherQuery, "node.importance") {
+		t.Fatalf("search query must not order by the always-null node.importance:\n%s", cypherQuery)
+	}
+
+	// 既有边界过滤条件必须原样保留
+	for _, placeholder := range []string{"$user_id", "$session_id", "$workspace_id", "doc_ids", "$search_terms"} {
+		if !strings.Contains(cypherQuery, placeholder) {
+			t.Fatalf("search query lost scope %q:\n%s", placeholder, cypherQuery)
+		}
+	}
+}
+
+// TestParseNodeFromRecordPropagatesScore 覆盖「扫描读取 score 列并落到 KnowledgeNode.Score」。
+func TestParseNodeFromRecordPropagatesScore(t *testing.T) {
+	engine := &Neo4jEngine{}
+	record := &neo4j.Record{
+		Keys: []string{"node", "relationship", "score"},
+		Values: []interface{}{
+			neo4j.Node{
+				ElementId: "node-1",
+				Labels:    []string{"Entity"},
+				Props: map[string]interface{}{
+					"name":    "Redis",
+					"doc_ids": []string{"doc-1"},
+				},
+			},
+			nil,
+			4.5,
+		},
+	}
+
+	parsed, ok := engine.parseNodeFromRecord(record)
+	if !ok {
+		t.Fatalf("expected node to be parsed from record")
+	}
+	if parsed.Score != 4.5 {
+		t.Fatalf("Score = %v, want 4.5", parsed.Score)
+	}
+	if parsed.Name != "Redis" {
+		t.Fatalf("Name = %q, want Redis", parsed.Name)
+	}
+	if len(parsed.DocIDs) != 1 || parsed.DocIDs[0] != "doc-1" {
+		t.Fatalf("DocIDs = %v, want [doc-1]", parsed.DocIDs)
+	}
+}
+
+// TestParseNodeFromRecordAcceptsIntegerScore 覆盖 score 为整数类型（Neo4j 整数列为 int64）时的兼容。
+func TestParseNodeFromRecordAcceptsIntegerScore(t *testing.T) {
+	engine := &Neo4jEngine{}
+	record := &neo4j.Record{
+		Keys: []string{"node", "relationship", "score"},
+		Values: []interface{}{
+			neo4j.Node{ElementId: "node-1", Labels: []string{"Entity"}},
+			nil,
+			int64(3),
+		},
+	}
+
+	parsed, ok := engine.parseNodeFromRecord(record)
+	if !ok {
+		t.Fatalf("expected node to be parsed from record")
+	}
+	if parsed.Score != 3.0 {
+		t.Fatalf("Score = %v, want 3.0", parsed.Score)
+	}
+}
+
+// TestParseNodeFromRecordScoreFallback 覆盖 score 列缺失 / nil / 非法类型时回退为 0，
+// 保证 expand / path / similarity 等不返回 score 的分支以及旧查询行为不变。
+func TestParseNodeFromRecordScoreFallback(t *testing.T) {
+	engine := &Neo4jEngine{}
+	node := neo4j.Node{ElementId: "node-1", Labels: []string{"Entity"}}
+
+	cases := []struct {
+		name   string
+		record *neo4j.Record
+	}{
+		{
+			name:   "missing score column",
+			record: &neo4j.Record{Keys: []string{"node"}, Values: []interface{}{node}},
+		},
+		{
+			name:   "nil score value",
+			record: &neo4j.Record{Keys: []string{"node", "relationship", "score"}, Values: []interface{}{node, nil, nil}},
+		},
+		{
+			name:   "non-numeric score value",
+			record: &neo4j.Record{Keys: []string{"node", "relationship", "score"}, Values: []interface{}{node, nil, "not-a-number"}},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			parsed, ok := engine.parseNodeFromRecord(tc.record)
+			if !ok {
+				t.Fatalf("expected node to be parsed from record")
+			}
+			if parsed.Score != 0 {
+				t.Fatalf("Score = %v, want 0 fallback", parsed.Score)
+			}
+		})
+	}
+}
+
+// TestParseNodeFromRecordHandlesMissingOrInvalidNode 覆盖 node 列缺失 / 类型异常时安全返回。
+func TestParseNodeFromRecordHandlesMissingOrInvalidNode(t *testing.T) {
+	engine := &Neo4jEngine{}
+
+	if _, ok := engine.parseNodeFromRecord(nil); ok {
+		t.Fatalf("nil record must not parse a node")
+	}
+	if _, ok := engine.parseNodeFromRecord(&neo4j.Record{Keys: []string{"score"}, Values: []interface{}{1.0}}); ok {
+		t.Fatalf("record without node column must not parse a node")
+	}
+	if _, ok := engine.parseNodeFromRecord(&neo4j.Record{Keys: []string{"node"}, Values: []interface{}{"not-a-node"}}); ok {
+		t.Fatalf("record with non-node value must not parse a node")
+	}
+}
+
 func TestGenerateEntityUUID(t *testing.T) {
 	// 测试确定性UUID生成
 	uuid1 := GenerateEntityUUID("Redis", "database", "/workspace1")

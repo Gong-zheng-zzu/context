@@ -880,6 +880,31 @@ func (ucm *UnifiedContextManager) searchVector(query models.SearchQuery, userID 
 				}
 			}
 
+			// 只保留可追溯到源文档的点，判定规则与 ContextService.RetrieveContext
+			// 的 contextsOnly 通道完全一致：优先 Fields["doc_id"]，其次 Fields["id"]；
+			// 两者都没有的点是多向量存储的内部表示点，必须剔除。
+			//
+			// 若在这里退回 result.ID，就会把向量库的 point 标识（UUID）当成文档
+			// 标识，使融合结果混入无法对应语料的伪文档，多源检索的评测口径也随之
+			// 与向量基线不可比（实测 MRR 0.346 -> 0.200）。
+			docID := ""
+			if result.Fields != nil {
+				if value, ok := result.Fields["doc_id"].(string); ok && value != "" {
+					docID = value
+				} else if value, ok := result.Fields["id"].(string); ok && value != "" {
+					docID = value
+				}
+			}
+			if docID == "" {
+				continue
+			}
+
+			metadata := make(map[string]interface{}, len(result.Fields)+1)
+			for key, value := range result.Fields {
+				metadata[key] = value
+			}
+			metadata["doc_id"] = docID
+
 			match := &models.VectorMatch{
 				ID:          result.ID,
 				Content:     content,
@@ -888,6 +913,7 @@ func (ucm *UnifiedContextManager) searchVector(query models.SearchQuery, userID 
 				Timestamp:   time.Now(), // 实际应该从result中获取
 				UserID:      userID,
 				WorkspaceID: workspaceID,
+				Metadata:    metadata,
 			}
 			vectorMatches = append(vectorMatches, match)
 		}

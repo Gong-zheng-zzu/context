@@ -25,6 +25,9 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from base_evaluator import APIResponse, BaseEvaluator
 
+# 配对显著性原语。与本文件同目录，使评测链路不需要依赖训练管线。
+import stat_tools
+
 
 CANONICAL_ATTACK_TYPES = (
     "prompt_injection",
@@ -214,6 +217,12 @@ class AblationDelta:
     newly_observed_residual_attack_types: List[str]
     layers_added: List[str]
     layer_names: List[str]
+    # 配对显著性。newly_detected / newly_missed 本身就是配对 2x2 表的两个不一致格，
+    # 因此可以就「这一层是否真的改变了判定」做精确检验，而不必只看比率差——样本量有限
+    # 时比率差无法区分真实改变与样本波动。
+    mcnemar_discordant_count: int = 0
+    mcnemar_exact_p_one_sided: Optional[float] = None
+    mcnemar_exact_p_two_sided: Optional[float] = None
 
 
 @dataclass
@@ -1336,6 +1345,8 @@ class SecurityAblationEvaluator(SecurityEvaluator):
                     return None
                 return current_value - baseline_value
 
+            mcnemar = stat_tools.mcnemar_exact(newly_detected, newly_missed)
+
             deltas.append(AblationDelta(
                 profile=profile,
                 baseline_profile=baseline_profile,
@@ -1358,6 +1369,9 @@ class SecurityAblationEvaluator(SecurityEvaluator):
                 newly_observed_residual_attack_types=sorted(current_residual - baseline_residual),
                 layers_added=sorted(current_layers - baseline_layers),
                 layer_names=list(current_layers),
+                mcnemar_discordant_count=int(mcnemar["discordant"]),
+                mcnemar_exact_p_one_sided=mcnemar["one_sided_exact_p"],
+                mcnemar_exact_p_two_sided=mcnemar["two_sided_exact_p"],
             ))
         return deltas
 
@@ -1464,6 +1478,14 @@ class SecurityAblationEvaluator(SecurityEvaluator):
                 "delta": (
                     "Each profile is compared with the previous profile in the canonical order "
                     "(regex_only -> asdf -> asdf_casia -> asdf_casia_pccm) using paired per-sample decisions."
+                ),
+                "delta_significance": (
+                    "newly_detected_count and newly_missed_count are the two discordant cells of the paired 2x2 "
+                    "table, so mcnemar_exact_p_one_sided and mcnemar_exact_p_two_sided are exact conditional "
+                    "McNemar tests of whether the added layer really changed decisions rather than reflecting "
+                    "sampling noise. Only samples scored under both profiles are included. A layer whose "
+                    "detection_rate_delta is non-zero while its two-sided p is large has not been shown to change "
+                    "anything."
                 ),
                 "asdf_residual": (
                     "residual_attack_types are the attack types still detected after ASDF normalization and "

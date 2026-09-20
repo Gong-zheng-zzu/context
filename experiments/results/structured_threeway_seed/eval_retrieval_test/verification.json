@@ -1,6 +1,6 @@
 {
   "schema": "structured-threeway-verification-v2",
-  "verified_at": "2026-09-13T12:32:50Z",
+  "verified_at": "2026-09-18T15:43:12Z",
   "manifest": "D:\\context\\context-keeper-main\\experiments\\results\\structured_threeway_seed\\eval_retrieval_test\\manifest.json",
   "scope": {
     "user_id": "eval_user_001",
@@ -21,17 +21,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 28,
             "status": "verified"
           }
         }
@@ -42,17 +42,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 27,
             "status": "verified"
           }
         }
@@ -63,17 +63,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 23,
             "status": "verified"
           }
         }
@@ -84,17 +84,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 33,
             "status": "verified"
           }
         }
@@ -105,17 +105,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 23,
             "status": "verified"
           }
         }
@@ -126,12 +126,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 4,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 4,
             "status": "verified"
           },
           "graph": {
@@ -147,17 +147,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 31,
             "status": "verified"
           }
         }
@@ -168,12 +168,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "graph": {
@@ -189,17 +189,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 5,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 5,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 34,
             "status": "verified"
           }
         }
@@ -210,17 +210,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 30,
             "status": "verified"
           }
         }
@@ -231,17 +231,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 32,
             "status": "verified"
           }
         }
@@ -252,17 +252,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 25,
             "status": "verified"
           }
         }
@@ -273,17 +273,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 27,
             "status": "verified"
           }
         }
@@ -294,17 +294,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 10,
+            "count": 28,
             "status": "verified"
           }
         }
@@ -315,17 +315,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 14,
             "status": "verified"
           }
         }
@@ -336,17 +336,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 26,
             "status": "verified"
           }
         }
@@ -357,12 +357,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "graph": {
@@ -378,17 +378,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 30,
             "status": "verified"
           }
         }
@@ -399,12 +399,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "graph": {
@@ -420,17 +420,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 28,
             "status": "verified"
           }
         }
@@ -441,17 +441,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 25,
             "status": "verified"
           }
         }
@@ -462,17 +462,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 10,
+            "count": 39,
             "status": "verified"
           }
         }
@@ -483,12 +483,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "graph": {
@@ -504,12 +504,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 5,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 4,
             "status": "verified"
           },
           "graph": {
@@ -525,12 +525,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "graph": {
@@ -546,17 +546,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 35,
             "status": "verified"
           }
         }
@@ -567,17 +567,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 35,
             "status": "verified"
           }
         }
@@ -588,17 +588,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 29,
             "status": "verified"
           }
         }
@@ -609,17 +609,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 28,
             "status": "verified"
           }
         }
@@ -630,17 +630,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 10,
+            "count": 18,
             "status": "verified"
           }
         }
@@ -649,7 +649,7 @@
   },
   "three_way": {
     "http_status": 200,
-    "response_sha256": "be3c01ccd0c164aad67653fefdac174ddbbfa0d20fd8be18a4939aa81f69316b",
+    "response_sha256": "c3ddd13030b089ff30270578471b2481135c4f3a58af7fac76ce293deb0aed82",
     "status": "verified",
     "verified": 30,
     "expected": 30,
@@ -660,17 +660,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 28,
             "status": "verified"
           }
         }
@@ -681,17 +681,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 27,
             "status": "verified"
           }
         }
@@ -702,17 +702,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 23,
             "status": "verified"
           }
         }
@@ -723,17 +723,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 33,
             "status": "verified"
           }
         }
@@ -744,17 +744,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 12,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 23,
             "status": "verified"
           }
         }
@@ -765,12 +765,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 4,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 4,
             "status": "verified"
           },
           "graph": {
@@ -786,17 +786,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 31,
             "status": "verified"
           }
         }
@@ -807,12 +807,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "graph": {
@@ -828,17 +828,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 5,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 5,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 34,
             "status": "verified"
           }
         }
@@ -849,17 +849,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 30,
             "status": "verified"
           }
         }
@@ -870,17 +870,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 32,
             "status": "verified"
           }
         }
@@ -891,17 +891,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 25,
             "status": "verified"
           }
         }
@@ -912,17 +912,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 27,
             "status": "verified"
           }
         }
@@ -933,17 +933,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 10,
+            "count": 28,
             "status": "verified"
           }
         }
@@ -954,17 +954,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 14,
             "status": "verified"
           }
         }
@@ -975,17 +975,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 16,
+            "count": 26,
             "status": "verified"
           }
         }
@@ -996,12 +996,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "graph": {
@@ -1017,17 +1017,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 30,
             "status": "verified"
           }
         }
@@ -1038,12 +1038,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "graph": {
@@ -1059,17 +1059,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 28,
             "status": "verified"
           }
         }
@@ -1080,17 +1080,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 25,
             "status": "verified"
           }
         }
@@ -1101,17 +1101,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 11,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 10,
+            "count": 39,
             "status": "verified"
           }
         }
@@ -1122,12 +1122,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 6,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 9,
             "status": "verified"
           },
           "graph": {
@@ -1143,12 +1143,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 5,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 4,
             "status": "verified"
           },
           "graph": {
@@ -1164,12 +1164,12 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 7,
             "status": "verified"
           },
           "graph": {
@@ -1185,17 +1185,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 35,
             "status": "verified"
           }
         }
@@ -1206,17 +1206,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 35,
             "status": "verified"
           }
         }
@@ -1227,17 +1227,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 29,
             "status": "verified"
           }
         }
@@ -1248,17 +1248,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 13,
+            "count": 28,
             "status": "verified"
           }
         }
@@ -1269,17 +1269,17 @@
         "lanes": {
           "vector": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "timeline": {
             "verified": true,
-            "count": 1,
+            "count": 10,
             "status": "verified"
           },
           "graph": {
             "verified": true,
-            "count": 10,
+            "count": 18,
             "status": "verified"
           }
         }

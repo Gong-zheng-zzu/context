@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260920T040204Z_full_system_9264",
+    "started_at":  "2026-09-20T04:02:04.5787049Z",
+    "ended_at":  "2026-09-20T04:03:29.5844203Z",
+    "outcome":  "succeeded",
+    "error":  null,
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  "D:\\context\\context-keeper-main\\experiments\\results\\raw\\ablation_adversarial_security_20260920_040326Z.json",
+    "command":  "python experiments/scripts/ablation_adversarial_eval.py --dataset experiments/datasets/external/pii_bench_zh/external_pii_positive.json --config-label full_system --config-evidence $env:EVAL_RUNTIME_CONFIG_HASH",
+    "command_sha256":  "ae30cc54bb69fb6015bef129576a7eb4a58c402f1f7cb99bb34a6fcf96cbd05c",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "715e0b4255d09e92b2d670e59e4b2614c46c2989b71e7124b4bbac3fa52390a4",
+                          "overlay_env_sha256":  "8824028e20b117c1a0577fd019baca95195e756bc60cad00b96d1f3eca784db7",
+                          "effective_env_sha256":  "ad134e696c4523d859d31c32cff6197417a635a257739d09eb19ba46dcd7bf7e"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "7c73eb571d192c8dcf22c566d3f83f3bc48e6a46d28981722ceb6f153584e826"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260920T040204Z_full_system_9264\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260920T040204Z_full_system_9264\\evaluation.log"
+                  }
+}

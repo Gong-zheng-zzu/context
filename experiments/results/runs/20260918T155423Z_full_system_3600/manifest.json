@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260918T155423Z_full_system_3600",
+    "started_at":  "2026-09-18T15:54:23.7975141Z",
+    "ended_at":  "2026-09-18T15:54:35.2556212Z",
+    "outcome":  "succeeded",
+    "error":  null,
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260918_235435.json",
+    "command":  "python experiments/scripts/prepare_structured_threeway_seed.py --overwrite --submit; python experiments/scripts/retrieval_eval.py --queries 30 --configs full_system --retrieval-mode rrf --base-url http://127.0.0.1:8088 --corpus-file experiments/datasets/retrieval_corpus/retrieval_corpus_30.json",
+    "command_sha256":  "84e8d596217ce512a13f24e0e8fd0cfb8ef1de3a9bf3969354efd32c19ff32ce",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "5d0c53de14b26dfa38a8ac675e1a96f3179a7261eb22bf649712dbc76545759b",
+                          "overlay_env_sha256":  "8824028e20b117c1a0577fd019baca95195e756bc60cad00b96d1f3eca784db7",
+                          "effective_env_sha256":  "1cf91ae7628cde51571c54ad5bd1f5615994338531a0b4d3ced6f902ed9e1345"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "d7c63b5c17e0ee02b13149bbbfaa2e8c1cc9419936d799aefcbca21c5dd10b00"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260918T155423Z_full_system_3600\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260918T155423Z_full_system_3600\\evaluation.log"
+                  }
+}

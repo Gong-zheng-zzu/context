@@ -1,0 +1,6040 @@
+{
+  "metadata": {
+    "dataset_id": "competition_retrieval_queries_v1_auto",
+    "annotation_status": "auto_derived_unreviewed",
+    "report_eligible": false,
+    "derivation_method": "query_constructed_from_source_document",
+    "generated_at_utc": "2026-09-20T03:35:27.958537+00:00",
+    "source_corpus_file": "retrieval_corpus_500_v2.json",
+    "source_corpus_sha256": "6766cc1e958381e4df0b5bcaf8af03e167e07f7c6b0caa61a6092cbc3422b3b8",
+    "total_queries": 300,
+    "breakdown": {
+      "temporal": 100,
+      "causal": 100,
+      "general": 100
+    },
+    "coverage": {
+      "temporal": {
+        "queries": 100,
+        "distinct_patients": 100,
+        "distinct_documents": 100,
+        "filled_beyond_patient_dedup": 0
+      },
+      "causal": {
+        "queries": 100,
+        "distinct_patients": 100,
+        "distinct_documents": 100,
+        "filled_beyond_patient_dedup": 0
+      },
+      "general": {
+        "queries": 100,
+        "distinct_patients": 100,
+        "distinct_documents": 100,
+        "filled_beyond_patient_dedup": 0
+      }
+    },
+    "annotation_caveat": "Relevance is definitional: each query is generated from its ground-truth document. No human relevance judgement was performed, and the label was not reviewed. Do not describe metrics from this set as human-verified."
+  },
+  "queries": [
+    {
+      "query_id": "competition_temporal_001",
+      "query_type": "temporal",
+      "question": "请查询李敏在2026-06-10前后的sleep护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_068_2026-06-10T06:09:43.194500"
+      ],
+      "expected_keywords": [
+        "李敏",
+        "2026-06-10",
+        "sleep"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_002",
+      "query_type": "temporal",
+      "question": "请查询赵玲在2026-06-26前后的confusion护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_005_2026-06-26T03:40:43.194500"
+      ],
+      "expected_keywords": [
+        "赵玲",
+        "2026-06-26",
+        "confusion"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_003",
+      "query_type": "temporal",
+      "question": "请查询赵鹏在2026-07-03前后的meal护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_004_2026-07-03T18:36:43.194500"
+      ],
+      "expected_keywords": [
+        "赵鹏",
+        "2026-07-03",
+        "meal"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_004",
+      "query_type": "temporal",
+      "question": "请查询吴鹏在2026-06-12前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_061_2026-06-12T11:45:43.194500"
+      ],
+      "expected_keywords": [
+        "吴鹏",
+        "2026-06-12",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_005",
+      "query_type": "temporal",
+      "question": "请查询陈华在2026-06-29前后的mood护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_012_2026-06-29T11:09:43.194500"
+      ],
+      "expected_keywords": [
+        "陈华",
+        "2026-06-29",
+        "mood"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_006",
+      "query_type": "temporal",
+      "question": "请查询黄秀英在2026-06-15前后的sleep护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_069_2026-06-15T06:36:43.194500"
+      ],
+      "expected_keywords": [
+        "黄秀英",
+        "2026-06-15",
+        "sleep"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_007",
+      "query_type": "temporal",
+      "question": "请查询黄磊在2026-06-13前后的vital_signs护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_072_2026-06-13T14:16:43.194500"
+      ],
+      "expected_keywords": [
+        "黄磊",
+        "2026-06-13",
+        "vital_signs"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_008",
+      "query_type": "temporal",
+      "question": "请查询王明在2026-06-11前后的pain护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_080_2026-06-11T12:15:43.194500"
+      ],
+      "expected_keywords": [
+        "王明",
+        "2026-06-11",
+        "pain"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_009",
+      "query_type": "temporal",
+      "question": "请查询周秀英在2026-06-15前后的pain护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_089_2026-06-15T10:23:43.194500"
+      ],
+      "expected_keywords": [
+        "周秀英",
+        "2026-06-15",
+        "pain"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_010",
+      "query_type": "temporal",
+      "question": "请查询杨桂英在2026-06-19前后的confusion护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_084_2026-06-19T02:02:43.194500"
+      ],
+      "expected_keywords": [
+        "杨桂英",
+        "2026-06-19",
+        "confusion"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_011",
+      "query_type": "temporal",
+      "question": "请查询黄红在2026-06-30前后的pain护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_036_2026-06-30T18:42:43.194500"
+      ],
+      "expected_keywords": [
+        "黄红",
+        "2026-06-30",
+        "pain"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_012",
+      "query_type": "temporal",
+      "question": "请查询赵志强在2026-06-26前后的confusion护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_033_2026-06-26T02:07:43.194500"
+      ],
+      "expected_keywords": [
+        "赵志强",
+        "2026-06-26",
+        "confusion"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_013",
+      "query_type": "temporal",
+      "question": "请查询周丽在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_049_2026-06-06T08:56:43.194500"
+      ],
+      "expected_keywords": [
+        "周丽",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_014",
+      "query_type": "temporal",
+      "question": "请查询黄娟在2026-06-15前后的meal护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_053_2026-06-15T07:43:43.194500"
+      ],
+      "expected_keywords": [
+        "黄娟",
+        "2026-06-15",
+        "meal"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_015",
+      "query_type": "temporal",
+      "question": "请查询李静在2026-07-02前后的vital_signs护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_037_2026-07-02T14:00:43.194500"
+      ],
+      "expected_keywords": [
+        "李静",
+        "2026-07-02",
+        "vital_signs"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_016",
+      "query_type": "temporal",
+      "question": "请查询赵军在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_055_2026-06-08T08:58:43.194500"
+      ],
+      "expected_keywords": [
+        "赵军",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_017",
+      "query_type": "temporal",
+      "question": "请查询王桂英在2026-06-21前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_047_2026-06-21T22:26:43.194500"
+      ],
+      "expected_keywords": [
+        "王桂英",
+        "2026-06-21",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_018",
+      "query_type": "temporal",
+      "question": "请查询王丽在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_098_2026-06-08T19:42:43.194500"
+      ],
+      "expected_keywords": [
+        "王丽",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_019",
+      "query_type": "temporal",
+      "question": "请查询吴鹏在2026-06-30前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_029_2026-06-30T11:42:43.194500"
+      ],
+      "expected_keywords": [
+        "吴鹏",
+        "2026-06-30",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_020",
+      "query_type": "temporal",
+      "question": "请查询周玲在2026-06-15前后的confusion护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_020_2026-06-15T02:09:43.194500"
+      ],
+      "expected_keywords": [
+        "周玲",
+        "2026-06-15",
+        "confusion"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_021",
+      "query_type": "temporal",
+      "question": "请查询李静在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_015_2026-06-06T09:35:43.194500"
+      ],
+      "expected_keywords": [
+        "李静",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_022",
+      "query_type": "temporal",
+      "question": "请查询黄秀英在2026-06-20前后的sleep护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_077_2026-06-20T06:09:43.194500"
+      ],
+      "expected_keywords": [
+        "黄秀英",
+        "2026-06-20",
+        "sleep"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_023",
+      "query_type": "temporal",
+      "question": "请查询吴丽在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_043_2026-06-06T21:05:43.194500"
+      ],
+      "expected_keywords": [
+        "吴丽",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_024",
+      "query_type": "temporal",
+      "question": "请查询吴志强在2026-06-08前后的confusion护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_013_2026-06-08T02:33:43.194500"
+      ],
+      "expected_keywords": [
+        "吴志强",
+        "2026-06-08",
+        "confusion"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_025",
+      "query_type": "temporal",
+      "question": "请查询李鹏在2026-06-29前后的mood护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_092_2026-06-29T10:33:43.194500"
+      ],
+      "expected_keywords": [
+        "李鹏",
+        "2026-06-29",
+        "mood"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_026",
+      "query_type": "temporal",
+      "question": "请查询吴军在2026-06-19前后的pain护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_006_2026-06-19T11:49:43.194500"
+      ],
+      "expected_keywords": [
+        "吴军",
+        "2026-06-19",
+        "pain"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_027",
+      "query_type": "temporal",
+      "question": "请查询王磊在2026-06-09前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_085_2026-06-09T07:31:43.194500"
+      ],
+      "expected_keywords": [
+        "王磊",
+        "2026-06-09",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_028",
+      "query_type": "temporal",
+      "question": "请查询黄勇在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_042_2026-06-06T07:12:43.194500"
+      ],
+      "expected_keywords": [
+        "黄勇",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_029",
+      "query_type": "temporal",
+      "question": "请查询黄伟在2026-06-22前后的meal护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_010_2026-06-22T12:02:43.194500"
+      ],
+      "expected_keywords": [
+        "黄伟",
+        "2026-06-22",
+        "meal"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_030",
+      "query_type": "temporal",
+      "question": "请查询刘桂英在2026-06-09前后的vital_signs护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_083_2026-06-09T07:04:43.194500"
+      ],
+      "expected_keywords": [
+        "刘桂英",
+        "2026-06-09",
+        "vital_signs"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_031",
+      "query_type": "temporal",
+      "question": "请查询赵军在2026-06-13前后的confusion护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_052_2026-06-13T14:36:43.194500"
+      ],
+      "expected_keywords": [
+        "赵军",
+        "2026-06-13",
+        "confusion"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_032",
+      "query_type": "temporal",
+      "question": "请查询王桂英在2026-06-07前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_050_2026-06-07T22:29:43.194500"
+      ],
+      "expected_keywords": [
+        "王桂英",
+        "2026-06-07",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_033",
+      "query_type": "temporal",
+      "question": "请查询吴玲在2026-06-10前后的mood护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_003_2026-06-10T13:07:43.194500"
+      ],
+      "expected_keywords": [
+        "吴玲",
+        "2026-06-10",
+        "mood"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_034",
+      "query_type": "temporal",
+      "question": "请查询李志强在2026-06-15前后的medication护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_075_2026-06-15T21:41:43.194500"
+      ],
+      "expected_keywords": [
+        "李志强",
+        "2026-06-15",
+        "medication"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_035",
+      "query_type": "temporal",
+      "question": "请查询黄丽在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_032_2026-06-06T22:47:43.194500"
+      ],
+      "expected_keywords": [
+        "黄丽",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_036",
+      "query_type": "temporal",
+      "question": "请查询李明在2026-07-04前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_028_2026-07-04T16:13:43.194500"
+      ],
+      "expected_keywords": [
+        "李明",
+        "2026-07-04",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_037",
+      "query_type": "temporal",
+      "question": "请查询周建国在2026-06-07前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_038_2026-06-07T10:46:43.194500"
+      ],
+      "expected_keywords": [
+        "周建国",
+        "2026-06-07",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_038",
+      "query_type": "temporal",
+      "question": "请查询李玲在2026-06-07前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_073_2026-06-07T19:37:43.194500"
+      ],
+      "expected_keywords": [
+        "李玲",
+        "2026-06-07",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_039",
+      "query_type": "temporal",
+      "question": "请查询杨军在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_027_2026-06-08T14:24:43.194500"
+      ],
+      "expected_keywords": [
+        "杨军",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_040",
+      "query_type": "temporal",
+      "question": "请查询李丽在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_095_2026-06-06T18:49:43.194500"
+      ],
+      "expected_keywords": [
+        "李丽",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_041",
+      "query_type": "temporal",
+      "question": "请查询杨建国在2026-06-09前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_063_2026-06-09T13:02:43.194500"
+      ],
+      "expected_keywords": [
+        "杨建国",
+        "2026-06-09",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_042",
+      "query_type": "temporal",
+      "question": "请查询赵涛在2026-06-27前后的medication护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_094_2026-06-27T21:47:43.194500"
+      ],
+      "expected_keywords": [
+        "赵涛",
+        "2026-06-27",
+        "medication"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_043",
+      "query_type": "temporal",
+      "question": "请查询吴红在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_034_2026-06-06T17:55:43.194500"
+      ],
+      "expected_keywords": [
+        "吴红",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_044",
+      "query_type": "temporal",
+      "question": "请查询黄芳在2026-06-19前后的mood护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_078_2026-06-19T17:29:43.194500"
+      ],
+      "expected_keywords": [
+        "黄芳",
+        "2026-06-19",
+        "mood"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_045",
+      "query_type": "temporal",
+      "question": "请查询赵红在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_081_2026-06-08T19:54:43.194500"
+      ],
+      "expected_keywords": [
+        "赵红",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_046",
+      "query_type": "temporal",
+      "question": "请查询周丽在2026-06-26前后的vital_signs护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_048_2026-06-26T14:41:43.194500"
+      ],
+      "expected_keywords": [
+        "周丽",
+        "2026-06-26",
+        "vital_signs"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_047",
+      "query_type": "temporal",
+      "question": "请查询杨红在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_096_2026-06-08T17:27:43.194500"
+      ],
+      "expected_keywords": [
+        "杨红",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_048",
+      "query_type": "temporal",
+      "question": "请查询赵娟在2026-06-16前后的pain护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_056_2026-06-16T09:32:43.194500"
+      ],
+      "expected_keywords": [
+        "赵娟",
+        "2026-06-16",
+        "pain"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_049",
+      "query_type": "temporal",
+      "question": "请查询周军在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_008_2026-06-06T20:34:43.194500"
+      ],
+      "expected_keywords": [
+        "周军",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_050",
+      "query_type": "temporal",
+      "question": "请查询赵磊在2026-06-10前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_002_2026-06-10T10:48:43.194500"
+      ],
+      "expected_keywords": [
+        "赵磊",
+        "2026-06-10",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_051",
+      "query_type": "temporal",
+      "question": "请查询赵丽在2026-07-01前后的pain护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_044_2026-07-01T19:22:43.194500"
+      ],
+      "expected_keywords": [
+        "赵丽",
+        "2026-07-01",
+        "pain"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_052",
+      "query_type": "temporal",
+      "question": "请查询王红在2026-06-24前后的mood护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_065_2026-06-24T15:43:43.194500"
+      ],
+      "expected_keywords": [
+        "王红",
+        "2026-06-24",
+        "mood"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_053",
+      "query_type": "temporal",
+      "question": "请查询吴华在2026-06-10前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_064_2026-06-10T08:16:43.194500"
+      ],
+      "expected_keywords": [
+        "吴华",
+        "2026-06-10",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_054",
+      "query_type": "temporal",
+      "question": "请查询刘芳在2026-06-25前后的vital_signs护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_100_2026-06-25T07:07:43.194500"
+      ],
+      "expected_keywords": [
+        "刘芳",
+        "2026-06-25",
+        "vital_signs"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_055",
+      "query_type": "temporal",
+      "question": "请查询刘玲在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_022_2026-06-06T06:06:43.194500"
+      ],
+      "expected_keywords": [
+        "刘玲",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_056",
+      "query_type": "temporal",
+      "question": "请查询陈娟在2026-06-09前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_040_2026-06-09T16:31:43.194500"
+      ],
+      "expected_keywords": [
+        "陈娟",
+        "2026-06-09",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_057",
+      "query_type": "temporal",
+      "question": "请查询赵敏在2026-06-10前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_099_2026-06-10T19:00:43.194500"
+      ],
+      "expected_keywords": [
+        "赵敏",
+        "2026-06-10",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_058",
+      "query_type": "temporal",
+      "question": "请查询赵红在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_074_2026-06-08T06:20:43.194500"
+      ],
+      "expected_keywords": [
+        "赵红",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_059",
+      "query_type": "temporal",
+      "question": "请查询杨勇在2026-06-19前后的medication护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_001_2026-06-19T12:52:43.194500"
+      ],
+      "expected_keywords": [
+        "杨勇",
+        "2026-06-19",
+        "medication"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_060",
+      "query_type": "temporal",
+      "question": "请查询陈明在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_054_2026-06-06T20:01:43.194500"
+      ],
+      "expected_keywords": [
+        "陈明",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_061",
+      "query_type": "temporal",
+      "question": "请查询赵玲在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_039_2026-06-06T17:14:43.194500"
+      ],
+      "expected_keywords": [
+        "赵玲",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_062",
+      "query_type": "temporal",
+      "question": "请查询刘涛在2026-06-07前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_058_2026-06-07T12:54:43.194500"
+      ],
+      "expected_keywords": [
+        "刘涛",
+        "2026-06-07",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_063",
+      "query_type": "temporal",
+      "question": "请查询张志强在2026-06-07前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_086_2026-06-07T14:54:43.194500"
+      ],
+      "expected_keywords": [
+        "张志强",
+        "2026-06-07",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_064",
+      "query_type": "temporal",
+      "question": "请查询周建国在2026-06-15前后的medication护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_007_2026-06-15T21:18:43.194500"
+      ],
+      "expected_keywords": [
+        "周建国",
+        "2026-06-15",
+        "medication"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_065",
+      "query_type": "temporal",
+      "question": "请查询周志强在2026-06-23前后的medication护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_059_2026-06-23T21:37:43.194500"
+      ],
+      "expected_keywords": [
+        "周志强",
+        "2026-06-23",
+        "medication"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_066",
+      "query_type": "temporal",
+      "question": "请查询杨鹏在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_097_2026-06-06T07:39:43.194500"
+      ],
+      "expected_keywords": [
+        "杨鹏",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_067",
+      "query_type": "temporal",
+      "question": "请查询周建国在2026-07-02前后的medication护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_011_2026-07-02T08:43:43.194500"
+      ],
+      "expected_keywords": [
+        "周建国",
+        "2026-07-02",
+        "medication"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_068",
+      "query_type": "temporal",
+      "question": "请查询刘华在2026-06-09前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_016_2026-06-09T08:50:43.194500"
+      ],
+      "expected_keywords": [
+        "刘华",
+        "2026-06-09",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_069",
+      "query_type": "temporal",
+      "question": "请查询陈志强在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_087_2026-06-08T10:47:43.194500"
+      ],
+      "expected_keywords": [
+        "陈志强",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_070",
+      "query_type": "temporal",
+      "question": "请查询吴志强在2026-06-30前后的vital_signs护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_031_2026-06-30T19:59:43.194500"
+      ],
+      "expected_keywords": [
+        "吴志强",
+        "2026-06-30",
+        "vital_signs"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_071",
+      "query_type": "temporal",
+      "question": "请查询张敏在2026-06-30前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_062_2026-06-30T09:16:43.194500"
+      ],
+      "expected_keywords": [
+        "张敏",
+        "2026-06-30",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_072",
+      "query_type": "temporal",
+      "question": "请查询吴涛在2026-06-12前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_051_2026-06-12T20:23:43.194500"
+      ],
+      "expected_keywords": [
+        "吴涛",
+        "2026-06-12",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_073",
+      "query_type": "temporal",
+      "question": "请查询黄静在2026-06-19前后的medication护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_070_2026-06-19T12:15:43.194500"
+      ],
+      "expected_keywords": [
+        "黄静",
+        "2026-06-19",
+        "medication"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_074",
+      "query_type": "temporal",
+      "question": "请查询李国强在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_025_2026-06-06T06:08:43.194500"
+      ],
+      "expected_keywords": [
+        "李国强",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_075",
+      "query_type": "temporal",
+      "question": "请查询王勇在2026-07-03前后的pain护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_019_2026-07-03T13:20:43.194500"
+      ],
+      "expected_keywords": [
+        "王勇",
+        "2026-07-03",
+        "pain"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_076",
+      "query_type": "temporal",
+      "question": "请查询李秀英在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_091_2026-06-08T14:48:43.194500"
+      ],
+      "expected_keywords": [
+        "李秀英",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_077",
+      "query_type": "temporal",
+      "question": "请查询杨红在2026-06-20前后的sleep护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_041_2026-06-20T06:18:43.194500"
+      ],
+      "expected_keywords": [
+        "杨红",
+        "2026-06-20",
+        "sleep"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_078",
+      "query_type": "temporal",
+      "question": "请查询周红在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_024_2026-06-08T14:25:43.194500"
+      ],
+      "expected_keywords": [
+        "周红",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_079",
+      "query_type": "temporal",
+      "question": "请查询李娟在2026-06-06前后的confusion护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_082_2026-06-06T03:54:43.194500"
+      ],
+      "expected_keywords": [
+        "李娟",
+        "2026-06-06",
+        "confusion"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_080",
+      "query_type": "temporal",
+      "question": "请查询王国强在2026-06-11前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_021_2026-06-11T09:22:43.194500"
+      ],
+      "expected_keywords": [
+        "王国强",
+        "2026-06-11",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_081",
+      "query_type": "temporal",
+      "question": "请查询陈秀英在2026-06-12前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_035_2026-06-12T06:36:43.194500"
+      ],
+      "expected_keywords": [
+        "陈秀英",
+        "2026-06-12",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_082",
+      "query_type": "temporal",
+      "question": "请查询周明在2026-06-07前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_090_2026-06-07T10:20:43.194500"
+      ],
+      "expected_keywords": [
+        "周明",
+        "2026-06-07",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_083",
+      "query_type": "temporal",
+      "question": "请查询周丽在2026-06-23前后的pain护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_017_2026-06-23T14:35:43.194500"
+      ],
+      "expected_keywords": [
+        "周丽",
+        "2026-06-23",
+        "pain"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_084",
+      "query_type": "temporal",
+      "question": "请查询李勇在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_045_2026-06-06T22:55:43.194500"
+      ],
+      "expected_keywords": [
+        "李勇",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_085",
+      "query_type": "temporal",
+      "question": "请查询杨娟在2026-06-25前后的medication护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_066_2026-06-25T08:15:43.194500"
+      ],
+      "expected_keywords": [
+        "杨娟",
+        "2026-06-25",
+        "medication"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_086",
+      "query_type": "temporal",
+      "question": "请查询杨秀英在2026-06-23前后的sleep护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_079_2026-06-23T06:49:43.194500"
+      ],
+      "expected_keywords": [
+        "杨秀英",
+        "2026-06-23",
+        "sleep"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_087",
+      "query_type": "temporal",
+      "question": "请查询吴磊在2026-06-29前后的vital_signs护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_023_2026-06-29T14:53:43.194500"
+      ],
+      "expected_keywords": [
+        "吴磊",
+        "2026-06-29",
+        "vital_signs"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_088",
+      "query_type": "temporal",
+      "question": "请查询李伟在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_093_2026-06-06T06:55:43.194500"
+      ],
+      "expected_keywords": [
+        "李伟",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_089",
+      "query_type": "temporal",
+      "question": "请查询黄玲在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_018_2026-06-06T20:29:43.194500"
+      ],
+      "expected_keywords": [
+        "黄玲",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_090",
+      "query_type": "temporal",
+      "question": "请查询赵丽在2026-06-06前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_060_2026-06-06T06:42:43.194500"
+      ],
+      "expected_keywords": [
+        "赵丽",
+        "2026-06-06",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_091",
+      "query_type": "temporal",
+      "question": "请查询陈桂英在2026-06-07前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_014_2026-06-07T10:12:43.194500"
+      ],
+      "expected_keywords": [
+        "陈桂英",
+        "2026-06-07",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_092",
+      "query_type": "temporal",
+      "question": "请查询黄明在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_067_2026-06-08T18:14:43.194500"
+      ],
+      "expected_keywords": [
+        "黄明",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_093",
+      "query_type": "temporal",
+      "question": "请查询杨建国在2026-06-18前后的mood护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_026_2026-06-18T11:52:43.194500"
+      ],
+      "expected_keywords": [
+        "杨建国",
+        "2026-06-18",
+        "mood"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_094",
+      "query_type": "temporal",
+      "question": "请查询张敏在2026-06-08前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_057_2026-06-08T09:28:43.194500"
+      ],
+      "expected_keywords": [
+        "张敏",
+        "2026-06-08",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_095",
+      "query_type": "temporal",
+      "question": "请查询王秀英在2026-06-09前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_071_2026-06-09T15:17:43.194500"
+      ],
+      "expected_keywords": [
+        "王秀英",
+        "2026-06-09",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_096",
+      "query_type": "temporal",
+      "question": "请查询黄国强在2026-06-18前后的meal护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_076_2026-06-18T07:07:43.194500"
+      ],
+      "expected_keywords": [
+        "黄国强",
+        "2026-06-18",
+        "meal"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_097",
+      "query_type": "temporal",
+      "question": "请查询吴鹏在2026-06-22前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_030_2026-06-22T15:18:43.194500"
+      ],
+      "expected_keywords": [
+        "吴鹏",
+        "2026-06-22",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_098",
+      "query_type": "temporal",
+      "question": "请查询王丽在2026-07-02前后的vital_signs护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_088_2026-07-02T07:25:43.194500"
+      ],
+      "expected_keywords": [
+        "王丽",
+        "2026-07-02",
+        "vital_signs"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_099",
+      "query_type": "temporal",
+      "question": "请查询黄伟在2026-06-10前后的fall护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_009_2026-06-10T11:30:43.194500"
+      ],
+      "expected_keywords": [
+        "黄伟",
+        "2026-06-10",
+        "fall"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_temporal_100",
+      "query_type": "temporal",
+      "question": "请查询刘志强在2026-06-12前后的medication护理记录与变化。",
+      "ground_truth_docs": [
+        "elder_046_2026-06-12T08:57:43.194500"
+      ],
+      "expected_keywords": [
+        "刘志强",
+        "2026-06-12",
+        "medication"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "按患者、日期和事件类型核验是否为相关记录。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_001",
+      "query_type": "causal",
+      "question": "周丽在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_048_2026-06-08T13:57:43.194500"
+      ],
+      "expected_keywords": [
+        "周丽",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_002",
+      "query_type": "causal",
+      "question": "周丽在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_049_2026-06-06T08:56:43.194500"
+      ],
+      "expected_keywords": [
+        "周丽",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_003",
+      "query_type": "causal",
+      "question": "吴志强在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_031_2026-06-06T18:36:43.194500"
+      ],
+      "expected_keywords": [
+        "吴志强",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_004",
+      "query_type": "causal",
+      "question": "赵军在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_052_2026-06-08T20:20:43.194500"
+      ],
+      "expected_keywords": [
+        "赵军",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_005",
+      "query_type": "causal",
+      "question": "周建国在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_038_2026-06-06T06:28:43.194500"
+      ],
+      "expected_keywords": [
+        "周建国",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_006",
+      "query_type": "causal",
+      "question": "周志强在2026-06-18发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_059_2026-06-18T16:25:43.194500"
+      ],
+      "expected_keywords": [
+        "周志强",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_007",
+      "query_type": "causal",
+      "question": "李秀英在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_091_2026-06-08T14:48:43.194500"
+      ],
+      "expected_keywords": [
+        "李秀英",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_008",
+      "query_type": "causal",
+      "question": "王勇在2026-06-11发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_019_2026-06-11T08:36:43.194500"
+      ],
+      "expected_keywords": [
+        "王勇",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_009",
+      "query_type": "causal",
+      "question": "陈明在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_054_2026-06-06T20:01:43.194500"
+      ],
+      "expected_keywords": [
+        "陈明",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_010",
+      "query_type": "causal",
+      "question": "赵敏在2026-06-10发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_099_2026-06-10T19:00:43.194500"
+      ],
+      "expected_keywords": [
+        "赵敏",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_011",
+      "query_type": "causal",
+      "question": "陈娟在2026-06-09发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_040_2026-06-09T16:31:43.194500"
+      ],
+      "expected_keywords": [
+        "陈娟",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_012",
+      "query_type": "causal",
+      "question": "李娟在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_082_2026-06-06T07:58:43.194500"
+      ],
+      "expected_keywords": [
+        "李娟",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_013",
+      "query_type": "causal",
+      "question": "赵军在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_055_2026-06-08T08:58:43.194500"
+      ],
+      "expected_keywords": [
+        "赵军",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_014",
+      "query_type": "causal",
+      "question": "刘芳在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_100_2026-06-06T06:40:43.194500"
+      ],
+      "expected_keywords": [
+        "刘芳",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_015",
+      "query_type": "causal",
+      "question": "赵玲在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_039_2026-06-06T17:14:43.194500"
+      ],
+      "expected_keywords": [
+        "赵玲",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_016",
+      "query_type": "causal",
+      "question": "杨建国在2026-06-09发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_063_2026-06-09T13:02:43.194500"
+      ],
+      "expected_keywords": [
+        "杨建国",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_017",
+      "query_type": "causal",
+      "question": "黄勇在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_042_2026-06-06T07:12:43.194500"
+      ],
+      "expected_keywords": [
+        "黄勇",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_018",
+      "query_type": "causal",
+      "question": "黄明在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_067_2026-06-08T18:14:43.194500"
+      ],
+      "expected_keywords": [
+        "黄明",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_019",
+      "query_type": "causal",
+      "question": "刘志强在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_046_2026-06-06T20:36:43.194500"
+      ],
+      "expected_keywords": [
+        "刘志强",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_020",
+      "query_type": "causal",
+      "question": "李静在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_037_2026-06-06T22:59:43.194500"
+      ],
+      "expected_keywords": [
+        "李静",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_021",
+      "query_type": "causal",
+      "question": "刘桂英在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_083_2026-06-07T13:53:43.194500"
+      ],
+      "expected_keywords": [
+        "刘桂英",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_022",
+      "query_type": "causal",
+      "question": "杨娟在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_066_2026-06-07T17:26:43.194500"
+      ],
+      "expected_keywords": [
+        "杨娟",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_023",
+      "query_type": "causal",
+      "question": "黄秀英在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_069_2026-06-06T18:16:43.194500"
+      ],
+      "expected_keywords": [
+        "黄秀英",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_024",
+      "query_type": "causal",
+      "question": "吴鹏在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_029_2026-06-06T13:18:43.194500"
+      ],
+      "expected_keywords": [
+        "吴鹏",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_025",
+      "query_type": "causal",
+      "question": "李明在2026-07-04发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_028_2026-07-04T16:13:43.194500"
+      ],
+      "expected_keywords": [
+        "李明",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_026",
+      "query_type": "causal",
+      "question": "吴鹏在2026-06-22发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_030_2026-06-22T15:18:43.194500"
+      ],
+      "expected_keywords": [
+        "吴鹏",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_027",
+      "query_type": "causal",
+      "question": "杨红在2026-06-16发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_041_2026-06-16T22:08:43.194500"
+      ],
+      "expected_keywords": [
+        "杨红",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_028",
+      "query_type": "causal",
+      "question": "吴鹏在2026-06-12发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_061_2026-06-12T11:45:43.194500"
+      ],
+      "expected_keywords": [
+        "吴鹏",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_029",
+      "query_type": "causal",
+      "question": "李勇在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_045_2026-06-06T22:55:43.194500"
+      ],
+      "expected_keywords": [
+        "李勇",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_030",
+      "query_type": "causal",
+      "question": "黄红在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_036_2026-06-06T08:22:43.194500"
+      ],
+      "expected_keywords": [
+        "黄红",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_031",
+      "query_type": "causal",
+      "question": "张敏在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_062_2026-06-08T18:45:43.194500"
+      ],
+      "expected_keywords": [
+        "张敏",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_032",
+      "query_type": "causal",
+      "question": "刘涛在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_058_2026-06-07T12:54:43.194500"
+      ],
+      "expected_keywords": [
+        "刘涛",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_033",
+      "query_type": "causal",
+      "question": "杨军在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_027_2026-06-08T14:24:43.194500"
+      ],
+      "expected_keywords": [
+        "杨军",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_034",
+      "query_type": "causal",
+      "question": "杨勇在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_001_2026-06-08T08:05:43.194500"
+      ],
+      "expected_keywords": [
+        "杨勇",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_035",
+      "query_type": "causal",
+      "question": "周玲在2026-06-18发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_020_2026-06-18T16:57:43.194500"
+      ],
+      "expected_keywords": [
+        "周玲",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_036",
+      "query_type": "causal",
+      "question": "王桂英在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_050_2026-06-07T22:29:43.194500"
+      ],
+      "expected_keywords": [
+        "王桂英",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_037",
+      "query_type": "causal",
+      "question": "陈秀英在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_035_2026-06-06T18:23:43.194500"
+      ],
+      "expected_keywords": [
+        "陈秀英",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_038",
+      "query_type": "causal",
+      "question": "黄娟在2026-06-15发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_053_2026-06-15T11:25:43.194500"
+      ],
+      "expected_keywords": [
+        "黄娟",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_039",
+      "query_type": "causal",
+      "question": "李丽在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_095_2026-06-06T18:49:43.194500"
+      ],
+      "expected_keywords": [
+        "李丽",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_040",
+      "query_type": "causal",
+      "question": "李鹏在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_092_2026-06-06T13:06:43.194500"
+      ],
+      "expected_keywords": [
+        "李鹏",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_041",
+      "query_type": "causal",
+      "question": "王桂英在2026-06-21发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_047_2026-06-21T22:26:43.194500"
+      ],
+      "expected_keywords": [
+        "王桂英",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_042",
+      "query_type": "causal",
+      "question": "王红在2026-06-09发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_065_2026-06-09T06:48:43.194500"
+      ],
+      "expected_keywords": [
+        "王红",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_043",
+      "query_type": "causal",
+      "question": "黄芳在2026-06-25发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_078_2026-06-25T09:27:43.194500"
+      ],
+      "expected_keywords": [
+        "黄芳",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_044",
+      "query_type": "causal",
+      "question": "张志强在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_086_2026-06-07T14:54:43.194500"
+      ],
+      "expected_keywords": [
+        "张志强",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_045",
+      "query_type": "causal",
+      "question": "周红在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_024_2026-06-08T14:25:43.194500"
+      ],
+      "expected_keywords": [
+        "周红",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_046",
+      "query_type": "causal",
+      "question": "周明在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_090_2026-06-07T10:20:43.194500"
+      ],
+      "expected_keywords": [
+        "周明",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_047",
+      "query_type": "causal",
+      "question": "黄伟在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_010_2026-06-06T09:05:43.194500"
+      ],
+      "expected_keywords": [
+        "黄伟",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_048",
+      "query_type": "causal",
+      "question": "吴华在2026-07-01发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_064_2026-07-01T22:38:43.194500"
+      ],
+      "expected_keywords": [
+        "吴华",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_049",
+      "query_type": "causal",
+      "question": "杨秀英在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_079_2026-06-06T16:52:43.194500"
+      ],
+      "expected_keywords": [
+        "杨秀英",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_050",
+      "query_type": "causal",
+      "question": "黄磊在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_072_2026-06-06T09:55:43.194500"
+      ],
+      "expected_keywords": [
+        "黄磊",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_051",
+      "query_type": "causal",
+      "question": "赵红在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_081_2026-06-08T19:54:43.194500"
+      ],
+      "expected_keywords": [
+        "赵红",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_052",
+      "query_type": "causal",
+      "question": "赵志强在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_033_2026-06-07T13:09:43.194500"
+      ],
+      "expected_keywords": [
+        "赵志强",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_053",
+      "query_type": "causal",
+      "question": "刘华在2026-06-09发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_016_2026-06-09T08:50:43.194500"
+      ],
+      "expected_keywords": [
+        "刘华",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_054",
+      "query_type": "causal",
+      "question": "陈志强在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_087_2026-06-08T10:47:43.194500"
+      ],
+      "expected_keywords": [
+        "陈志强",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_055",
+      "query_type": "causal",
+      "question": "张敏在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_057_2026-06-08T09:28:43.194500"
+      ],
+      "expected_keywords": [
+        "张敏",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_056",
+      "query_type": "causal",
+      "question": "吴红在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_034_2026-06-06T17:55:43.194500"
+      ],
+      "expected_keywords": [
+        "吴红",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_057",
+      "query_type": "causal",
+      "question": "杨鹏在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_097_2026-06-06T07:39:43.194500"
+      ],
+      "expected_keywords": [
+        "杨鹏",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_058",
+      "query_type": "causal",
+      "question": "王明在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_080_2026-06-07T13:54:43.194500"
+      ],
+      "expected_keywords": [
+        "王明",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_059",
+      "query_type": "causal",
+      "question": "吴军在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_006_2026-06-06T12:02:43.194500"
+      ],
+      "expected_keywords": [
+        "吴军",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_060",
+      "query_type": "causal",
+      "question": "赵丽在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_060_2026-06-06T06:42:43.194500"
+      ],
+      "expected_keywords": [
+        "赵丽",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_061",
+      "query_type": "causal",
+      "question": "杨红在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_096_2026-06-08T17:27:43.194500"
+      ],
+      "expected_keywords": [
+        "杨红",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_062",
+      "query_type": "causal",
+      "question": "李国强在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_025_2026-06-06T06:08:43.194500"
+      ],
+      "expected_keywords": [
+        "李国强",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_063",
+      "query_type": "causal",
+      "question": "周军在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_008_2026-06-06T20:34:43.194500"
+      ],
+      "expected_keywords": [
+        "周军",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_064",
+      "query_type": "causal",
+      "question": "黄玲在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_018_2026-06-07T20:06:43.194500"
+      ],
+      "expected_keywords": [
+        "黄玲",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_065",
+      "query_type": "causal",
+      "question": "李志强在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_075_2026-06-08T09:40:43.194500"
+      ],
+      "expected_keywords": [
+        "李志强",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_066",
+      "query_type": "causal",
+      "question": "王丽在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_088_2026-06-06T15:28:43.194500"
+      ],
+      "expected_keywords": [
+        "王丽",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_067",
+      "query_type": "causal",
+      "question": "刘玲在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_022_2026-06-06T06:06:43.194500"
+      ],
+      "expected_keywords": [
+        "刘玲",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_068",
+      "query_type": "causal",
+      "question": "王秀英在2026-06-09发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_071_2026-06-09T15:17:43.194500"
+      ],
+      "expected_keywords": [
+        "王秀英",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_069",
+      "query_type": "causal",
+      "question": "黄丽在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_032_2026-06-06T22:47:43.194500"
+      ],
+      "expected_keywords": [
+        "黄丽",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_070",
+      "query_type": "causal",
+      "question": "赵磊在2026-06-10发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_002_2026-06-10T10:48:43.194500"
+      ],
+      "expected_keywords": [
+        "赵磊",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_071",
+      "query_type": "causal",
+      "question": "赵涛在2026-06-10发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_094_2026-06-10T10:27:43.194500"
+      ],
+      "expected_keywords": [
+        "赵涛",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_072",
+      "query_type": "causal",
+      "question": "吴涛在2026-06-12发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_051_2026-06-12T20:23:43.194500"
+      ],
+      "expected_keywords": [
+        "吴涛",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_073",
+      "query_type": "causal",
+      "question": "赵红在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_074_2026-06-08T06:20:43.194500"
+      ],
+      "expected_keywords": [
+        "赵红",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_074",
+      "query_type": "causal",
+      "question": "赵丽在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_044_2026-06-06T16:21:43.194500"
+      ],
+      "expected_keywords": [
+        "赵丽",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_075",
+      "query_type": "causal",
+      "question": "吴玲在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_003_2026-06-07T16:58:43.194500"
+      ],
+      "expected_keywords": [
+        "吴玲",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_076",
+      "query_type": "causal",
+      "question": "杨建国在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_026_2026-06-07T18:15:43.194500"
+      ],
+      "expected_keywords": [
+        "杨建国",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_077",
+      "query_type": "causal",
+      "question": "李静在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_015_2026-06-06T09:35:43.194500"
+      ],
+      "expected_keywords": [
+        "李静",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_078",
+      "query_type": "causal",
+      "question": "李伟在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_093_2026-06-06T06:55:43.194500"
+      ],
+      "expected_keywords": [
+        "李伟",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_079",
+      "query_type": "causal",
+      "question": "周建国在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_007_2026-06-06T09:21:43.194500"
+      ],
+      "expected_keywords": [
+        "周建国",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_080",
+      "query_type": "causal",
+      "question": "陈桂英在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_014_2026-06-07T10:12:43.194500"
+      ],
+      "expected_keywords": [
+        "陈桂英",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_081",
+      "query_type": "causal",
+      "question": "赵玲在2026-06-10发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_005_2026-06-10T08:14:43.194500"
+      ],
+      "expected_keywords": [
+        "赵玲",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_082",
+      "query_type": "causal",
+      "question": "赵鹏在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_004_2026-06-06T08:44:43.194500"
+      ],
+      "expected_keywords": [
+        "赵鹏",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_083",
+      "query_type": "causal",
+      "question": "周秀英在2026-06-10发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_089_2026-06-10T10:34:43.194500"
+      ],
+      "expected_keywords": [
+        "周秀英",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_084",
+      "query_type": "causal",
+      "question": "王丽在2026-06-08发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_098_2026-06-08T19:42:43.194500"
+      ],
+      "expected_keywords": [
+        "王丽",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_085",
+      "query_type": "causal",
+      "question": "李敏在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_068_2026-06-06T14:18:43.194500"
+      ],
+      "expected_keywords": [
+        "李敏",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_086",
+      "query_type": "causal",
+      "question": "黄国强在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_076_2026-06-06T14:02:43.194500"
+      ],
+      "expected_keywords": [
+        "黄国强",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_087",
+      "query_type": "causal",
+      "question": "周建国在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_011_2026-06-06T13:37:43.194500"
+      ],
+      "expected_keywords": [
+        "周建国",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_088",
+      "query_type": "causal",
+      "question": "王国强在2026-06-11发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_021_2026-06-11T09:22:43.194500"
+      ],
+      "expected_keywords": [
+        "王国强",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_089",
+      "query_type": "causal",
+      "question": "吴丽在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_043_2026-06-06T21:05:43.194500"
+      ],
+      "expected_keywords": [
+        "吴丽",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_090",
+      "query_type": "causal",
+      "question": "杨桂英在2026-06-09发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_084_2026-06-09T15:39:43.194500"
+      ],
+      "expected_keywords": [
+        "杨桂英",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_091",
+      "query_type": "causal",
+      "question": "王磊在2026-06-09发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_085_2026-06-09T07:31:43.194500"
+      ],
+      "expected_keywords": [
+        "王磊",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_092",
+      "query_type": "causal",
+      "question": "吴磊在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_023_2026-06-06T07:28:43.194500"
+      ],
+      "expected_keywords": [
+        "吴磊",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_093",
+      "query_type": "causal",
+      "question": "吴志强在2026-06-14发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_013_2026-06-14T22:49:43.194500"
+      ],
+      "expected_keywords": [
+        "吴志强",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_094",
+      "query_type": "causal",
+      "question": "黄秀英在2026-06-10发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_077_2026-06-10T08:14:43.194500"
+      ],
+      "expected_keywords": [
+        "黄秀英",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_095",
+      "query_type": "causal",
+      "question": "黄伟在2026-06-10发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_009_2026-06-10T11:30:43.194500"
+      ],
+      "expected_keywords": [
+        "黄伟",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_096",
+      "query_type": "causal",
+      "question": "周丽在2026-06-09发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_017_2026-06-09T10:19:43.194500"
+      ],
+      "expected_keywords": [
+        "周丽",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_097",
+      "query_type": "causal",
+      "question": "陈华在2026-06-14发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_012_2026-06-14T14:18:43.194500"
+      ],
+      "expected_keywords": [
+        "陈华",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_098",
+      "query_type": "causal",
+      "question": "黄静在2026-06-06发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_070_2026-06-06T07:02:43.194500"
+      ],
+      "expected_keywords": [
+        "黄静",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_099",
+      "query_type": "causal",
+      "question": "李玲在2026-06-07发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_073_2026-06-07T19:37:43.194500"
+      ],
+      "expected_keywords": [
+        "李玲",
+        "fall",
+        "低血压"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_causal_100",
+      "query_type": "causal",
+      "question": "赵娟在2026-06-09发生fall与哪些护理因素有关？",
+      "ground_truth_docs": [
+        "elder_056_2026-06-09T22:50:43.194500"
+      ],
+      "expected_keywords": [
+        "赵娟",
+        "fall",
+        "环境因素"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否包含该患者同日事件及对应诱因或护理因素。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_001",
+      "query_type": "general",
+      "question": "吴鹏本次meal护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_061_2026-06-07T12:18:43.194500"
+      ],
+      "expected_keywords": [
+        "吴鹏",
+        "meal",
+        "饮食"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_002",
+      "query_type": "general",
+      "question": "李敏本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_068_2026-06-17T10:24:43.194500"
+      ],
+      "expected_keywords": [
+        "李敏",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_003",
+      "query_type": "general",
+      "question": "黄伟本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_010_2026-06-06T09:05:43.194500"
+      ],
+      "expected_keywords": [
+        "黄伟",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_004",
+      "query_type": "general",
+      "question": "赵鹏本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_004_2026-07-04T10:32:43.194500"
+      ],
+      "expected_keywords": [
+        "赵鹏",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_005",
+      "query_type": "general",
+      "question": "黄秀英本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_069_2026-06-06T18:16:43.194500"
+      ],
+      "expected_keywords": [
+        "黄秀英",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_006",
+      "query_type": "general",
+      "question": "赵军本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_052_2026-06-08T20:20:43.194500"
+      ],
+      "expected_keywords": [
+        "赵军",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_007",
+      "query_type": "general",
+      "question": "李丽本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_095_2026-06-06T18:49:43.194500"
+      ],
+      "expected_keywords": [
+        "李丽",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_008",
+      "query_type": "general",
+      "question": "吴红本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_034_2026-06-06T17:55:43.194500"
+      ],
+      "expected_keywords": [
+        "吴红",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_009",
+      "query_type": "general",
+      "question": "赵玲本次sleep护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_005_2026-06-22T06:32:43.194500"
+      ],
+      "expected_keywords": [
+        "赵玲",
+        "sleep",
+        "睡眠"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_010",
+      "query_type": "general",
+      "question": "张志强本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_086_2026-06-14T12:08:43.194500"
+      ],
+      "expected_keywords": [
+        "张志强",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_011",
+      "query_type": "general",
+      "question": "赵敏本次mood护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_099_2026-06-21T14:54:43.194500"
+      ],
+      "expected_keywords": [
+        "赵敏",
+        "mood",
+        "情绪"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_012",
+      "query_type": "general",
+      "question": "黄静本次medication护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_070_2026-06-19T12:15:43.194500"
+      ],
+      "expected_keywords": [
+        "黄静",
+        "medication",
+        "服药"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_013",
+      "query_type": "general",
+      "question": "周明本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_090_2026-07-05T18:58:43.194500"
+      ],
+      "expected_keywords": [
+        "周明",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_014",
+      "query_type": "general",
+      "question": "王丽本次sleep护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_098_2026-06-24T06:02:43.194500"
+      ],
+      "expected_keywords": [
+        "王丽",
+        "sleep",
+        "睡眠"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_015",
+      "query_type": "general",
+      "question": "陈秀英本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_035_2026-06-06T18:23:43.194500"
+      ],
+      "expected_keywords": [
+        "陈秀英",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_016",
+      "query_type": "general",
+      "question": "黄磊本次vital_signs护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_072_2026-06-13T14:16:43.194500"
+      ],
+      "expected_keywords": [
+        "黄磊",
+        "vital_signs",
+        "生命体征"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_017",
+      "query_type": "general",
+      "question": "陈华本次mood护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_012_2026-06-29T11:09:43.194500"
+      ],
+      "expected_keywords": [
+        "陈华",
+        "mood",
+        "情绪"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_018",
+      "query_type": "general",
+      "question": "杨红本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_096_2026-06-27T13:11:43.194500"
+      ],
+      "expected_keywords": [
+        "杨红",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_019",
+      "query_type": "general",
+      "question": "李秀英本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_091_2026-06-08T14:48:43.194500"
+      ],
+      "expected_keywords": [
+        "李秀英",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_020",
+      "query_type": "general",
+      "question": "杨秀英本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_079_2026-06-06T16:52:43.194500"
+      ],
+      "expected_keywords": [
+        "杨秀英",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_021",
+      "query_type": "general",
+      "question": "李娟本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_082_2026-06-06T07:58:43.194500"
+      ],
+      "expected_keywords": [
+        "李娟",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_022",
+      "query_type": "general",
+      "question": "李静本次sleep护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_015_2026-06-22T06:42:43.194500"
+      ],
+      "expected_keywords": [
+        "李静",
+        "sleep",
+        "睡眠"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_023",
+      "query_type": "general",
+      "question": "李鹏本次mood护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_092_2026-06-29T10:33:43.194500"
+      ],
+      "expected_keywords": [
+        "李鹏",
+        "mood",
+        "情绪"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_024",
+      "query_type": "general",
+      "question": "杨红本次sleep护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_041_2026-06-20T06:18:43.194500"
+      ],
+      "expected_keywords": [
+        "杨红",
+        "sleep",
+        "睡眠"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_025",
+      "query_type": "general",
+      "question": "刘玲本次mood护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_022_2026-06-13T16:38:43.194500"
+      ],
+      "expected_keywords": [
+        "刘玲",
+        "mood",
+        "情绪"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_026",
+      "query_type": "general",
+      "question": "周丽本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_049_2026-06-06T08:56:43.194500"
+      ],
+      "expected_keywords": [
+        "周丽",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_027",
+      "query_type": "general",
+      "question": "杨建国本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_063_2026-06-09T13:02:43.194500"
+      ],
+      "expected_keywords": [
+        "杨建国",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_028",
+      "query_type": "general",
+      "question": "黄国强本次meal护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_076_2026-06-18T07:07:43.194500"
+      ],
+      "expected_keywords": [
+        "黄国强",
+        "meal",
+        "饮食"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_029",
+      "query_type": "general",
+      "question": "张敏本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_062_2026-06-30T09:16:43.194500"
+      ],
+      "expected_keywords": [
+        "张敏",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_030",
+      "query_type": "general",
+      "question": "赵红本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_081_2026-06-08T19:54:43.194500"
+      ],
+      "expected_keywords": [
+        "赵红",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_031",
+      "query_type": "general",
+      "question": "刘华本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_016_2026-06-16T16:03:43.194500"
+      ],
+      "expected_keywords": [
+        "刘华",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_032",
+      "query_type": "general",
+      "question": "周建国本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_038_2026-06-07T10:46:43.194500"
+      ],
+      "expected_keywords": [
+        "周建国",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_033",
+      "query_type": "general",
+      "question": "周建国本次medication护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_011_2026-07-02T08:43:43.194500"
+      ],
+      "expected_keywords": [
+        "周建国",
+        "medication",
+        "服药"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_034",
+      "query_type": "general",
+      "question": "李玲本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_073_2026-06-07T19:37:43.194500"
+      ],
+      "expected_keywords": [
+        "李玲",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_035",
+      "query_type": "general",
+      "question": "黄娟本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_053_2026-06-15T11:25:43.194500"
+      ],
+      "expected_keywords": [
+        "黄娟",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_036",
+      "query_type": "general",
+      "question": "赵磊本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_002_2026-06-10T10:48:43.194500"
+      ],
+      "expected_keywords": [
+        "赵磊",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_037",
+      "query_type": "general",
+      "question": "王勇本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_019_2026-06-11T08:36:43.194500"
+      ],
+      "expected_keywords": [
+        "王勇",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_038",
+      "query_type": "general",
+      "question": "周玲本次confusion护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_020_2026-06-15T02:09:43.194500"
+      ],
+      "expected_keywords": [
+        "周玲",
+        "confusion",
+        "认知障碍"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_039",
+      "query_type": "general",
+      "question": "李国强本次sleep护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_025_2026-06-27T06:07:43.194500"
+      ],
+      "expected_keywords": [
+        "李国强",
+        "sleep",
+        "睡眠"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_040",
+      "query_type": "general",
+      "question": "黄红本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_036_2026-06-30T18:42:43.194500"
+      ],
+      "expected_keywords": [
+        "黄红",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_041",
+      "query_type": "general",
+      "question": "吴磊本次vital_signs护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_023_2026-06-29T14:53:43.194500"
+      ],
+      "expected_keywords": [
+        "吴磊",
+        "vital_signs",
+        "生命体征"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_042",
+      "query_type": "general",
+      "question": "刘志强本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_046_2026-06-06T20:36:43.194500"
+      ],
+      "expected_keywords": [
+        "刘志强",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_043",
+      "query_type": "general",
+      "question": "杨桂英本次confusion护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_084_2026-06-27T02:39:43.194500"
+      ],
+      "expected_keywords": [
+        "杨桂英",
+        "confusion",
+        "认知障碍"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_044",
+      "query_type": "general",
+      "question": "吴涛本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_051_2026-06-12T20:23:43.194500"
+      ],
+      "expected_keywords": [
+        "吴涛",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_045",
+      "query_type": "general",
+      "question": "陈桂英本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_014_2026-06-07T10:12:43.194500"
+      ],
+      "expected_keywords": [
+        "陈桂英",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_046",
+      "query_type": "general",
+      "question": "赵红本次meal护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_074_2026-06-22T18:06:43.194500"
+      ],
+      "expected_keywords": [
+        "赵红",
+        "meal",
+        "饮食"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_047",
+      "query_type": "general",
+      "question": "周建国本次medication护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_007_2026-06-15T21:18:43.194500"
+      ],
+      "expected_keywords": [
+        "周建国",
+        "medication",
+        "服药"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_048",
+      "query_type": "general",
+      "question": "赵丽本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_060_2026-06-06T06:42:43.194500"
+      ],
+      "expected_keywords": [
+        "赵丽",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_049",
+      "query_type": "general",
+      "question": "王丽本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_088_2026-06-06T15:28:43.194500"
+      ],
+      "expected_keywords": [
+        "王丽",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_050",
+      "query_type": "general",
+      "question": "周丽本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_017_2026-06-23T14:35:43.194500"
+      ],
+      "expected_keywords": [
+        "周丽",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_051",
+      "query_type": "general",
+      "question": "王红本次mood护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_065_2026-06-24T15:43:43.194500"
+      ],
+      "expected_keywords": [
+        "王红",
+        "mood",
+        "情绪"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_052",
+      "query_type": "general",
+      "question": "赵涛本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_094_2026-06-10T10:27:43.194500"
+      ],
+      "expected_keywords": [
+        "赵涛",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_053",
+      "query_type": "general",
+      "question": "黄伟本次vital_signs护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_009_2026-06-26T07:28:43.194500"
+      ],
+      "expected_keywords": [
+        "黄伟",
+        "vital_signs",
+        "生命体征"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_054",
+      "query_type": "general",
+      "question": "李勇本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_045_2026-06-06T22:55:43.194500"
+      ],
+      "expected_keywords": [
+        "李勇",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_055",
+      "query_type": "general",
+      "question": "吴玲本次mood护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_003_2026-06-10T13:07:43.194500"
+      ],
+      "expected_keywords": [
+        "吴玲",
+        "mood",
+        "情绪"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_056",
+      "query_type": "general",
+      "question": "刘芳本次vital_signs护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_100_2026-06-25T07:07:43.194500"
+      ],
+      "expected_keywords": [
+        "刘芳",
+        "vital_signs",
+        "生命体征"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_057",
+      "query_type": "general",
+      "question": "杨勇本次medication护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_001_2026-06-19T12:52:43.194500"
+      ],
+      "expected_keywords": [
+        "杨勇",
+        "medication",
+        "服药"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_058",
+      "query_type": "general",
+      "question": "王桂英本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_050_2026-06-07T22:29:43.194500"
+      ],
+      "expected_keywords": [
+        "王桂英",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_059",
+      "query_type": "general",
+      "question": "黄芳本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_078_2026-06-25T09:27:43.194500"
+      ],
+      "expected_keywords": [
+        "黄芳",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_060",
+      "query_type": "general",
+      "question": "李志强本次medication护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_075_2026-06-15T21:41:43.194500"
+      ],
+      "expected_keywords": [
+        "李志强",
+        "medication",
+        "服药"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_061",
+      "query_type": "general",
+      "question": "吴鹏本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_029_2026-06-06T13:18:43.194500"
+      ],
+      "expected_keywords": [
+        "吴鹏",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_062",
+      "query_type": "general",
+      "question": "王明本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_080_2026-06-07T13:54:43.194500"
+      ],
+      "expected_keywords": [
+        "王明",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_063",
+      "query_type": "general",
+      "question": "吴志强本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_031_2026-06-06T18:36:43.194500"
+      ],
+      "expected_keywords": [
+        "吴志强",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_064",
+      "query_type": "general",
+      "question": "张敏本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_057_2026-06-08T09:28:43.194500"
+      ],
+      "expected_keywords": [
+        "张敏",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_065",
+      "query_type": "general",
+      "question": "黄玲本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_018_2026-06-06T20:29:43.194500"
+      ],
+      "expected_keywords": [
+        "黄玲",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_066",
+      "query_type": "general",
+      "question": "吴鹏本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_030_2026-06-06T08:37:43.194500"
+      ],
+      "expected_keywords": [
+        "吴鹏",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_067",
+      "query_type": "general",
+      "question": "杨建国本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_026_2026-06-07T18:15:43.194500"
+      ],
+      "expected_keywords": [
+        "杨建国",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_068",
+      "query_type": "general",
+      "question": "吴华本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_064_2026-06-10T08:16:43.194500"
+      ],
+      "expected_keywords": [
+        "吴华",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_069",
+      "query_type": "general",
+      "question": "杨军本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_027_2026-07-03T20:49:43.194500"
+      ],
+      "expected_keywords": [
+        "杨军",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_070",
+      "query_type": "general",
+      "question": "赵丽本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_044_2026-06-06T16:21:43.194500"
+      ],
+      "expected_keywords": [
+        "赵丽",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_071",
+      "query_type": "general",
+      "question": "刘桂英本次vital_signs护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_083_2026-06-09T07:04:43.194500"
+      ],
+      "expected_keywords": [
+        "刘桂英",
+        "vital_signs",
+        "生命体征"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_072",
+      "query_type": "general",
+      "question": "黄秀英本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_077_2026-06-10T08:14:43.194500"
+      ],
+      "expected_keywords": [
+        "黄秀英",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_073",
+      "query_type": "general",
+      "question": "周丽本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_048_2026-06-08T13:57:43.194500"
+      ],
+      "expected_keywords": [
+        "周丽",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_074",
+      "query_type": "general",
+      "question": "周红本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_024_2026-06-08T14:25:43.194500"
+      ],
+      "expected_keywords": [
+        "周红",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_075",
+      "query_type": "general",
+      "question": "王国强本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_021_2026-06-11T09:22:43.194500"
+      ],
+      "expected_keywords": [
+        "王国强",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_076",
+      "query_type": "general",
+      "question": "杨娟本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_066_2026-06-07T17:26:43.194500"
+      ],
+      "expected_keywords": [
+        "杨娟",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_077",
+      "query_type": "general",
+      "question": "李静本次vital_signs护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_037_2026-07-02T14:00:43.194500"
+      ],
+      "expected_keywords": [
+        "李静",
+        "vital_signs",
+        "生命体征"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_078",
+      "query_type": "general",
+      "question": "李伟本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_093_2026-06-06T06:55:43.194500"
+      ],
+      "expected_keywords": [
+        "李伟",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_079",
+      "query_type": "general",
+      "question": "吴丽本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_043_2026-06-06T21:05:43.194500"
+      ],
+      "expected_keywords": [
+        "吴丽",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_080",
+      "query_type": "general",
+      "question": "陈娟本次sleep护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_040_2026-06-19T06:49:43.194500"
+      ],
+      "expected_keywords": [
+        "陈娟",
+        "sleep",
+        "睡眠"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_081",
+      "query_type": "general",
+      "question": "赵玲本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_039_2026-06-06T17:14:43.194500"
+      ],
+      "expected_keywords": [
+        "赵玲",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_082",
+      "query_type": "general",
+      "question": "王桂英本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_047_2026-06-21T22:26:43.194500"
+      ],
+      "expected_keywords": [
+        "王桂英",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_083",
+      "query_type": "general",
+      "question": "陈明本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_054_2026-06-06T20:01:43.194500"
+      ],
+      "expected_keywords": [
+        "陈明",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_084",
+      "query_type": "general",
+      "question": "吴军本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_006_2026-06-06T12:02:43.194500"
+      ],
+      "expected_keywords": [
+        "吴军",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_085",
+      "query_type": "general",
+      "question": "刘涛本次sleep护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_058_2026-07-03T06:57:43.194500"
+      ],
+      "expected_keywords": [
+        "刘涛",
+        "sleep",
+        "睡眠"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_086",
+      "query_type": "general",
+      "question": "周军本次vital_signs护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_008_2026-06-11T19:57:43.194500"
+      ],
+      "expected_keywords": [
+        "周军",
+        "vital_signs",
+        "生命体征"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_087",
+      "query_type": "general",
+      "question": "黄勇本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_042_2026-06-06T07:12:43.194500"
+      ],
+      "expected_keywords": [
+        "黄勇",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_088",
+      "query_type": "general",
+      "question": "周秀英本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_089_2026-06-15T10:23:43.194500"
+      ],
+      "expected_keywords": [
+        "周秀英",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_089",
+      "query_type": "general",
+      "question": "陈志强本次meal护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_087_2026-06-25T07:33:43.194500"
+      ],
+      "expected_keywords": [
+        "陈志强",
+        "meal",
+        "饮食"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_090",
+      "query_type": "general",
+      "question": "赵志强本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_033_2026-06-07T13:09:43.194500"
+      ],
+      "expected_keywords": [
+        "赵志强",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_091",
+      "query_type": "general",
+      "question": "李明本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_028_2026-07-04T16:13:43.194500"
+      ],
+      "expected_keywords": [
+        "李明",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_092",
+      "query_type": "general",
+      "question": "赵军本次vital_signs护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_055_2026-06-19T07:36:43.194500"
+      ],
+      "expected_keywords": [
+        "赵军",
+        "vital_signs",
+        "生命体征"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_093",
+      "query_type": "general",
+      "question": "黄明本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_067_2026-06-10T13:53:43.194500"
+      ],
+      "expected_keywords": [
+        "黄明",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_094",
+      "query_type": "general",
+      "question": "赵娟本次pain护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_056_2026-06-16T09:32:43.194500"
+      ],
+      "expected_keywords": [
+        "赵娟",
+        "pain",
+        "疼痛"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_095",
+      "query_type": "general",
+      "question": "王磊本次meal护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_085_2026-06-07T07:24:43.194500"
+      ],
+      "expected_keywords": [
+        "王磊",
+        "meal",
+        "饮食"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_096",
+      "query_type": "general",
+      "question": "周志强本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_059_2026-06-18T16:25:43.194500"
+      ],
+      "expected_keywords": [
+        "周志强",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_097",
+      "query_type": "general",
+      "question": "杨鹏本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_097_2026-06-06T07:39:43.194500"
+      ],
+      "expected_keywords": [
+        "杨鹏",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_098",
+      "query_type": "general",
+      "question": "王秀英本次mood护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_071_2026-07-04T09:46:43.194500"
+      ],
+      "expected_keywords": [
+        "王秀英",
+        "mood",
+        "情绪"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_099",
+      "query_type": "general",
+      "question": "吴志强本次confusion护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_013_2026-06-08T02:33:43.194500"
+      ],
+      "expected_keywords": [
+        "吴志强",
+        "confusion",
+        "认知障碍"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "query_id": "competition_general_100",
+      "query_type": "general",
+      "question": "黄丽本次fall护理记录的主要情况和处置是什么？",
+      "ground_truth_docs": [
+        "elder_032_2026-06-06T22:47:43.194500"
+      ],
+      "expected_keywords": [
+        "黄丽",
+        "fall",
+        "摔倒"
+      ],
+      "annotation": {
+        "status": "auto_derived_unreviewed",
+        "proposed_relevance": 1,
+        "proposed_reason": "核验记录是否描述该患者的目标事件和护理处置。",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    }
+  ]
+}

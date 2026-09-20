@@ -1,0 +1,49 @@
+{
+  "benign_samples": 200,
+  "category_counts": {
+    "bypass_attack": 100,
+    "confusing": 100,
+    "normal": 100,
+    "standard": 100
+  },
+  "dataset_path": "test_data/test_data_400.json",
+  "dataset_schema_note": "JSON array of {id, content, expected_sensitive, sensitive_types, attack_type, category, description}",
+  "dataset_sha256": "47b84fdb14e26ef8f335c38b6a8009c1eeb4b35ff2c5babe03d1535565b5c437",
+  "generation_method": "deterministic template amplification with real encoding rules",
+  "generator": "scripts/go/generate_test_data.go",
+  "known_limits": [
+    "Text is template-derived, so lexical diversity is lower than a human-authored corpus.",
+    "The four categories are balanced by construction; real traffic is not.",
+    "Positive identity numbers carry valid GB 11643-1999 check digits, but they are synthetic and do not correspond to real people."
+  ],
+  "per_category": 100,
+  "schema": "adversarial-sensitive-data-manifest-v1",
+  "seed": 20260920,
+  "sensitive_samples": 200,
+  "subtype_counts": {
+    "bypass_attack": {
+      "base64": 16,
+      "chinese_number": 17,
+      "homophone": 17,
+      "semantic": 16,
+      "separator": 17,
+      "space_separation": 17
+    },
+    "confusing": {
+      "employee_id": 25,
+      "order_id": 25,
+      "postal_code": 25,
+      "ratio": 25
+    },
+    "normal": {
+      "ordinary_prose": 100
+    },
+    "standard": {
+      "blood_pressure": 25,
+      "id_card": 25,
+      "medical_record": 25,
+      "phone": 25
+    }
+  },
+  "total_samples": 400
+}

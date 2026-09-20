@@ -1,0 +1,1207 @@
+{
+  "name": "pccm_calibration_repository_devset_v1",
+  "source": "repository",
+  "notes": "由仓库自有标注语料 test_data_100.json 构建；标签来自语料自带的 expected_sensitive 字段，层置信度取自消融端点 asdf_casia_pccm profile 的确定性层输出（layer 5 由 lab profile 排除，记为 0）。样本 100 条（正例 60、负例 40）。",
+  "samples": [
+    {
+      "id": "synthetic_pccm_devset_1",
+      "text": "患者身份证：110101199001011234",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_2",
+      "text": "患者身份证：310115198505052345",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_3",
+      "text": "患者身份证：440305199212123456",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_4",
+      "text": "患者身份证：500101198808084567",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_5",
+      "text": "患者身份证：210102199103035678",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.7310585786300049,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_6",
+      "text": "患者身份证：330106199706066789",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_7",
+      "text": "患者身份证：420111199409097890",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_8",
+      "text": "患者身份证：610104199511118901",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_9",
+      "text": "患者身份证：510107199612129012",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_10",
+      "text": "患者身份证：320108199801011123",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_11",
+      "text": "联系电话：13812345678",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.5577968078146831,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_12",
+      "text": "联系电话：13987654321",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.5577968078146831,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_13",
+      "text": "联系电话：15012345678",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.5577968078146831,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_14",
+      "text": "联系电话：15987654321",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.5577968078146831,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_15",
+      "text": "联系电话：18012345678",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.5577968078146831,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_16",
+      "text": "联系电话：18987654321",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.5577968078146831,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_17",
+      "text": "联系电话：17012345678",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.5577968078146831,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_18",
+      "text": "联系电话：17987654321",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_19",
+      "text": "联系电话：19012345678",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_20",
+      "text": "联系电话：19987654321",
+      "sensitive_type": "phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.5577968078146831,
+        "2": 0.0,
+        "4": 0.6865191480796098,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_21",
+      "text": "病历号：MR20230001",
+      "sensitive_type": "medical_record",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.7927173701800941,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_22",
+      "text": "病历号：MR20230002",
+      "sensitive_type": "medical_record",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.7927173701800941,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_23",
+      "text": "病历号：MR20230003",
+      "sensitive_type": "medical_record",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.7927173701800941,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_24",
+      "text": "病历号：MR20230004",
+      "sensitive_type": "medical_record",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.7927173701800941,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_25",
+      "text": "病历号：MR20230005",
+      "sensitive_type": "medical_record",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.7927173701800941,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_26",
+      "text": "血压：120/80 mmHg",
+      "sensitive_type": "blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.6579527207670044,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_27",
+      "text": "血压：130/85 mmHg",
+      "sensitive_type": "blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.6579527207670044,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_28",
+      "text": "血压：140/90 mmHg",
+      "sensitive_type": "blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.6579527207670044,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_29",
+      "text": "血压：110/70 mmHg",
+      "sensitive_type": "blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.6579527207670044,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_30",
+      "text": "血压：125/82 mmHg",
+      "sensitive_type": "blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.6579527207670044,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_31",
+      "text": "身份证号：1 1 0 1 0 1 1 9 9 0 0 1 0 1 1 2 3 4",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.502054334447393,
+        "2": 0.0,
+        "4": 0.503919074692996,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_32",
+      "text": "身份证号：1 3 8 1 2 3 4 5 6 7 8",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.42000000000000004,
+        "2": 0.0,
+        "4": 0.35,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_33",
+      "text": "身份证号：3 1 0 1 1 5 1 9 8 5 0 5 0 5 2 3 4 5",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.502054334447393,
+        "2": 0.0,
+        "4": 0.503919074692996,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_34",
+      "text": "身份证号：1 5 0 1 2 3 4 5 6 7 8",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.42000000000000004,
+        "2": 0.0,
+        "4": 0.35,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_35",
+      "text": "身份证号：4 4 0 3 0 5 1 9 9 2 1 2 1 2 3 4 5 6",
+      "sensitive_type": "id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.502054334447393,
+        "2": 0.0,
+        "4": 0.503919074692996,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_36",
+      "text": "联系方式：138-1234-5678",
+      "sensitive_type": "phone,id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.45500000000000007,
+        "2": 0.0,
+        "4": 0.55197958490209,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_37",
+      "text": "联系方式：110101-19900101-1234",
+      "sensitive_type": "phone,id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.364,
+        "2": 0.0,
+        "4": 0.39432737892977626,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_38",
+      "text": "联系方式：150.1234.5678",
+      "sensitive_type": "phone,id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.45500000000000007,
+        "2": 0.0,
+        "4": 0.55197958490209,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_39",
+      "text": "联系方式：180/1234/5678",
+      "sensitive_type": "phone,id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.45500000000000007,
+        "2": 0.0,
+        "4": 0.55197958490209,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_40",
+      "text": "联系方式：170|1234|5678",
+      "sensitive_type": "phone,id_card",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.45500000000000007,
+        "2": 0.0,
+        "4": 0.55197958490209,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_41",
+      "text": "证件号码：一一零一零一一九九零零一零一一二三四",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.474250479526337,
+        "2": 0.0,
+        "4": 0.4774052091212786,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_42",
+      "text": "证件号码：一三八一二三四五六七八",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.42000000000000004,
+        "2": 0.0,
+        "4": 0.39999999999999997,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_43",
+      "text": "证件号码：三一零一一五一九八五零五零五二三四五",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.474250479526337,
+        "2": 0.0,
+        "4": 0.4774052091212786,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_44",
+      "text": "证件号码：一五零一二三四五六七八",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.42000000000000004,
+        "2": 0.0,
+        "4": 0.39999999999999997,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_45",
+      "text": "证件号码：四四零三零五一九九二一二一二三四五六",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.474250479526337,
+        "2": 0.0,
+        "4": 0.4774052091212786,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_46",
+      "text": "身份证：幺幺零幺零幺幺玖玖零零幺零幺幺贰叁肆",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_47",
+      "text": "身份证：幺叁捌幺贰叁肆伍陆柒捌",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.42000000000000004,
+        "2": 0.0,
+        "4": 0.35,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_48",
+      "text": "身份证：叁幺零幺幺伍幺玖捌伍零伍零伍贰叁肆伍",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_49",
+      "text": "身份证：幺伍零幺贰叁肆伍陆柒捌",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.42000000000000004,
+        "2": 0.0,
+        "4": 0.35,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_50",
+      "text": "身份证：肆肆零叁零伍幺玖玖贰幺贰幺贰叁肆伍陆",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.4167033898191028,
+        "2": 0.0,
+        "4": 0.43213326394516804,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_51",
+      "text": "编码信息：MTEwMTAxMTk5MDAxMDExMjM0",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.364,
+        "2": 0.0,
+        "4": 0.35000000000000003,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_52",
+      "text": "编码信息：MTM4MTIzNDU2Nzg=",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.42000000000000004,
+        "2": 0.0,
+        "4": 0.35,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_53",
+      "text": "编码信息：MzEwMTE1MTk4NTA1MDUyMzQ1",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.364,
+        "2": 0.0,
+        "4": 0.35000000000000003,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_54",
+      "text": "编码信息：MTUwMTIzNDU2Nzg=",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.42000000000000004,
+        "2": 0.0,
+        "4": 0.35,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_55",
+      "text": "编码信息：NDQwMzA1MTk5MjEyMTIzNDU2",
+      "sensitive_type": "id_card,phone",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.364,
+        "2": 0.0,
+        "4": 0.35000000000000003,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_56",
+      "text": "患者的证件号码是一一零一零一开头的那个十八位数字",
+      "sensitive_type": "id_card,phone,medical_record,blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_57",
+      "text": "他的手机号是138开头的11位号码",
+      "sensitive_type": "id_card,phone,medical_record,blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_58",
+      "text": "病历号是MR开头后面跟着八位数字",
+      "sensitive_type": "id_card,phone,medical_record,blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_59",
+      "text": "血压测量结果是一百二十比八十",
+      "sensitive_type": "id_card,phone,medical_record,blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_60",
+      "text": "身份证前六位是110101，后面是出生日期加四位顺序码",
+      "sensitive_type": "id_card,phone,medical_record,blood_pressure",
+      "expected_sensitive": true,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_61",
+      "text": "邮政编码：110101",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_62",
+      "text": "邮编：310115",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_63",
+      "text": "寄送地址邮编：440305",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_64",
+      "text": "快递邮编：500101",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_65",
+      "text": "收件人邮编：210102",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_66",
+      "text": "员工工号：20230001",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_67",
+      "text": "工号：EMP12345",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_68",
+      "text": "职工编号：2023001",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_69",
+      "text": "员工编号：A123456",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_70",
+      "text": "工作证号：WK20230001",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_71",
+      "text": "订单号：ORD20230001",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_72",
+      "text": "快递单号：SF1234567890",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_73",
+      "text": "交易流水号：TXN20230001",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_74",
+      "text": "发票号码：INV20230001",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_75",
+      "text": "预约编号：APT20230001",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_76",
+      "text": "男女比例：120/80",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_77",
+      "text": "得分：130/150",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_78",
+      "text": "完成率：140/200",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_79",
+      "text": "通过率：110/150",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_80",
+      "text": "正确率：125/160",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_81",
+      "text": "今天天气很好，适合出门散步。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_82",
+      "text": "养老院的护理人员很专业，服务态度好。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_83",
+      "text": "老人们在活动室下棋聊天，氛围很温馨。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_84",
+      "text": "食堂的饭菜营养均衡，老人们都很满意。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_85",
+      "text": "每周二有健康讲座，内容很实用。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_86",
+      "text": "护士每天按时查房，关心老人的身体状况。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_87",
+      "text": "院内环境优美，绿化做得很好。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_88",
+      "text": "老人们参加手工活动，锻炼动手能力。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_89",
+      "text": "定期组织体检，及时发现健康问题。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_90",
+      "text": "家属探视时间是每天下午2点到5点。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_91",
+      "text": "康复训练室设备齐全，专业人员指导。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_92",
+      "text": "老人们晚上9点准时休息，作息规律。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_93",
+      "text": "每月举办生日会，为当月寿星庆祝。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_94",
+      "text": "图书室藏书丰富，老人们可以自由借阅。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_95",
+      "text": "院内有专门的医务室，24小时值班。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_96",
+      "text": "定期更换床单被褥，保持卫生整洁。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_97",
+      "text": "老人们可以自由选择喜欢的活动参加。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_98",
+      "text": "护理人员经过专业培训，持证上岗。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_99",
+      "text": "院内安装了监控系统，确保老人安全。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    },
+    {
+      "id": "synthetic_pccm_devset_100",
+      "text": "每天有营养师搭配菜谱，保证营养均衡。",
+      "sensitive_type": "",
+      "expected_sensitive": false,
+      "layer_confidences": {
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "5": 0.0
+      }
+    }
+  ]
+}

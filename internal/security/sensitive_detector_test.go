@@ -538,6 +538,61 @@ func TestAESStorage(t *testing.T) {
 	}
 }
 
+// TestDetector_DetectMedicalRecordAndBloodPressure 覆盖医疗场景两类补充规则。
+//
+// 落点背景：对抗性评测数据集 test_data/test_data_100.json 的 standard 类别中，
+// `病历号：MR2023xxxx`（id 21-25）与 `血压：120/80 mmHg`（id 26-30）此前 10/10
+// 全部漏检 —— 正则层没有这两类模式，而评测用的 lab profile 是确定性链路（不含
+// LLM），因此这两类只能由确定性规则识别。
+func TestDetector_DetectMedicalRecordAndBloodPressure(t *testing.T) {
+	detector := NewDetector()
+
+	tests := []struct {
+		name     string
+		input    string
+		wantType SensitiveType
+	}{
+		{"病历号", "病历号：MR20230001", SensitiveTypeMedicalRecord},
+		{"病案号半角冒号", "病案号:MR20239999", SensitiveTypeMedicalRecord},
+		{"血压", "血压：120/80 mmHg", SensitiveTypeBloodPressure},
+		{"血压带空格", "血压 : 140 / 90 mmHg", SensitiveTypeBloodPressure},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			for _, info := range detector.Detect(tt.input) {
+				if info.Type == tt.wantType {
+					return
+				}
+			}
+			t.Fatalf("input %q: want type %q, got %#v", tt.input, tt.wantType, detector.Detect(tt.input))
+		})
+	}
+}
+
+// TestDetector_MedicalRulesRequireLabelAnchor 覆盖标签锚定约束。
+//
+// 血压规则必须要求「血压：」标签：OutputFilter 复用同一份规则表（output_filter.go
+// 经 NewDetector 构造同一款 Detector），若改成裸匹配 \d+/\d+，正常输出
+// 「您的血压是120/80 mmHg」会被判为敏感并触发警告，破坏 output_filter_test.go
+// 中既有的行为契约。
+func TestDetector_MedicalRulesRequireLabelAnchor(t *testing.T) {
+	detector := NewDetector()
+
+	for _, input := range []string{
+		"您的血压是120/80 mmHg，属于正常范围。",
+		"血压是120/80 mmHg",
+		"120/80",
+		"该患者编号 20230001 已登记",
+	} {
+		for _, info := range detector.Detect(input) {
+			if info.Type == SensitiveTypeBloodPressure || info.Type == SensitiveTypeMedicalRecord {
+				t.Fatalf("input %q 不应命中医疗规则，实际命中 %#v", input, info)
+			}
+		}
+	}
+}
+
 func BenchmarkDetector_Detect(b *testing.B) {
 	detector := NewDetector()
 	text := "api_key=sk-1234567890abcdef password=secret123 token=abc123"

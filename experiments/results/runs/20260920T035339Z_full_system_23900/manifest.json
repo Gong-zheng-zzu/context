@@ -1,0 +1,32 @@
+{
+    "schema_version":  1,
+    "run_id":  "20260920T035339Z_full_system_23900",
+    "started_at":  "2026-09-20T03:53:39.1937346Z",
+    "ended_at":  "2026-09-20T03:53:59.0203730Z",
+    "outcome":  "succeeded",
+    "error":  null,
+    "smoke_status":  "passed",
+    "evaluator_exit_code":  0,
+    "result_file":  "D:\\context\\context-keeper-main\\experiments\\results\\raw\\retrieval_20260920_115358.json",
+    "command":  "python experiments/scripts/retrieval_eval.py --queries 300 --configs full_system --retrieval-mode rrf --base-url http://127.0.0.1:8088 --ground-truth-file experiments/datasets/retrieval_groundtruth/competition_queries_300_auto.json --corpus-file experiments/datasets/retrieval_corpus/retrieval_corpus_500_v2.json --allow-auto-derived-ground-truth",
+    "command_sha256":  "6cbd15651aaf6af6982046a2fdfe185092a39a2813095cfe1dd7cdbe6efddd9f",
+    "configuration":  {
+                          "name":  "full_system",
+                          "base_env_sha256":  "715e0b4255d09e92b2d670e59e4b2614c46c2989b71e7124b4bbac3fa52390a4",
+                          "overlay_env_sha256":  "8824028e20b117c1a0577fd019baca95195e756bc60cad00b96d1f3eca784db7",
+                          "effective_env_sha256":  "ad134e696c4523d859d31c32cff6197417a635a257739d09eb19ba46dcd7bf7e"
+                      },
+    "data":  {
+                 "datasets_tree_sha256":  "dbc91c617d266eaf0975b2b40aa672bf501ece18a0ab1f0e215d4b6ad5c05e7e"
+             },
+    "environment":  {
+                        "powershell":  "5.1.26100.6899",
+                        "docker_compose":  "Docker Compose version v5.1.2",
+                        "platform":  "Microsoft Windows NT 10.0.26100.0",
+                        "health_url":  "http://localhost:8088/health"
+                    },
+    "artifacts":  {
+                      "smoke_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260920T035339Z_full_system_23900\\smoke.log",
+                      "evaluation_log":  "D:\\context\\context-keeper-main\\experiments\\results\\runs\\20260920T035339Z_full_system_23900\\evaluation.log"
+                  }
+}
