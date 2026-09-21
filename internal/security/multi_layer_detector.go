@@ -357,9 +357,12 @@ func (mld *MultiLayerDetector) applyCASIA(text string, items []SensitiveInfo, co
 		adjustedConf := item.Confidence * evidence.NormalizedWeight
 		// 保底：上下文里没有该类型的任何关键词时 NormalizedWeight = 0.5，
 		// 直接相乘会把已被正则/词典确证的匹配压到过滤阈值以下而误杀真阳性。
-		// 保底只限制"上下文缺失导致的衰减幅度"，正面/负面关键词的相对
-		// 增强与抑制仍然保留；推断型层（context）不享受保底。
-		if confirmed {
+		// 保底只限制"上下文缺失导致的衰减幅度"：仅当上下文不存在净负向证据
+		// （RawWeight >= 0，即没有命中负向关键词）时生效。一旦命中负向关键词，
+		// 该抑制是有意的、可解释的，不应被保底抵消——否则"工号 13812345678"
+		// 这类正则确证的形状误报永远无法被压到过滤阈值以下。推断型层
+		// （context）不享受保底。
+		if confirmed && evidence.RawWeight >= 0 {
 			if floor := item.Confidence * casiaConfidenceFloor(mld.casiaAlgorithm.config); adjustedConf < floor {
 				adjustedConf = floor
 			}

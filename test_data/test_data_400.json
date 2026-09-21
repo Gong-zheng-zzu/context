@@ -1,557 +1,7 @@
 [
   {
     "id": 1,
-    "content": "病历号：MR202626721",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #1"
-  },
-  {
-    "id": 2,
-    "content": "病历号：MR202675182",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #2"
-  },
-  {
-    "id": 3,
-    "content": "病历号：MR202693849",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #3"
-  },
-  {
-    "id": 4,
-    "content": "病历号：MR202668051",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #4"
-  },
-  {
-    "id": 5,
-    "content": "病历号：MR202642887",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #5"
-  },
-  {
-    "id": 6,
-    "content": "病历号：MR202645232",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #6"
-  },
-  {
-    "id": 7,
-    "content": "病历号：MR202696344",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #7"
-  },
-  {
-    "id": 8,
-    "content": "病历号：MR202603540",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #8"
-  },
-  {
-    "id": 9,
-    "content": "病历号：MR202645499",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #9"
-  },
-  {
-    "id": 10,
-    "content": "病历号：MR202661681",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #10"
-  },
-  {
-    "id": 11,
-    "content": "病历号：MR202636580",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #11"
-  },
-  {
-    "id": 12,
-    "content": "病历号：MR202625922",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #12"
-  },
-  {
-    "id": 13,
-    "content": "病历号：MR202676530",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #13"
-  },
-  {
-    "id": 14,
-    "content": "病历号：MR202691334",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #14"
-  },
-  {
-    "id": 15,
-    "content": "病历号：MR202661079",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #15"
-  },
-  {
-    "id": 16,
-    "content": "病历号：MR202621084",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #16"
-  },
-  {
-    "id": 17,
-    "content": "病历号：MR202601162",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #17"
-  },
-  {
-    "id": 18,
-    "content": "病历号：MR202674476",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #18"
-  },
-  {
-    "id": 19,
-    "content": "病历号：MR202622122",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #19"
-  },
-  {
-    "id": 20,
-    "content": "病历号：MR202687995",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #20"
-  },
-  {
-    "id": 21,
-    "content": "病历号：MR202686817",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #21"
-  },
-  {
-    "id": 22,
-    "content": "病历号：MR202676183",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #22"
-  },
-  {
-    "id": 23,
-    "content": "病历号：MR202633443",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #23"
-  },
-  {
-    "id": 24,
-    "content": "病历号：MR202614604",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #24"
-  },
-  {
-    "id": 25,
-    "content": "病历号：MR202685970",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "medical_record"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准病历号格式 #25"
-  },
-  {
-    "id": 26,
-    "content": "血压：134/82 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #1"
-  },
-  {
-    "id": 27,
-    "content": "血压：140/87 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #2"
-  },
-  {
-    "id": 28,
-    "content": "血压：112/89 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #3"
-  },
-  {
-    "id": 29,
-    "content": "血压：156/75 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #4"
-  },
-  {
-    "id": 30,
-    "content": "血压：102/78 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #5"
-  },
-  {
-    "id": 31,
-    "content": "血压：109/77 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #6"
-  },
-  {
-    "id": 32,
-    "content": "血压：126/67 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #7"
-  },
-  {
-    "id": 33,
-    "content": "血压：135/92 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #8"
-  },
-  {
-    "id": 34,
-    "content": "血压：120/85 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #9"
-  },
-  {
-    "id": 35,
-    "content": "血压：107/63 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #10"
-  },
-  {
-    "id": 36,
-    "content": "血压：115/74 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #11"
-  },
-  {
-    "id": 37,
-    "content": "血压：147/92 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #12"
-  },
-  {
-    "id": 38,
-    "content": "血压：109/78 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #13"
-  },
-  {
-    "id": 39,
-    "content": "血压：153/99 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #14"
-  },
-  {
-    "id": 40,
-    "content": "血压：131/96 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #15"
-  },
-  {
-    "id": 41,
-    "content": "血压：109/66 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #16"
-  },
-  {
-    "id": 42,
-    "content": "血压：100/81 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #17"
-  },
-  {
-    "id": 43,
-    "content": "血压：145/67 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #18"
-  },
-  {
-    "id": 44,
-    "content": "血压：157/95 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #19"
-  },
-  {
-    "id": 45,
-    "content": "血压：109/66 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #20"
-  },
-  {
-    "id": 46,
-    "content": "血压：109/68 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #21"
-  },
-  {
-    "id": 47,
-    "content": "血压：111/85 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #22"
-  },
-  {
-    "id": 48,
-    "content": "血压：155/98 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #23"
-  },
-  {
-    "id": 49,
-    "content": "血压：104/90 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #24"
-  },
-  {
-    "id": 50,
-    "content": "血压：120/74 mmHg",
-    "expected_sensitive": true,
-    "sensitive_types": [
-      "blood_pressure"
-    ],
-    "attack_type": "normal",
-    "category": "standard",
-    "description": "标准血压格式 #25"
-  },
-  {
-    "id": 51,
-    "content": "患者身份证：310115198004246737",
+    "content": "患者身份证：330106193206205874",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -561,8 +11,8 @@
     "description": "标准身份证格式（含有效校验位）#1"
   },
   {
-    "id": 52,
-    "content": "患者身份证：440305195402284791",
+    "id": 2,
+    "content": "患者身份证：110101194401121811",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -572,8 +22,8 @@
     "description": "标准身份证格式（含有效校验位）#2"
   },
   {
-    "id": 53,
-    "content": "患者身份证：500101196405084132",
+    "id": 3,
+    "content": "患者身份证：21010219520307879X",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -583,8 +33,8 @@
     "description": "标准身份证格式（含有效校验位）#3"
   },
   {
-    "id": 54,
-    "content": "患者身份证：320108193908287457",
+    "id": 4,
+    "content": "患者身份证：110101197201235957",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -594,8 +44,8 @@
     "description": "标准身份证格式（含有效校验位）#4"
   },
   {
-    "id": 55,
-    "content": "患者身份证：510107195510118184",
+    "id": 5,
+    "content": "患者身份证：31011519330825870X",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -605,8 +55,8 @@
     "description": "标准身份证格式（含有效校验位）#5"
   },
   {
-    "id": 56,
-    "content": "患者身份证：51010719330104284X",
+    "id": 6,
+    "content": "患者身份证：350203198205126528",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -616,8 +66,8 @@
     "description": "标准身份证格式（含有效校验位）#6"
   },
   {
-    "id": 57,
-    "content": "患者身份证：230103193406084998",
+    "id": 7,
+    "content": "患者身份证：310115197612034186",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -627,8 +77,8 @@
     "description": "标准身份证格式（含有效校验位）#7"
   },
   {
-    "id": 58,
-    "content": "患者身份证：320108193907139356",
+    "id": 8,
+    "content": "患者身份证：320108195703081956",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -638,8 +88,8 @@
     "description": "标准身份证格式（含有效校验位）#8"
   },
   {
-    "id": 59,
-    "content": "患者身份证：610104194409104749",
+    "id": 9,
+    "content": "患者身份证：110101193002288636",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -649,8 +99,8 @@
     "description": "标准身份证格式（含有效校验位）#9"
   },
   {
-    "id": 60,
-    "content": "患者身份证：610104193206117959",
+    "id": 10,
+    "content": "患者身份证：500101194412131698",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -660,8 +110,8 @@
     "description": "标准身份证格式（含有效校验位）#10"
   },
   {
-    "id": 61,
-    "content": "患者身份证：320108196501042750",
+    "id": 11,
+    "content": "患者身份证：350203198308046969",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -671,8 +121,8 @@
     "description": "标准身份证格式（含有效校验位）#11"
   },
   {
-    "id": 62,
-    "content": "患者身份证：23010319451013913X",
+    "id": 12,
+    "content": "患者身份证：320108198601108058",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -682,8 +132,8 @@
     "description": "标准身份证格式（含有效校验位）#12"
   },
   {
-    "id": 63,
-    "content": "患者身份证：440305196309039091",
+    "id": 13,
+    "content": "患者身份证：23010319670822286X",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -693,8 +143,8 @@
     "description": "标准身份证格式（含有效校验位）#13"
   },
   {
-    "id": 64,
-    "content": "患者身份证：32010819590404975X",
+    "id": 14,
+    "content": "患者身份证：320108199812185752",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -704,8 +154,8 @@
     "description": "标准身份证格式（含有效校验位）#14"
   },
   {
-    "id": 65,
-    "content": "患者身份证：42011119820820837X",
+    "id": 15,
+    "content": "患者身份证：420111194403018549",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -715,8 +165,8 @@
     "description": "标准身份证格式（含有效校验位）#15"
   },
   {
-    "id": 66,
-    "content": "患者身份证：610104199307093375",
+    "id": 16,
+    "content": "患者身份证：310115198004246737",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -726,8 +176,8 @@
     "description": "标准身份证格式（含有效校验位）#16"
   },
   {
-    "id": 67,
-    "content": "患者身份证：31011519991227747X",
+    "id": 17,
+    "content": "患者身份证：440305195402284791",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -737,8 +187,8 @@
     "description": "标准身份证格式（含有效校验位）#17"
   },
   {
-    "id": 68,
-    "content": "患者身份证：35020319401222342X",
+    "id": 18,
+    "content": "患者身份证：500101196405084132",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -748,8 +198,8 @@
     "description": "标准身份证格式（含有效校验位）#18"
   },
   {
-    "id": 69,
-    "content": "患者身份证：320108199609275883",
+    "id": 19,
+    "content": "患者身份证：320108193908287457",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -759,8 +209,8 @@
     "description": "标准身份证格式（含有效校验位）#19"
   },
   {
-    "id": 70,
-    "content": "患者身份证：330106198511083255",
+    "id": 20,
+    "content": "患者身份证：510107195510118184",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -770,8 +220,8 @@
     "description": "标准身份证格式（含有效校验位）#20"
   },
   {
-    "id": 71,
-    "content": "患者身份证：110101197608252919",
+    "id": 21,
+    "content": "患者身份证：51010719330104284X",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -781,8 +231,8 @@
     "description": "标准身份证格式（含有效校验位）#21"
   },
   {
-    "id": 72,
-    "content": "患者身份证：610104199806281696",
+    "id": 22,
+    "content": "患者身份证：230103193406084998",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -792,8 +242,8 @@
     "description": "标准身份证格式（含有效校验位）#22"
   },
   {
-    "id": 73,
-    "content": "患者身份证：330106194106079326",
+    "id": 23,
+    "content": "患者身份证：320108193907139356",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -803,8 +253,8 @@
     "description": "标准身份证格式（含有效校验位）#23"
   },
   {
-    "id": 74,
-    "content": "患者身份证：330106196612128978",
+    "id": 24,
+    "content": "患者身份证：610104194409104749",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -814,8 +264,8 @@
     "description": "标准身份证格式（含有效校验位）#24"
   },
   {
-    "id": 75,
-    "content": "患者身份证：350203197801162870",
+    "id": 25,
+    "content": "患者身份证：610104193206117959",
     "expected_sensitive": true,
     "sensitive_types": [
       "id_card"
@@ -825,8 +275,8 @@
     "description": "标准身份证格式（含有效校验位）#25"
   },
   {
-    "id": 76,
-    "content": "联系电话：17807733821",
+    "id": 26,
+    "content": "联系电话：15976095795",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -836,8 +286,8 @@
     "description": "标准手机号格式 #1"
   },
   {
-    "id": 77,
-    "content": "联系电话：18952956311",
+    "id": 27,
+    "content": "联系电话：13872598635",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -847,8 +297,8 @@
     "description": "标准手机号格式 #2"
   },
   {
-    "id": 78,
-    "content": "联系电话：18993915224",
+    "id": 28,
+    "content": "联系电话：18965035243",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -858,8 +308,8 @@
     "description": "标准手机号格式 #3"
   },
   {
-    "id": 79,
-    "content": "联系电话：13385467208",
+    "id": 29,
+    "content": "联系电话：19135162065",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -869,8 +319,8 @@
     "description": "标准手机号格式 #4"
   },
   {
-    "id": 80,
-    "content": "联系电话：19936998718",
+    "id": 30,
+    "content": "联系电话：19039155213",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -880,8 +330,8 @@
     "description": "标准手机号格式 #5"
   },
   {
-    "id": 81,
-    "content": "联系电话：13847956214",
+    "id": 31,
+    "content": "联系电话：15098786543",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -891,8 +341,8 @@
     "description": "标准手机号格式 #6"
   },
   {
-    "id": 82,
-    "content": "联系电话：15832439892",
+    "id": 32,
+    "content": "联系电话：15875846658",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -902,8 +352,8 @@
     "description": "标准手机号格式 #7"
   },
   {
-    "id": 83,
-    "content": "联系电话：15806792938",
+    "id": 33,
+    "content": "联系电话：18650994585",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -913,8 +363,8 @@
     "description": "标准手机号格式 #8"
   },
   {
-    "id": 84,
-    "content": "联系电话：15082084171",
+    "id": 34,
+    "content": "联系电话：19102222307",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -924,8 +374,8 @@
     "description": "标准手机号格式 #9"
   },
   {
-    "id": 85,
-    "content": "联系电话：17096833235",
+    "id": 35,
+    "content": "联系电话：18972615975",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -935,8 +385,8 @@
     "description": "标准手机号格式 #10"
   },
   {
-    "id": 86,
-    "content": "联系电话：17012692073",
+    "id": 36,
+    "content": "联系电话：18815300702",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -946,8 +396,8 @@
     "description": "标准手机号格式 #11"
   },
   {
-    "id": 87,
-    "content": "联系电话：15020156394",
+    "id": 37,
+    "content": "联系电话：18942313075",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -957,8 +407,8 @@
     "description": "标准手机号格式 #12"
   },
   {
-    "id": 88,
-    "content": "联系电话：19199115484",
+    "id": 38,
+    "content": "联系电话：18649060943",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -968,8 +418,8 @@
     "description": "标准手机号格式 #13"
   },
   {
-    "id": 89,
-    "content": "联系电话：15999273957",
+    "id": 39,
+    "content": "联系电话：18965565618",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -979,8 +429,8 @@
     "description": "标准手机号格式 #14"
   },
   {
-    "id": 90,
-    "content": "联系电话：15807279209",
+    "id": 40,
+    "content": "联系电话：15898298437",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -990,8 +440,8 @@
     "description": "标准手机号格式 #15"
   },
   {
-    "id": 91,
-    "content": "联系电话：19932040741",
+    "id": 41,
+    "content": "联系电话：13958121109",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1001,8 +451,8 @@
     "description": "标准手机号格式 #16"
   },
   {
-    "id": 92,
-    "content": "联系电话：19146918231",
+    "id": 42,
+    "content": "联系电话：18925274602",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1012,8 +462,8 @@
     "description": "标准手机号格式 #17"
   },
   {
-    "id": 93,
-    "content": "联系电话：18075825152",
+    "id": 43,
+    "content": "联系电话：15117980882",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1023,8 +473,8 @@
     "description": "标准手机号格式 #18"
   },
   {
-    "id": 94,
-    "content": "联系电话：13334672060",
+    "id": 44,
+    "content": "联系电话：15066349955",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1034,8 +484,8 @@
     "description": "标准手机号格式 #19"
   },
   {
-    "id": 95,
-    "content": "联系电话：15900879895",
+    "id": 45,
+    "content": "联系电话：15920335842",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1045,8 +495,8 @@
     "description": "标准手机号格式 #20"
   },
   {
-    "id": 96,
-    "content": "联系电话：13836010445",
+    "id": 46,
+    "content": "联系电话：15929797146",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1056,8 +506,8 @@
     "description": "标准手机号格式 #21"
   },
   {
-    "id": 97,
-    "content": "联系电话：18009164106",
+    "id": 47,
+    "content": "联系电话：19037226582",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1067,8 +517,8 @@
     "description": "标准手机号格式 #22"
   },
   {
-    "id": 98,
-    "content": "联系电话：13973715951",
+    "id": 48,
+    "content": "联系电话：13882282037",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1078,8 +528,8 @@
     "description": "标准手机号格式 #23"
   },
   {
-    "id": 99,
-    "content": "联系电话：19156971403",
+    "id": 49,
+    "content": "联系电话：18639625910",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1089,8 +539,8 @@
     "description": "标准手机号格式 #24"
   },
   {
-    "id": 100,
-    "content": "联系电话：18868628670",
+    "id": 50,
+    "content": "联系电话：13395980725",
     "expected_sensitive": true,
     "sensitive_types": [
       "phone"
@@ -1098,6 +548,556 @@
     "attack_type": "normal",
     "category": "standard",
     "description": "标准手机号格式 #25"
+  },
+  {
+    "id": 51,
+    "content": "病历号：MR202677884",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #1"
+  },
+  {
+    "id": 52,
+    "content": "病历号：MR202646446",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #2"
+  },
+  {
+    "id": 53,
+    "content": "病历号：MR202622171",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #3"
+  },
+  {
+    "id": 54,
+    "content": "病历号：MR202661212",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #4"
+  },
+  {
+    "id": 55,
+    "content": "病历号：MR202650491",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #5"
+  },
+  {
+    "id": 56,
+    "content": "病历号：MR202639867",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #6"
+  },
+  {
+    "id": 57,
+    "content": "病历号：MR202682588",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #7"
+  },
+  {
+    "id": 58,
+    "content": "病历号：MR202679185",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #8"
+  },
+  {
+    "id": 59,
+    "content": "病历号：MR202648407",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #9"
+  },
+  {
+    "id": 60,
+    "content": "病历号：MR202685369",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #10"
+  },
+  {
+    "id": 61,
+    "content": "病历号：MR202606189",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #11"
+  },
+  {
+    "id": 62,
+    "content": "病历号：MR202650931",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #12"
+  },
+  {
+    "id": 63,
+    "content": "病历号：MR202694077",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #13"
+  },
+  {
+    "id": 64,
+    "content": "病历号：MR202637102",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #14"
+  },
+  {
+    "id": 65,
+    "content": "病历号：MR202610532",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #15"
+  },
+  {
+    "id": 66,
+    "content": "病历号：MR202681113",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #16"
+  },
+  {
+    "id": 67,
+    "content": "病历号：MR202621866",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #17"
+  },
+  {
+    "id": 68,
+    "content": "病历号：MR202656759",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #18"
+  },
+  {
+    "id": 69,
+    "content": "病历号：MR202634863",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #19"
+  },
+  {
+    "id": 70,
+    "content": "病历号：MR202629897",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #20"
+  },
+  {
+    "id": 71,
+    "content": "病历号：MR202673574",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #21"
+  },
+  {
+    "id": 72,
+    "content": "病历号：MR202692368",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #22"
+  },
+  {
+    "id": 73,
+    "content": "病历号：MR202660584",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #23"
+  },
+  {
+    "id": 74,
+    "content": "病历号：MR202646331",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #24"
+  },
+  {
+    "id": 75,
+    "content": "病历号：MR202614787",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "medical_record"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准病历号格式 #25"
+  },
+  {
+    "id": 76,
+    "content": "血压：147/81 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #1"
+  },
+  {
+    "id": 77,
+    "content": "血压：147/91 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #2"
+  },
+  {
+    "id": 78,
+    "content": "血压：115/84 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #3"
+  },
+  {
+    "id": 79,
+    "content": "血压：115/68 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #4"
+  },
+  {
+    "id": 80,
+    "content": "血压：158/98 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #5"
+  },
+  {
+    "id": 81,
+    "content": "血压：144/74 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #6"
+  },
+  {
+    "id": 82,
+    "content": "血压：128/72 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #7"
+  },
+  {
+    "id": 83,
+    "content": "血压：100/78 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #8"
+  },
+  {
+    "id": 84,
+    "content": "血压：118/71 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #9"
+  },
+  {
+    "id": 85,
+    "content": "血压：118/95 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #10"
+  },
+  {
+    "id": 86,
+    "content": "血压：102/93 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #11"
+  },
+  {
+    "id": 87,
+    "content": "血压：102/94 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #12"
+  },
+  {
+    "id": 88,
+    "content": "血压：129/64 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #13"
+  },
+  {
+    "id": 89,
+    "content": "血压：109/97 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #14"
+  },
+  {
+    "id": 90,
+    "content": "血压：128/69 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #15"
+  },
+  {
+    "id": 91,
+    "content": "血压：146/81 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #16"
+  },
+  {
+    "id": 92,
+    "content": "血压：117/91 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #17"
+  },
+  {
+    "id": 93,
+    "content": "血压：112/92 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #18"
+  },
+  {
+    "id": 94,
+    "content": "血压：123/80 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #19"
+  },
+  {
+    "id": 95,
+    "content": "血压：125/75 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #20"
+  },
+  {
+    "id": 96,
+    "content": "血压：128/65 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #21"
+  },
+  {
+    "id": 97,
+    "content": "血压：108/86 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #22"
+  },
+  {
+    "id": 98,
+    "content": "血压：105/91 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #23"
+  },
+  {
+    "id": 99,
+    "content": "血压：117/63 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #24"
+  },
+  {
+    "id": 100,
+    "content": "血压：138/90 mmHg",
+    "expected_sensitive": true,
+    "sensitive_types": [
+      "blood_pressure"
+    ],
+    "attack_type": "normal",
+    "category": "standard",
+    "description": "标准血压格式 #25"
   },
   {
     "id": 101,
@@ -2028,10 +2028,7 @@
     "content": "周春生的证件号码是一叁开头的那个十八位数字",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "id_card"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2042,10 +2039,7 @@
     "content": "林春生的手机号是170开头的十一位号码",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "phone"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2056,10 +2050,7 @@
     "content": "刘德明的病历号是MR开头后面跟着五位数字",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "medical_record"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2070,9 +2061,6 @@
     "content": "高海燕在意识模糊记录中提到的血压是一百二十比八十",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
       "blood_pressure"
     ],
     "attack_type": "semantic",
@@ -2084,10 +2072,7 @@
     "content": "王德明的身份证前六位是210102，后面是出生日期加四位顺序码",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "id_card"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2098,10 +2083,7 @@
     "content": "刘文军的证件号码是一伍开头的那个十八位数字",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "id_card"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2112,10 +2094,7 @@
     "content": "马凤英的手机号是178开头的十一位号码",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "phone"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2126,10 +2105,7 @@
     "content": "罗桂英的病历号是MR开头后面跟着五位数字",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "medical_record"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2140,9 +2116,6 @@
     "content": "周国庆在疼痛记录中提到的血压是一百二十比八十",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
       "blood_pressure"
     ],
     "attack_type": "semantic",
@@ -2154,10 +2127,7 @@
     "content": "马丽华的身份证前六位是320108，后面是出生日期加四位顺序码",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "id_card"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2168,10 +2138,7 @@
     "content": "张守义的证件号码是一幺开头的那个十八位数字",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "id_card"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2182,10 +2149,7 @@
     "content": "刘秀英的手机号是170开头的十一位号码",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "phone"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2196,10 +2160,7 @@
     "content": "马文军的病历号是MR开头后面跟着五位数字",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "medical_record"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2210,9 +2171,6 @@
     "content": "李宝林在意识模糊记录中提到的血压是一百二十比八十",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
       "blood_pressure"
     ],
     "attack_type": "semantic",
@@ -2224,10 +2182,7 @@
     "content": "高凤英的身份证前六位是440305，后面是出生日期加四位顺序码",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "id_card"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2238,10 +2193,7 @@
     "content": "赵建国的证件号码是一贰开头的那个十八位数字",
     "expected_sensitive": true,
     "sensitive_types": [
-      "id_card",
-      "phone",
-      "medical_record",
-      "blood_pressure"
+      "id_card"
     ],
     "attack_type": "semantic",
     "category": "bypass_attack",
@@ -2249,231 +2201,6 @@
   },
   {
     "id": 201,
-    "content": "得分：100/120",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #1（应判定为非敏感）"
-  },
-  {
-    "id": 202,
-    "content": "得分：101/121",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #2（应判定为非敏感）"
-  },
-  {
-    "id": 203,
-    "content": "得分：102/122",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #3（应判定为非敏感）"
-  },
-  {
-    "id": 204,
-    "content": "得分：103/123",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #4（应判定为非敏感）"
-  },
-  {
-    "id": 205,
-    "content": "得分：104/124",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #5（应判定为非敏感）"
-  },
-  {
-    "id": 206,
-    "content": "得分：105/125",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #6（应判定为非敏感）"
-  },
-  {
-    "id": 207,
-    "content": "得分：106/126",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #7（应判定为非敏感）"
-  },
-  {
-    "id": 208,
-    "content": "得分：107/127",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #8（应判定为非敏感）"
-  },
-  {
-    "id": 209,
-    "content": "得分：108/128",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #9（应判定为非敏感）"
-  },
-  {
-    "id": 210,
-    "content": "得分：109/129",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #10（应判定为非敏感）"
-  },
-  {
-    "id": 211,
-    "content": "得分：110/130",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #11（应判定为非敏感）"
-  },
-  {
-    "id": 212,
-    "content": "得分：111/131",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #12（应判定为非敏感）"
-  },
-  {
-    "id": 213,
-    "content": "得分：112/132",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #13（应判定为非敏感）"
-  },
-  {
-    "id": 214,
-    "content": "得分：113/133",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #14（应判定为非敏感）"
-  },
-  {
-    "id": 215,
-    "content": "得分：114/134",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #15（应判定为非敏感）"
-  },
-  {
-    "id": 216,
-    "content": "得分：115/135",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #16（应判定为非敏感）"
-  },
-  {
-    "id": 217,
-    "content": "得分：116/136",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #17（应判定为非敏感）"
-  },
-  {
-    "id": 218,
-    "content": "得分：117/137",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #18（应判定为非敏感）"
-  },
-  {
-    "id": 219,
-    "content": "得分：118/138",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #19（应判定为非敏感）"
-  },
-  {
-    "id": 220,
-    "content": "得分：119/139",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #20（应判定为非敏感）"
-  },
-  {
-    "id": 221,
-    "content": "得分：120/140",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #21（应判定为非敏感）"
-  },
-  {
-    "id": 222,
-    "content": "得分：121/141",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #22（应判定为非敏感）"
-  },
-  {
-    "id": 223,
-    "content": "得分：122/142",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #23（应判定为非敏感）"
-  },
-  {
-    "id": 224,
-    "content": "得分：123/143",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #24（应判定为非敏感）"
-  },
-  {
-    "id": 225,
-    "content": "得分：124/144",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #25（应判定为非敏感）"
-  },
-  {
-    "id": 226,
     "content": "邮政编码：110101",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2482,7 +2209,7 @@
     "description": "邮编易混淆场景 #1（应判定为非敏感）"
   },
   {
-    "id": 227,
+    "id": 202,
     "content": "邮政编码：310115",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2491,7 +2218,7 @@
     "description": "邮编易混淆场景 #2（应判定为非敏感）"
   },
   {
-    "id": 228,
+    "id": 203,
     "content": "邮政编码：440305",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2500,7 +2227,7 @@
     "description": "邮编易混淆场景 #3（应判定为非敏感）"
   },
   {
-    "id": 229,
+    "id": 204,
     "content": "邮政编码：500101",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2509,7 +2236,7 @@
     "description": "邮编易混淆场景 #4（应判定为非敏感）"
   },
   {
-    "id": 230,
+    "id": 205,
     "content": "邮政编码：210102",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2518,7 +2245,7 @@
     "description": "邮编易混淆场景 #5（应判定为非敏感）"
   },
   {
-    "id": 231,
+    "id": 206,
     "content": "邮政编码：330106",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2527,7 +2254,7 @@
     "description": "邮编易混淆场景 #6（应判定为非敏感）"
   },
   {
-    "id": 232,
+    "id": 207,
     "content": "邮政编码：420111",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2536,7 +2263,7 @@
     "description": "邮编易混淆场景 #7（应判定为非敏感）"
   },
   {
-    "id": 233,
+    "id": 208,
     "content": "邮政编码：610104",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2545,7 +2272,7 @@
     "description": "邮编易混淆场景 #8（应判定为非敏感）"
   },
   {
-    "id": 234,
+    "id": 209,
     "content": "邮政编码：510107",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2554,7 +2281,7 @@
     "description": "邮编易混淆场景 #9（应判定为非敏感）"
   },
   {
-    "id": 235,
+    "id": 210,
     "content": "邮政编码：320108",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2563,7 +2290,7 @@
     "description": "邮编易混淆场景 #10（应判定为非敏感）"
   },
   {
-    "id": 236,
+    "id": 211,
     "content": "邮政编码：350203",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2572,7 +2299,7 @@
     "description": "邮编易混淆场景 #11（应判定为非敏感）"
   },
   {
-    "id": 237,
+    "id": 212,
     "content": "邮政编码：230103",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2581,7 +2308,7 @@
     "description": "邮编易混淆场景 #12（应判定为非敏感）"
   },
   {
-    "id": 238,
+    "id": 213,
     "content": "邮政编码：110101",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2590,7 +2317,7 @@
     "description": "邮编易混淆场景 #13（应判定为非敏感）"
   },
   {
-    "id": 239,
+    "id": 214,
     "content": "邮政编码：310115",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2599,7 +2326,7 @@
     "description": "邮编易混淆场景 #14（应判定为非敏感）"
   },
   {
-    "id": 240,
+    "id": 215,
     "content": "邮政编码：440305",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2608,7 +2335,7 @@
     "description": "邮编易混淆场景 #15（应判定为非敏感）"
   },
   {
-    "id": 241,
+    "id": 216,
     "content": "邮政编码：500101",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2617,7 +2344,7 @@
     "description": "邮编易混淆场景 #16（应判定为非敏感）"
   },
   {
-    "id": 242,
+    "id": 217,
     "content": "邮政编码：210102",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2626,7 +2353,7 @@
     "description": "邮编易混淆场景 #17（应判定为非敏感）"
   },
   {
-    "id": 243,
+    "id": 218,
     "content": "邮政编码：330106",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2635,7 +2362,7 @@
     "description": "邮编易混淆场景 #18（应判定为非敏感）"
   },
   {
-    "id": 244,
+    "id": 219,
     "content": "邮政编码：420111",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2644,7 +2371,7 @@
     "description": "邮编易混淆场景 #19（应判定为非敏感）"
   },
   {
-    "id": 245,
+    "id": 220,
     "content": "邮政编码：610104",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2653,52 +2380,7 @@
     "description": "邮编易混淆场景 #20（应判定为非敏感）"
   },
   {
-    "id": 246,
-    "content": "邮政编码：510107",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #21（应判定为非敏感）"
-  },
-  {
-    "id": 247,
-    "content": "邮政编码：320108",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #22（应判定为非敏感）"
-  },
-  {
-    "id": 248,
-    "content": "邮政编码：350203",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #23（应判定为非敏感）"
-  },
-  {
-    "id": 249,
-    "content": "邮政编码：230103",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #24（应判定为非敏感）"
-  },
-  {
-    "id": 250,
-    "content": "邮政编码：110101",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #25（应判定为非敏感）"
-  },
-  {
-    "id": 251,
+    "id": 221,
     "content": "员工工号：EMP20260000",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2707,7 +2389,7 @@
     "description": "工号易混淆场景 #1（应判定为非敏感）"
   },
   {
-    "id": 252,
+    "id": 222,
     "content": "员工工号：EMP20260001",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2716,7 +2398,7 @@
     "description": "工号易混淆场景 #2（应判定为非敏感）"
   },
   {
-    "id": 253,
+    "id": 223,
     "content": "员工工号：EMP20260002",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2725,7 +2407,7 @@
     "description": "工号易混淆场景 #3（应判定为非敏感）"
   },
   {
-    "id": 254,
+    "id": 224,
     "content": "员工工号：EMP20260003",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2734,7 +2416,7 @@
     "description": "工号易混淆场景 #4（应判定为非敏感）"
   },
   {
-    "id": 255,
+    "id": 225,
     "content": "员工工号：EMP20260004",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2743,7 +2425,7 @@
     "description": "工号易混淆场景 #5（应判定为非敏感）"
   },
   {
-    "id": 256,
+    "id": 226,
     "content": "员工工号：EMP20260005",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2752,7 +2434,7 @@
     "description": "工号易混淆场景 #6（应判定为非敏感）"
   },
   {
-    "id": 257,
+    "id": 227,
     "content": "员工工号：EMP20260006",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2761,7 +2443,7 @@
     "description": "工号易混淆场景 #7（应判定为非敏感）"
   },
   {
-    "id": 258,
+    "id": 228,
     "content": "员工工号：EMP20260007",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2770,7 +2452,7 @@
     "description": "工号易混淆场景 #8（应判定为非敏感）"
   },
   {
-    "id": 259,
+    "id": 229,
     "content": "员工工号：EMP20260008",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2779,7 +2461,7 @@
     "description": "工号易混淆场景 #9（应判定为非敏感）"
   },
   {
-    "id": 260,
+    "id": 230,
     "content": "员工工号：EMP20260009",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2788,7 +2470,7 @@
     "description": "工号易混淆场景 #10（应判定为非敏感）"
   },
   {
-    "id": 261,
+    "id": 231,
     "content": "员工工号：EMP20260010",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2797,7 +2479,7 @@
     "description": "工号易混淆场景 #11（应判定为非敏感）"
   },
   {
-    "id": 262,
+    "id": 232,
     "content": "员工工号：EMP20260011",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2806,7 +2488,7 @@
     "description": "工号易混淆场景 #12（应判定为非敏感）"
   },
   {
-    "id": 263,
+    "id": 233,
     "content": "员工工号：EMP20260012",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2815,7 +2497,7 @@
     "description": "工号易混淆场景 #13（应判定为非敏感）"
   },
   {
-    "id": 264,
+    "id": 234,
     "content": "员工工号：EMP20260013",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2824,7 +2506,7 @@
     "description": "工号易混淆场景 #14（应判定为非敏感）"
   },
   {
-    "id": 265,
+    "id": 235,
     "content": "员工工号：EMP20260014",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2833,7 +2515,7 @@
     "description": "工号易混淆场景 #15（应判定为非敏感）"
   },
   {
-    "id": 266,
+    "id": 236,
     "content": "员工工号：EMP20260015",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2842,7 +2524,7 @@
     "description": "工号易混淆场景 #16（应判定为非敏感）"
   },
   {
-    "id": 267,
+    "id": 237,
     "content": "员工工号：EMP20260016",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2851,7 +2533,7 @@
     "description": "工号易混淆场景 #17（应判定为非敏感）"
   },
   {
-    "id": 268,
+    "id": 238,
     "content": "员工工号：EMP20260017",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2860,7 +2542,7 @@
     "description": "工号易混淆场景 #18（应判定为非敏感）"
   },
   {
-    "id": 269,
+    "id": 239,
     "content": "员工工号：EMP20260018",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2869,7 +2551,7 @@
     "description": "工号易混淆场景 #19（应判定为非敏感）"
   },
   {
-    "id": 270,
+    "id": 240,
     "content": "员工工号：EMP20260019",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2878,52 +2560,7 @@
     "description": "工号易混淆场景 #20（应判定为非敏感）"
   },
   {
-    "id": 271,
-    "content": "员工工号：EMP20260020",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #21（应判定为非敏感）"
-  },
-  {
-    "id": 272,
-    "content": "员工工号：EMP20260021",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #22（应判定为非敏感）"
-  },
-  {
-    "id": 273,
-    "content": "员工工号：EMP20260022",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #23（应判定为非敏感）"
-  },
-  {
-    "id": 274,
-    "content": "员工工号：EMP20260023",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #24（应判定为非敏感）"
-  },
-  {
-    "id": 275,
-    "content": "员工工号：EMP20260024",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #25（应判定为非敏感）"
-  },
-  {
-    "id": 276,
+    "id": 241,
     "content": "订单号：ORD202600000",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2932,7 +2569,7 @@
     "description": "订单号易混淆场景 #1（应判定为非敏感）"
   },
   {
-    "id": 277,
+    "id": 242,
     "content": "订单号：ORD202600001",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2941,7 +2578,7 @@
     "description": "订单号易混淆场景 #2（应判定为非敏感）"
   },
   {
-    "id": 278,
+    "id": 243,
     "content": "订单号：ORD202600002",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2950,7 +2587,7 @@
     "description": "订单号易混淆场景 #3（应判定为非敏感）"
   },
   {
-    "id": 279,
+    "id": 244,
     "content": "订单号：ORD202600003",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2959,7 +2596,7 @@
     "description": "订单号易混淆场景 #4（应判定为非敏感）"
   },
   {
-    "id": 280,
+    "id": 245,
     "content": "订单号：ORD202600004",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2968,7 +2605,7 @@
     "description": "订单号易混淆场景 #5（应判定为非敏感）"
   },
   {
-    "id": 281,
+    "id": 246,
     "content": "订单号：ORD202600005",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2977,7 +2614,7 @@
     "description": "订单号易混淆场景 #6（应判定为非敏感）"
   },
   {
-    "id": 282,
+    "id": 247,
     "content": "订单号：ORD202600006",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2986,7 +2623,7 @@
     "description": "订单号易混淆场景 #7（应判定为非敏感）"
   },
   {
-    "id": 283,
+    "id": 248,
     "content": "订单号：ORD202600007",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2995,7 +2632,7 @@
     "description": "订单号易混淆场景 #8（应判定为非敏感）"
   },
   {
-    "id": 284,
+    "id": 249,
     "content": "订单号：ORD202600008",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3004,7 +2641,7 @@
     "description": "订单号易混淆场景 #9（应判定为非敏感）"
   },
   {
-    "id": 285,
+    "id": 250,
     "content": "订单号：ORD202600009",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3013,7 +2650,7 @@
     "description": "订单号易混淆场景 #10（应判定为非敏感）"
   },
   {
-    "id": 286,
+    "id": 251,
     "content": "订单号：ORD202600010",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3022,7 +2659,7 @@
     "description": "订单号易混淆场景 #11（应判定为非敏感）"
   },
   {
-    "id": 287,
+    "id": 252,
     "content": "订单号：ORD202600011",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3031,7 +2668,7 @@
     "description": "订单号易混淆场景 #12（应判定为非敏感）"
   },
   {
-    "id": 288,
+    "id": 253,
     "content": "订单号：ORD202600012",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3040,7 +2677,7 @@
     "description": "订单号易混淆场景 #13（应判定为非敏感）"
   },
   {
-    "id": 289,
+    "id": 254,
     "content": "订单号：ORD202600013",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3049,7 +2686,7 @@
     "description": "订单号易混淆场景 #14（应判定为非敏感）"
   },
   {
-    "id": 290,
+    "id": 255,
     "content": "订单号：ORD202600014",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3058,7 +2695,7 @@
     "description": "订单号易混淆场景 #15（应判定为非敏感）"
   },
   {
-    "id": 291,
+    "id": 256,
     "content": "订单号：ORD202600015",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3067,7 +2704,7 @@
     "description": "订单号易混淆场景 #16（应判定为非敏感）"
   },
   {
-    "id": 292,
+    "id": 257,
     "content": "订单号：ORD202600016",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3076,7 +2713,7 @@
     "description": "订单号易混淆场景 #17（应判定为非敏感）"
   },
   {
-    "id": 293,
+    "id": 258,
     "content": "订单号：ORD202600017",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3085,7 +2722,7 @@
     "description": "订单号易混淆场景 #18（应判定为非敏感）"
   },
   {
-    "id": 294,
+    "id": 259,
     "content": "订单号：ORD202600018",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3094,7 +2731,7 @@
     "description": "订单号易混淆场景 #19（应判定为非敏感）"
   },
   {
-    "id": 295,
+    "id": 260,
     "content": "订单号：ORD202600019",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -3103,49 +2740,364 @@
     "description": "订单号易混淆场景 #20（应判定为非敏感）"
   },
   {
-    "id": 296,
-    "content": "订单号：ORD202600020",
+    "id": 261,
+    "content": "得分：100/120",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "normal",
     "category": "confusing",
-    "description": "订单号易混淆场景 #21（应判定为非敏感）"
+    "description": "比例易混淆场景 #1（应判定为非敏感）"
+  },
+  {
+    "id": 262,
+    "content": "得分：101/121",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #2（应判定为非敏感）"
+  },
+  {
+    "id": 263,
+    "content": "得分：102/122",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #3（应判定为非敏感）"
+  },
+  {
+    "id": 264,
+    "content": "得分：103/123",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #4（应判定为非敏感）"
+  },
+  {
+    "id": 265,
+    "content": "得分：104/124",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #5（应判定为非敏感）"
+  },
+  {
+    "id": 266,
+    "content": "得分：105/125",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #6（应判定为非敏感）"
+  },
+  {
+    "id": 267,
+    "content": "得分：106/126",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #7（应判定为非敏感）"
+  },
+  {
+    "id": 268,
+    "content": "得分：107/127",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #8（应判定为非敏感）"
+  },
+  {
+    "id": 269,
+    "content": "得分：108/128",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #9（应判定为非敏感）"
+  },
+  {
+    "id": 270,
+    "content": "得分：109/129",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #10（应判定为非敏感）"
+  },
+  {
+    "id": 271,
+    "content": "得分：110/130",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #11（应判定为非敏感）"
+  },
+  {
+    "id": 272,
+    "content": "得分：111/131",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #12（应判定为非敏感）"
+  },
+  {
+    "id": 273,
+    "content": "得分：112/132",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #13（应判定为非敏感）"
+  },
+  {
+    "id": 274,
+    "content": "得分：113/133",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #14（应判定为非敏感）"
+  },
+  {
+    "id": 275,
+    "content": "得分：114/134",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #15（应判定为非敏感）"
+  },
+  {
+    "id": 276,
+    "content": "得分：115/135",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #16（应判定为非敏感）"
+  },
+  {
+    "id": 277,
+    "content": "得分：116/136",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #17（应判定为非敏感）"
+  },
+  {
+    "id": 278,
+    "content": "得分：117/137",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #18（应判定为非敏感）"
+  },
+  {
+    "id": 279,
+    "content": "得分：118/138",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #19（应判定为非敏感）"
+  },
+  {
+    "id": 280,
+    "content": "得分：119/139",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "normal",
+    "category": "confusing",
+    "description": "比例易混淆场景 #20（应判定为非敏感）"
+  },
+  {
+    "id": 281,
+    "content": "订单号：230103193205078321",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "身份证形状被语境否定 #1（应判定为非敏感）"
+  },
+  {
+    "id": 282,
+    "content": "编号：17826364349",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "手机号形状被语境否定 #2（应判定为非敏感）"
+  },
+  {
+    "id": 283,
+    "content": "物流单号：500101194407041815",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "身份证形状被语境否定 #3（应判定为非敏感）"
+  },
+  {
+    "id": 284,
+    "content": "员工编号：18819602071",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "手机号形状被语境否定 #4（应判定为非敏感）"
+  },
+  {
+    "id": 285,
+    "content": "订单号：420111199405104320",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "身份证形状被语境否定 #5（应判定为非敏感）"
+  },
+  {
+    "id": 286,
+    "content": "编号：18628418725",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "手机号形状被语境否定 #6（应判定为非敏感）"
+  },
+  {
+    "id": 287,
+    "content": "物流单号：350203197604123696",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "身份证形状被语境否定 #7（应判定为非敏感）"
+  },
+  {
+    "id": 288,
+    "content": "员工编号：19040094674",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "手机号形状被语境否定 #8（应判定为非敏感）"
+  },
+  {
+    "id": 289,
+    "content": "订单号：500101196402069500",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "身份证形状被语境否定 #9（应判定为非敏感）"
+  },
+  {
+    "id": 290,
+    "content": "编号：13851916941",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "手机号形状被语境否定 #10（应判定为非敏感）"
+  },
+  {
+    "id": 291,
+    "content": "物流单号：310115199111272505",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "身份证形状被语境否定 #11（应判定为非敏感）"
+  },
+  {
+    "id": 292,
+    "content": "员工编号：17099994779",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "手机号形状被语境否定 #12（应判定为非敏感）"
+  },
+  {
+    "id": 293,
+    "content": "订单号：440305196504162116",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "身份证形状被语境否定 #13（应判定为非敏感）"
+  },
+  {
+    "id": 294,
+    "content": "编号：13307668870",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "手机号形状被语境否定 #14（应判定为非敏感）"
+  },
+  {
+    "id": 295,
+    "content": "物流单号：440305199711062293",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "身份证形状被语境否定 #15（应判定为非敏感）"
+  },
+  {
+    "id": 296,
+    "content": "员工编号：13990108109",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "手机号形状被语境否定 #16（应判定为非敏感）"
   },
   {
     "id": 297,
-    "content": "订单号：ORD202600021",
+    "content": "订单号：110101196105111394",
     "expected_sensitive": false,
     "sensitive_types": [],
-    "attack_type": "normal",
+    "attack_type": "context_negated",
     "category": "confusing",
-    "description": "订单号易混淆场景 #22（应判定为非敏感）"
+    "description": "身份证形状被语境否定 #17（应判定为非敏感）"
   },
   {
     "id": 298,
-    "content": "订单号：ORD202600022",
+    "content": "编号：19045557584",
     "expected_sensitive": false,
     "sensitive_types": [],
-    "attack_type": "normal",
+    "attack_type": "context_negated",
     "category": "confusing",
-    "description": "订单号易混淆场景 #23（应判定为非敏感）"
+    "description": "手机号形状被语境否定 #18（应判定为非敏感）"
   },
   {
     "id": 299,
-    "content": "订单号：ORD202600023",
+    "content": "物流单号：230103199406269594",
     "expected_sensitive": false,
     "sensitive_types": [],
-    "attack_type": "normal",
+    "attack_type": "context_negated",
     "category": "confusing",
-    "description": "订单号易混淆场景 #24（应判定为非敏感）"
+    "description": "身份证形状被语境否定 #19（应判定为非敏感）"
   },
   {
     "id": 300,
-    "content": "订单号：ORD202600024",
+    "content": "员工编号：13853478550",
     "expected_sensitive": false,
     "sensitive_types": [],
-    "attack_type": "normal",
+    "attack_type": "context_negated",
     "category": "confusing",
-    "description": "订单号易混淆场景 #25（应判定为非敏感）"
+    "description": "手机号形状被语境否定 #20（应判定为非敏感）"
   },
   {
     "id": 301,

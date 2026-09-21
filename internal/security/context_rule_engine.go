@@ -263,7 +263,9 @@ func (cre *ContextRuleEngine) LoadDefaultRules() {
 	cre.AddRule(&ContextRule{
 		ID:       "phone_assoc_002",
 		Type:     SensitiveTypePhone,
-		Pattern:  `1[3-9]\d{9}`,
+		// 加 \b 边界并使用与 Layer 1 一致的号段（含 19 全号段），避免在身份证号等
+		// 更长数字串内部误匹配出一个 11 位子串（如 230103193205078321 里的 19320507832）。
+		Pattern:  `\b1(?:3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-9])\d{8}\b`,
 		Triggers: []string{"手机", "电话", "联系方式", "联系人", "号码"},
 		Suppressors: []string{"示例", "测试", "假设"},
 		WindowSize:  15,
@@ -309,7 +311,10 @@ func (cre *ContextRuleEngine) LoadDefaultRules() {
 	cre.AddRule(&ContextRule{
 		ID:       "bankcard_assoc_005",
 		Type:     SensitiveTypeBankCard,
-		Pattern:  `[1-9]\d{15,18}`,
+		// 使用与 Layer 1 一致的 BIN 号段锚定（62/4/5/6/9558 开头），而不是裸
+		// [1-9]\d{15,18}：后者会把 18 位身份证号、订单号、快递单号等任意长数字
+		// 串误判为银行卡（实测 230103193205078321 被误报）。
+		Pattern:  `\b(?:62\d{14,17}|4\d{15}|5[1-5]\d{14}|6(?:011|5\d{2})\d{12,15}|9558\d{15})\b`,
 		Triggers: []string{"银行卡", "卡号", "账号", "账户"},
 		Suppressors: []string{"示例", "测试", "假设"},
 		WindowSize:  20,

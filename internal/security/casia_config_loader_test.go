@@ -53,9 +53,11 @@ func TestCASIABuiltinKeywordWeightsTable(t *testing.T) {
 		{"id_card", "邮编", -0.8},
 		{"phone", "手机", 1.0},
 		{"phone", "联系方式", 0.8},
-		{"phone", "工号", -0.6},
+		{"phone", "工号", -1.2},
+		{"id_card", "订单号", -1.2},
+		{"id_card", "编号", -1.2},
 		{"medical_record", "病历号", 1.0},
-		{"medical_record", "快递单号", -0.8},
+		{"medical_record", "快递单号", -1.2},
 		{"blood_pressure", "收缩压", 0.9},
 		{"blood_pressure", "分数", -0.7},
 	}

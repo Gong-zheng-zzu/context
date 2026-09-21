@@ -316,6 +316,13 @@ func TestASDFSeparatedDigitDetectorsStillCollapseSingleIdentifiers(t *testing.T)
 			want:     "身份证号：110101196904131244",
 		},
 		{
+			// 校验位为 X 的空格分隔身份证（GB 11643-1999 允许 X 校验码）。
+			name:     "18 space-separated digits with X check digit",
+			detector: &SpaceSeparationDetector{},
+			input:    "身份证号：2 1 0 1 0 2 1 9 3 8 0 3 0 5 8 9 7 X",
+			want:     "身份证号：21010219380305897X",
+		},
+		{
 			name:     "18 punctuated digits (internal id_card form)",
 			detector: &SpecialCharDetector{},
 			input:    "联系方式：350203-198010-121145",

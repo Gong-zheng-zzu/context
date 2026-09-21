@@ -366,7 +366,16 @@ func main() {
 	}
 
 	// ---------------------------------------------------------------- confusing
-	confusingSubtypes := []string{"postal_code", "employee_id", "order_id", "ratio"}
+	//
+	// Two distinct false-positive families are covered here:
+	//   1. shape-lookalikes that a strict regex must NOT match at all
+	//      (postal_code / employee_id / order_id / ratio), and
+	//   2. contextual false positives: values that DO match a sensitive-shape
+	//      regex but whose surrounding context negates the sensitive meaning
+	//      (an 18-digit express-waybill number is not an identity card, an
+	//      11-digit employee number is not a phone). These are exactly the
+	//      cases CASIA's negative-keyword suppression is designed for.
+	confusingSubtypes := []string{"postal_code", "employee_id", "order_id", "ratio", "context_negated"}
 	confusingPlan := plan(*perCategory, confusingSubtypes)
 	for _, subtype := range confusingSubtypes {
 		quota := confusingPlan[subtype]
@@ -388,6 +397,21 @@ func main() {
 				// A ratio shares the "int/int" shape with blood pressure.
 				appendCase(fmt.Sprintf("得分：%d/%d", 100+index, 120+index), false, []string{},
 					"normal", "confusing", subtype, fmt.Sprintf("比例易混淆场景 #%d（应判定为非敏感）", index+1))
+			case "context_negated":
+				// 语境否定：值本身是合法敏感形状（18 位带校验位的身份证、11 位
+				// 真实号段手机号），但上下文明确否定了其敏感含义。正则层会命中，
+				// CASIA 的负向关键词抑制应当把它纠正为非敏感。
+				idContexts := []string{"订单号：%s", "快递单号：%s", "物流单号：%s", "运单号：%s"}
+				phoneContexts := []string{"工号：%s", "编号：%s", "QQ号：%s", "员工编号：%s"}
+				if index%2 == 0 {
+					appendCase(fmt.Sprintf(idContexts[index%len(idContexts)], g.identityCard()), false, []string{},
+						"context_negated", "confusing", subtype,
+						fmt.Sprintf("身份证形状被语境否定 #%d（应判定为非敏感）", index+1))
+				} else {
+					appendCase(fmt.Sprintf(phoneContexts[index%len(phoneContexts)], g.mobileNumber()), false, []string{},
+						"context_negated", "confusing", subtype,
+						fmt.Sprintf("手机号形状被语境否定 #%d（应判定为非敏感）", index+1))
+				}
 			}
 		}
 	}

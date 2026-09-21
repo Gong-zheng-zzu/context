@@ -340,7 +340,7 @@ var (
 	inputRequestDetector  = security.NewInputRequestPolicyDetector()
 )
 
-var mainlandPhonePattern = regexp.MustCompile(`\b1(?:3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[1389])\d{8}\b`)
+var mainlandPhonePattern = regexp.MustCompile(`\b1(?:3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-9])\d{8}\b`)
 
 // enforceOutputRedaction is the final response boundary. It intentionally
 // repeats basic detector redaction and applies a deterministic phone mask so a

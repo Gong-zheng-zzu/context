@@ -204,7 +204,11 @@ func plausibleObfuscationCandidate(digits int) bool {
 }
 
 var (
-	spaceSeparatedDigitPattern   = regexp.MustCompile(`[0-9]+(?:[\t ]+[0-9]+)+`)
+	// 空格分隔的候选以数字结尾，但身份证校验位可以是 X/x（GB 11643-1999），
+	// 因此末尾允许一个空格分隔的 X/x 参与归一化（如 "… 9 7 X"），否则该候选
+	// 归一化后只剩 17 位数字，令身份证正则失配（评测数据集 space_separation
+	// 子类 107/115 暴露）。
+	spaceSeparatedDigitPattern   = regexp.MustCompile(`[0-9]+(?:[\t ]+[0-9]+)+(?:[\t ]+[Xx])?`)
 	specialSeparatedDigitPattern = regexp.MustCompile(`[0-9]+(?:[-_./\\|]+[0-9]+)+`)
 )
 

@@ -345,9 +345,11 @@ func TestCASIAFloorDoesNotApplyToInferredLayers(t *testing.T) {
 	}
 }
 
-// TestCASIASNegativeContextStillSuppresses 确认保底没有把负面上下文的作用抹掉：
-// 抑制后的分数应低于正向上下文，且不低于 base × floor。
-func TestCASIANegativeContextStillSuppresses(t *testing.T) {
+// TestCASIANegativeContextSuppressesConfirmedMatch 确认负向上下文能真正抑制
+// 正则确证的形状误报：保底只保护中性/正向上下文，一旦命中负向关键词，结果应被
+// 压到过滤阈值以下并从候选中移除，而不是被保底抵消（"快递单号 110101199001011234"
+// 是身份证形状，但语境否定了它）。
+func TestCASIANegativeContextSuppressesConfirmedMatch(t *testing.T) {
 	detector := NewMultiLayerDetector("http://127.0.0.1:1", "unused")
 
 	positive := detector.regexDetector.Detect("身份证号 110101199001011234")
@@ -358,14 +360,15 @@ func TestCASIANegativeContextStillSuppresses(t *testing.T) {
 
 	positiveAdjusted := detector.applyCASIA("身份证号 110101199001011234", positive, true)
 	negativeAdjusted := detector.applyCASIA("快递单号 110101199001011234", negative, true)
-	if len(positiveAdjusted) == 0 || len(negativeAdjusted) == 0 {
-		t.Skip("CASIA filtered one of the probes; comparison is not meaningful")
-	}
 
-	positiveScore := positiveAdjusted[0].Confidence
-	negativeScore := negativeAdjusted[0].Confidence
-	if negativeScore > positiveScore {
-		t.Fatalf("negative context score %v should not exceed positive context score %v", negativeScore, positiveScore)
+	if len(positiveAdjusted) == 0 {
+		t.Fatal("positive context must keep the regex-confirmed identity match")
+	}
+	if len(negativeAdjusted) != 0 {
+		t.Fatalf(
+			"negative context must suppress the identity-shaped probe, got %d kept item(s) at confidence %v",
+			len(negativeAdjusted), negativeAdjusted[0].Confidence,
+		)
 	}
 }
 
