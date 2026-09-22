@@ -58,7 +58,7 @@ AUDIT_FIELDS = (
 # Security-lab ablation contract. The server owns the profile list and evaluates
 # every profile in a single request; the client only selects which server-owned
 # profiles are aggregated and reported.
-ABLATION_PROFILE_ORDER = ("regex_only", "asdf", "asdf_casia", "asdf_casia_pccm")
+ABLATION_PROFILE_ORDER = ("regex_only", "asdf", "asdf_casia", "asdf_casia_pccm", "asdf_casia_pccm_llm")
 ABLATION_DEFAULT_PROFILES = ",".join(ABLATION_PROFILE_ORDER)
 ABLATION_DEFAULT_ENDPOINT = "/api/v1/security/ablation"
 ABLATION_SYNTHETIC_ID_PREFIX = "synthetic_"
@@ -1589,6 +1589,32 @@ ABLATION_SELF_TEST_RESPONSE: Dict[str, Any] = {
                            "enhancement_per_extra_layer": 0.05, "decision_threshold": 0.45,
                            "layer_activation_threshold": 0.3},
                 "early_stop_reason": "deterministic_lab_profile_excludes_llm", "latency_ms": 1.9,
+                "pipeline_version": "security-ablation-v1",
+            },
+            {
+                "profile": "asdf_casia_pccm_llm", "decision": "allow", "reason": "asdf_normalized_no_sensitive_span",
+                "confidence": 0.0, "sensitive_types": [],
+                "layers": [
+                    {"layer": "regex_casia", "status": "ok", "confidence": 0.0, "match_count": 0,
+                     "latency_ms": 0.3, "spans": []},
+                    {"layer": "dictionary_casia", "status": "ok", "confidence": 0.0, "match_count": 0,
+                     "latency_ms": 0.2, "spans": []},
+                    {"layer": "context_casia", "status": "ok", "confidence": 0.0, "match_count": 0,
+                     "latency_ms": 0.1, "spans": []},
+                    {"layer": "llm", "status": "ok", "confidence": 0.0, "match_count": 0,
+                     "latency_ms": 2.0, "spans": []},
+                ],
+                "asdf": {"is_adversarial": True, "attack_types": ["space_separation"], "confidence": 0.9,
+                         "pipeline_version": "asdf-normalization-v2", "original_sha256": "b",
+                         "normalized_sha256": "c", "normalization_steps": [{"sequence": 1}],
+                         "redetection_performed": True, "residual_attack_types": []},
+                "casia": {"version": "casia-context-v1", "context_window_bytes": 64, "decision_threshold": 0.6,
+                          "keyword_weights": {"phone": {"电话": 1.2}}, "source": "builtin"},
+                "pccm_s": {"version": "pccm-s-fixed-v1", "calibration_source": "fixed_unvalidated",
+                           "layer_weights": {"1": 0.7, "2": 0.1, "4": 0.15, "5": 0.05},
+                           "enhancement_per_extra_layer": 0.05, "decision_threshold": 0.45,
+                           "layer_activation_threshold": 0.3},
+                "early_stop_reason": "deterministic_lab_profile_excludes_llm", "latency_ms": 2.2,
                 "pipeline_version": "security-ablation-v1",
             },
         ],

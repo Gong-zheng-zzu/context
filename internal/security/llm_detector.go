@@ -200,31 +200,22 @@ func (ld *LLMDetector) buildPrompt(text string, markedRanges [][2]int) string {
 		markedRangesStr = string(rangesJSON)
 	}
 
-	prompt := fmt.Sprintf(`你是敏感信息检测专家。分析文本中的隐晦敏感表达，返回JSON。
+	prompt := fmt.Sprintf(`你是敏感信息检测专家。分析文本中的隐晦敏感表达（隐喻、暗示、变体表达），返回JSON。
 
 规则：
-- 检测隐喻、暗示、变体表达的敏感信息
+- 检测文本中隐含的、但没有直接写出具体数值的敏感信息（例如"手机号是170开头的十一位号码"里隐含了手机号）
 - 忽略已标记位置：%s
-- 类型：个人信息(personal_info)/认证凭证(credential)/财务信息(financial)/政治敏感(political)/暴力(violence)/色情(adult)/其他(other)
+- type 只能从下面选，不要发明新类型：
+  id_card(身份证号)、phone(手机号)、medical_record(病历号)、blood_pressure(血压)、bank_card(银行卡号)、credit_card(信用卡号)、email(邮箱)、ip_address(IP地址)、password(密码)、api_key(API密钥)
 
 文本：%s
 
 输出格式（必须是有效的JSON）：
-{
-  "items": [
-    {
-      "type": "类型",
-      "start": 起始位置,
-      "end": 结束位置,
-      "confidence": 0.0-1.0,
-      "reason": "简短原因"
-    }
-  ]
-}
+{"items":[{"type":"类型","confidence":0.0-1.0,"reason":"简短原因"}]}
 
 如果无敏感内容，返回：{"items":[]}
 
-注意：只返回JSON，不要有其他文字。`, markedRangesStr, text)
+注意：只返回JSON，不要有其他文字。不要输出start/end位置字段。`, markedRangesStr, text)
 
 	return prompt
 }

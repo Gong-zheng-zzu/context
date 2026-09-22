@@ -111,7 +111,7 @@ func NewMultiLayerDetector(ollamaURL, llmModel string) *MultiLayerDetector {
 		regexDetector: NewDetector(),
 		dictMatcher:   NewDictionaryMatcher(),
 		contextEngine: NewContextRuleEngine(),
-		llmDetector:   NewLLMDetector(ollamaURL, llmModel, 500*time.Millisecond),
+		llmDetector:   NewLLMDetector(ollamaURL, llmModel, 30*time.Second),
 
 		// 🆕 初始化理论创新模型（PCCM-S 单一真源）
 		pccmModel:      NewProgressiveConfidenceModelWithConfig(pccmConfig),
@@ -397,17 +397,31 @@ func (mld *MultiLayerDetector) executeLayer5(ctx context.Context, text string, m
 		}
 	}
 
-	// 转换为SensitiveInfo
+	// 转换为SensitiveInfo。LLM 返回的 start/end 是字符索引且可能越界，必须钳制到
+	// 文本长度内，否则 text[start:end] 会 panic；位置字段不参与判定，仅用于审计。
 	items := make([]SensitiveInfo, len(llmResult.Items))
 	for i, item := range llmResult.Items {
+		start, end := item.Start, item.End
+		if start < 0 {
+			start = 0
+		}
+		if start > len(text) {
+			start = len(text)
+		}
+		if end < start {
+			end = start
+		}
+		if end > len(text) {
+			end = len(text)
+		}
 		items[i] = SensitiveInfo{
 			Type:       SensitiveType(item.Type),
-			Value:      text[item.Start:item.End],
-			Start:      item.Start,
-			End:        item.End,
+			Value:      text[start:end],
+			Start:      start,
+			End:        end,
 			Label:      item.Type,
-			Position:   item.Start,
-			Length:     item.End - item.Start,
+			Position:   start,
+			Length:     end - start,
 			Confidence: item.Confidence,
 			Encrypted:  false,
 		}
@@ -638,17 +652,26 @@ func (mld *MultiLayerDetector) DisableEarlyStop() {
 	mld.earlyStop = false
 }
 
-// SetLayerWeight 设置层权重
+// SetLayerWeight 设置层权重。委托给 PCCM 模型（单一真源），保证生产默认
+// 走 PCCM 时调用方设置的权重真正生效；此前只改遗留的 weights 后备映射，
+// 导致该 API 在生产路径上静默失效。
 func (mld *MultiLayerDetector) SetLayerWeight(layerID int, weight float64) {
 	mld.mu.Lock()
 	defer mld.mu.Unlock()
+	// 同步保留后备映射，使 DisablePCCM 的旧加权路径行为一致。
 	mld.weights[layerID] = weight
+	if mld.pccmModel != nil {
+		mld.pccmModel.SetLayerWeight(layerID, weight)
+	}
 }
 
-// GetLayerWeight 获取层权重
+// GetLayerWeight 获取层权重。优先从 PCCM 模型（单一真源）读取。
 func (mld *MultiLayerDetector) GetLayerWeight(layerID int) float64 {
 	mld.mu.RLock()
 	defer mld.mu.RUnlock()
+	if mld.pccmModel != nil {
+		return mld.pccmModel.GetLayerWeight(layerID)
+	}
 	return mld.weights[layerID]
 }
 

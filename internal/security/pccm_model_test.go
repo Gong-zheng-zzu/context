@@ -176,3 +176,36 @@ func TestPCCMSecurityConfigFromEnv(t *testing.T) {
 		t.Fatalf("invalid env value should fall back, got %v", envConfig.EnhancementPerExtraLayer)
 	}
 }
+
+// TestMultiLayerDetectorSetLayerWeightUsesPCCMAsSingleSource 固化修复：
+// SetLayerWeight 必须作用到 PCCM 模型（生产默认路径），而非只改遗留的
+// weights 后备映射。此前调用 SetLayerWeight 在生产路径上静默失效。
+func TestMultiLayerDetectorSetLayerWeightUsesPCCMAsSingleSource(t *testing.T) {
+	detector := NewMultiLayerDetector("http://127.0.0.1:1", "unused")
+
+	if got := detector.GetLayerWeight(1); got != 0.70 {
+		t.Fatalf("default layer 1 weight = %v, want 0.70", got)
+	}
+
+	detector.SetLayerWeight(1, 0.33)
+	if got := detector.GetLayerWeight(1); got != 0.33 {
+		t.Fatalf("after SetLayerWeight(1, 0.33), GetLayerWeight(1) = %v, want 0.33", got)
+	}
+
+	// 模型（单一真源）必须同步更新。
+	model := detector.GetPCCMModel()
+	if got := model.GetLayerWeight(1); got != 0.33 {
+		t.Fatalf("model weight for layer 1 = %v, want 0.33 (single source not updated)", got)
+	}
+
+	// 置信度计算必须反映新权重：只激活 Layer 1（置信度 0.9）时，
+	// 单层不增强，最终置信度应等于该层置信度本身（与权重无关），
+	// 因此改用两层验证权重确实进入归一化加权。
+	detector.SetLayerWeight(2, 0.0)
+	conf := detector.calculateConfidence([]LayerResult{
+		{LayerID: 1, Confidence: 0.9},
+		{LayerID: 2, Confidence: 0.3},
+	})
+	// Layer 1 权重 0.33、Layer 2 权重 0 → 加权平均 = 0.9（Layer 2 权重为 0 不贡献）。
+	assertFloatEqual(t, "weighted confidence with layer2 weight 0", conf, 0.9)
+}

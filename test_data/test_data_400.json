@@ -2291,96 +2291,6 @@
   },
   {
     "id": 211,
-    "content": "邮政编码：350203",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #11（应判定为非敏感）"
-  },
-  {
-    "id": 212,
-    "content": "邮政编码：230103",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #12（应判定为非敏感）"
-  },
-  {
-    "id": 213,
-    "content": "邮政编码：110101",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #13（应判定为非敏感）"
-  },
-  {
-    "id": 214,
-    "content": "邮政编码：310115",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #14（应判定为非敏感）"
-  },
-  {
-    "id": 215,
-    "content": "邮政编码：440305",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #15（应判定为非敏感）"
-  },
-  {
-    "id": 216,
-    "content": "邮政编码：500101",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #16（应判定为非敏感）"
-  },
-  {
-    "id": 217,
-    "content": "邮政编码：210102",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #17（应判定为非敏感）"
-  },
-  {
-    "id": 218,
-    "content": "邮政编码：330106",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #18（应判定为非敏感）"
-  },
-  {
-    "id": 219,
-    "content": "邮政编码：420111",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #19（应判定为非敏感）"
-  },
-  {
-    "id": 220,
-    "content": "邮政编码：610104",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "邮编易混淆场景 #20（应判定为非敏感）"
-  },
-  {
-    "id": 221,
     "content": "员工工号：EMP20260000",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2389,7 +2299,7 @@
     "description": "工号易混淆场景 #1（应判定为非敏感）"
   },
   {
-    "id": 222,
+    "id": 212,
     "content": "员工工号：EMP20260001",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2398,7 +2308,7 @@
     "description": "工号易混淆场景 #2（应判定为非敏感）"
   },
   {
-    "id": 223,
+    "id": 213,
     "content": "员工工号：EMP20260002",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2407,7 +2317,7 @@
     "description": "工号易混淆场景 #3（应判定为非敏感）"
   },
   {
-    "id": 224,
+    "id": 214,
     "content": "员工工号：EMP20260003",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2416,7 +2326,7 @@
     "description": "工号易混淆场景 #4（应判定为非敏感）"
   },
   {
-    "id": 225,
+    "id": 215,
     "content": "员工工号：EMP20260004",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2425,7 +2335,7 @@
     "description": "工号易混淆场景 #5（应判定为非敏感）"
   },
   {
-    "id": 226,
+    "id": 216,
     "content": "员工工号：EMP20260005",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2434,7 +2344,7 @@
     "description": "工号易混淆场景 #6（应判定为非敏感）"
   },
   {
-    "id": 227,
+    "id": 217,
     "content": "员工工号：EMP20260006",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2443,7 +2353,7 @@
     "description": "工号易混淆场景 #7（应判定为非敏感）"
   },
   {
-    "id": 228,
+    "id": 218,
     "content": "员工工号：EMP20260007",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2452,7 +2362,7 @@
     "description": "工号易混淆场景 #8（应判定为非敏感）"
   },
   {
-    "id": 229,
+    "id": 219,
     "content": "员工工号：EMP20260008",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2461,106 +2371,7 @@
     "description": "工号易混淆场景 #9（应判定为非敏感）"
   },
   {
-    "id": 230,
-    "content": "员工工号：EMP20260009",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #10（应判定为非敏感）"
-  },
-  {
-    "id": 231,
-    "content": "员工工号：EMP20260010",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #11（应判定为非敏感）"
-  },
-  {
-    "id": 232,
-    "content": "员工工号：EMP20260011",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #12（应判定为非敏感）"
-  },
-  {
-    "id": 233,
-    "content": "员工工号：EMP20260012",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #13（应判定为非敏感）"
-  },
-  {
-    "id": 234,
-    "content": "员工工号：EMP20260013",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #14（应判定为非敏感）"
-  },
-  {
-    "id": 235,
-    "content": "员工工号：EMP20260014",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #15（应判定为非敏感）"
-  },
-  {
-    "id": 236,
-    "content": "员工工号：EMP20260015",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #16（应判定为非敏感）"
-  },
-  {
-    "id": 237,
-    "content": "员工工号：EMP20260016",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #17（应判定为非敏感）"
-  },
-  {
-    "id": 238,
-    "content": "员工工号：EMP20260017",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #18（应判定为非敏感）"
-  },
-  {
-    "id": 239,
-    "content": "员工工号：EMP20260018",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #19（应判定为非敏感）"
-  },
-  {
-    "id": 240,
-    "content": "员工工号：EMP20260019",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "工号易混淆场景 #20（应判定为非敏感）"
-  },
-  {
-    "id": 241,
+    "id": 220,
     "content": "订单号：ORD202600000",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2569,7 +2380,7 @@
     "description": "订单号易混淆场景 #1（应判定为非敏感）"
   },
   {
-    "id": 242,
+    "id": 221,
     "content": "订单号：ORD202600001",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2578,7 +2389,7 @@
     "description": "订单号易混淆场景 #2（应判定为非敏感）"
   },
   {
-    "id": 243,
+    "id": 222,
     "content": "订单号：ORD202600002",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2587,7 +2398,7 @@
     "description": "订单号易混淆场景 #3（应判定为非敏感）"
   },
   {
-    "id": 244,
+    "id": 223,
     "content": "订单号：ORD202600003",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2596,7 +2407,7 @@
     "description": "订单号易混淆场景 #4（应判定为非敏感）"
   },
   {
-    "id": 245,
+    "id": 224,
     "content": "订单号：ORD202600004",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2605,7 +2416,7 @@
     "description": "订单号易混淆场景 #5（应判定为非敏感）"
   },
   {
-    "id": 246,
+    "id": 225,
     "content": "订单号：ORD202600005",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2614,7 +2425,7 @@
     "description": "订单号易混淆场景 #6（应判定为非敏感）"
   },
   {
-    "id": 247,
+    "id": 226,
     "content": "订单号：ORD202600006",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2623,7 +2434,7 @@
     "description": "订单号易混淆场景 #7（应判定为非敏感）"
   },
   {
-    "id": 248,
+    "id": 227,
     "content": "订单号：ORD202600007",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2632,7 +2443,7 @@
     "description": "订单号易混淆场景 #8（应判定为非敏感）"
   },
   {
-    "id": 249,
+    "id": 228,
     "content": "订单号：ORD202600008",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2641,106 +2452,7 @@
     "description": "订单号易混淆场景 #9（应判定为非敏感）"
   },
   {
-    "id": 250,
-    "content": "订单号：ORD202600009",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #10（应判定为非敏感）"
-  },
-  {
-    "id": 251,
-    "content": "订单号：ORD202600010",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #11（应判定为非敏感）"
-  },
-  {
-    "id": 252,
-    "content": "订单号：ORD202600011",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #12（应判定为非敏感）"
-  },
-  {
-    "id": 253,
-    "content": "订单号：ORD202600012",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #13（应判定为非敏感）"
-  },
-  {
-    "id": 254,
-    "content": "订单号：ORD202600013",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #14（应判定为非敏感）"
-  },
-  {
-    "id": 255,
-    "content": "订单号：ORD202600014",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #15（应判定为非敏感）"
-  },
-  {
-    "id": 256,
-    "content": "订单号：ORD202600015",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #16（应判定为非敏感）"
-  },
-  {
-    "id": 257,
-    "content": "订单号：ORD202600016",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #17（应判定为非敏感）"
-  },
-  {
-    "id": 258,
-    "content": "订单号：ORD202600017",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #18（应判定为非敏感）"
-  },
-  {
-    "id": 259,
-    "content": "订单号：ORD202600018",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #19（应判定为非敏感）"
-  },
-  {
-    "id": 260,
-    "content": "订单号：ORD202600019",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "订单号易混淆场景 #20（应判定为非敏感）"
-  },
-  {
-    "id": 261,
+    "id": 229,
     "content": "得分：100/120",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2749,7 +2461,7 @@
     "description": "比例易混淆场景 #1（应判定为非敏感）"
   },
   {
-    "id": 262,
+    "id": 230,
     "content": "得分：101/121",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2758,7 +2470,7 @@
     "description": "比例易混淆场景 #2（应判定为非敏感）"
   },
   {
-    "id": 263,
+    "id": 231,
     "content": "得分：102/122",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2767,7 +2479,7 @@
     "description": "比例易混淆场景 #3（应判定为非敏感）"
   },
   {
-    "id": 264,
+    "id": 232,
     "content": "得分：103/123",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2776,7 +2488,7 @@
     "description": "比例易混淆场景 #4（应判定为非敏感）"
   },
   {
-    "id": 265,
+    "id": 233,
     "content": "得分：104/124",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2785,7 +2497,7 @@
     "description": "比例易混淆场景 #5（应判定为非敏感）"
   },
   {
-    "id": 266,
+    "id": 234,
     "content": "得分：105/125",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2794,7 +2506,7 @@
     "description": "比例易混淆场景 #6（应判定为非敏感）"
   },
   {
-    "id": 267,
+    "id": 235,
     "content": "得分：106/126",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2803,7 +2515,7 @@
     "description": "比例易混淆场景 #7（应判定为非敏感）"
   },
   {
-    "id": 268,
+    "id": 236,
     "content": "得分：107/127",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2812,7 +2524,7 @@
     "description": "比例易混淆场景 #8（应判定为非敏感）"
   },
   {
-    "id": 269,
+    "id": 237,
     "content": "得分：108/128",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2821,106 +2533,7 @@
     "description": "比例易混淆场景 #9（应判定为非敏感）"
   },
   {
-    "id": 270,
-    "content": "得分：109/129",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #10（应判定为非敏感）"
-  },
-  {
-    "id": 271,
-    "content": "得分：110/130",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #11（应判定为非敏感）"
-  },
-  {
-    "id": 272,
-    "content": "得分：111/131",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #12（应判定为非敏感）"
-  },
-  {
-    "id": 273,
-    "content": "得分：112/132",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #13（应判定为非敏感）"
-  },
-  {
-    "id": 274,
-    "content": "得分：113/133",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #14（应判定为非敏感）"
-  },
-  {
-    "id": 275,
-    "content": "得分：114/134",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #15（应判定为非敏感）"
-  },
-  {
-    "id": 276,
-    "content": "得分：115/135",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #16（应判定为非敏感）"
-  },
-  {
-    "id": 277,
-    "content": "得分：116/136",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #17（应判定为非敏感）"
-  },
-  {
-    "id": 278,
-    "content": "得分：117/137",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #18（应判定为非敏感）"
-  },
-  {
-    "id": 279,
-    "content": "得分：118/138",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #19（应判定为非敏感）"
-  },
-  {
-    "id": 280,
-    "content": "得分：119/139",
-    "expected_sensitive": false,
-    "sensitive_types": [],
-    "attack_type": "normal",
-    "category": "confusing",
-    "description": "比例易混淆场景 #20（应判定为非敏感）"
-  },
-  {
-    "id": 281,
+    "id": 238,
     "content": "订单号：230103193205078321",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2929,7 +2542,7 @@
     "description": "身份证形状被语境否定 #1（应判定为非敏感）"
   },
   {
-    "id": 282,
+    "id": 239,
     "content": "编号：17826364349",
     "expected_sensitive": false,
     "sensitive_types": [],
@@ -2938,26 +2551,26 @@
     "description": "手机号形状被语境否定 #2（应判定为非敏感）"
   },
   {
-    "id": 283,
-    "content": "物流单号：500101194407041815",
+    "id": 240,
+    "content": "快递单号：6233710679057985",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "身份证形状被语境否定 #3（应判定为非敏感）"
+    "description": "银行卡形状被语境否定 #3（应判定为非敏感）"
   },
   {
-    "id": 284,
-    "content": "员工编号：18819602071",
+    "id": 241,
+    "content": "编号：4.4.5.1",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "手机号形状被语境否定 #4（应判定为非敏感）"
+    "description": "IP/版本号形状被语境否定 #4（应判定为非敏感）"
   },
   {
-    "id": 285,
-    "content": "订单号：420111199405104320",
+    "id": 242,
+    "content": "订单号：420111199107093926",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
@@ -2965,8 +2578,8 @@
     "description": "身份证形状被语境否定 #5（应判定为非敏感）"
   },
   {
-    "id": 286,
-    "content": "编号：18628418725",
+    "id": 243,
+    "content": "编号：15917453232",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
@@ -2974,26 +2587,26 @@
     "description": "手机号形状被语境否定 #6（应判定为非敏感）"
   },
   {
-    "id": 287,
-    "content": "物流单号：350203197604123696",
+    "id": 244,
+    "content": "快递单号：6244330541552415",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "身份证形状被语境否定 #7（应判定为非敏感）"
+    "description": "银行卡形状被语境否定 #7（应判定为非敏感）"
   },
   {
-    "id": 288,
-    "content": "员工编号：19040094674",
+    "id": 245,
+    "content": "编号：7.6.6.1",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "手机号形状被语境否定 #8（应判定为非敏感）"
+    "description": "IP/版本号形状被语境否定 #8（应判定为非敏感）"
   },
   {
-    "id": 289,
-    "content": "订单号：500101196402069500",
+    "id": 246,
+    "content": "订单号：500101198901237635",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
@@ -3001,103 +2614,490 @@
     "description": "身份证形状被语境否定 #9（应判定为非敏感）"
   },
   {
-    "id": 290,
-    "content": "编号：13851916941",
+    "id": 247,
+    "content": "顺丰单号：510107194902072766",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "手机号形状被语境否定 #10（应判定为非敏感）"
+    "description": "物流快递单号（身份证形状）被语境否定 #1（应判定为非敏感）"
+  },
+  {
+    "id": 248,
+    "content": "中通单号：330106196908116423",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "物流快递单号（身份证形状）被语境否定 #2（应判定为非敏感）"
+  },
+  {
+    "id": 249,
+    "content": "圆通单号：420111195212279855",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "物流快递单号（身份证形状）被语境否定 #3（应判定为非敏感）"
+  },
+  {
+    "id": 250,
+    "content": "申通单号：500101193104089702",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "物流快递单号（身份证形状）被语境否定 #4（应判定为非敏感）"
+  },
+  {
+    "id": 251,
+    "content": "韵达单号：440305199711062293",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "物流快递单号（身份证形状）被语境否定 #5（应判定为非敏感）"
+  },
+  {
+    "id": 252,
+    "content": "京东单号：320108193901188480",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "物流快递单号（身份证形状）被语境否定 #6（应判定为非敏感）"
+  },
+  {
+    "id": 253,
+    "content": "顺丰单号：420111194909172076",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "物流快递单号（身份证形状）被语境否定 #7（应判定为非敏感）"
+  },
+  {
+    "id": 254,
+    "content": "中通单号：35020319830624200X",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "物流快递单号（身份证形状）被语境否定 #8（应判定为非敏感）"
+  },
+  {
+    "id": 255,
+    "content": "圆通单号：440305197108087024",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "物流快递单号（身份证形状）被语境否定 #9（应判定为非敏感）"
+  },
+  {
+    "id": 256,
+    "content": "增值税发票号：51010719771025784X",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "发票号/合同编号（身份证形状）被语境否定 #1（应判定为非敏感）"
+  },
+  {
+    "id": 257,
+    "content": "税控发票号：500101195605225943",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "发票号/合同编号（身份证形状）被语境否定 #2（应判定为非敏感）"
+  },
+  {
+    "id": 258,
+    "content": "合同编号：310115199511107250",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "发票号/合同编号（身份证形状）被语境否定 #3（应判定为非敏感）"
+  },
+  {
+    "id": 259,
+    "content": "电子发票号：230103195404225418",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "发票号/合同编号（身份证形状）被语境否定 #4（应判定为非敏感）"
+  },
+  {
+    "id": 260,
+    "content": "购销合同编号：210102194106057597",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "发票号/合同编号（身份证形状）被语境否定 #5（应判定为非敏感）"
+  },
+  {
+    "id": 261,
+    "content": "增值税发票号：110101196709074109",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "发票号/合同编号（身份证形状）被语境否定 #6（应判定为非敏感）"
+  },
+  {
+    "id": 262,
+    "content": "税控发票号：500101199710282163",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "发票号/合同编号（身份证形状）被语境否定 #7（应判定为非敏感）"
+  },
+  {
+    "id": 263,
+    "content": "合同编号：210102199709205993",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "发票号/合同编号（身份证形状）被语境否定 #8（应判定为非敏感）"
+  },
+  {
+    "id": 264,
+    "content": "电子发票号：420111193607195470",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "发票号/合同编号（身份证形状）被语境否定 #9（应判定为非敏感）"
+  },
+  {
+    "id": 265,
+    "content": "住院号：420111197410154649",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "医疗文书号（身份证形状）被语境否定 #1（应判定为非敏感）"
+  },
+  {
+    "id": 266,
+    "content": "处方号：610104195007212266",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "医疗文书号（身份证形状）被语境否定 #2（应判定为非敏感）"
+  },
+  {
+    "id": 267,
+    "content": "检查流水号：440305197902144823",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "医疗文书号（身份证形状）被语境否定 #3（应判定为非敏感）"
+  },
+  {
+    "id": 268,
+    "content": "门诊流水号：350203194907099706",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "医疗文书号（身份证形状）被语境否定 #4（应判定为非敏感）"
+  },
+  {
+    "id": 269,
+    "content": "检验流水号：510107196103073155",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "医疗文书号（身份证形状）被语境否定 #5（应判定为非敏感）"
+  },
+  {
+    "id": 270,
+    "content": "住院号：31011519960315306X",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "医疗文书号（身份证形状）被语境否定 #6（应判定为非敏感）"
+  },
+  {
+    "id": 271,
+    "content": "处方号：210102196804087602",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "医疗文书号（身份证形状）被语境否定 #7（应判定为非敏感）"
+  },
+  {
+    "id": 272,
+    "content": "检查流水号：510107196802218296",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "医疗文书号（身份证形状）被语境否定 #8（应判定为非敏感）"
+  },
+  {
+    "id": 273,
+    "content": "门诊流水号：440305197505138868",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "医疗文书号（身份证形状）被语境否定 #9（应判定为非敏感）"
+  },
+  {
+    "id": 274,
+    "content": "会员号：18663579041",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "会员号/学号（手机号形状）被语境否定 #1（应判定为非敏感）"
+  },
+  {
+    "id": 275,
+    "content": "学号：15888586591",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "会员号/学号（手机号形状）被语境否定 #2（应判定为非敏感）"
+  },
+  {
+    "id": 276,
+    "content": "验证码：18616327205",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "会员号/学号（手机号形状）被语境否定 #3（应判定为非敏感）"
+  },
+  {
+    "id": 277,
+    "content": "员工编号：13864593442",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "会员号/学号（手机号形状）被语境否定 #4（应判定为非敏感）"
+  },
+  {
+    "id": 278,
+    "content": "工号：18601785168",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "会员号/学号（手机号形状）被语境否定 #5（应判定为非敏感）"
+  },
+  {
+    "id": 279,
+    "content": "会员号：13954905031",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "会员号/学号（手机号形状）被语境否定 #6（应判定为非敏感）"
+  },
+  {
+    "id": 280,
+    "content": "学号：19167186956",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "会员号/学号（手机号形状）被语境否定 #7（应判定为非敏感）"
+  },
+  {
+    "id": 281,
+    "content": "验证码：19054922047",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "会员号/学号（手机号形状）被语境否定 #8（应判定为非敏感）"
+  },
+  {
+    "id": 282,
+    "content": "员工编号：18971708987",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "会员号/学号（手机号形状）被语境否定 #9（应判定为非敏感）"
+  },
+  {
+    "id": 283,
+    "content": "交易流水号：6265112792765896",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "交易流水号（银行卡形状）被语境否定 #1（应判定为非敏感）"
+  },
+  {
+    "id": 284,
+    "content": "支付流水号：6243809564553440",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "交易流水号（银行卡形状）被语境否定 #2（应判定为非敏感）"
+  },
+  {
+    "id": 285,
+    "content": "退款流水号：6256969984874390",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "交易流水号（银行卡形状）被语境否定 #3（应判定为非敏感）"
+  },
+  {
+    "id": 286,
+    "content": "交易单号：6260809378193716",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "交易流水号（银行卡形状）被语境否定 #4（应判定为非敏感）"
+  },
+  {
+    "id": 287,
+    "content": "对账流水号：6294838787642897",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "交易流水号（银行卡形状）被语境否定 #5（应判定为非敏感）"
+  },
+  {
+    "id": 288,
+    "content": "交易流水号：6275945016756037",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "交易流水号（银行卡形状）被语境否定 #6（应判定为非敏感）"
+  },
+  {
+    "id": 289,
+    "content": "支付流水号：6242778732069380",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "交易流水号（银行卡形状）被语境否定 #7（应判定为非敏感）"
+  },
+  {
+    "id": 290,
+    "content": "退款流水号：6299892549230043",
+    "expected_sensitive": false,
+    "sensitive_types": [],
+    "attack_type": "context_negated",
+    "category": "confusing",
+    "description": "交易流水号（银行卡形状）被语境否定 #8（应判定为非敏感）"
   },
   {
     "id": 291,
-    "content": "物流单号：310115199111272505",
+    "content": "交易单号：6244362522966171",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "身份证形状被语境否定 #11（应判定为非敏感）"
+    "description": "交易流水号（银行卡形状）被语境否定 #9（应判定为非敏感）"
   },
   {
     "id": 292,
-    "content": "员工编号：17099994779",
+    "content": "设备序列号：6269875694791901",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "手机号形状被语境否定 #12（应判定为非敏感）"
+    "description": "设备序列号（银行卡形状）被语境否定 #1（应判定为非敏感）"
   },
   {
     "id": 293,
-    "content": "订单号：440305196504162116",
+    "content": "出厂编号：6289007855891075",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "身份证形状被语境否定 #13（应判定为非敏感）"
+    "description": "设备序列号（银行卡形状）被语境否定 #2（应判定为非敏感）"
   },
   {
     "id": 294,
-    "content": "编号：13307668870",
+    "content": "机身序列号：6247344329735076",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "手机号形状被语境否定 #14（应判定为非敏感）"
+    "description": "设备序列号（银行卡形状）被语境否定 #3（应判定为非敏感）"
   },
   {
     "id": 295,
-    "content": "物流单号：440305199711062293",
+    "content": "设备编号：6224933020187307",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "身份证形状被语境否定 #15（应判定为非敏感）"
+    "description": "设备序列号（银行卡形状）被语境否定 #4（应判定为非敏感）"
   },
   {
     "id": 296,
-    "content": "员工编号：13990108109",
+    "content": "生产序列号：6218686629450762",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "手机号形状被语境否定 #16（应判定为非敏感）"
+    "description": "设备序列号（银行卡形状）被语境否定 #5（应判定为非敏感）"
   },
   {
     "id": 297,
-    "content": "订单号：110101196105111394",
+    "content": "设备序列号：6284560704658814",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "身份证形状被语境否定 #17（应判定为非敏感）"
+    "description": "设备序列号（银行卡形状）被语境否定 #6（应判定为非敏感）"
   },
   {
     "id": 298,
-    "content": "编号：19045557584",
+    "content": "出厂编号：6295332778022175",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "手机号形状被语境否定 #18（应判定为非敏感）"
+    "description": "设备序列号（银行卡形状）被语境否定 #7（应判定为非敏感）"
   },
   {
     "id": 299,
-    "content": "物流单号：230103199406269594",
+    "content": "机身序列号：6242109716821249",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "身份证形状被语境否定 #19（应判定为非敏感）"
+    "description": "设备序列号（银行卡形状）被语境否定 #8（应判定为非敏感）"
   },
   {
     "id": 300,
-    "content": "员工编号：13853478550",
+    "content": "设备编号：6222518277389480",
     "expected_sensitive": false,
     "sensitive_types": [],
     "attack_type": "context_negated",
     "category": "confusing",
-    "description": "手机号形状被语境否定 #20（应判定为非敏感）"
+    "description": "设备序列号（银行卡形状）被语境否定 #9（应判定为非敏感）"
   },
   {
     "id": 301,

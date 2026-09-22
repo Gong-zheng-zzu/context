@@ -168,6 +168,19 @@ func (g *generator) bloodPressure() string {
 	return fmt.Sprintf("%d/%d", systolic, diastolic)
 }
 
+// bankCardNumber builds a 16-digit UnionPay-shaped number (62 prefix), which
+// matches the bank_card regex by shape but carries no Luhn check here — it is
+// used only for the context-negated false-positive family.
+func (g *generator) bankCardNumber() string {
+	return fmt.Sprintf("62%014d", g.rng.Intn(100000000000000))
+}
+
+// versionNumber builds an x.y.z.w dotted shape that matches the ip_address
+// regex by shape but is meant to read as a version/build number.
+func (g *generator) versionNumber() string {
+	return fmt.Sprintf("%d.%d.%d.%d", 1+g.rng.Intn(9), g.rng.Intn(10), g.rng.Intn(10), g.rng.Intn(10))
+}
+
 func (g *generator) person() string {
 	return familyNames[g.rng.Intn(len(familyNames))] + givenNames[g.rng.Intn(len(givenNames))]
 }
@@ -375,7 +388,10 @@ func main() {
 	//      (an 18-digit express-waybill number is not an identity card, an
 	//      11-digit employee number is not a phone). These are exactly the
 	//      cases CASIA's negative-keyword suppression is designed for.
-	confusingSubtypes := []string{"postal_code", "employee_id", "order_id", "ratio", "context_negated"}
+	confusingSubtypes := []string{
+		"postal_code", "employee_id", "order_id", "ratio", "context_negated",
+		"waybill", "invoice_contract", "hospital_doc", "member_student", "transaction", "device_serial",
+	}
 	confusingPlan := plan(*perCategory, confusingSubtypes)
 	for _, subtype := range confusingSubtypes {
 		quota := confusingPlan[subtype]
@@ -399,19 +415,86 @@ func main() {
 					"normal", "confusing", subtype, fmt.Sprintf("比例易混淆场景 #%d（应判定为非敏感）", index+1))
 			case "context_negated":
 				// 语境否定：值本身是合法敏感形状（18 位带校验位的身份证、11 位
-				// 真实号段手机号），但上下文明确否定了其敏感含义。正则层会命中，
-				// CASIA 的负向关键词抑制应当把它纠正为非敏感。
+				// 真实号段手机号、16 位银行卡形状、x.y.z.w 版本号形状），但上下文
+				// 明确否定了其敏感含义。正则层会命中，CASIA 的负向关键词抑制应当
+				// 把它纠正为非敏感。按 index%4 轮换四类形状，各覆盖一个负向语境。
 				idContexts := []string{"订单号：%s", "快递单号：%s", "物流单号：%s", "运单号：%s"}
 				phoneContexts := []string{"工号：%s", "编号：%s", "QQ号：%s", "员工编号：%s"}
-				if index%2 == 0 {
+				bankCardContexts := []string{"订单号：%s", "流水号：%s", "快递单号：%s", "运单号：%s"}
+				ipContexts := []string{"版本号：%s", "版本：%s", "日期：%s", "编号：%s"}
+				switch index % 4 {
+				case 0:
 					appendCase(fmt.Sprintf(idContexts[index%len(idContexts)], g.identityCard()), false, []string{},
 						"context_negated", "confusing", subtype,
 						fmt.Sprintf("身份证形状被语境否定 #%d（应判定为非敏感）", index+1))
-				} else {
+				case 1:
 					appendCase(fmt.Sprintf(phoneContexts[index%len(phoneContexts)], g.mobileNumber()), false, []string{},
 						"context_negated", "confusing", subtype,
 						fmt.Sprintf("手机号形状被语境否定 #%d（应判定为非敏感）", index+1))
+				case 2:
+					appendCase(fmt.Sprintf(bankCardContexts[index%len(bankCardContexts)], g.bankCardNumber()), false, []string{},
+						"context_negated", "confusing", subtype,
+						fmt.Sprintf("银行卡形状被语境否定 #%d（应判定为非敏感）", index+1))
+				default:
+					appendCase(fmt.Sprintf(ipContexts[index%len(ipContexts)], g.versionNumber()), false, []string{},
+						"context_negated", "confusing", subtype,
+						fmt.Sprintf("IP/版本号形状被语境否定 #%d（应判定为非敏感）", index+1))
 				}
+			case "waybill":
+				// 物流快递单号：真实快递公司（顺丰/中通/圆通/申通/韵达/京东）单号。
+				// 单号本身是 18 位纯数字（身份证形状），但「xx单号」语境否定其身份含义。
+				waybillContexts := []string{
+					"顺丰单号：%s", "中通单号：%s", "圆通单号：%s",
+					"申通单号：%s", "韵达单号：%s", "京东单号：%s",
+				}
+				appendCase(fmt.Sprintf(waybillContexts[index%len(waybillContexts)], g.identityCard()), false, []string{},
+					"context_negated", "confusing", subtype,
+					fmt.Sprintf("物流快递单号（身份证形状）被语境否定 #%d（应判定为非敏感）", index+1))
+			case "invoice_contract":
+				// 发票号 / 合同编号：财务与法务场景的 18 位数字串，形状像身份证。
+				invoiceContexts := []string{
+					"增值税发票号：%s", "税控发票号：%s", "合同编号：%s",
+					"电子发票号：%s", "购销合同编号：%s",
+				}
+				appendCase(fmt.Sprintf(invoiceContexts[index%len(invoiceContexts)], g.identityCard()), false, []string{},
+					"context_negated", "confusing", subtype,
+					fmt.Sprintf("发票号/合同编号（身份证形状）被语境否定 #%d（应判定为非敏感）", index+1))
+			case "hospital_doc":
+				// 医疗文书号：住院号 / 处方号 / 检查流水号，18 位数字像身份证。
+				hospitalContexts := []string{
+					"住院号：%s", "处方号：%s", "检查流水号：%s",
+					"门诊流水号：%s", "检验流水号：%s",
+				}
+				appendCase(fmt.Sprintf(hospitalContexts[index%len(hospitalContexts)], g.identityCard()), false, []string{},
+					"context_negated", "confusing", subtype,
+					fmt.Sprintf("医疗文书号（身份证形状）被语境否定 #%d（应判定为非敏感）", index+1))
+			case "member_student":
+				// 会员号 / 学号 / 验证码：11 位数字像手机号，但非通讯用途。
+				memberContexts := []string{
+					"会员号：%s", "学号：%s", "验证码：%s",
+					"员工编号：%s", "工号：%s",
+				}
+				appendCase(fmt.Sprintf(memberContexts[index%len(memberContexts)], g.mobileNumber()), false, []string{},
+					"context_negated", "confusing", subtype,
+					fmt.Sprintf("会员号/学号（手机号形状）被语境否定 #%d（应判定为非敏感）", index+1))
+			case "transaction":
+				// 交易流水号：支付/退款流水号，16 位数字像银行卡。
+				transactionContexts := []string{
+					"交易流水号：%s", "支付流水号：%s", "退款流水号：%s",
+					"交易单号：%s", "对账流水号：%s",
+				}
+				appendCase(fmt.Sprintf(transactionContexts[index%len(transactionContexts)], g.bankCardNumber()), false, []string{},
+					"context_negated", "confusing", subtype,
+					fmt.Sprintf("交易流水号（银行卡形状）被语境否定 #%d（应判定为非敏感）", index+1))
+			case "device_serial":
+				// 设备序列号 / 出厂编号：16 位数字像银行卡，但属于硬件标识。
+				deviceContexts := []string{
+					"设备序列号：%s", "出厂编号：%s", "机身序列号：%s",
+					"设备编号：%s", "生产序列号：%s",
+				}
+				appendCase(fmt.Sprintf(deviceContexts[index%len(deviceContexts)], g.bankCardNumber()), false, []string{},
+					"context_negated", "confusing", subtype,
+					fmt.Sprintf("设备序列号（银行卡形状）被语境否定 #%d（应判定为非敏感）", index+1))
 			}
 		}
 	}

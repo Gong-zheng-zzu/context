@@ -8,7 +8,7 @@
   },
   "dataset_path": "test_data/test_data_400.json",
   "dataset_schema_note": "JSON array of {id, content, expected_sensitive, sensitive_types, attack_type, category, description}",
-  "dataset_sha256": "25c7a4a18f1966c45edb2c2d4c08eee5a3bde08d4628792879869a0b7efa5594",
+  "dataset_sha256": "fe63319598fee0fce0d1bdf50409823bf07cb4db1fec63c8b28d0b3323ffc390",
   "generation_method": "deterministic template amplification with real encoding rules",
   "generator": "scripts/go/generate_test_data.go",
   "known_limits": [
@@ -30,11 +30,17 @@
       "space_separation": 17
     },
     "confusing": {
-      "context_negated": 20,
-      "employee_id": 20,
-      "order_id": 20,
-      "postal_code": 20,
-      "ratio": 20
+      "context_negated": 9,
+      "device_serial": 9,
+      "employee_id": 9,
+      "hospital_doc": 9,
+      "invoice_contract": 9,
+      "member_student": 9,
+      "order_id": 9,
+      "postal_code": 10,
+      "ratio": 9,
+      "transaction": 9,
+      "waybill": 9
     },
     "normal": {
       "ordinary_prose": 100

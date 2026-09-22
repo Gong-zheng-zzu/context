@@ -51,6 +51,25 @@ func (m *ProgressiveConfidenceModel) Config() PCCMSecurityConfig {
 	return clonePCCMSecurityConfig(m.config)
 }
 
+// SetLayerWeight 更新单层权重，作为 MultiLayerDetector.SetLayerWeight 的
+// 唯一真源。此前的实现只改动 MultiLayerDetector 遗留的 weights 后备映射，
+// 而生产默认走 PCCM 模型，导致调用方设置的权重静默失效。
+func (m *ProgressiveConfidenceModel) SetLayerWeight(layerID int, weight float64) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if m.config.LayerWeights == nil {
+		m.config.LayerWeights = map[int]float64{}
+	}
+	m.config.LayerWeights[layerID] = weight
+}
+
+// GetLayerWeight 返回单层权重（单一真源）。
+func (m *ProgressiveConfidenceModel) GetLayerWeight(layerID int) float64 {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
+	return m.config.LayerWeights[layerID]
+}
+
 // CalculateFinalConfidence 计算最终置信度。
 //
 // 参数 layerConfidences 的 key 为层 ID（1=正则, 2=词典, 4=上下文规则, 5=LLM），
