@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestASDFAuditRecordsHashesAndBidirectionalSpanMapWithoutPlaintext(t *testing.T) {
+func TestASDFAuditRecordsHashesAndLossySpanRangeWithoutPlaintext(t *testing.T) {
 	framework := NewAdversarialSampleDefenseFramework()
 	result := framework.DefendAndNormalizeWithAudit("联系电话 138-1234-5678")
 	if !result.IsAdversarial || result.NormalizedText != "联系电话 13812345678" {
@@ -18,8 +18,8 @@ func TestASDFAuditRecordsHashesAndBidirectionalSpanMapWithoutPlaintext(t *testin
 		t.Fatalf("audit hashes/steps = %+v", result)
 	}
 	step := result.NormalizationSteps[0]
-	if len(step.SpanMap) != 1 || !step.SpanMap[0].Bidirectional {
-		t.Fatalf("span map = %+v, want bidirectional changed range", step.SpanMap)
+	if len(step.SpanMap) != 1 || step.SpanMap[0].Bidirectional {
+		t.Fatalf("span map = %+v, want explicitly lossy changed range", step.SpanMap)
 	}
 	serialized, err := json.Marshal(result)
 	if err != nil {
@@ -247,6 +247,23 @@ func TestASDFBase64DetectorDoesNotFlagOrdinaryEncodedText(t *testing.T) {
 	}
 	if got := detector.Normalize(input); got != input {
 		t.Fatalf("ordinary Base64 text was normalized unexpectedly: %q", got)
+	}
+}
+
+func TestASDFBase64DetectorSupportsURLSafeAndUnpaddedTokens(t *testing.T) {
+	detector := &Base64Detector{}
+	plain := "身份证110101199001011234"
+	for _, encoded := range []string{
+		base64.RawURLEncoding.EncodeToString([]byte(plain)),
+		base64.RawStdEncoding.EncodeToString([]byte(plain)),
+	} {
+		input := "护理备注：" + encoded
+		if detected, _, attackType := detector.Detect(input); !detected || attackType != "base64_encoding" {
+			t.Fatalf("Detect(%q) = detected=%v type=%q, want base64_encoding", input, detected, attackType)
+		}
+		if got, want := detector.Normalize(input), "护理备注："+plain; got != want {
+			t.Fatalf("Normalize(%q) = %q, want %q", input, got, want)
+		}
 	}
 }
 

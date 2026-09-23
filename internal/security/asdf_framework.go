@@ -13,8 +13,10 @@ import (
 const ASDFPipelineVersion = "asdf-normalization-v2"
 
 // ASDFSpanMap maps one changed byte range before and after a normalization
-// step. Both coordinate systems are retained so an auditor can translate a
-// detector span in either direction without returning the sensitive text.
+// step. Both coordinate systems are retained for audit correlation without
+// returning the sensitive text. Normalization can delete separators or expand
+// an encoded token, so a changed range is not generally reversible at byte
+// precision; Bidirectional is true only for an exact one-to-one offset map.
 type ASDFSpanMap struct {
 	OriginalStart   int  `json:"original_start"`
 	OriginalEnd     int  `json:"original_end"`
@@ -171,7 +173,7 @@ func asdfChangedSpanMap(before, after string) []ASDFSpanMap {
 	return []ASDFSpanMap{{
 		OriginalStart: prefix, OriginalEnd: beforeSuffix,
 		NormalizedStart: prefix, NormalizedEnd: afterSuffix,
-		Bidirectional: true,
+		Bidirectional: beforeSuffix-prefix == afterSuffix-prefix,
 	}}
 }
 
@@ -533,14 +535,26 @@ type Base64Detector struct{}
 // 继续下调会扩大候选面，需另行评估误报，故本次不做。
 // 候选仍要经过 validBase64Token（长度对齐/可解码/UTF-8/无控制字符）与
 // isSensitiveDecodedPayload（数字密度或敏感关键词）两级精筛才判定命中。
-var base64TokenPattern = regexp.MustCompile(`[A-Za-z0-9+/]{15,}={0,2}`)
+// The candidate alphabet includes both RFC 4648 standard and URL-safe Base64.
+// Validation below still decodes the token and requires sensitive plaintext,
+// keeping ordinary alphanumeric words from becoming a detection signal.
+var base64TokenPattern = regexp.MustCompile(`[A-Za-z0-9+/_-]{15,}={0,2}`)
 var sensitiveDecodedPattern = regexp.MustCompile(`(?:\d[\s-]*){6,}`)
 
 func validBase64Token(token string) ([]byte, bool) {
-	if len(token)%4 != 0 {
-		return nil, false
+	var decoded []byte
+	var err error
+	for _, encoding := range []*base64.Encoding{
+		base64.StdEncoding,
+		base64.URLEncoding,
+		base64.RawStdEncoding,
+		base64.RawURLEncoding,
+	} {
+		decoded, err = encoding.DecodeString(token)
+		if err == nil {
+			break
+		}
 	}
-	decoded, err := base64.StdEncoding.DecodeString(token)
 	if err != nil || len(decoded) < 4 || !utf8.Valid(decoded) {
 		return nil, false
 	}
