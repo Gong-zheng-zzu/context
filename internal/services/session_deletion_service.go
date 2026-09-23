@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/contextkeeper/service/internal/config"
@@ -139,10 +140,27 @@ type SessionDeletionResult struct {
 type SessionDeletionService struct {
 	sessionStore *store.SessionStore
 	replicas     []sessionReplicaBinding
+	auditChain   *AuditChain
 }
 
 func NewSessionDeletionService(sessionStore *store.SessionStore, replicas ...sessionReplicaBinding) *SessionDeletionService {
-	return &SessionDeletionService{sessionStore: sessionStore, replicas: replicas}
+	service := &SessionDeletionService{sessionStore: sessionStore, replicas: replicas}
+	if path := os.Getenv("SESSION_DELETION_AUDIT_PATH"); path != "" {
+		chain, err := NewAuditChain(path)
+		if err != nil {
+			log.Printf("[session-delete] audit chain configuration failed: %v", err)
+		} else {
+			service.auditChain = chain
+		}
+	}
+	return service
+}
+
+// SetAuditChain allows deployments and tests to inject a durable audit sink.
+func (s *SessionDeletionService) SetAuditChain(chain *AuditChain) {
+	if s != nil {
+		s.auditChain = chain
+	}
 }
 
 // NewSessionDeletionServiceWithVectorStore adds an owner- and session-scoped
@@ -400,6 +418,33 @@ func (s *SessionDeletionService) audit(result *SessionDeletionResult) {
 		return
 	}
 	result.EvidenceSHA256 = fmt.Sprintf("%x", sha256.Sum256(canonical))
+	if s.auditChain != nil {
+		receipt := struct {
+			VerificationID string                       `json:"verification_id"`
+			TraceID        string                       `json:"trace_id"`
+			VerifiedAt     time.Time                    `json:"verified_at"`
+			ScopeSHA256    string                       `json:"scope_sha256"`
+			EvidenceSHA256 string                       `json:"evidence_sha256"`
+			DryRun         bool                         `json:"dry_run"`
+			Complete       bool                         `json:"complete"`
+			Stores         []SessionDeletionStoreResult `json:"stores"`
+		}{
+			VerificationID: result.VerificationID,
+			TraceID:        result.TraceID,
+			VerifiedAt:     result.VerifiedAt,
+			ScopeSHA256:    result.ScopeSHA256,
+			EvidenceSHA256: result.EvidenceSHA256,
+			DryRun:         result.DryRun,
+			Complete:       result.Complete,
+			Stores:         result.Stores,
+		}
+		chainHash, err := s.auditChain.Append(receipt)
+		if err != nil {
+			log.Printf("[session-delete] append-only audit unavailable: %v", err)
+		} else {
+			log.Printf("[session-delete] audit_chain_event_hash=%s", chainHash)
+		}
+	}
 	payload, err := json.Marshal(result)
 	if err != nil {
 		log.Printf("[session-delete] audit marshal failed: %v", err)

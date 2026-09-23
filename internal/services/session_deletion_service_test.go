@@ -3,6 +3,8 @@ package services
 import (
 	"context"
 	"errors"
+	"os"
+	"path/filepath"
 	"regexp"
 	"testing"
 
@@ -86,6 +88,12 @@ func TestSessionDeletionDeletesAllReplicasBeforeLocalArtifacts(t *testing.T) {
 		sessionReplicaBinding{name: "timescaledb", replica: timelineReplica},
 		sessionReplicaBinding{name: "neo4j", replica: graphReplica},
 	)
+	auditPath := filepath.Join(t.TempDir(), "audit", "session-deletions.jsonl")
+	chain, err := NewAuditChain(auditPath)
+	if err != nil {
+		t.Fatalf("NewAuditChain() error = %v", err)
+	}
+	service.SetAuditChain(chain)
 
 	ctx := utils.WithTraceID(context.Background(), "deletion-trace-001")
 	result, err := service.Delete(ctx, "owner", "session-a", false)
@@ -111,6 +119,12 @@ func TestSessionDeletionDeletesAllReplicasBeforeLocalArtifacts(t *testing.T) {
 	}
 	if _, err := sessionStore.GetSessionOwner("session-a"); !errors.Is(err, store.ErrSessionNotFound) {
 		t.Fatalf("local session should be removed, err=%v", err)
+	}
+	if err := chain.Verify(); err != nil {
+		t.Fatalf("audit chain verification failed: %v", err)
+	}
+	if _, err := os.Stat(auditPath); err != nil {
+		t.Fatalf("audit chain was not persisted: %v", err)
 	}
 }
 
