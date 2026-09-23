@@ -449,6 +449,32 @@ async function sendMessage() {
 
         JWT_TOKEN = savedToken;
 
+        if (agentModeEnabled && typeof window.runCaregiverTrustedAgent === 'function') {
+            if (fileAttachments.length > 0) {
+                throw new Error('受控 Agent 不处理附件。请先取消附件，或关闭受控 Agent 后使用常规文件流程。');
+            }
+            const result = await window.runCaregiverTrustedAgent({
+                message: fullMessage,
+                sessionID: currentSessionID,
+                token: savedToken
+            });
+            hideTypingIndicator();
+            if (result.sessionID) {
+                currentSessionID = result.sessionID;
+            }
+            addMessage('assistant', result.answer);
+            if (result.execution) {
+                addAgentExecutionSummary(result.execution);
+            }
+            messageHistory.push({
+                role: 'assistant',
+                content: result.answer,
+                timestamp: Date.now()
+            });
+            saveCurrentSession();
+            return;
+        }
+
         // 调用后端API
         const response = await fetch(`${API_BASE_URL}/api/chat`, {
             method: 'POST',
@@ -613,6 +639,15 @@ async function saveNursingRecord(content, category) {
         addMessage('assistant', acknowledgement);
         addMemoryWriteStatus();
         addNursingRecordSecuritySummary(record.security_execution);
+        window.dispatchEvent(new CustomEvent('caregiver:record-saved', {
+            detail: {
+                recordID: record.record_id,
+                category: record.category,
+                content: recordContent,
+                sessionID: currentSessionID,
+                securityExecution: record.security_execution || null
+            }
+        }));
         messageHistory.push({ role: 'assistant', content: acknowledgement, timestamp: record.timestamp || Date.now() });
         if (record.sensitive_types && record.sensitive_types.length > 0) {
             showSecurityWarnings(['护理记录中的敏感字段已按策略脱敏']);

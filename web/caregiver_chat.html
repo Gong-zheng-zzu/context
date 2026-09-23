@@ -854,12 +854,42 @@
         .agent-label { font-weight: 600; }
         .agent-stats { color: #888; font-size: 11px; text-align: right; margin-top: 4px; padding-top: 6px; border-top: 1px solid #eee; }
         .agent-fallback-tag { color: #ff9800; font-weight: 500; }
+        .trusted-workflow {
+            max-width: 1000px; margin: 10px auto 0; padding: 10px 12px;
+            border: 1px solid #c9dce1; border-left: 4px solid #176b87;
+            border-radius: 4px; background: #f7fbfc; color: #294657;
+        }
+        .trusted-workflow-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .trusted-workflow-title { font-size: 13px; font-weight: 700; }
+        .trusted-workflow-status { font-size: 12px; color: #637684; }
+        .trusted-workflow-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-top: 8px; }
+        .trusted-workflow-controls label { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; }
+        .trusted-workflow-controls button { border: 1px solid #9bbfc9; border-radius: 3px; background: #fff; color: #176b87; padding: 6px 9px; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .trusted-workflow-controls button:hover:not(:disabled) { background: #eaf4f7; }
+        .trusted-workflow-controls button:disabled { color: #9aaab1; border-color: #d6e0e3; cursor: not-allowed; }
+        .trusted-workflow-result { display: none; margin-top: 9px; padding: 8px 10px; border-radius: 3px; background: #fff; border-left: 3px solid #8ca9b4; font-size: 12px; line-height: 1.6; white-space: pre-wrap; }
+        .trusted-workflow-result.verified { border-color: #2e7d32; }
+        .trusted-workflow-result.review { border-color: #b7791f; }
+        .trusted-workflow-result.failed { border-color: #b42318; color: #8b1e17; }
+        @media (max-width: 680px) {
+            .input-area { padding: 12px; }
+            .input-container { align-items: stretch; flex-direction: column; gap: 8px; }
+            .input-wrapper { width: 100%; }
+            .agent-toggle-row { width: 100%; flex-wrap: wrap; gap: 8px; }
+            .agent-toggle { flex: 1 1 145px; }
+            #agentModeStatus { flex: 1 1 105px; }
+            .record-controls { margin-left: auto; }
+            .trusted-workflow-head { align-items: flex-start; flex-direction: column; gap: 3px; }
+            .trusted-workflow-controls { align-items: stretch; flex-direction: column; }
+            .trusted-workflow-controls button { width: 100%; }
+        }
     </style>
     <!-- 配置文件 -->
     <script src="js/config.js"></script>
     <!-- 通用聊天功能 -->
     <script src="js/chat-common.js?v=workflow-governance-1"></script>
     <script src="js/auth-security-override.js"></script>
+    <script src="js/caregiver-trusted-workflow.js?v=trusted-care-1"></script>
 </head>
 <body>
     <!-- 登录界面 -->
@@ -1022,6 +1052,19 @@
                     </div>
                 </div>
                 <div id="filePreviewContainer" class="file-preview-container"></div>
+                <section class="trusted-workflow" id="trustedCareWorkflow" aria-label="可信护理辅助">
+                    <div class="trusted-workflow-head">
+                        <span class="trusted-workflow-title">可信护理辅助</span>
+                        <span class="trusted-workflow-status" id="trustedCareStatus">保存记录后可生成风险提示</span>
+                    </div>
+                    <div class="trusted-workflow-controls">
+                        <label><input id="trustedCareAutoCausal" type="checkbox" checked> 保存后分析因果风险</label>
+                        <button id="trustedCareRetrieve" type="button" disabled>查询关联记录</button>
+                        <button id="trustedCareImage" type="button">护理影像脱敏</button>
+                        <input id="trustedCareImageInput" type="file" accept="image/jpeg,image/png" hidden>
+                    </div>
+                    <div class="trusted-workflow-result" id="trustedCareResult" aria-live="polite"></div>
+                </section>
                 <div class="input-hint">任务示例：<button type="button" onclick="sendQuickQuestion('查询近期风险事件')">查询近期风险事件</button> <button type="button" onclick="sendQuickQuestion('整理今日护理记录')">整理护理记录</button> <button type="button" onclick="sendQuickQuestion('生成交接摘要')">生成交接摘要</button> <a href="pccm.html">PCCM 因果分析（独立分析）</a></div>
                 <div class="input-hint">
                     💡 提示：您可以直接说"记录XXX的血压、体温"等，我会自动识别并保存
