@@ -28,6 +28,8 @@ class TrustedCareThemeTests(unittest.TestCase):
         theme = THEME.read_text(encoding="utf-8")
         for token in ("--care-brand", "--care-panel", "--care-line", "--care-danger"):
             self.assertIn(token, theme)
+        self.assertIn("body:has(.chat-main) .user-avatar", theme)
+        self.assertIn("background: var(--care-brand) !important", theme)
         self.assertIn("prefers-reduced-motion", theme)
         self.assertNotIn("url(http", theme)
         self.assertNotIn("@import", theme)

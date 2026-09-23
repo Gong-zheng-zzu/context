@@ -58,6 +58,7 @@ body:has(.chat-main) .back-btn { background: transparent !important; border: 1px
 body:has(.chat-main) .chat-main { background: var(--care-panel) !important; }
 body:has(.chat-main) .chat-header { min-height: 70px !important; padding: 16px 28px !important; border-bottom: 1px solid var(--care-line) !important; box-shadow: 0 1px 0 rgba(24,50,74,.03) !important; }
 body:has(.chat-main) .chat-title { color: var(--care-ink) !important; font-size: 18px !important; }
+body:has(.chat-main) .user-avatar { background: var(--care-brand) !important; color: #fff !important; box-shadow: none !important; }
 body:has(.chat-main) .messages-container { background: #f7fafb !important; padding: 28px !important; }
 body:has(.chat-main) .message { max-width: 920px; margin: 0 auto 18px !important; align-items: flex-start; }
 body:has(.chat-main) .message.user { justify-content: flex-start; }
