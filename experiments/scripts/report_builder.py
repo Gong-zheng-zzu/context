@@ -22,6 +22,13 @@ import io
 import base64
 
 
+# Prefer fonts with Chinese glyph coverage for locally generated competition
+# charts.  The ordered list is portable across Windows/Linux development and
+# falls back to DejaVu Sans when no CJK font is available.
+matplotlib.rcParams["font.family"] = ["Noto Sans SC", "Microsoft YaHei", "SimHei", "DejaVu Sans"]
+matplotlib.rcParams["axes.unicode_minus"] = False
+
+
 RETRIEVAL_MIN_COMPLETE_QUERIES = 50
 SECURITY_REQUIRED_REQUESTS = 120
 SECURITY_BENIGN_REQUIRED_REQUESTS = 100

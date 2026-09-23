@@ -107,6 +107,12 @@ class ReportBuilderTest(unittest.TestCase):
     def setUp(self):
         self.builder = ReportBuilder()
 
+    def test_chinese_font_fallback_is_configured_for_chart_output(self):
+        configured_fonts = report_builder.matplotlib.rcParams["font.family"]
+        self.assertIn("Noto Sans SC", configured_fonts)
+        self.assertIn("Microsoft YaHei", configured_fonts)
+        self.assertFalse(report_builder.matplotlib.rcParams["axes.unicode_minus"])
+
     def test_retrieval_requires_at_least_fifty_complete_raw_queries(self):
         valid, reason = self.builder._validate_result("retrieval", retrieval_result())
         self.assertTrue(valid, reason)

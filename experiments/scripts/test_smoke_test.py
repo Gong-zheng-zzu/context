@@ -76,10 +76,16 @@ class SmokeContractTests(unittest.TestCase):
                 [sys.executable, str(Path(__file__).with_name("smoke_test.py")), "--base-url", "http://127.0.0.1:1", "--json-output", str(output)],
                 capture_output=True,
                 text=True,
+                encoding="utf-8",
+                # The child inherits the Windows console encoding on some
+                # machines.  Its diagnostic is not an assertion target, so
+                # preserve the process result without a reader-thread crash.
+                errors="replace",
                 check=False,
                 timeout=10,
             )
             self.assertNotEqual(completed.returncode, 0)
+            self.assertIn("[FAIL] health:", completed.stdout)
             report = json.loads(output.read_text(encoding="utf-8"))
             self.assertEqual(report["failure"], "health")
             self.assertFalse(report["passed"])
