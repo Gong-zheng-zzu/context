@@ -277,3 +277,18 @@ func TestExtractCausalRelationsReportsRulesFallbackWhenModelUnavailable(t *testi
 		t.Fatalf("execution = %#v, want explicit rules fallback tier and timing", body.Execution)
 	}
 }
+
+func TestCausalGraphEndpointsReturnUnavailableWithoutNeo4j(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	handler := NewCausalReasoningHandler(nil, nil, nil)
+	router := gin.New()
+	router.POST("/infer", handler.InferCausal)
+	router.GET("/stats", handler.GetGraphStats)
+	for _, testCase := range []struct{ method, path string }{{http.MethodPost, "/infer"}, {http.MethodGet, "/stats"}} {
+		response := httptest.NewRecorder()
+		router.ServeHTTP(response, httptest.NewRequest(testCase.method, testCase.path, nil))
+		if response.Code != http.StatusServiceUnavailable {
+			t.Fatalf("%s %s status = %d, want 503", testCase.method, testCase.path, response.Code)
+		}
+	}
+}
