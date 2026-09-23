@@ -25,6 +25,7 @@ body {
 /* Role chat workspaces */
 body:has(.chat-main) .sidebar {
   width: 264px !important;
+  min-height: 0 !important;
   background: #123e4b !important;
   border-right: 0 !important;
   box-shadow: 8px 0 24px rgba(18, 62, 75, .12) !important;
@@ -48,13 +49,13 @@ body:has(.chat-main) .new-chat-btn {
   padding: 12px !important;
 }
 body:has(.chat-main) .new-chat-btn:hover { background: #65c5a8 !important; transform: none !important; }
-body:has(.chat-main) .chat-history { padding: 14px 12px !important; }
+body:has(.chat-main) .chat-history { flex: 1 1 auto !important; min-height: 0 !important; padding: 14px 12px !important; }
 body:has(.chat-main) .history-item { color: rgba(245,251,250,.72) !important; border-radius: 7px !important; margin-bottom: 4px !important; }
 body:has(.chat-main) .history-item:hover { background: rgba(255,255,255,.08) !important; }
 body:has(.chat-main) .history-item.active { background: rgba(75,179,154,.2) !important; border-left: 3px solid #65c5a8 !important; color: #fff !important; }
-body:has(.chat-main) .sidebar-footer { padding: 16px 20px !important; border-top: 1px solid rgba(255,255,255,.12) !important; }
+body:has(.chat-main) .sidebar-footer { flex: 0 0 auto !important; margin-top: auto !important; padding: 16px 20px !important; border-top: 1px solid rgba(255,255,255,.12) !important; background: #123e4b !important; }
 body:has(.chat-main) .privacy-status { background: rgba(75,179,154,.16) !important; border: 1px solid rgba(101,197,168,.32) !important; box-shadow: none !important; border-radius: 8px !important; }
-body:has(.chat-main) .back-btn { background: transparent !important; border: 1px solid rgba(255,255,255,.22) !important; border-radius: 7px !important; }
+body:has(.chat-main) .back-btn { display: flex !important; min-height: 40px; align-items: center; justify-content: center; background: transparent !important; border: 1px solid rgba(255,255,255,.22) !important; border-radius: 7px !important; color: #f5fbfa !important; text-decoration: none !important; }
 body:has(.chat-main) .chat-main { background: var(--care-panel) !important; }
 body:has(.chat-main) .chat-header { min-height: 70px !important; padding: 16px 28px !important; border-bottom: 1px solid var(--care-line) !important; box-shadow: 0 1px 0 rgba(24,50,74,.03) !important; }
 body:has(.chat-main) .chat-title { color: var(--care-ink) !important; font-size: 18px !important; }
@@ -133,6 +134,8 @@ body:has(.shell) input, body:has(.shell) select, body:has(.shell) textarea { bor
   body:has(.chat-main) .sidebar .chat-history,
   body:has(.chat-main) .sidebar .privacy-status { display: none !important; }
   body:has(.chat-main) .sidebar-header, body:has(.chat-main) .sidebar-footer { padding: 14px 10px !important; }
+  body:has(.chat-main) .back-btn { min-height: 38px; font-size: 0 !important; }
+  body:has(.chat-main) .back-btn::after { content: "←"; font-size: 18px; }
   body:has(.chat-main) .logo { justify-content: center; }
   body:has(.chat-main) .new-chat-btn { padding: 11px 8px !important; }
   body:has(.chat-main) .messages-container { padding: 18px 14px !important; }

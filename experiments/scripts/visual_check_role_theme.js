@@ -46,11 +46,15 @@ async function assertPage(page, name, viewport) {
         themeLoaded: Array.from(document.styleSheets).some(sheet => sheet.href && sheet.href.includes('/css/trusted-care-theme.css?')),
         viewportWidth: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth,
-        visible: document.body.getBoundingClientRect().height > 0
+        visible: document.body.getBoundingClientRect().height > 0,
+        footer: document.querySelector('.sidebar-footer .back-btn')?.getBoundingClientRect()
     }));
     if (!state.themeLoaded) throw new Error(`${name}: shared theme did not load`);
     if (!state.visible) throw new Error(`${name}: page body is not visible`);
     if (state.scrollWidth > state.viewportWidth + 2) throw new Error(`${name}: horizontal overflow ${state.scrollWidth}/${state.viewportWidth}`);
+    if (state.footer && (state.footer.top < 0 || state.footer.bottom > viewport.height + 1 || state.footer.width < 20)) {
+        throw new Error(`${name}: sidebar return action is outside the viewport`);
+    }
     const suffix = viewport.width < 700 ? 'mobile' : 'desktop';
     await page.screenshot({ path: path.join(outputDir, `${name.replace('.html', '')}-${suffix}.png`), fullPage: true });
 }
