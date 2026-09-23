@@ -34,32 +34,15 @@ type causalGraphWriter interface {
 
 // NewCausalReasoningHandler 创建因果推理处理器
 func NewCausalReasoningHandler(llmClient *llm.OllamaLocalClient, kgEngine *knowledge.Neo4jEngine, securityService *security.SecurityService) *CausalReasoningHandler {
-	var graphBuilder *causal_reasoning.GraphBuilder
-	var inferenceEngine *causal_reasoning.InferenceEngine
-	if kgEngine != nil {
-		graphBuilder = causal_reasoning.NewGraphBuilder(kgEngine)
-		inferenceEngine = causal_reasoning.NewInferenceEngine(kgEngine)
-	}
+	graphBuilder := causal_reasoning.NewGraphBuilder(kgEngine)
 	return &CausalReasoningHandler{
 		extractor:       causal_reasoning.NewEntityExtractor(llmClient),
-		inferenceEngine: inferenceEngine,
+		inferenceEngine: causal_reasoning.NewInferenceEngine(kgEngine),
 		graphBuilder:    graphBuilder,
 		graphWriter:     graphBuilder,
 		reviewStore:     NewFileCausalReviewStore("./data/causal_reviews.jsonl"),
 		securityService: securityService,
 	}
-}
-
-func (h *CausalReasoningHandler) requireGraph(c *gin.Context) bool {
-	if h != nil && h.graphBuilder != nil && h.inferenceEngine != nil {
-		return true
-	}
-	c.JSON(http.StatusServiceUnavailable, gin.H{
-		"error":   "causal graph storage is unavailable",
-		"status":  "unavailable",
-		"persist": false,
-	})
-	return false
 }
 
 // ExtractCausalRelations 抽取因果关系
@@ -352,9 +335,6 @@ func causalResultLimit(raw string) (int, error) {
 // InferCausal 因果推理查询
 // POST /api/v1/causal/infer
 func (h *CausalReasoningHandler) InferCausal(c *gin.Context) {
-	if !h.requireGraph(c) {
-		return
-	}
 	var req causal_reasoning.InferRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的请求参数", "details": err.Error()})
@@ -410,9 +390,6 @@ func (h *CausalReasoningHandler) InferCausal(c *gin.Context) {
 // QueryCausalChain 查询因果链
 // GET /api/v1/causal/chain
 func (h *CausalReasoningHandler) QueryCausalChain(c *gin.Context) {
-	if !h.requireGraph(c) {
-		return
-	}
 	from := c.Query("from")
 	to := c.Query("to")
 
@@ -466,9 +443,6 @@ func (h *CausalReasoningHandler) QueryCausalChain(c *gin.Context) {
 // GetGraphStats 获取因果图谱统计信息
 // GET /api/v1/causal/stats
 func (h *CausalReasoningHandler) GetGraphStats(c *gin.Context) {
-	if !h.requireGraph(c) {
-		return
-	}
 	stats, err := h.graphBuilder.GetGraphStats(c.Request.Context())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "获取统计信息失败", "details": err.Error()})
@@ -481,9 +455,6 @@ func (h *CausalReasoningHandler) GetGraphStats(c *gin.Context) {
 // GetRelatedCauses 获取相关原因
 // GET /api/v1/causal/causes/:entity
 func (h *CausalReasoningHandler) GetRelatedCauses(c *gin.Context) {
-	if !h.requireGraph(c) {
-		return
-	}
 	entity := c.Param("entity")
 	if entity == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少实体参数"})
@@ -512,9 +483,6 @@ func (h *CausalReasoningHandler) GetRelatedCauses(c *gin.Context) {
 // GetRelatedEffects 获取相关结果
 // GET /api/v1/causal/effects/:entity
 func (h *CausalReasoningHandler) GetRelatedEffects(c *gin.Context) {
-	if !h.requireGraph(c) {
-		return
-	}
 	entity := c.Param("entity")
 	if entity == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少实体参数"})
