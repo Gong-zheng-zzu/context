@@ -37,6 +37,13 @@ class TrustedCareThemeTests(unittest.TestCase):
         self.assertNotIn("url(http", theme)
         self.assertNotIn("@import", theme)
 
+    def test_caregiver_brand_marks_are_theme_controlled_instead_of_emoji(self):
+        page = (ROOT / "web" / "caregiver_chat.html").read_text(encoding="utf-8")
+        self.assertNotIn("🧑‍⚕️", page)
+        self.assertGreaterEqual(page.count("care-mark"), 3)
+        self.assertIn('class="chat-title-icon care-mark"', page)
+        self.assertIn(".login-logo.care-mark", THEME.read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()

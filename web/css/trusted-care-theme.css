@@ -35,9 +35,15 @@ body:has(.chat-main) .sidebar-header { padding: 22px 20px !important; border-bot
 body:has(.chat-main) .logo { margin-bottom: 18px !important; }
 body:has(.chat-main) .logo-icon,
 body:has(.chat-main) .chat-title-icon {
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 32px !important;
+  height: 32px !important;
   background: #2b8b8e !important;
   border: 0 !important;
-  border-radius: 10px !important;
+  border-radius: 8px !important;
+  color: #fff !important;
+  font: 700 16px/1 "Microsoft YaHei", sans-serif !important;
   box-shadow: none !important;
 }
 body:has(.chat-main) .logo-text { color: #f5fbfa !important; letter-spacing: .02em !important; }
@@ -59,6 +65,7 @@ body:has(.chat-main) .back-btn { display: flex !important; min-height: 40px; ali
 body:has(.chat-main) .chat-main { background: var(--care-panel) !important; }
 body:has(.chat-main) .chat-header { min-height: 70px !important; padding: 16px 28px !important; border-bottom: 1px solid var(--care-line) !important; box-shadow: 0 1px 0 rgba(24,50,74,.03) !important; }
 body:has(.chat-main) .chat-title { color: var(--care-ink) !important; font-size: 18px !important; }
+body:has(.chat-main) .chat-title { display: flex !important; align-items: center !important; gap: 10px !important; }
 body:has(.chat-main) .user-avatar { background: var(--care-brand) !important; color: #fff !important; box-shadow: none !important; }
 body:has(.chat-main) .messages-container { background: #f7fafb !important; padding: 28px !important; }
 body:has(.chat-main) .message { max-width: 920px; margin: 0 auto 18px !important; align-items: flex-start; }
@@ -98,6 +105,7 @@ body:has(.chat-main) .message-bubble { border-radius: 12px !important; font-size
 /* Shared login surface */
 .login-overlay { background: rgba(12, 40, 52, .72) !important; backdrop-filter: blur(5px); }
 .login-container { border: 1px solid rgba(255,255,255,.7) !important; border-radius: 14px !important; box-shadow: 0 24px 70px rgba(10,35,48,.24) !important; padding: 30px !important; }
+.login-logo.care-mark { display: grid !important; place-items: center !important; background: #2b8b8e !important; color: #fff !important; border-radius: 14px !important; font: 700 30px/1 "Microsoft YaHei", sans-serif !important; box-shadow: 0 8px 20px rgba(15,107,120,.2) !important; }
 .login-title { color: var(--care-ink) !important; font-size: 24px !important; letter-spacing: -.02em !important; }
 .login-subtitle, .login-hint { color: var(--care-muted) !important; }
 .test-users-grid { gap: 10px !important; }
