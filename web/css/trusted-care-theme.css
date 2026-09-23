@@ -59,6 +59,21 @@ body:has(.chat-main) .chat-main { background: var(--care-panel) !important; }
 body:has(.chat-main) .chat-header { min-height: 70px !important; padding: 16px 28px !important; border-bottom: 1px solid var(--care-line) !important; box-shadow: 0 1px 0 rgba(24,50,74,.03) !important; }
 body:has(.chat-main) .chat-title { color: var(--care-ink) !important; font-size: 18px !important; }
 body:has(.chat-main) .messages-container { background: #f7fafb !important; padding: 28px !important; }
+body:has(.chat-main) .message { max-width: 920px; margin: 0 auto 18px !important; align-items: flex-start; }
+body:has(.chat-main) .message.user { justify-content: flex-start; }
+body:has(.chat-main) .message-content { max-width: min(760px, 78%) !important; }
+body:has(.chat-main) .message-avatar { width: 36px !important; height: 36px !important; border-radius: 10px !important; font-size: 0 !important; box-shadow: none !important; }
+body:has(.chat-main) .message.assistant .message-avatar { background: #dff1ee !important; }
+body:has(.chat-main) .message.user .message-avatar { background: var(--care-brand) !important; }
+body:has(.chat-main) .message.assistant .message-avatar::after { content: "AI"; color: var(--care-brand-dark); font: 700 11px/1 Inter, sans-serif; }
+body:has(.chat-main) .message.user .message-avatar::after { content: "我"; color: #fff; font: 700 13px/1 "Microsoft YaHei", sans-serif; }
+body:has(.chat-main) .message-bubble { padding: 14px 16px !important; line-height: 1.7 !important; color: var(--care-ink) !important; }
+body:has(.chat-main) .message.assistant .message-bubble { border: 1px solid var(--care-line) !important; background: #fff !important; }
+body:has(.chat-main) .message.user .message-bubble { border: 0 !important; background: var(--care-brand) !important; color: #fff !important; }
+body:has(.chat-main) .message-time { color: #80909b !important; font-size: 12px !important; margin-top: 5px !important; }
+body:has(.chat-main) .message.system-notice .message-bubble { border-color: #e7c071 !important; border-left: 4px solid #bd7a11 !important; background: #fff9ed !important; color: #60440c !important; }
+body:has(.chat-main) .message.system-notice .message-avatar { background: #f9e4b9 !important; }
+body:has(.chat-main) .message.system-notice .message-avatar::after { content: "!"; color: #8b5b0e; font: 800 18px/1 Inter, sans-serif; }
 body:has(.chat-main) .welcome-screen { max-width: 820px; margin: 0 auto; padding: 36px 24px !important; }
 body:has(.chat-main) .welcome-icon { width: 64px !important; height: 64px !important; margin-bottom: 16px !important; }
 body:has(.chat-main) .particle-heart { display: none !important; }
@@ -69,6 +84,7 @@ body:has(.chat-main) .quick-questions { gap: 12px !important; max-width: 680px !
 body:has(.chat-main) .quick-question { border: 1px solid var(--care-line) !important; border-radius: 9px !important; box-shadow: none !important; padding: 16px !important; }
 body:has(.chat-main) .quick-question:hover { border-color: #8bcabd !important; background: #f4fbf9 !important; transform: translateY(-1px) !important; box-shadow: 0 5px 14px rgba(24,50,74,.06) !important; }
 body:has(.chat-main) .quick-question-text { color: var(--care-ink) !important; font-size: 16px !important; }
+body:has(.chat-main) .quick-question-icon { width: 28px; height: 28px; display: grid; place-items: center; margin-bottom: 8px !important; border-radius: 7px; background: #e7f4f2; font-size: 16px !important; }
 body:has(.chat-main) .input-area { padding: 16px 28px 20px !important; border-top: 1px solid var(--care-line) !important; }
 body:has(.chat-main) .input-container { max-width: 980px !important; }
 body:has(.chat-main) textarea,
@@ -119,6 +135,7 @@ body:has(.shell) input, body:has(.shell) select, body:has(.shell) textarea { bor
   body:has(.chat-main) .logo { justify-content: center; }
   body:has(.chat-main) .new-chat-btn { padding: 11px 8px !important; }
   body:has(.chat-main) .messages-container { padding: 18px 14px !important; }
+  body:has(.chat-main) .message-content { max-width: calc(100% - 50px) !important; }
   body:has(.chat-main) .input-area { padding: 12px 14px 14px !important; }
   body:has(.chat-main) .quick-questions { grid-template-columns: 1fr !important; }
   body:has(.role-grid) .header h1 { font-size: 32px !important; }

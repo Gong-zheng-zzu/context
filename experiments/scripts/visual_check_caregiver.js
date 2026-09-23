@@ -123,6 +123,14 @@ async function verifyInteractiveBridge(page) {
     for (const path of ['/api/v1/causal/extract', '/api/mcp/tools/retrieve_context', '/api/v1/agent/execute']) {
         if (!calls.includes(path)) throw new Error(`caregiver bridge did not call ${path}`);
     }
+
+    await page.evaluate(() => addMessage('assistant', 'OCR识别失败：Tesseract tessdata path unavailable'));
+    await page.waitForFunction(() => {
+        const notice = document.querySelector('.message.system-notice .message-bubble');
+        const welcome = document.getElementById('welcomeScreen');
+        return notice && notice.textContent.includes('图片文字暂未识别') && !notice.textContent.includes('Tesseract') && welcome?.style.display === 'none';
+    }, { timeout: 5000 });
+    await page.screenshot({ path: path.join(outputDir, 'caregiver-ocr-notice.png'), fullPage: true });
 }
 
 async function main() {

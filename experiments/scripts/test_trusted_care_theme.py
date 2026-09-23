@@ -22,7 +22,7 @@ class TrustedCareThemeTests(unittest.TestCase):
         for page_name in PAGES:
             with self.subTest(page=page_name):
                 page = (ROOT / "web" / page_name).read_text(encoding="utf-8")
-                self.assertIn('href="css/trusted-care-theme.css"', page)
+                self.assertIn('href="css/trusted-care-theme.css?v=', page)
 
     def test_theme_uses_a_single_operational_palette_without_broad_origin_rules(self):
         theme = THEME.read_text(encoding="utf-8")

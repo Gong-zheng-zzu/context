@@ -41,6 +41,15 @@ class CaregiverTrustedWorkflowTests(unittest.TestCase):
         self.assertIn("payload.write_applied !== false", self.workflow)
         self.assertIn("read_only_authoritative_tools", self.workflow)
 
+    def test_chat_presentation_converts_technical_ocr_output_into_a_user_actionable_notice(self):
+        self.assertIn("function normalizeAssistantPresentation", self.chat_common)
+        self.assertIn("technicalOCRFailure", self.chat_common)
+        self.assertIn("system-notice", self.chat_common)
+        self.assertIn("图片文字暂未识别", self.chat_common)
+        self.assertIn("tesseract", self.chat_common.lower())
+        self.assertIn("function dismissWelcomeScreen", self.chat_common)
+        self.assertIn("dismissWelcomeScreen();", self.chat_common)
+
     def test_workflow_uses_authorized_results_without_exposing_audit_or_delete_controls(self):
         self.assertIn('/api/v1/causal/extract', self.workflow)
         self.assertIn('/api/mcp/tools/retrieve_context', self.workflow)

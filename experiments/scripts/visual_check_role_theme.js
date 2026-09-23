@@ -43,7 +43,7 @@ async function assertPage(page, name, viewport) {
     await page.goto(`http://127.0.0.1:${server.address().port}/${name}?api=http://127.0.0.1:1&mode=fixture`, { waitUntil: 'networkidle0' });
     await page.evaluate(() => document.getElementById('loginOverlay')?.remove());
     const state = await page.evaluate(() => ({
-        themeLoaded: Array.from(document.styleSheets).some(sheet => sheet.href && sheet.href.endsWith('/css/trusted-care-theme.css')),
+        themeLoaded: Array.from(document.styleSheets).some(sheet => sheet.href && sheet.href.includes('/css/trusted-care-theme.css?')),
         viewportWidth: document.documentElement.clientWidth,
         scrollWidth: document.documentElement.scrollWidth,
         visible: document.body.getBoundingClientRect().height > 0

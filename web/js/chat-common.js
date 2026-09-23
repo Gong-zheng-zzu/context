@@ -333,6 +333,14 @@ function isExplicitNursingRecordIntent(message) {
         /^(记录|护理记录|新增记录|保存记录)/.test(String(message || '').trim());
 }
 
+function dismissWelcomeScreen() {
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    if (welcomeScreen) {
+        welcomeScreen.style.display = 'none';
+    }
+    isFirstMessage = false;
+}
+
 async function sendMessage() {
     const input = document.getElementById('messageInput');
     const message = input.value.trim();
@@ -340,13 +348,7 @@ async function sendMessage() {
     if (!message && selectedFiles.length === 0) return;
 
     // 隐藏欢迎界面
-    if (isFirstMessage) {
-        const welcomeScreen = document.getElementById('welcomeScreen');
-        if (welcomeScreen) {
-            welcomeScreen.style.display = 'none';
-        }
-        isFirstMessage = false;
-    }
+    if (isFirstMessage) dismissWelcomeScreen();
 
     // 先上传文件（如果有）
     let fileAttachments = [];
@@ -693,11 +695,27 @@ function saveNursingRecordFromInput() {
     saveNursingRecord(content, category);
 }
 
+function normalizeAssistantPresentation(content) {
+    const text = String(content || '');
+    const technicalOCRFailure = /(?:tesseract|tessdata|ocr.{0,32}(?:失败|error|unavailable))/i.test(text);
+    if (technicalOCRFailure) {
+        return {
+            content: '图片文字暂未识别。请手动填写图片中的关键数值，或稍后重新上传清晰图片。',
+            state: 'system-notice'
+        };
+    }
+    return { content: text, state: '' };
+}
+
 // 添加消息到界面
 function addMessage(type, content, timestamp, files) {
     const container = document.getElementById('messagesContainer');
+    dismissWelcomeScreen();
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}`;
+    const presentation = type === 'assistant'
+        ? normalizeAssistantPresentation(content)
+        : { content: String(content || ''), state: '' };
+    messageDiv.className = `message ${type}${presentation.state ? ` ${presentation.state}` : ''}`;
 
     let timeStr;
     if (timestamp) {
@@ -733,7 +751,7 @@ function addMessage(type, content, timestamp, files) {
         <div class="message-avatar">${avatarIcon}</div>
         <div class="message-content">
             <div class="message-bubble">
-                ${formatMessage(content)}
+                ${formatMessage(presentation.content)}
                 ${filesHTML}
             </div>
             <div class="message-time">${timeStr}</div>

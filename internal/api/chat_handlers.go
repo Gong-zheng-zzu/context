@@ -826,7 +826,7 @@ func ChatHandler(c *gin.Context) {
 					ocrResult, err := ocrService.RecognizeMedicalReport(tempImagePath)
 					if err != nil {
 						log.Printf("⚠️ [聊天API] OCR识别失败: %v", err)
-						fileTexts = append(fileTexts, fmt.Sprintf("\n[图片: %s - OCR识别失败: %v]", metadata.OriginalName, err))
+						fileTexts = append(fileTexts, "\n"+imageOCRUnavailableFeedback(metadata.OriginalName))
 					} else if len(ocrResult.Text) == 0 {
 						log.Printf("⚠️ [聊天API] OCR未识别到文字内容")
 						fileTexts = append(fileTexts, fmt.Sprintf("\n[图片: %s - 未识别到文字内容]", metadata.OriginalName))
