@@ -73,10 +73,18 @@ def with_trial_metadata(requests_to_submit: List[Dict[str, Any]], trial: int, ro
     for item in requests_to_submit:
         request = json.loads(json.dumps(item["request"]))
         metadata = request["metadata"]
+        # Target and control are separate evaluation instances. Reusing the
+        # same doc_id makes a retrieval probe ambiguous when a backend loses
+        # session scope, so only the control instance gets a stable namespace.
+        doc_id = item["doc_id"]
+        if role == "control":
+            doc_id = f"control-{doc_id}"
+            request["metadata"]["doc_id"] = doc_id
+            request["metadata"]["id"] = doc_id
         metadata["unlearning_trial"] = trial
         metadata["unlearning_seed_role"] = role
         seeded.append({
-            "doc_id": item["doc_id"],
+            "doc_id": doc_id,
             "source_record_sha256": item["source_record_sha256"],
             "request": request,
             "request_sha256": sha256_bytes(canonical_json(request)),

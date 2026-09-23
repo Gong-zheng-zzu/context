@@ -22,6 +22,9 @@ class PrepareUnlearningTrialSeedTests(unittest.TestCase):
         self.assertEqual({item["request"]["sessionId"] for item in control}, {seed.CONTROL_SESSION_ID})
         self.assertTrue(all(item["request"]["metadata"]["unlearning_trial"] == 2 for item in target + control))
         self.assertTrue(all(item["request"]["metadata"]["seed_schema"] == "structured-threeway-v1" for item in target + control))
+        self.assertTrue({item["doc_id"] for item in target}.isdisjoint({item["doc_id"] for item in control}))
+        self.assertTrue(all(item["doc_id"].startswith("control-") for item in control))
+        self.assertTrue(all(item["request"]["metadata"]["doc_id"] == item["doc_id"] for item in control))
 
     def test_control_scope_is_distinct_from_target(self):
         self.assertEqual(seed.ALLOWED_USER_ID, "eval_user_001")
