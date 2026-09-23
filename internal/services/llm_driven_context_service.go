@@ -2341,6 +2341,7 @@ type VectorStoreAdapter struct {
 func (adapter *VectorStoreAdapter) SearchByQuery(ctx context.Context, query string, limit int) ([]*models.VectorMatch, error) {
 	// 🔥 从Context获取基础信息，而非参数传递
 	userID, _ := ctx.Value("user_id").(string)
+	sessionID, _ := ctx.Value("session_id").(string)
 
 	log.Printf("🔍 [向量适配器] 执行查询: %s, 用户: %s, 限制: %d", query, userID, limit)
 	log.Printf("🔍 [向量适配器] 引擎状态: %T", adapter.Engine)
@@ -2357,8 +2358,9 @@ func (adapter *VectorStoreAdapter) SearchByQuery(ctx context.Context, query stri
 
 		// 构建SearchOptions
 		options := &models.SearchOptions{
-			Limit:  limit,
-			UserID: userID,
+			Limit:     limit,
+			UserID:    userID,
+			SessionID: sessionID,
 		}
 
 		log.Printf("📥 [向量适配器] 查询参数: %+v", options)

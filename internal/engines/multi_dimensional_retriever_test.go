@@ -43,11 +43,12 @@ func (s *recordingKnowledgeStore) SearchByQuery(_ context.Context, req Knowledge
 }
 
 type recordingVectorStore struct {
-	delay  time.Duration
-	mu     sync.Mutex
-	query  string
-	limit  int
-	userID string
+	delay     time.Duration
+	mu        sync.Mutex
+	query     string
+	limit     int
+	userID    string
+	sessionID string
 }
 
 func (s *recordingVectorStore) SearchByQuery(ctx context.Context, query string, limit int) ([]*models.VectorMatch, error) {
@@ -55,6 +56,7 @@ func (s *recordingVectorStore) SearchByQuery(ctx context.Context, query string, 
 	s.mu.Lock()
 	s.query, s.limit = query, limit
 	s.userID, _ = ctx.Value("user_id").(string)
+	s.sessionID, _ = ctx.Value("session_id").(string)
 	s.mu.Unlock()
 	return []*models.VectorMatch{{ID: "vector-1", Content: "vector", Score: 0.9}}, nil
 }
@@ -114,6 +116,12 @@ func TestParallelRetrieveReportsWallClockDurationAndPreservesScope(t *testing.T)
 	}
 	if vectorUserID != "user-1" {
 		t.Fatalf("vector user_id = %q, want query tenant propagated to context", vectorUserID)
+	}
+	vector.mu.Lock()
+	vectorSessionID := vector.sessionID
+	vector.mu.Unlock()
+	if vectorSessionID != "session-1" {
+		t.Fatalf("vector session_id = %q, want query session propagated to context", vectorSessionID)
 	}
 }
 

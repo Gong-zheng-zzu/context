@@ -129,6 +129,12 @@ func (mdr *MultiDimensionalRetrieverImpl) ParallelRetrieve(ctx context.Context, 
 			ctx = context.WithValue(ctx, "user_id", queries.UserID)
 		}
 	}
+	// Session scope is a hard isolation boundary for evaluation and deletion
+	// probes.  Keep it in the shared context so vector adapters can construct
+	// the same filter used by timeline and graph stores.
+	if queries != nil && strings.TrimSpace(queries.SessionID) != "" {
+		ctx = context.WithValue(ctx, "session_id", strings.TrimSpace(queries.SessionID))
+	}
 
 	// 关键词通道兜底：时间线的 keywords/title/content ILIKE 与知识图谱的
 	// node.name/description/keywords CONTAINS 都依赖 KeyConcepts。若调用方未提供
@@ -693,10 +699,10 @@ func getDefaultMultiDimensionalConfig() *MultiDimensionalConfig {
 		// 候选池必须覆盖「目标文档数 × 每文档点数」，否则按 doc_id 去重后剩下的
 		// 唯一文档会少于请求条数（25 个点只能还原出约 4 篇），使多源融合的输出
 		// 与 contextsOnly 向量基线不可比。60 可稳定支撑 5 篇以上的唯一文档。
-		VectorMaxResults: 60,
-		MinSimilarityScore:  0.6,
-		MinRelevanceScore:   0.5,
-		MaxRetries:          1,
-		RetryInterval:       2,
+		VectorMaxResults:   60,
+		MinSimilarityScore: 0.6,
+		MinRelevanceScore:  0.5,
+		MaxRetries:         1,
+		RetryInterval:      2,
 	}
 }
