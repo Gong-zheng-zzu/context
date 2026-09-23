@@ -123,9 +123,14 @@ func (mdr *MultiDimensionalRetrieverImpl) ParallelRetrieve(ctx context.Context, 
 	// Direct callers may provide the tenant on the query object rather than on
 	// the context. Preserve an already-authenticated context identity, but make
 	// sure vector adapters still receive a user boundary for those callers.
-	if queries != nil && strings.TrimSpace(queries.UserID) != "" {
+	if queries != nil {
 		currentUserID, _ := ctx.Value("user_id").(string)
-		if strings.TrimSpace(currentUserID) == "" {
+		currentUserID = strings.TrimSpace(currentUserID)
+		if currentUserID != "" {
+			// An authenticated context always wins over caller-controlled query
+			// fields. Every retrieval lane must observe the same tenant.
+			queries.UserID = currentUserID
+		} else if strings.TrimSpace(queries.UserID) != "" {
 			ctx = context.WithValue(ctx, "user_id", queries.UserID)
 		}
 	}

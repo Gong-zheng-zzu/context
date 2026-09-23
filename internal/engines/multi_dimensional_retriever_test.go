@@ -126,13 +126,19 @@ func TestParallelRetrieveReportsWallClockDurationAndPreservesScope(t *testing.T)
 }
 
 func TestParallelRetrievePreservesAuthenticatedContextTenant(t *testing.T) {
+	timeline := &recordingTimelineStore{}
+	knowledge := &recordingKnowledgeStore{}
 	vector := &recordingVectorStore{}
-	retriever := NewMultiDimensionalRetriever(nil, nil, vector)
+	retriever := NewMultiDimensionalRetriever(timeline, knowledge, vector)
 	ctx := context.WithValue(context.Background(), "user_id", "authenticated-user")
 
 	_, err := retriever.ParallelRetrieve(ctx, &models.MultiDimensionalQuery{
-		VectorQueries: []string{"vector query"},
-		UserID:        "query-user-should-not-override",
+		TimelineQueries:  []string{"timeline query"},
+		KnowledgeQueries: []string{"knowledge query"},
+		VectorQueries:    []string{"vector query"},
+		UserID:           "query-user-should-not-override",
+		SessionID:        "session-1",
+		WorkspaceID:      "workspace-1",
 	})
 	if err != nil {
 		t.Fatalf("ParallelRetrieve() error = %v", err)
@@ -143,6 +149,18 @@ func TestParallelRetrievePreservesAuthenticatedContextTenant(t *testing.T) {
 	vector.mu.Unlock()
 	if got != "authenticated-user" {
 		t.Fatalf("vector user_id = %q, want authenticated context tenant", got)
+	}
+	timeline.mu.Lock()
+	timelineUserID := timeline.req.UserID
+	timeline.mu.Unlock()
+	if timelineUserID != "authenticated-user" {
+		t.Fatalf("timeline user_id = %q, want authenticated context tenant", timelineUserID)
+	}
+	knowledge.mu.Lock()
+	knowledgeUserID := knowledge.req.UserID
+	knowledge.mu.Unlock()
+	if knowledgeUserID != "authenticated-user" {
+		t.Fatalf("knowledge user_id = %q, want authenticated context tenant", knowledgeUserID)
 	}
 }
 
