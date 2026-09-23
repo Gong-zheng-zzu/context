@@ -16,6 +16,7 @@ import (
 
 	"github.com/contextkeeper/service/internal/agent"
 	"github.com/contextkeeper/service/internal/config"
+	"github.com/contextkeeper/service/internal/middleware"
 	"github.com/contextkeeper/service/internal/models"
 	"github.com/contextkeeper/service/internal/security"
 	"github.com/contextkeeper/service/internal/services"
@@ -57,7 +58,6 @@ type projectAnalysisJSON struct {
 	CurrentPhase    string  `json:"current_phase"`
 	ConfidenceLevel float64 `json:"confidence_level"`
 }
-
 
 // Handler API处理器
 type Handler struct {
@@ -410,7 +410,6 @@ func (h *Handler) HandleRetrieveContext(c *gin.Context) {
 		},
 	})
 }
-
 
 // handleMCPAssociateFile 处理MCP工具调用 - 关联文件
 func (h *Handler) HandleMCPAssociateFile(c *gin.Context) {
@@ -1108,7 +1107,6 @@ func (h *Handler) HandleMCPToolsList(c *gin.Context) {
 		},
 	})
 }
-
 
 // dispatchToolCallWithContext 分派工具调用到相应的处理函数（支持上下文传递）
 func (h *Handler) dispatchToolCallWithContext(ctx context.Context, toolName string, params map[string]interface{}) (interface{}, error) {
@@ -2418,16 +2416,16 @@ func (h *Handler) HandleToolLocalOperationCallback(ctx context.Context, params m
 // 在init函数或者路由注册函数中添加WebSocket路由
 func (h *Handler) RegisterWebSocketRoutes(router *gin.Engine) {
 	// WebSocket连接端点
-	router.GET("/ws", h.HandleWebSocket)
+	router.GET("/ws", middleware.JWTAuth(), h.HandleWebSocket)
 
 	// WebSocket状态查询端点
-	router.GET("/ws/status", h.GetWebSocketStatus)
+	router.GET("/ws/status", middleware.JWTAuth(), h.GetWebSocketStatus)
 
 	// 🔥 WebSocket连接详情调试端点
-	router.GET("/ws/debug", h.GetWSDebugStatus)
+	router.GET("/ws/debug", middleware.JWTAuth(), h.GetWSDebugStatus)
 
 	// 🔥 WebSocket会话注册端点
-	router.POST("/api/ws/register-session", h.HandleSessionRegister)
+	router.POST("/api/ws/register-session", middleware.JWTAuth(), h.HandleSessionRegister)
 
 	log.Println("WebSocket路由已注册: /ws, /ws/status, /ws/debug, /api/ws/register-session")
 }
@@ -2737,6 +2735,7 @@ func (h *Handler) RegisterManagementRoutes(router *gin.Engine) {
 
 	// Session管理接口组 - 专用于系统监控和管理
 	management := router.Group("/management")
+	management.Use(middleware.JWTAuth())
 	{
 		// 查询所有有效未过期session列表（支持分页）
 		management.GET("/sessions", h.HandleGetSessionsList)
@@ -2747,6 +2746,7 @@ func (h *Handler) RegisterManagementRoutes(router *gin.Engine) {
 
 	// 🔥 新增：用户管理接口组
 	api := router.Group("/api")
+	api.Use(middleware.JWTAuth())
 	{
 		// 🔥 新增：用户管理接口
 		api.POST("/users", h.HandleCreateUser)        // 新增用户（包含唯一性校验）

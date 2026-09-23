@@ -3,9 +3,29 @@
 package main
 
 import (
+	"net/http/httptest"
 	"testing"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
+
+func TestRegisterPublicStaticRoutesDoesNotExposeRuntimeTempFiles(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	router := gin.New()
+	registerPublicStaticRoutes(router)
+	for _, route := range router.Routes() {
+		if route.Path == "/temp/*filepath" || route.Path == "/temp" {
+			t.Fatalf("runtime temp route was publicly registered: %#v", route)
+		}
+	}
+	req := httptest.NewRequest("GET", "/temp/secret.txt", nil)
+	rec := httptest.NewRecorder()
+	router.ServeHTTP(rec, req)
+	if rec.Code != 404 {
+		t.Fatalf("GET /temp/secret.txt status = %d, want 404", rec.Code)
+	}
+}
 
 func TestToolCallErrorKeepsPercentSignsLiteral(t *testing.T) {
 	err := toolCallError("invalid value: 100% complete")

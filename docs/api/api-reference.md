@@ -27,7 +27,6 @@
 |------|------|------|
 | GET | `/` | 静态页面（`./web/role_selection.html`） |
 | GET | `/web/*` | 静态资源（`./web`） |
-| GET | `/temp/*` | 临时文件（`./data/temp`） |
 | GET | `/health` | 健康检查 |
 | POST | `/api/auth/login` | 账号登录 |
 | POST | `/api/role/login` | 角色登录 |

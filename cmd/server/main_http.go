@@ -369,9 +369,7 @@ func main() {
 // setupRoutesAndStartServer 注册路由并启动服务器
 func setupRoutesAndStartServer(router *gin.Engine, handler *api.Handler, cfg *config.Config) {
 	// 🔥 静态文件服务（公开访问）
-	router.Static("/web", "./web")
-	router.StaticFile("/", "./web/role_selection.html")
-	router.Static("/temp", "./data/temp")
+	registerPublicStaticRoutes(router)
 	log.Println("✅ 静态文件服务器注册成功")
 
 	// 🔥 健康检查端点（公开访问）
@@ -542,6 +540,14 @@ func setupRoutesAndStartServer(router *gin.Engine, handler *api.Handler, cfg *co
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("HTTP服务器启动失败: %v", err)
 	}
+}
+
+// registerPublicStaticRoutes deliberately exposes only the UI. Runtime files
+// under data/temp may contain uploads or generated reports and must not be a
+// public download surface.
+func registerPublicStaticRoutes(router *gin.Engine) {
+	router.Static("/web", "./web")
+	router.StaticFile("/", "./web/role_selection.html")
 }
 
 // initSecurityService 初始化安全服务
