@@ -451,6 +451,14 @@
             background: #d1ecf1;
             color: #0c5460;
         }
+        :root { --ink:#10233f; --muted:#718096; --line:#e6edf5; --brand:#087f8c; --brand-soft:#e6f6f5; --warn:#a96816; --warn-soft:#fff5e5; }
+        body { background: radial-gradient(circle at 15% 0%, #174a5b 0, #0e2039 42%, #081322 100%); color:var(--ink); }
+        .container { max-width:1480px; width:100%; margin:0 auto; padding:24px clamp(14px,3vw,42px) 42px; }
+        .header,.panel { border:1px solid rgba(255,255,255,.55); box-shadow:0 18px 50px rgba(3,15,31,.22); background:rgba(255,255,255,.98); border-radius:18px; }
+        .tech-badge { background:var(--brand); border-radius:999px; }
+        .tech-badges { flex-wrap:wrap; justify-content:flex-end; }
+        .demo-status { display:flex; align-items:center; gap:10px; margin-top:16px; padding:11px 14px; border-radius:10px; background:var(--warn-soft); border:1px solid #f1d19d; color:#80531a; font-size:13px; }
+        @media (max-width:880px) { .header-title { align-items:flex-start; gap:14px; flex-direction:column; } .tech-badges { justify-content:flex-start; } .main-content { grid-template-columns:1fr; } .panel { padding:18px; } h1 { font-size:22px; } }
     </style>
 </head>
 <body>
@@ -465,10 +473,11 @@
                     </div>
                 </div>
                 <div class="tech-badges">
-                    <div class="tech-badge">存储效率70%</div>
+                    <div class="tech-badge">分层组件演示</div>
                     <div class="tech-badge">ASDF框架</div>
                 </div>
             </div>
+            <div class="demo-status"><span>●</span><strong>主链状态：</strong>冷热分层为独立能力组件；容量、压缩率和延迟指标待同一数据集正式基准测试</div>
         </div>
 
         <div class="main-content">

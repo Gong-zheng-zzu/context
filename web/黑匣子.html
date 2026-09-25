@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>黑匣子审计日志 - 智能健康管理平台</title>
     <style>
+        :root { --ink:#10233f; --muted:#718096; --line:#e6edf5; --brand:#087f8c; --brand-soft:#e6f6f5; --warn:#a96816; --warn-soft:#fff5e5; }
         * {
             margin: 0;
             padding: 0;
@@ -447,6 +448,14 @@
             word-break: break-all;
             margin-top: 10px;
         }
+        body { background: radial-gradient(circle at 15% 0%, #174a5b 0, #0e2039 42%, #081322 100%); color:var(--ink); }
+        .container { max-width:1480px; width:100%; margin:0 auto; padding:24px clamp(14px,3vw,42px) 42px; }
+        .header,.panel { border:1px solid rgba(255,255,255,.55); box-shadow:0 18px 50px rgba(3,15,31,.22); }
+        .header,.panel { background:rgba(255,255,255,.98); border-radius:18px; }
+        .tech-badge { background:var(--brand); border-radius:999px; }
+        .tech-badges { flex-wrap:wrap; justify-content:flex-end; }
+        .demo-status { display:flex; align-items:center; gap:10px; margin-top:16px; padding:11px 14px; border-radius:10px; background:var(--warn-soft); border:1px solid #f1d19d; color:#80531a; font-size:13px; }
+        @media (max-width:880px) { .header-title,.record-header { align-items:flex-start; gap:14px; flex-direction:column; } .tech-badges { justify-content:flex-start; } .main-content { grid-template-columns:1fr; } .panel { padding:18px; } h1 { font-size:22px; } }
     </style>
 </head>
 <body>
@@ -465,6 +474,7 @@
                     <div class="tech-badge">哈希完整性校验</div>
                 </div>
             </div>
+            <div class="demo-status"><span>●</span><strong>当前页面：</strong>演示审计视图 · 数据以当前运行 API 返回为准 · 公开页面不代表法律存证</div>
         </div>
 
         <div class="main-content">
