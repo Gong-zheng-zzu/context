@@ -23,6 +23,12 @@ security:
 causal:
   schema_version: causal-ompr-v1
   splits: {train: 600, validation: 100, test: 100}
+  expanded_candidate:
+    path: experiments/datasets/generated/causal_ompr_expanded_v1
+    schema_version: causal-ompr-expanded-v1
+    splits: {train: 2400, validation: 400, test: 400}
+    annotation_status: synthetic_unreviewed
+    eligible_for_formal_report: false
   model_fallback: [contextkeeper-causal-3b, qwen2.5:3b, rules, abstain]
   gates:
     strict_tuple_f1: 0.75

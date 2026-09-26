@@ -13,9 +13,19 @@
   },
   "splits": {
     "causal": {"train": 600, "validation": 100, "test": 100},
+    "causal_expanded_candidate": {"train": 2400, "validation": 400, "test": 400},
     "security": {"benign_minimum": 100, "ambiguous_minimum": 100},
     "retrieval": {"query_minimum": 300}
   },
+  "candidate_artifacts": [
+    {
+      "path": "experiments/datasets/generated/causal_ompr_expanded_v1",
+      "schema_version": "causal-ompr-expanded-v1",
+      "annotation_status": "synthetic_unreviewed",
+      "eligible_for_formal_report": false,
+      "dataset_sha256": "154e7e1a74a50972f9498c981ee9b02ffa61d226ffd5c542df538880fdb25201"
+    }
+  ],
   "artifacts": [],
   "status": "template_only",
   "eligible_for_formal_report": false

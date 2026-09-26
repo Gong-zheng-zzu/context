@@ -1,0 +1,30 @@
+{
+  "annotation_status": "synthetic_unreviewed",
+  "dataset_sha256": "154e7e1a74a50972f9498c981ee9b02ffa61d226ffd5c542df538880fdb25201",
+  "eligible_for_frozen_evaluation": false,
+  "files": {
+    "test": {
+      "path": "test.jsonl",
+      "records": 400,
+      "sha256": "91f30a1e0308a7b8751ea53fee854fe850a83d5dac1080ca2685825c0ed207e2"
+    },
+    "train": {
+      "path": "train.jsonl",
+      "records": 2400,
+      "sha256": "c85b8b037d0b6e9281b5093a11824630d5b49473fa3e63a3d84bd453617f0e66"
+    },
+    "validation": {
+      "path": "validation.jsonl",
+      "records": 400,
+      "sha256": "4d3a7a41844eb5b0629073154f7cfbe76066ef950396e86361bf8da4e3150841"
+    }
+  },
+  "schema_version": "causal-ompr-expanded-v1",
+  "seed": 20260926,
+  "split_counts": {
+    "test": 400,
+    "train": 2400,
+    "validation": 400
+  },
+  "template_families_are_split_disjoint": true
+}

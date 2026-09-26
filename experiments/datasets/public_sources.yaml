@@ -1,0 +1,42 @@
+schema_version: public-dataset-sources-v1
+policy:
+  public_repository_may_include: [public_synthetic, lawfully_deidentified_with_redistributable_license]
+  restricted_sources_require: [credential, data_use_agreement, local_only_ingestion]
+  formal_test_requires: [dataset_sha256, source_license, split_manifest, annotation_status]
+sources:
+  - id: synthea
+    name: Synthea Synthetic Patient Data
+    url: https://github.com/synthetichealth/synthea
+    license: Apache-2.0
+    data_type: fully_synthetic_fhir_csv
+    status: approved_for_local_generation
+    use: structured_context_and_retrieval_augmentation
+    pii_expected: false
+    note: Generate locally with a pinned Synthea release; do not commit generated bulk data by default.
+  - id: mimic_iv
+    name: MIMIC-IV
+    url: https://physionet.org/content/mimiciv/3.1/
+    license: PhysioNet_Credentialed_Health_Data_License_1.5.0
+    data_type: deidentified_clinical_records
+    status: restricted_local_only
+    use: optional_external_validation_after_credentialing
+    pii_expected: deidentified_but_sensitive
+    note: Requires PhysioNet credentialing and data-use agreement; never download in CI or publish raw data.
+  - id: eicu_crd
+    name: eICU Collaborative Research Database
+    url: https://physionet.org/content/eicu-crd/2.0/
+    license: PhysioNet_Credentialed_Health_Data_License_1.5.0
+    data_type: deidentified_critical_care_records
+    status: restricted_local_only
+    use: optional_external_validation_after_credentialing
+    pii_expected: deidentified_but_sensitive
+    note: Requires credentialing and local-only processing; not part of the public competition dataset.
+  - id: pii_bench_zh
+    name: PII Bench Chinese positive subset
+    url: https://github.com/AntixK/PiiBench
+    license: verify_upstream_before_redistribution
+    data_type: pii_positive_text
+    status: existing_local_external_fixture
+    use: security_recall_only
+    pii_expected: synthetic_or_deidentified_verify_before_publish
+    note: Positive-only data cannot estimate benign false-positive rate.
