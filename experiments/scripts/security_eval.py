@@ -1696,8 +1696,8 @@ def _ablation_self_test_checks() -> List[Tuple[str, Any]]:
         ("17_synthetic_sample_id_matches_server_contract",
          lambda: all(pattern.match(evaluator._synthetic_sample_id(sample_id))
                      for sample_id in ("prompt_injection_001", "benign-01-01", "weird id.with/slash"))),
-        ("18_ablation_response_parses_four_profiles",
-         lambda: len(parsed) == 4 and parsed["asdf"]["asdf"]["is_adversarial"] is True
+        ("18_ablation_response_parses_all_declared_profiles",
+         lambda: len(parsed) == len(ABLATION_PROFILE_ORDER) and parsed["asdf"]["asdf"]["is_adversarial"] is True
          and parsed["asdf"]["asdf"]["residual_attack_types"] == ["homophone"]
          and parsed["asdf_casia_pccm"]["layers"][0]["span_count"] == 0),
         ("19_ablation_config_snapshots_are_deduplicated",
