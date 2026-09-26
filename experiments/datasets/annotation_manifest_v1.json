@@ -1,0 +1,22 @@
+{
+  "schema_version": "annotation-manifest-v1",
+  "dataset_name": "contextkeeper-competition-evidence",
+  "purpose": "安全、因果和检索正式评测的来源登记模板",
+  "data_policy": {
+    "allowed": ["public_synthetic", "lawfully_deidentified"],
+    "forbidden": ["unconsented_raw_care_records", "tokens", "credentials", "private_runtime_data"]
+  },
+  "review_policy": {
+    "minimum_independent_annotators": 2,
+    "arbitrator_required_on_conflict": true,
+    "frozen_test_eligible_only_after_adjudication": true
+  },
+  "splits": {
+    "causal": {"train": 600, "validation": 100, "test": 100},
+    "security": {"benign_minimum": 100, "ambiguous_minimum": 100},
+    "retrieval": {"query_minimum": 300}
+  },
+  "artifacts": [],
+  "status": "template_only",
+  "eligible_for_formal_report": false
+}

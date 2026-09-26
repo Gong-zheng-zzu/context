@@ -1,0 +1,48 @@
+schema_version: competition-experiment-v1
+project_positioning: smart_eldercare_data_governance
+runtime:
+  primary: docker_linux
+  model_runtime: local_ollama
+  offline_fallback_required: true
+  random_seed: 20260926
+evidence:
+  require_dataset_sha256: true
+  require_config_fingerprint: true
+  require_failure_samples: true
+  historical_results_are_formal: false
+security:
+  profiles: [regex_only, asdf, asdf_casia, asdf_casia_pccm]
+  attack_categories: [separator, homophone, chinese_numeral, base64, semantic, contextual]
+  benign_minimum: 100
+  ambiguous_minimum: 100
+  gates:
+    defense_rate: 0.95
+    per_category_defense_rate: 0.90
+    benign_false_positive_rate: 0.03
+    pii_span_f1: 0.92
+causal:
+  schema_version: causal-ompr-v1
+  splits: {train: 600, validation: 100, test: 100}
+  model_fallback: [contextkeeper-causal-3b, qwen2.5:3b, rules, abstain]
+  gates:
+    strict_tuple_f1: 0.75
+    field_macro_f1: 0.88
+    no_cause_false_positive_rate: 0.05
+    negation_accuracy: 0.95
+    temporal_accuracy: 0.95
+    online_p95_seconds: 3.0
+retrieval:
+  queries_minimum: 300
+  compare: [vector, vector_filter, rrf]
+  gates:
+    relative_mrr_improvement: 0.05
+    recall_at_5_regression_allowed: false
+deletion:
+  stores: [qdrant, neo4j, timescaledb, cache]
+  require_control_scope_preserved: true
+  require_idempotent_retry: true
+agent:
+  mode: controlled_research_extension
+  whitelist_sources_required: true
+  human_confirmation_required: true
+  contributes_to_formal_metrics: false
