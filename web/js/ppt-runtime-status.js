@@ -62,6 +62,17 @@
           : pageKind() === 'memory_graph'
             ? '记忆子图当前按 owner 隔离，进程内实现不等同于持久化图谱。'
             : '生命周期状态来自服务端，未返回的指标不会在页面显示。';
+      if (pageKind() === 'memory_graph') {
+        fetch(`${apiBase()}/api/v1/evidence/communities`, { headers }).then(r => r.json().then(communityBody => ({ ok: r.ok, communityBody }))).then(({ ok: communityBody }) => {
+          const data = communityBody && communityBody.data && typeof communityBody.data === 'object' ? communityBody.data : communityBody;
+          const count = data && Array.isArray(data.communities) ? data.communities.length : null;
+          const communityText = ok && count !== null ? `服务端 owner-scoped 社区数：${count}（不展示未授权原文）。` : '无法获取 owner-scoped 社区证据，页面保留静态说明。';
+          panel.innerHTML = `<strong>live · ${prototype ? '受控原型' : '服务端状态'}</strong><br><span>implementation: ${String(implementation).replace(/[<>]/g, '')}</span><br><span>${communityText}</span><br><span>${extra}</span>`;
+        }).catch(() => {
+          panel.innerHTML = `<strong>live · ${prototype ? '受控原型' : '服务端状态'}</strong><br><span>implementation: ${String(implementation).replace(/[<>]/g, '')}</span><br><span>无法获取 owner-scoped 社区证据，页面保留静态说明。</span>`;
+        });
+        return;
+      }
       panel.innerHTML = `<strong>live · ${prototype ? '受控原型' : '服务端状态'}</strong><br><span>implementation: ${String(implementation).replace(/[<>]/g, '')}</span><br><span>${extra}</span>`;
     }).catch(() => {
       panel.innerHTML = '<strong>live · 服务不可用</strong><br><span>无法获取实时证据，请检查服务、认证和 Docker 依赖。</span>';

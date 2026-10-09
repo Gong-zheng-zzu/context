@@ -34,6 +34,7 @@ class PptRuntimeStatusContractTest(unittest.TestCase):
 
     def test_bridge_reads_server_owned_status(self):
         self.assertIn("/api/v1/lifecycle/status", self.script)
+        self.assertIn("/api/v1/evidence/communities", self.script)
         self.assertIn("in_process_evidence_lifecycle", self.script)
         self.assertIn("X-Trace-ID", self.script)
         self.assertIn("implementation", self.script)
