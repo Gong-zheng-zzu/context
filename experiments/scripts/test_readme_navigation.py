@@ -23,6 +23,8 @@ class ReadmeNavigationTest(unittest.TestCase):
         page = (ROOT / "web" / "role_selection.html").read_text(encoding="utf-8")
         self.assertIn("competition_portal.html?mode=fixture", page)
         self.assertIn("competition_console.html?mode=fixture", page)
+        for extension in ("三维协同记忆图.html?mode=fixture", "数据调度.html?mode=fixture", "隐私保护.html?mode=fixture", "黑匣子.html?mode=fixture"):
+            self.assertIn(extension, page)
 
 
 if __name__ == "__main__":
