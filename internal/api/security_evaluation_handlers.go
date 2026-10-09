@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"os"
@@ -16,6 +15,12 @@ import (
 const defaultSecurityEvaluationUserID = "eval_user_001"
 
 var syntheticSecuritySampleIDPattern = regexp.MustCompile(`^synthetic_[A-Za-z0-9_-]{1,64}$`)
+
+// Competition ablation is deliberately deterministic. The optional LLM
+// profile remains available to offline research code, but it is excluded from
+// the protected competition endpoint so a model timeout cannot masquerade as
+// a security result.
+var competitionSecurityProfiles = []string{"regex_only", "asdf", "asdf_casia", "asdf_casia_pccm"}
 
 // SecurityInputEvaluationRequest is intentionally limited to the authenticated
 // input pipeline. It is used by the experiment runner and never calls the LLM.
@@ -121,6 +126,7 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 	originalMessage := message
 	redactedMessage := message
 	sensitiveTypes := make([]string, 0)
+	sensitiveDetected := false
 	// Resolve the service before creating execution evidence so the response
 	// truthfully reports whether ASDF and multi-layer scanning were available.
 	// Prefer the handler's injected service. The global chat service is kept as
@@ -168,40 +174,28 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 	originalMessage = message
 	redactedMessage = message
 	if decision == "allow" && securityService != nil {
-		scan, err := securityService.ScanContent(context.Background(), req.SessionID, userIDValue, originalMessage)
+		// Evaluation is deliberately deterministic. The generic ScanContent path
+		// may invoke the optional LLM layer and wait for its full timeout, which
+		// violates this endpoint's no-LLM contract and makes normal smoke checks
+		// look like an outage. The server-owned PCCM-S profile provides the same
+		// ASDF/CASIA evidence without network or model calls.
+		evaluation, err := securityService.EvaluateSecurityProfile(c.Request.Context(), "asdf_casia_pccm", originalMessage)
 		if err != nil {
-			log.Printf("[security evaluation] sensitive input scan failed: %v", err)
+			log.Printf("[security evaluation] deterministic profile failed: %v", err)
 		} else {
-			if scan.Metadata != nil {
-				if used, ok := scan.Metadata["multi_layer_used"].(bool); ok {
-					securityExecution["multi_layer_used"] = used
-				}
-				if configuration, ok := scan.Metadata["configuration"].(security.MultiLayerConfiguration); ok {
-					securityExecution["pccm_enabled"] = configuration.PCCMEnabled
-					securityExecution["casia_enabled"] = configuration.CASIAEnabled
-				}
-				if configuration, ok := scan.Metadata["configuration"].(security.MultiLayerSecurityConfiguration); ok {
-					securityExecution["multi_layer_enabled"] = configuration.Enabled
-					securityExecution["pccm_enabled"] = configuration.PCCMEnabled
-					securityExecution["casia_enabled"] = configuration.CASIAEnabled
-					securityExecution["early_stop"] = configuration.EarlyStop
-				}
-				for _, field := range []string{"layers_used", "final_confidence", "conflicts_resolved", "multi_layer_fallback", "multi_layer_error"} {
-					if value, exists := scan.Metadata[field]; exists {
-						securityExecution[field] = value
-					}
-				}
+			securityExecution["profile"] = evaluation.Profile
+			securityExecution["profile_evidence"] = evaluation
+			securityExecution["layers_used"] = evaluation.Layers
+			securityExecution["final_confidence"] = evaluation.Confidence
+			securityExecution["early_stop"] = evaluation.EarlyStopReason
+			for _, sensitiveType := range evaluation.SensitiveTypes {
+				sensitiveTypes = append(sensitiveTypes, string(sensitiveType))
 			}
-			if len(scan.SensitiveInfos) > 0 {
-				redactedMessage = scan.RedactedContent
-				for _, info := range scan.SensitiveInfos {
-					sensitiveTypes = append(sensitiveTypes, string(info.Type))
-				}
-			}
+			sensitiveDetected = len(evaluation.SensitiveTypes) > 0
 		}
 	}
 	if decision == "allow" {
-		decision, stage = inputSecurityDecision(redactedMessage != originalMessage, inputNormalized)
+		decision, stage = inputSecurityDecision(sensitiveDetected, inputNormalized)
 	}
 
 	// The result is intentionally metadata-only: never return raw or redacted input.
@@ -263,8 +257,8 @@ func (h *Handler) HandleSecurityAblationEvaluation(c *gin.Context) {
 		return
 	}
 
-	results := make([]security.SecurityProfileEvaluation, 0, len(security.SecurityLabProfiles))
-	for _, profile := range security.SecurityLabProfiles {
+	results := make([]security.SecurityProfileEvaluation, 0, len(competitionSecurityProfiles))
+	for _, profile := range competitionSecurityProfiles {
 		result, err := securityService.EvaluateSecurityProfile(c.Request.Context(), profile, req.Message)
 		if err != nil {
 			writeCompetitionUnavailable(c, "security_ablation", err.Error())

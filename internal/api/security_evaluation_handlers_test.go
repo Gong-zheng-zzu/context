@@ -49,6 +49,38 @@ func TestSecurityExecutionEvidenceReportsUnavailableSecurityService(t *testing.T
 	}
 }
 
+func TestSecurityInputEvaluationUsesDeterministicPCCMSProfile(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	handler := newSecurityLabTestHandler(t)
+	recorder := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(recorder)
+	ctx.Request = httptest.NewRequest(http.MethodPost, "/api/v1/security/evaluate-input", strings.NewReader(`{"input":"normal care note","sample_id":"synthetic_normal_1"}`))
+	ctx.Request.Header.Set("Content-Type", "application/json")
+	ctx.Set("user_id", "security_eval_user")
+	handler.HandleSecurityInputEvaluation(ctx)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("status = %d, body = %s", recorder.Code, recorder.Body.String())
+	}
+	var payload struct {
+		Data struct {
+			Decision          string                 `json:"decision"`
+			SecurityExecution map[string]interface{} `json:"security_execution"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(recorder.Body.Bytes(), &payload); err != nil {
+		t.Fatal(err)
+	}
+	if payload.Data.Decision != "allow" {
+		t.Fatalf("decision = %q, want allow", payload.Data.Decision)
+	}
+	if got := payload.Data.SecurityExecution["profile"]; got != "asdf_casia_pccm" {
+		t.Fatalf("profile = %#v, want deterministic asdf_casia_pccm", got)
+	}
+	if _, ok := payload.Data.SecurityExecution["profile_evidence"]; !ok {
+		t.Fatalf("missing server-owned deterministic profile evidence: %#v", payload.Data.SecurityExecution)
+	}
+}
+
 func newSecurityLabTestHandler(t *testing.T) *Handler {
 	t.Helper()
 	t.Setenv("SECURITY_ENCRYPTION_SECRET", "security-lab-test-secret-with-sufficient-length")
