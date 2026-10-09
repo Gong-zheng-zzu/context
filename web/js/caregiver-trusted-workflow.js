@@ -166,6 +166,40 @@
         }
     }
 
+    function syntheticPCMBase64(sampleRate, seconds) {
+        const count = Math.floor(sampleRate * seconds);
+        const bytes = new Uint8Array(count * 2);
+        for (let index = 0; index < count; index += 1) {
+            const sample = Math.round(Math.sin(2 * Math.PI * 220 * index / sampleRate) * 0.18 * 32767);
+            const offset = index * 2;
+            bytes[offset] = sample & 0xff;
+            bytes[offset + 1] = (sample >> 8) & 0xff;
+        }
+        let binary = '';
+        for (let index = 0; index < bytes.length; index += 1) binary += String.fromCharCode(bytes[index]);
+        return btoa(binary);
+    }
+
+    async function analyseSyntheticAudio() {
+        setStatus('正在执行合成音频内存隐私处理');
+        try {
+            const sampleRate = 16000;
+            const payload = await request('/api/v1/multimodal/audio/privacy-analysis', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ encoding: 'pcm_s16le', sample_rate: sampleRate, pcm_base64: syntheticPCMBase64(sampleRate, 1) })
+            });
+            if (payload.persisted !== false || payload.raw_pcm_returned !== false || payload.raw_pcm_persisted !== false || !payload.transform) {
+                throw new Error('服务端未满足音频最小化处理契约');
+            }
+            showResult(`合成音频隐私处理完成：${payload.transform.algorithm || '已执行'}。原始 PCM 未返回、未持久化。`, 'verified');
+            setStatus('音频隐私处理完成，未保存原始音频');
+        } catch (error) {
+            showResult(`音频隐私处理失败：${error.message}`, 'failed');
+            setStatus('音频隐私处理失败，未伪造成功结果');
+        }
+    }
+
     window.runCaregiverTrustedAgent = async function runCaregiverTrustedAgent(requestInput) {
         const sessionID = String(requestInput && requestInput.sessionID || '').trim();
         const message = String(requestInput && requestInput.message || '').trim();
@@ -191,8 +225,10 @@
         const retrieveButton = byID('trustedCareRetrieve');
         const imageButton = byID('trustedCareImage');
         const imageInput = byID('trustedCareImageInput');
+        const audioButton = byID('trustedCareAudio');
         if (retrieveButton) retrieveButton.addEventListener('click', retrieveRelatedRecords);
         if (imageButton && imageInput) imageButton.addEventListener('click', () => imageInput.click());
+        if (audioButton) audioButton.addEventListener('click', analyseSyntheticAudio);
         if (imageInput) imageInput.addEventListener('change', async () => {
             const file = imageInput.files && imageInput.files[0];
             imageInput.value = '';
