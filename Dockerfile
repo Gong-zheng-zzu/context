@@ -45,6 +45,9 @@ COPY internal/ ./internal/
 COPY pkg/ ./pkg/
 COPY scripts/ ./scripts/
 COPY web/ ./web/
+# Non-secret runtime configuration is part of the reproducible image. The
+# repository .dockerignore excludes config/.env and other local credentials.
+COPY config/ ./config/
 
 # 构建信息（模拟build.sh的构建信息设置）
 ARG VERSION=docker
@@ -107,6 +110,9 @@ COPY --from=builder /app/scripts/build/ /app/scripts/build/
 
 # 从构建阶段复制前端文件
 COPY --from=builder /app/web/ /app/web/
+# Keep the same non-secret configuration available at runtime and in the
+# Linux builder used by the release gate.
+COPY --from=builder /app/config/ /app/config/
 
 # 🔥 修改：创建必要的目录，包括统一的日志目录
 RUN mkdir -p /app/data /app/data/logs /app/config /app/logs && \
