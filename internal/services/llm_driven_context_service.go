@@ -2352,9 +2352,13 @@ func (adapter *VectorStoreAdapter) SearchByQuery(ctx context.Context, query stri
 		return []*models.VectorMatch{}, nil
 	}
 
-	// 🔥 修复：使用统一的类型断言模式
-	if vectorStore, ok := adapter.Engine.(models.VectorStore); ok {
-		log.Printf("🔧 [向量适配器] 检测到VectorStore引擎，构建查询参数")
+	// Retrieval only needs the text-search capability. Accept the narrow
+	// interface here instead of requiring every storage-management method;
+	// this also keeps failure/timeout adapters testable and auditable.
+	if vectorStore, ok := adapter.Engine.(interface {
+		SearchByText(context.Context, string, *models.SearchOptions) ([]models.SearchResult, error)
+	}); ok {
+		log.Printf("🔧 [向量适配器] 检测到文本检索引擎，构建查询参数")
 
 		// 构建SearchOptions
 		options := &models.SearchOptions{
@@ -2369,7 +2373,11 @@ func (adapter *VectorStoreAdapter) SearchByQuery(ctx context.Context, query stri
 		results, err := vectorStore.SearchByText(ctx, query, options)
 		if err != nil {
 			log.Printf("❌ [向量适配器] 查询失败: %v", err)
-			return []*models.VectorMatch{}, nil // 返回空结果而不是错误，保持检索链路稳定
+			// Preserve the error so the multi-source audit can distinguish an
+			// unavailable/timeout vector lane from a successful empty result.
+			// The retrieval coordinator still returns a partial response; this
+			// error only changes source_statuses and fusion_mode evidence.
+			return []*models.VectorMatch{}, fmt.Errorf("vector search failed: %w", err)
 		}
 
 		// 🔥 转换SearchResult[]到VectorMatch[]

@@ -9,6 +9,23 @@ import (
 	"github.com/contextkeeper/service/internal/models"
 )
 
+func TestDefaultVectorTimeoutIsBoundedAndConfigurable(t *testing.T) {
+	t.Setenv("RETRIEVAL_VECTOR_TIMEOUT_SECONDS", "")
+	if got := getDefaultMultiDimensionalConfig().VectorTimeout; got != 2 {
+		t.Fatalf("default vector timeout = %d, want 2 seconds", got)
+	}
+
+	t.Setenv("RETRIEVAL_VECTOR_TIMEOUT_SECONDS", "1")
+	if got := getDefaultMultiDimensionalConfig().VectorTimeout; got != 1 {
+		t.Fatalf("configured vector timeout = %d, want 1 second", got)
+	}
+
+	t.Setenv("RETRIEVAL_VECTOR_TIMEOUT_SECONDS", "0")
+	if got := getDefaultMultiDimensionalConfig().VectorTimeout; got != 2 {
+		t.Fatalf("invalid vector timeout = %d, want safe default 2 seconds", got)
+	}
+}
+
 type recordingTimelineStore struct {
 	delay time.Duration
 	mu    sync.Mutex

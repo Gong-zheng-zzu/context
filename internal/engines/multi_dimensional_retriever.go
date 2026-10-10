@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -695,9 +697,13 @@ func (mdr *MultiDimensionalRetrieverImpl) GetTimelineStore() TimelineStore {
 // getDefaultMultiDimensionalConfig 获取默认配置
 func getDefaultMultiDimensionalConfig() *MultiDimensionalConfig {
 	return &MultiDimensionalConfig{
-		TimelineTimeout:     5, // 5秒
-		KnowledgeTimeout:    5, // 5秒
-		VectorTimeout:       5, // 5秒
+		TimelineTimeout:  5, // 5秒
+		KnowledgeTimeout: 5, // 5秒
+		// Embedding is an optional dependency in the competition runtime. Keep
+		// the default budget below the online p95 target so an unavailable
+		// Ollama endpoint becomes an explicit vector failure instead of holding
+		// the whole evidence request for five seconds.
+		VectorTimeout:       retrievalVectorTimeoutSeconds(),
 		TimelineMaxResults:  20,
 		KnowledgeMaxResults: 15,
 		// 向量库按多向量方式存储：同一篇文档会写入多个表示点（实测约 6 个/文档）。
@@ -710,4 +716,18 @@ func getDefaultMultiDimensionalConfig() *MultiDimensionalConfig {
 		MaxRetries:         1,
 		RetryInterval:      2,
 	}
+}
+
+func retrievalVectorTimeoutSeconds() int {
+	const defaultTimeout = 2
+	raw := strings.TrimSpace(os.Getenv("RETRIEVAL_VECTOR_TIMEOUT_SECONDS"))
+	if raw == "" {
+		return defaultTimeout
+	}
+	value, err := strconv.Atoi(raw)
+	if err != nil || value < 1 || value > 30 {
+		log.Printf("⚠️ [多维度检索] RETRIEVAL_VECTOR_TIMEOUT_SECONDS=%q 无效，使用默认 %d 秒", raw, defaultTimeout)
+		return defaultTimeout
+	}
+	return value
 }
