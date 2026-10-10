@@ -20,6 +20,11 @@ import (
 // can present an honest offline-mode state.
 var ErrLLMUnavailable = errors.New("ollama client is not configured")
 
+// causalLLMTimeout bounds model arbitration so a slow local Ollama process
+// cannot hold the HTTP request past the competition latency budget. The
+// deterministic rule fallback remains available after this deadline.
+var causalLLMTimeout = 2500 * time.Millisecond
+
 // EntityExtractor 因果实体抽取器
 type EntityExtractor struct {
 	llmClient   *llm.OllamaLocalClient
@@ -81,7 +86,9 @@ func (ee *EntityExtractor) ExtractWithExecution(ctx context.Context, text string
 
 	// 使用LLM抽取O→C→P→R四元组
 	if useLLM {
-		llmRelations, err := ee.extractWithLLM(ctx, text)
+		modelCtx, cancel := context.WithTimeout(ctx, causalLLMTimeout)
+		llmRelations, err := ee.extractWithLLM(modelCtx, text)
+		cancel()
 		if err != nil {
 			// LLM失败时降级到规则引擎
 			if useRules {
@@ -187,6 +194,9 @@ func hasVerifiedRelations(relations []CausalRelation) bool {
 func extractionFallbackReason(err error) string {
 	if errors.Is(err, ErrLLMUnavailable) {
 		return "ollama_unavailable"
+	}
+	if errors.Is(err, context.DeadlineExceeded) {
+		return "model_timeout"
 	}
 	return "model_request_failed"
 }

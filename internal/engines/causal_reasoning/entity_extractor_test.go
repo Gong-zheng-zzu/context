@@ -25,6 +25,12 @@ func TestExtractWithExecutionRejectsLLMWithoutClient(t *testing.T) {
 	}
 }
 
+func TestExtractionFallbackReasonDistinguishesModelTimeout(t *testing.T) {
+	if got := extractionFallbackReason(context.DeadlineExceeded); got != "model_timeout" {
+		t.Fatalf("fallback reason=%q, want model_timeout", got)
+	}
+}
+
 func TestExtractWithExecutionRecordsRulesFallback(t *testing.T) {
 	extractor := NewEntityExtractor(nil)
 	relations, execution, err := extractor.ExtractWithExecution(context.Background(), "患者服用降压药后出现体位性低血压", true, false, true)
