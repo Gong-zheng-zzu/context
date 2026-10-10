@@ -36,6 +36,7 @@ class PptRuntimeStatusContractTest(unittest.TestCase):
         self.assertIn("/api/v1/lifecycle/status", self.script)
         self.assertIn("/api/v1/evidence/communities", self.script)
         self.assertIn("/api/v1/multimodal/image/deidentify", self.script)
+        self.assertIn("/api/v1/multimodal/audio/privacy-analysis", self.script)
         self.assertIn("new FormData()", self.script)
         self.assertIn("X-Trace-ID", self.script)
         self.assertIn("implementation", self.script)

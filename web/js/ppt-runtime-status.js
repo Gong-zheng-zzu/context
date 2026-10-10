@@ -89,11 +89,13 @@
   function installMultimodalControls(card, headers) {
     var controls = document.createElement('div');
     controls.style.cssText = 'margin-top:18px;padding-top:16px;border-top:1px solid #e4edf2;display:grid;gap:10px';
-    controls.innerHTML = '<label for="pptImageUpload"><strong>图片脱敏验证</strong></label><input id="pptImageUpload" type="file" accept="image/png,image/jpeg"><button id="pptImageSubmit" type="button" style="width:max-content;padding:9px 14px;border:0;border-radius:9px;background:#087f8c;color:#fff;cursor:pointer">在内存中处理</button><div id="pptImageResult" role="status" style="color:#5f7182"></div>';
+    controls.innerHTML = '<label for="pptImageUpload"><strong>图片脱敏验证</strong></label><input id="pptImageUpload" type="file" accept="image/png,image/jpeg"><button id="pptImageSubmit" type="button" style="width:max-content;padding:9px 14px;border:0;border-radius:9px;background:#087f8c;color:#fff;cursor:pointer">在内存中处理</button><div id="pptImageResult" role="status" style="color:#5f7182"></div><strong style="margin-top:8px">音频隐私分析</strong><button id="pptAudioSubmit" type="button" style="width:max-content;padding:9px 14px;border:0;border-radius:9px;background:#355c7d;color:#fff;cursor:pointer">生成短测试音频并分析</button><div id="pptAudioResult" role="status" style="color:#5f7182"></div>';
     card.appendChild(controls);
     var input = controls.querySelector('#pptImageUpload');
     var button = controls.querySelector('#pptImageSubmit');
     var result = controls.querySelector('#pptImageResult');
+    var audioButton = controls.querySelector('#pptAudioSubmit');
+    var audioResult = controls.querySelector('#pptAudioResult');
     button.addEventListener('click', function () {
       if (!input.files || !input.files[0]) {
         result.textContent = '请选择 PNG 或 JPEG 文件。';
@@ -123,6 +125,34 @@
         result.textContent = '真实处理失败：' + (error.message || '服务不可用');
       }).finally(function () {
         button.disabled = false;
+      });
+    });
+    audioButton.addEventListener('click', function () {
+      var sampleRate = 16000;
+      var sampleCount = Math.floor(sampleRate * 0.5);
+      var bytes = new Uint8Array(sampleCount * 2);
+      var view = new DataView(bytes.buffer);
+      for (var i = 0; i < sampleCount; i++) {
+        view.setInt16(i * 2, Math.round(Math.sin(i * 2 * Math.PI * 440 / sampleRate) * 12000), true);
+      }
+      var binary = '';
+      for (var j = 0; j < bytes.length; j++) binary += String.fromCharCode(bytes[j]);
+      audioButton.disabled = true;
+      audioResult.textContent = '处理中；仅提交内存中的 0.5 秒 PCM 摘要。';
+      fetch(apiBase() + '/api/v1/multimodal/audio/privacy-analysis', {
+        method: 'POST', headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+        body: JSON.stringify({ pcm_base64: btoa(binary), sample_rate: sampleRate, encoding: 'pcm_s16le' })
+      }).then(function (response) {
+        return response.json().catch(function () { return {}; }).then(function (body) {
+          if (!response.ok || body.success === false) throw new Error(body.error || body.message || ('HTTP ' + response.status));
+          return body;
+        });
+      }).then(function (body) {
+        audioResult.textContent = '已完成内存分析 · trace_id: ' + (body.trace_id || '响应未提供') + ' · persisted: ' + String(body.persisted === true) + ' · raw_pcm_returned: ' + String(body.raw_pcm_returned === true);
+      }).catch(function (error) {
+        audioResult.textContent = '真实处理失败：' + (error.message || '服务不可用');
+      }).finally(function () {
+        audioButton.disabled = false;
       });
     });
   }
