@@ -86,6 +86,47 @@
     });
   }
 
+  function installMultimodalControls(card, headers) {
+    var controls = document.createElement('div');
+    controls.style.cssText = 'margin-top:18px;padding-top:16px;border-top:1px solid #e4edf2;display:grid;gap:10px';
+    controls.innerHTML = '<label for="pptImageUpload"><strong>图片脱敏验证</strong></label><input id="pptImageUpload" type="file" accept="image/png,image/jpeg"><button id="pptImageSubmit" type="button" style="width:max-content;padding:9px 14px;border:0;border-radius:9px;background:#087f8c;color:#fff;cursor:pointer">在内存中处理</button><div id="pptImageResult" role="status" style="color:#5f7182"></div>';
+    card.appendChild(controls);
+    var input = controls.querySelector('#pptImageUpload');
+    var button = controls.querySelector('#pptImageSubmit');
+    var result = controls.querySelector('#pptImageResult');
+    button.addEventListener('click', function () {
+      if (!input.files || !input.files[0]) {
+        result.textContent = '请选择 PNG 或 JPEG 文件。';
+        return;
+      }
+      var form = new FormData();
+      form.append('image', input.files[0]);
+      button.disabled = true;
+      result.textContent = '处理中；原始文件不会上传到持久化存储。';
+      fetch(apiBase() + '/api/v1/multimodal/image/deidentify', {
+        method: 'POST', headers: headers, body: form
+      }).then(function (response) {
+        return response.json().catch(function () { return {}; }).then(function (body) {
+          if (!response.ok || body.success === false) throw new Error(body.error || body.message || ('HTTP ' + response.status));
+          return body;
+        });
+      }).then(function (body) {
+        result.textContent = '已完成内存脱敏 · trace_id: ' + (body.trace_id || '响应未提供') + ' · applied_regions: ' + (body.applied_regions || 0) + ' · persisted: ' + String(body.persisted === true);
+        if (body.deidentified_image) {
+          var image = document.createElement('img');
+          image.alt = '脱敏后的图片副本';
+          image.style.cssText = 'display:block;max-width:100%;max-height:280px;border-radius:10px;border:1px solid #d9e5ee;margin-top:8px';
+          image.src = body.deidentified_image;
+          result.appendChild(image);
+        }
+      }).catch(function (error) {
+        result.textContent = '真实处理失败：' + (error.message || '服务不可用');
+      }).finally(function () {
+        button.disabled = false;
+      });
+    });
+  }
+
   function installLive(page, panel) {
     var bearer = getToken();
     if (!bearer) {
@@ -120,6 +161,7 @@
       }
       if (page === 'multimodal') {
         replaceLiveContent(page, '多模态实时能力待操作', '服务可用，但图像/音频处理必须由用户通过受保护 POST 接口触发。页面不会伪造固定识别率或历史时间戳。');
+        installMultimodalControls(document.getElementById('pptLiveEvidence'), headers);
         return;
       }
       replaceLiveContent(page, '实时服务状态', '服务端已响应，但该页面没有可展示的实时证据接口。');
