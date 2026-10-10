@@ -26,21 +26,31 @@ class PptRuntimeStatusContractTest(unittest.TestCase):
 
     def test_bridge_has_explicit_fixture_boundary_and_live_error(self):
         self.assertIn("offline_fixture", self.script)
-        self.assertIn("不调用服务、模型、数据库、联网 Agent、写入或删除接口", self.script)
-        self.assertIn("服务不可用", self.script)
-        self.assertIn("未回退到写死结果", self.script)
+        self.assertIn("不会联网、调用模型、写入存储或执行删除", self.script)
+        self.assertIn("无法获取实时证据", self.script)
+        self.assertIn("不回退到写死的成功数据", self.script)
         self.assertNotIn("localStorage", self.script)
         self.assertNotIn("sessionStorage", self.script)
 
     def test_bridge_reads_server_owned_status(self):
         self.assertIn("/api/v1/lifecycle/status", self.script)
         self.assertIn("/api/v1/evidence/communities", self.script)
-        self.assertIn("in_process_evidence_lifecycle", self.script)
         self.assertIn("X-Trace-ID", self.script)
         self.assertIn("implementation", self.script)
 
-    def test_script_has_no_unescaped_html_in_server_values(self):
-        self.assertRegex(self.script, re.compile(r"replace\(/\[<>\]/g"))
+    def test_script_escapes_server_values(self):
+        self.assertRegex(self.script, re.compile(r"replace\(/\[&<>"))
+
+    def test_pages_declare_explicit_runtime_kind(self):
+        expected = {
+            "黑匣子.html": "audit",
+            "数据调度.html": "lifecycle",
+            "隐私保护.html": "multimodal",
+            "三维协同记忆图.html": "memory_graph",
+        }
+        for name, kind in expected.items():
+            page = (ROOT / "web" / name).read_text(encoding="utf-8")
+            self.assertIn(f'data-ppt-page="{kind}"', page)
 
 
 if __name__ == "__main__":

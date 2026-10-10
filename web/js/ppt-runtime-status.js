@@ -1,82 +1,142 @@
 (function () {
   'use strict';
 
-  // Shared status bridge for the legacy PPT pages. It never invents metrics and
-  // never stores credentials. A live status is shown only after a real,
-  // authenticated response; otherwise the page remains explicitly labelled.
+  // Legacy PPT pages contain screenshots and sample numbers. Keep them only
+  // in fixture mode; live mode displays authenticated server evidence or an
+  // explicit error state.
+  var root = document.documentElement;
+
   function apiBase() {
-    return window.CONFIG && window.CONFIG.API_BASE_URL
-      ? window.CONFIG.API_BASE_URL.replace(/\/$/, '')
-      : 'http://localhost:8088';
+    var configured = window.CONFIG && window.CONFIG.API_BASE_URL;
+    return String(configured || window.location.origin || 'http://localhost:8088').replace(/\/$/, '');
   }
 
-  function token() {
-    return typeof window.JWT_TOKEN === 'string' && window.JWT_TOKEN &&
-      !(typeof window.isOfflineToken === 'function' && window.isOfflineToken(window.JWT_TOKEN))
-      ? window.JWT_TOKEN : '';
-  }
-
-  function mode() {
+  function getMode() {
     return new URLSearchParams(window.location.search).get('mode') === 'fixture'
       ? 'offline_fixture' : 'live';
   }
 
-  function pageKind() {
-    const path = window.location.pathname;
-    if (path.includes('黑匣子')) return 'audit';
-    if (path.includes('数据调度')) return 'lifecycle';
-    if (path.includes('隐私保护')) return 'multimodal';
-    if (path.includes('三维协同记忆图')) return 'memory_graph';
-    return 'extension';
+  function getPage() {
+    return document.body && document.body.getAttribute('data-ppt-page') || 'extension';
+  }
+
+  function getToken() {
+    var value = window.JWT_TOKEN;
+    if (typeof value !== 'string' || !value) return '';
+    if (typeof window.isOfflineToken === 'function' && window.isOfflineToken(value)) return '';
+    return value;
+  }
+
+  function escapeHTML(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (ch) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+    });
+  }
+
+  function ensureStyles() {
+    if (document.getElementById('pptRuntimeStyles')) return;
+    var style = document.createElement('style');
+    style.id = 'pptRuntimeStyles';
+    style.textContent = '.ppt-live-empty{margin:20px 0;padding:28px;border:1px solid #d9e5ee;border-radius:16px;background:#fff;color:#183b56;box-shadow:0 8px 28px rgba(24,59,86,.10)}.ppt-live-empty h2{margin:0 0 8px;font-size:20px}.ppt-live-empty p{margin:6px 0;color:#5f7182;line-height:1.6}.ppt-live-empty code{font-family:ui-monospace,monospace;color:#087f8c;white-space:pre-wrap}.ppt-runtime-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:#e8f5f3;color:#086b75;font-size:12px;font-weight:700}.ppt-runtime-badge.fixture{background:#fff5e5;color:#8a5a13}.ppt-runtime-error{background:#fff1f0;border-color:#f0b9b4;color:#8b2b24}';
+    document.head.appendChild(style);
+  }
+
+  function installPanel(mode) {
+    if (document.getElementById('pptRuntimeStatus')) return document.getElementById('pptRuntimeStatus');
+    var panel = document.createElement('aside');
+    panel.id = 'pptRuntimeStatus';
+    panel.setAttribute('aria-live', 'polite');
+    panel.style.cssText = 'position:fixed;right:18px;bottom:18px;z-index:9999;max-width:380px;padding:12px 14px;border:1px solid #d8e5ea;border-radius:12px;background:#f8fbfc;color:#183b56;box-shadow:0 8px 24px rgba(24,59,86,.14);font:13px/1.5 system-ui,sans-serif';
+    document.body.appendChild(panel);
+    panel.innerHTML = mode === 'offline_fixture'
+      ? '<span class="ppt-runtime-badge fixture">offline_fixture</span><br><span>仅展示静态样例；不会联网、调用模型、写入存储或执行删除。</span>'
+      : '<span class="ppt-runtime-badge">live</span><br><span>正在等待受保护服务端证据……</span>';
+    return panel;
+  }
+
+  function replaceLiveContent(page, title, detail, error) {
+    var container = document.querySelector('.container') || document.body;
+    Array.prototype.forEach.call(container.querySelectorAll('.main-content'), function (node) {
+      node.setAttribute('aria-hidden', 'true');
+      node.style.display = 'none';
+    });
+    var existing = document.getElementById('pptLiveEvidence');
+    if (existing) existing.remove();
+    var card = document.createElement('section');
+    card.id = 'pptLiveEvidence';
+    card.className = 'ppt-live-empty' + (error ? ' ppt-runtime-error' : '');
+    card.innerHTML = '<h2>' + escapeHTML(title) + '</h2><p>' + escapeHTML(detail) + '</p><p><span class="ppt-runtime-badge">live</span> 页面只显示本次受保护请求返回的证据；旧版静态样例已隐藏。</p>';
+    container.appendChild(card);
+  }
+
+  function unwrap(body) {
+    if (body && body.data && typeof body.data === 'object') return body.data;
+    return body || {};
+  }
+
+  function fetchJSON(path, headers) {
+    return fetch(apiBase() + path, { headers: headers }).then(function (response) {
+      return response.json().catch(function () { return {}; }).then(function (body) {
+        if (!response.ok) {
+          var message = body && (body.error || body.message || body.status);
+          throw new Error(message || ('HTTP ' + response.status));
+        }
+        return body;
+      });
+    });
+  }
+
+  function installLive(page, panel) {
+    var bearer = getToken();
+    if (!bearer) {
+      panel.innerHTML = '<span class="ppt-runtime-badge">live</span><br><strong>需要登录后查看实时证据</strong><br><span>未发现有效 JWT；没有回退到静态成功结果。</span>';
+      replaceLiveContent(page, '实时证据不可用', '当前页面需要登录态才能读取受保护 API。请从比赛门户进入，或使用 ?mode=fixture 查看离线样例。', true);
+      return;
+    }
+
+    var headers = { Authorization: 'Bearer ' + bearer, 'X-Trace-ID': 'ppt-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8) };
+    fetchJSON('/api/v1/lifecycle/status', headers).then(function (body) {
+      var data = unwrap(body);
+      var status = data.status || {};
+      var implementation = status.implementation || data.implementation || 'unknown';
+      panel.innerHTML = '<span class="ppt-runtime-badge">live</span><br><strong>服务端证据已返回</strong><br><span>trace_id: <code>' + escapeHTML(body.trace_id || '响应未提供') + '</code></span><br><span>implementation: <code>' + escapeHTML(implementation) + '</code></span>';
+
+      if (page === 'memory_graph') {
+        return fetchJSON('/api/v1/evidence/communities', headers).then(function (communityBody) {
+          var communityData = unwrap(communityBody);
+          var count = Array.isArray(communityData.communities) ? communityData.communities.length : 0;
+          replaceLiveContent(page, '记忆子图实时证据', 'owner-scoped 社区数量：' + count + '。页面不展示未授权的节点原文；详细实体与关系应从受保护 evidence API 获取。');
+          panel.innerHTML += '<br><span>communities: ' + count + ' · owner scope: authenticated_user</span>';
+        });
+      }
+      if (page === 'lifecycle') {
+        var statusJSON = JSON.stringify(status, null, 2);
+        replaceLiveContent(page, '冷热分层实时状态', '生命周期接口已返回服务端状态。当前页面仅显示实时 JSON，不把静态图表当作实测指标。\n' + statusJSON);
+        return;
+      }
+      if (page === 'audit') {
+        replaceLiveContent(page, '黑匣子实时查询尚未配置', '运行时尚未提供受保护 trace 查询接口，因此不显示旧版审计记录。请从比赛控制台查看本次请求的 trace_id。');
+        return;
+      }
+      if (page === 'multimodal') {
+        replaceLiveContent(page, '多模态实时能力待操作', '服务可用，但图像/音频处理必须由用户通过受保护 POST 接口触发。页面不会伪造固定识别率或历史时间戳。');
+        return;
+      }
+      replaceLiveContent(page, '实时服务状态', '服务端已响应，但该页面没有可展示的实时证据接口。');
+    }).catch(function (error) {
+      panel.innerHTML = '<span class="ppt-runtime-badge">live</span><br><strong>无法获取实时证据</strong><br><span>' + escapeHTML(error.message || '服务不可用') + '</span>';
+      replaceLiveContent(page, '实时证据不可用', '服务、认证或 Docker 依赖未就绪。页面保留真实错误，不回退到写死的成功数据。', true);
+    });
   }
 
   function install() {
-    if (!document.body || document.getElementById('pptRuntimeStatus')) return;
-    const panel = document.createElement('aside');
-    panel.id = 'pptRuntimeStatus';
-    panel.setAttribute('aria-live', 'polite');
-    panel.style.cssText = 'position:fixed;right:18px;bottom:18px;z-index:9999;max-width:360px;padding:12px 14px;border:1px solid #d8e5ea;border-radius:12px;background:#f8fbfc;color:#183b56;box-shadow:0 8px 24px rgba(24,59,86,.14);font:13px/1.5 system-ui,sans-serif';
-    document.body.appendChild(panel);
-    const currentMode = mode();
-    if (currentMode === 'offline_fixture') {
-      panel.innerHTML = '<strong>offline_fixture · 受控演示</strong><br><span>不调用服务、模型、数据库、联网 Agent、写入或删除接口。</span>';
-      return;
-    }
-    panel.innerHTML = '<strong>live · 等待受保护响应</strong><br><span>登录后将显示服务端真实能力状态。</span>';
-    const bearer = token();
-    if (!bearer) return;
-    const headers = { Authorization: `Bearer ${bearer}`, 'X-Trace-ID': `ppt-${Date.now()}-${Math.random().toString(36).slice(2, 8)}` };
-    const lifecycle = fetch(`${apiBase()}/api/v1/lifecycle/status`, { headers }).then(r => r.json().then(body => ({ ok: r.ok, body })));
-    lifecycle.then(({ ok, body }) => {
-      const payload = body && body.data && typeof body.data === 'object' ? body.data : body;
-      if (!ok || !payload || payload.success === false) {
-        panel.innerHTML = '<strong>live · 服务状态不可用</strong><br><span>页面保留真实错误状态，未回退到写死结果。</span>';
-        return;
-      }
-      const implementation = payload.implementation || 'unknown';
-      const prototype = implementation === 'in_process_evidence_lifecycle';
-      const extra = pageKind() === 'multimodal'
-        ? '图像/音频接口为内存受控处理，需在比赛控制台执行具体验证。'
-        : pageKind() === 'audit'
-          ? '审计页面不自行生成 Trace 记录，实时证据以受保护接口响应为准。'
-          : pageKind() === 'memory_graph'
-            ? '记忆子图当前按 owner 隔离，进程内实现不等同于持久化图谱。'
-            : '生命周期状态来自服务端，未返回的指标不会在页面显示。';
-      if (pageKind() === 'memory_graph') {
-        fetch(`${apiBase()}/api/v1/evidence/communities`, { headers }).then(r => r.json().then(communityBody => ({ ok: r.ok, communityBody }))).then(({ ok: communityBody }) => {
-          const data = communityBody && communityBody.data && typeof communityBody.data === 'object' ? communityBody.data : communityBody;
-          const count = data && Array.isArray(data.communities) ? data.communities.length : null;
-          const communityText = ok && count !== null ? `服务端 owner-scoped 社区数：${count}（不展示未授权原文）。` : '无法获取 owner-scoped 社区证据，页面保留静态说明。';
-          panel.innerHTML = `<strong>live · ${prototype ? '受控原型' : '服务端状态'}</strong><br><span>implementation: ${String(implementation).replace(/[<>]/g, '')}</span><br><span>${communityText}</span><br><span>${extra}</span>`;
-        }).catch(() => {
-          panel.innerHTML = `<strong>live · ${prototype ? '受控原型' : '服务端状态'}</strong><br><span>implementation: ${String(implementation).replace(/[<>]/g, '')}</span><br><span>无法获取 owner-scoped 社区证据，页面保留静态说明。</span>`;
-        });
-        return;
-      }
-      panel.innerHTML = `<strong>live · ${prototype ? '受控原型' : '服务端状态'}</strong><br><span>implementation: ${String(implementation).replace(/[<>]/g, '')}</span><br><span>${extra}</span>`;
-    }).catch(() => {
-      panel.innerHTML = '<strong>live · 服务不可用</strong><br><span>无法获取实时证据，请检查服务、认证和 Docker 依赖。</span>';
-    });
+    if (!document.body) return;
+    ensureStyles();
+    var currentMode = getMode();
+    root.setAttribute('data-runtime-mode', currentMode);
+    document.body.setAttribute('data-runtime-mode', currentMode);
+    var panel = installPanel(currentMode);
+    if (currentMode === 'live') installLive(getPage(), panel);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install);
