@@ -72,7 +72,12 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 		req.MinConfidence = 0.5
 	}
 	if !req.UseRules && !req.UsePMI && !req.UseLLM {
-		req.UseLLM = true // 默认使用LLM
+		// Keep the endpoint useful when Ollama is unavailable: deterministic
+		// candidates run first, with the model used only as arbitration. The
+		// extractor reports an explicit abstention for unsupported text.
+		req.UseRules = true
+		req.UsePMI = true
+		req.UseLLM = true
 	}
 
 	startTime := time.Now()

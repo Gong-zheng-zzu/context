@@ -101,6 +101,31 @@ func TestExtractCausalRelationsIsAnalysisOnlyWithoutPersistFlag(t *testing.T) {
 	}
 }
 
+func TestExtractCausalRelationsDefaultsToOfflineSafeCascade(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	handler := &CausalReasoningHandler{extractor: causal_reasoning.NewEntityExtractor(nil)}
+	request := httptest.NewRequest(http.MethodPost, "/causal/extract", strings.NewReader(`{"text":"鎮ｈ€呮湇鐢ㄩ檷鍘嬭嵂鍚庡嚭鐜颁綋浣嶆€т綆琛€鍘嬪苟鏈夎穼鍊掗闄?"}`))
+	request.Header.Set("Content-Type", "application/json")
+	response := httptest.NewRecorder()
+	router := gin.New()
+	router.POST("/causal/extract", handler.ExtractCausalRelations)
+	router.ServeHTTP(response, request)
+
+	if response.Code != http.StatusOK {
+		t.Fatalf("status=%d body=%s", response.Code, response.Body.String())
+	}
+	var body causal_reasoning.ExtractResponse
+	if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil {
+		t.Fatalf("decode response: %v", err)
+	}
+	if body.Execution == nil || !body.Execution.UseRules || !body.Execution.UseLLM {
+		t.Fatalf("execution=%+v, want rules plus bounded model cascade", body.Execution)
+	}
+	if len(body.Relations) == 0 || body.Execution.Mode != "rules_fallback" {
+		t.Fatalf("relations=%+v execution=%+v, want deterministic offline fallback", body.Relations, body.Execution)
+	}
+}
+
 func TestCausalResultLimit(t *testing.T) {
 	testCases := []struct {
 		name    string
