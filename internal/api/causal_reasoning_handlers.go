@@ -83,7 +83,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 	if h.securityService != nil {
 		normalizedText, _, _, _ := h.securityService.DefendAndNormalize(req.Text)
 		securityExecution.InputNormalized = normalizedText != req.Text
-		scanResult, err := h.securityService.ScanContent(c.Request.Context(), "causal-analysis", causalUserID(c), req.Text)
+		scanResult, err := h.securityService.ScanContentDeterministic(c.Request.Context(), "causal-analysis", causalUserID(c), req.Text)
 		if err != nil {
 			c.JSON(http.StatusServiceUnavailable, gin.H{"error": "causal input security check failed"})
 			return

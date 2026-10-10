@@ -426,6 +426,42 @@ func (s *SecurityService) ScanContent(ctx context.Context, sessionID, userID, co
 	return result, nil
 }
 
+// ScanContentDeterministic runs the competition pre-generation security path
+// without the optional LLM layer. It is intended for latency-sensitive APIs
+// such as causal extraction: ASDF, CASIA and PCCM-S remain auditable while a
+// model outage cannot hold the request until the LLM timeout expires.
+func (s *SecurityService) ScanContentDeterministic(ctx context.Context, sessionID, userID, content string) (*ScanResult, error) {
+	if s == nil || s.detector == nil || s.asdfFramework == nil {
+		return nil, fmt.Errorf("deterministic security pipeline is unavailable")
+	}
+	started := time.Now()
+	audit, err := s.EvaluateSecurityProfile(ctx, "asdf_casia_pccm", content)
+	if err != nil {
+		return nil, err
+	}
+	redacted, infos := s.detector.DetectAndRedact(audit.ASDF.NormalizedText)
+	result := &ScanResult{
+		SessionID: sessionID, UserID: userID, OriginalContent: content,
+		RedactedContent: redacted, SensitiveInfos: infos,
+		Actions: make([]Action, 0), Timestamp: started,
+		Metadata: map[string]interface{}{
+			"multi_layer_used": true,
+			"llm_invoked":      false,
+			"profile":          audit.Profile,
+			"profile_evidence": audit,
+			"configuration":    s.GetMultiLayerConfiguration(),
+		},
+		ScanTime: time.Since(started),
+	}
+	if len(infos) == 0 && len(audit.SensitiveTypes) > 0 {
+		// Preserve the conservative decision from CASIA/PCCM even when a
+		// normalized span is not available to the legacy redactor.
+		result.RedactedContent = content
+	}
+	s.updateStats(infos)
+	return result, nil
+}
+
 // GetMultiLayerConfiguration returns the effective service configuration for
 // API audit output. It is safe to call while scans are running.
 func (s *SecurityService) GetMultiLayerConfiguration() MultiLayerSecurityConfiguration {
