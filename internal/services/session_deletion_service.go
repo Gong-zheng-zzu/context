@@ -380,6 +380,7 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 		result.Stores = append(result.Stores, localResult)
 		if auditErr := s.audit(result); auditErr != nil {
 			result.AuditError = auditErr.Error()
+			return result, auditErr
 		}
 		return result, nil
 	}
@@ -393,6 +394,8 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 		result.Complete = true
 		if auditErr := s.audit(result); auditErr != nil {
 			result.AuditError = auditErr.Error()
+			result.Complete = false
+			return result, auditErr
 		}
 		return result, nil
 	}

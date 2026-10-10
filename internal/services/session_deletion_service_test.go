@@ -237,6 +237,24 @@ func TestSessionDeletionVerificationIDIsStableAcrossRetries(t *testing.T) {
 	}
 }
 
+func TestSessionDeletionFailsClosedWhenAuditChainCannotAppend(t *testing.T) {
+	sessionStore := newOwnedSessionStore(t, "owner", "session-audit-failure")
+	service := NewSessionDeletionService(sessionStore)
+	auditDirectory := t.TempDir()
+	chain, err := NewAuditChain(auditDirectory)
+	if err != nil {
+		t.Fatalf("create audit chain: %v", err)
+	}
+	service.SetAuditChain(chain)
+	result, err := service.Delete(context.Background(), "owner", "session-audit-failure", false)
+	if err == nil || result.Complete || result.AuditError == "" {
+		t.Fatalf("audit failure must fail closed: result=%#v err=%v", result, err)
+	}
+	if _, ownerErr := sessionStore.GetSessionOwner("session-audit-failure"); ownerErr != nil {
+		t.Fatalf("audit failure must preserve local session: %v", ownerErr)
+	}
+}
+
 func TestSessionDeletionVectorReplicaUsesConfiguredCollectionAndSessionScope(t *testing.T) {
 	sessionStore := newOwnedSessionStore(t, "owner", "session-e")
 	vectorStore := &fakeSessionVectorStore{records: []*models.VectorRecord{
