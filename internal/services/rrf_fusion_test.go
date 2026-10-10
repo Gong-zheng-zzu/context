@@ -301,3 +301,33 @@ func TestApplyRRFFusionToRetrievalEnabled(t *testing.T) {
 		t.Errorf("原始 doc_id 应保留, 实际 %v", matchB.Metadata["doc_id"])
 	}
 }
+
+func TestApplyRRFFusionToRetrievalDeduplicatesCrossSourceDocumentIDs(t *testing.T) {
+	vector := &models.VectorMatch{ID: "v-doc", Content: "same", Score: 0.9, Metadata: map[string]interface{}{"doc_id": "doc-same"}}
+	graph := &models.KnowledgeNode{ID: "g-doc", Name: "same", Properties: map[string]interface{}{"doc_id": "doc-same"}}
+	other := &models.VectorMatch{ID: "v-other", Content: "other", Score: 0.1, Metadata: map[string]interface{}{"doc_id": "doc-other"}}
+	retrieval := &RetrievalResults{Results: []interface{}{vector, graph, other}, Sources: []string{"vector", "knowledge", "vector"}}
+
+	audit := ApplyRRFFusionToRetrieval(retrieval, DefaultRRFConfig())
+	if audit == nil || audit.FusionMode != "rrf_2_sources" {
+		t.Fatalf("expected two-source audit, got %#v", audit)
+	}
+	if len(retrieval.Results) != 2 {
+		t.Fatalf("expected unique doc IDs in production result, got %d", len(retrieval.Results))
+	}
+	seen := map[string]bool{}
+	for _, raw := range retrieval.Results {
+		match, ok := raw.(*models.VectorMatch)
+		if !ok {
+			continue
+		}
+		docID, _ := match.Metadata["doc_id"].(string)
+		if seen[docID] {
+			t.Fatalf("duplicate doc_id remained: %q", docID)
+		}
+		seen[docID] = true
+	}
+	if !seen["doc-same"] || !seen["doc-other"] {
+		t.Fatalf("unexpected document IDs after fusion: %#v", seen)
+	}
+}

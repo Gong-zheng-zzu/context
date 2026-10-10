@@ -154,9 +154,9 @@ type SourcedCandidate struct {
 type FusedCandidate struct {
 	DocID       string
 	Content     string
-	Score       float64         // 加权 RRF 分数：sum(weight[source] / (K + rank))
-	SourceRanks map[string]int  // 各来源中的名次（从1开始）
-	Sources     []string        // 命中的来源（已排序）
+	Score       float64        // 加权 RRF 分数：sum(weight[source] / (K + rank))
+	SourceRanks map[string]int // 各来源中的名次（从1开始）
+	Sources     []string       // 命中的来源（已排序）
 	Metadata    map[string]interface{}
 }
 
@@ -345,7 +345,7 @@ func ApplyRRFFusionToRetrieval(retrieval *RetrievalResults, cfg RRFConfig) *Fusi
 	}
 
 	// 提取候选并记录候选所属的结果下标（用于把融合分数映射回原始结果）
-	docIDToResultIndex := make(map[string]int)
+	docIDToResultIndices := make(map[string][]int)
 	candidates := make([]SourcedCandidate, 0)
 	for index, result := range retrieval.Results {
 		if index >= len(retrieval.Sources) {
@@ -359,9 +359,7 @@ func ApplyRRFFusionToRetrieval(retrieval *RetrievalResults, cfg RRFConfig) *Fusi
 			if candidate.DocID == "" {
 				continue
 			}
-			if _, seen := docIDToResultIndex[candidate.DocID]; !seen {
-				docIDToResultIndex[candidate.DocID] = index
-			}
+			docIDToResultIndices[candidate.DocID] = appendUniqueIndex(docIDToResultIndices[candidate.DocID], index)
 			candidates = append(candidates, SourcedCandidate{
 				DocID:    candidate.DocID,
 				Content:  candidate.Content,
@@ -383,7 +381,7 @@ func ApplyRRFFusionToRetrieval(retrieval *RetrievalResults, cfg RRFConfig) *Fusi
 	best := make(map[int]*FusedCandidate)
 	for index := range fused {
 		fc := &fused[index]
-		if resultIndex, ok := docIDToResultIndex[fc.DocID]; ok {
+		if resultIndex, ok := representativeResultIndex(fc, docIDToResultIndices, retrieval.Sources); ok {
 			if current, exists := best[resultIndex]; !exists || fc.Score > current.Score {
 				best[resultIndex] = fc
 			}
@@ -426,12 +424,21 @@ func ApplyRRFFusionToRetrieval(retrieval *RetrievalResults, cfg RRFConfig) *Fusi
 		}
 		return leftScore > rightScore
 	})
-	newResults := make([]interface{}, len(retrieval.Results))
-	newSources := make([]string, len(retrieval.Results))
-	for position, originalIndex := range order {
-		newResults[position] = retrieval.Results[originalIndex]
+	newResults := make([]interface{}, 0, len(retrieval.Results))
+	newSources := make([]string, 0, len(retrieval.Results))
+	seenDocIDs := make(map[string]struct{}, len(best))
+	for _, originalIndex := range order {
+		if fc, ok := best[originalIndex]; ok {
+			if _, seen := seenDocIDs[fc.DocID]; seen {
+				continue
+			}
+			seenDocIDs[fc.DocID] = struct{}{}
+		}
+		newResults = append(newResults, retrieval.Results[originalIndex])
 		if originalIndex < len(retrieval.Sources) {
-			newSources[position] = retrieval.Sources[originalIndex]
+			newSources = append(newSources, retrieval.Sources[originalIndex])
+		} else {
+			newSources = append(newSources, "")
 		}
 	}
 	retrieval.Results = newResults
@@ -443,13 +450,37 @@ func ApplyRRFFusionToRetrieval(retrieval *RetrievalResults, cfg RRFConfig) *Fusi
 	return &audit
 }
 
+func appendUniqueIndex(indices []int, index int) []int {
+	for _, existing := range indices {
+		if existing == index {
+			return indices
+		}
+	}
+	return append(indices, index)
+}
+
+func representativeResultIndex(candidate *FusedCandidate, indices map[string][]int, sources []string) (int, bool) {
+	choices := indices[candidate.DocID]
+	if len(choices) == 0 {
+		return 0, false
+	}
+	for _, preferred := range candidate.Sources {
+		for _, index := range choices {
+			if index < len(sources) && sources[index] == preferred {
+				return index, true
+			}
+		}
+	}
+	return choices[0], true
+}
+
 // setRetrievalFusionMetadata 在检索结果集上记录融合级审计信息
 func setRetrievalFusionMetadata(retrieval *RetrievalResults, audit *FusionAudit) {
 	if retrieval == nil || audit == nil {
 		return
 	}
 	retrieval.FusionMetadata = map[string]interface{}{
-		"retrieval_fusion_mode":   audit.FusionMode,
+		"retrieval_fusion_mode":    audit.FusionMode,
 		"retrieval_active_sources": audit.ActiveSources,
 		"retrieval_empty_sources":  audit.EmptySources,
 		"source_candidate_counts":  audit.SourceCandidateCounts,
