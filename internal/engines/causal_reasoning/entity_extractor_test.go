@@ -266,3 +266,23 @@ func TestGenericCausalExtractionHandlesSecondEdgeTrigger(t *testing.T) {
 		t.Fatalf("relation=%+v", relation)
 	}
 }
+
+func TestEvidenceSpansRoundTripWithChineseRunesAndSeparators(t *testing.T) {
+	text := "患者服用降压药后出现体位性低血压，然后跌倒"
+	relation := CausalRelation{
+		Object: "患者", Mediator: "服用降压药", Property: "体位性低血压", Result: "跌倒",
+	}
+	spans := spansForRelation(text, relation)
+	if len(spans) != 3 {
+		t.Fatalf("spans=%+v, want mediator/property/result spans", spans)
+	}
+	runes := []rune(text)
+	for _, span := range spans {
+		if span.Start < 0 || span.End <= span.Start || span.End > len(runes) {
+			t.Fatalf("invalid rune offsets: %+v (runes=%d)", span, len(runes))
+		}
+		if got := string(runes[span.Start:span.End]); got != span.Text {
+			t.Fatalf("span %s does not round trip: got %q offsets=%d:%d", span.Field, got, span.Start, span.End)
+		}
+	}
+}

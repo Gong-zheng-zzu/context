@@ -29,7 +29,9 @@ type CausalRelation struct {
 }
 
 // EvidenceSpan identifies the exact source span supporting a field. Offsets
-// are byte offsets, matching Go string slicing semantics.
+// are rune offsets in the original source text so Chinese evidence can be
+// highlighted without splitting a UTF-8 code point. The API serializes these
+// offsets as integers; callers should slice []rune(source), not source bytes.
 type EvidenceSpan struct {
 	Field string `json:"field"`
 	Text  string `json:"text"`

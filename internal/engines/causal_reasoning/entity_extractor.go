@@ -1106,17 +1106,43 @@ func detectPatient(text string) string {
 
 func spansForRelation(text string, relation CausalRelation) []EvidenceSpan {
 	spans := make([]EvidenceSpan, 0, 4)
-	n := normalizeForLookup(text)
 	for _, field := range []struct{ name, value string }{{"object", relation.Object}, {"mediator", relation.Mediator}, {"property", relation.Property}, {"result", relation.Result}} {
 		if field.value == "" || field.value == "患者" {
 			continue
 		}
-		start := strings.Index(n, normalizeForLookup(field.value))
-		if start >= 0 {
-			spans = append(spans, EvidenceSpan{Field: field.name, Text: field.value, Start: start, End: start + len(field.value)})
+		if start, end, sourceText, ok := findNormalizedSourceSpan(text, field.value); ok {
+			spans = append(spans, EvidenceSpan{Field: field.name, Text: sourceText, Start: start, End: end})
 		}
 	}
 	return spans
+}
+
+// findNormalizedSourceSpan returns rune offsets into the original source. The
+// causal matcher intentionally ignores separators and normalizes case, so a
+// byte offset in normalizeForLookup(text) cannot be used for UI highlighting.
+// Nursing records are short; an O(n^2) rune scan is preferable to an opaque
+// offset translation table and keeps the mapping correct for every separator.
+func findNormalizedSourceSpan(source, value string) (start, end int, matched string, ok bool) {
+	target := normalizeForLookup(value)
+	if target == "" {
+		return 0, 0, "", false
+	}
+	runes := []rune(source)
+	for i := 0; i < len(runes); i++ {
+		for j := i + 1; j <= len(runes); j++ {
+			candidate := string(runes[i:j])
+			if normalizeForLookup(candidate) == target {
+				return i, j, candidate, true
+			}
+			// Once the normalized candidate has passed the target length and
+			// does not only contain ignorable separators, extending it cannot
+			// produce the same field.
+			if len([]rune(normalizeForLookup(candidate))) > len([]rune(target)) && strings.TrimSpace(candidate) != "" {
+				break
+			}
+		}
+	}
+	return 0, 0, "", false
 }
 
 // matchRules 匹配规则并计算规则置信度
