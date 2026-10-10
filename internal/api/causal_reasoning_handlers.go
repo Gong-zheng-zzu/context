@@ -477,9 +477,6 @@ func (h *CausalReasoningHandler) GetGraphStats(c *gin.Context) {
 // GetRelatedCauses 获取相关原因
 // GET /api/v1/causal/causes/:entity
 func (h *CausalReasoningHandler) GetRelatedCauses(c *gin.Context) {
-	if !h.requireGraph(c) {
-		return
-	}
 	entity := c.Param("entity")
 	if entity == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少实体参数"})
@@ -489,6 +486,9 @@ func (h *CausalReasoningHandler) GetRelatedCauses(c *gin.Context) {
 	limit, err := causalResultLimit(c.Query("limit"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的limit参数", "details": "limit必须是1到100之间的整数"})
+		return
+	}
+	if !h.requireGraph(c) {
 		return
 	}
 
@@ -508,9 +508,6 @@ func (h *CausalReasoningHandler) GetRelatedCauses(c *gin.Context) {
 // GetRelatedEffects 获取相关结果
 // GET /api/v1/causal/effects/:entity
 func (h *CausalReasoningHandler) GetRelatedEffects(c *gin.Context) {
-	if !h.requireGraph(c) {
-		return
-	}
 	entity := c.Param("entity")
 	if entity == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "缺少实体参数"})
@@ -520,6 +517,9 @@ func (h *CausalReasoningHandler) GetRelatedEffects(c *gin.Context) {
 	limit, err := causalResultLimit(c.Query("limit"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "无效的limit参数", "details": "limit必须是1到100之间的整数"})
+		return
+	}
+	if !h.requireGraph(c) {
 		return
 	}
 
