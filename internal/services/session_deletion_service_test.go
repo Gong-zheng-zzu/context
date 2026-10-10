@@ -204,6 +204,39 @@ func TestSessionDeletionDryRunPreservesAllStores(t *testing.T) {
 	}
 }
 
+func TestSessionDeletionFailsClosedWhenReplicaIsUnavailable(t *testing.T) {
+	sessionStore := newOwnedSessionStore(t, "owner", "session-unavailable")
+	service := NewSessionDeletionService(sessionStore,
+		sessionReplicaBinding{name: "neo4j", skipReason: "not enabled"},
+	)
+	result, err := service.Delete(context.Background(), "owner", "session-unavailable", false)
+	if err == nil || result.Complete {
+		t.Fatalf("unavailable replica must fail closed: result=%#v err=%v", result, err)
+	}
+	if len(result.Stores) != 1 || result.Stores[0].Status != "unavailable" {
+		t.Fatalf("unexpected unavailable store evidence: %#v", result.Stores)
+	}
+	if _, ownerErr := sessionStore.GetSessionOwner("session-unavailable"); ownerErr != nil {
+		t.Fatalf("failed deletion must preserve local session: %v", ownerErr)
+	}
+}
+
+func TestSessionDeletionVerificationIDIsStableAcrossRetries(t *testing.T) {
+	firstStore := newOwnedSessionStore(t, "owner", "session-stable")
+	first, err := NewSessionDeletionService(firstStore, sessionReplicaBinding{name: "timescaledb", replica: &fakeSessionReplica{count: 1}}).Delete(context.Background(), "owner", "session-stable", true)
+	if err != nil {
+		t.Fatalf("first dry run: %v", err)
+	}
+	secondStore := newOwnedSessionStore(t, "owner", "session-stable")
+	second, err := NewSessionDeletionService(secondStore, sessionReplicaBinding{name: "timescaledb", replica: &fakeSessionReplica{count: 1}}).Delete(context.Background(), "owner", "session-stable", true)
+	if err != nil {
+		t.Fatalf("second dry run: %v", err)
+	}
+	if first.VerificationID != second.VerificationID || first.EvidenceSHA256 != second.EvidenceSHA256 {
+		t.Fatalf("stable proof identity changed: first=%#v second=%#v", first, second)
+	}
+}
+
 func TestSessionDeletionVectorReplicaUsesConfiguredCollectionAndSessionScope(t *testing.T) {
 	sessionStore := newOwnedSessionStore(t, "owner", "session-e")
 	vectorStore := &fakeSessionVectorStore{records: []*models.VectorRecord{

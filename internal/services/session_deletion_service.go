@@ -130,6 +130,7 @@ type SessionDeletionResult struct {
 	VerifiedAt     time.Time `json:"verified_at"`
 	ScopeSHA256    string    `json:"scope_sha256"`
 	EvidenceSHA256 string    `json:"evidence_sha256,omitempty"`
+	AuditError     string    `json:"audit_error,omitempty"`
 	// Complete is true only after every configured durable replica and the
 	// local session cache/file have been verified as deleted.
 	Complete bool                         `json:"complete"`
@@ -264,7 +265,9 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 	verifiedAt := time.Now().UTC()
 	traceID := utils.GetTraceIDFromContext(ctx)
 	scopeHash := fmt.Sprintf("%x", sha256.Sum256([]byte(userID+"\x1f"+sessionID)))
-	verificationHash := sha256.Sum256([]byte(scopeHash + "\x1f" + traceID + "\x1f" + verifiedAt.Format(time.RFC3339Nano)))
+	// Keep verification identity stable across retries. Trace and timestamp
+	// remain separate fields in the returned audit record.
+	verificationHash := sha256.Sum256([]byte(scopeHash + "\x1f" + fmt.Sprintf("%t", dryRun)))
 	result := &SessionDeletionResult{
 		SessionID: sessionID, UserID: userID, DryRun: dryRun,
 		VerificationID: fmt.Sprintf("del-%x", verificationHash[:8]), TraceID: traceID,
@@ -285,10 +288,14 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 	for _, binding := range s.replicas {
 		storeResult := SessionDeletionStoreResult{Store: binding.name}
 		if binding.replica == nil {
-			storeResult.Status = "skipped"
+			storeResult.Status = "unavailable"
 			storeResult.Error = binding.skipReason
 			result.Stores = append(result.Stores, storeResult)
-			continue
+			result.Complete = false
+			if err := s.audit(result); err != nil {
+				result.AuditError = err.Error()
+			}
+			return result, fmt.Errorf("%s replica is unavailable: %s", binding.name, binding.skipReason)
 		}
 
 		before, err := binding.replica.CountSessionReplicaRecords(ctx, userID, sessionID)
@@ -297,7 +304,9 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 			storeResult.Status = "failed"
 			storeResult.Error = err.Error()
 			result.Stores = append(result.Stores, storeResult)
-			s.audit(result)
+			if auditErr := s.audit(result); auditErr != nil {
+				result.AuditError = auditErr.Error()
+			}
 			return result, fmt.Errorf("count %s replica: %w", binding.name, err)
 		}
 		if dryRun {
@@ -313,7 +322,9 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 			storeResult.Status = "failed"
 			storeResult.Error = err.Error()
 			result.Stores = append(result.Stores, storeResult)
-			s.audit(result)
+			if auditErr := s.audit(result); auditErr != nil {
+				result.AuditError = auditErr.Error()
+			}
 			return result, fmt.Errorf("delete %s replica: %w", binding.name, err)
 		}
 		after, err := binding.replica.CountSessionReplicaRecords(ctx, userID, sessionID)
@@ -326,7 +337,9 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 				storeResult.Error = fmt.Sprintf("verification found %d remaining records", after)
 			}
 			result.Stores = append(result.Stores, storeResult)
-			s.audit(result)
+			if auditErr := s.audit(result); auditErr != nil {
+				result.AuditError = auditErr.Error()
+			}
 			if err != nil {
 				return result, fmt.Errorf("verify %s replica: %w", binding.name, err)
 			}
@@ -352,7 +365,9 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 		localResult.Status = "failed"
 		localResult.Error = err.Error()
 		result.Stores = append(result.Stores, localResult)
-		s.audit(result)
+		if auditErr := s.audit(result); auditErr != nil {
+			result.AuditError = auditErr.Error()
+		}
 		return result, fmt.Errorf("count session file/cache: %w", err)
 	}
 	if err != nil {
@@ -363,7 +378,9 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 		localResult.Status = "dry_run"
 		localResult.After = before
 		result.Stores = append(result.Stores, localResult)
-		s.audit(result)
+		if auditErr := s.audit(result); auditErr != nil {
+			result.AuditError = auditErr.Error()
+		}
 		return result, nil
 	}
 	if before == 0 {
@@ -374,7 +391,9 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 		localResult.After = 0
 		result.Stores = append(result.Stores, localResult)
 		result.Complete = true
-		s.audit(result)
+		if auditErr := s.audit(result); auditErr != nil {
+			result.AuditError = auditErr.Error()
+		}
 		return result, nil
 	}
 
@@ -384,7 +403,9 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 		localResult.Status = "failed"
 		localResult.Error = err.Error()
 		result.Stores = append(result.Stores, localResult)
-		s.audit(result)
+		if auditErr := s.audit(result); auditErr != nil {
+			result.AuditError = auditErr.Error()
+		}
 		return result, fmt.Errorf("delete session file/cache: %w", err)
 	}
 	after, err := s.sessionStore.SessionArtifactCountAfterDeletion(sessionID)
@@ -397,7 +418,9 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 			localResult.Error = fmt.Sprintf("verification found %d remaining artifacts", after)
 		}
 		result.Stores = append(result.Stores, localResult)
-		s.audit(result)
+		if auditErr := s.audit(result); auditErr != nil {
+			result.AuditError = auditErr.Error()
+		}
 		if err != nil {
 			return result, fmt.Errorf("verify session file/cache: %w", err)
 		}
@@ -406,16 +429,30 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 	localResult.Status = "deleted"
 	result.Stores = append(result.Stores, localResult)
 	result.Complete = true
-	s.audit(result)
+	if auditErr := s.audit(result); auditErr != nil {
+		result.AuditError = auditErr.Error()
+		result.Complete = false
+		return result, auditErr
+	}
 	return result, nil
 }
 
-func (s *SessionDeletionService) audit(result *SessionDeletionResult) {
+func (s *SessionDeletionService) audit(result *SessionDeletionResult) error {
 	result.EvidenceSHA256 = ""
-	canonical, err := json.Marshal(result)
+	canonical, err := json.Marshal(struct {
+		SessionID   string                       `json:"session_id"`
+		UserID      string                       `json:"user_id"`
+		DryRun      bool                         `json:"dry_run"`
+		ScopeSHA256 string                       `json:"scope_sha256"`
+		Complete    bool                         `json:"complete"`
+		Stores      []SessionDeletionStoreResult `json:"stores"`
+	}{
+		SessionID: result.SessionID, UserID: result.UserID, DryRun: result.DryRun,
+		ScopeSHA256: result.ScopeSHA256, Complete: result.Complete, Stores: result.Stores,
+	})
 	if err != nil {
 		log.Printf("[session-delete] evidence marshal failed: %v", err)
-		return
+		return err
 	}
 	result.EvidenceSHA256 = fmt.Sprintf("%x", sha256.Sum256(canonical))
 	if s.auditChain != nil {
@@ -441,6 +478,7 @@ func (s *SessionDeletionService) audit(result *SessionDeletionResult) {
 		chainHash, err := s.auditChain.Append(receipt)
 		if err != nil {
 			log.Printf("[session-delete] append-only audit unavailable: %v", err)
+			return fmt.Errorf("append-only audit unavailable: %w", err)
 		} else {
 			log.Printf("[session-delete] audit_chain_event_hash=%s", chainHash)
 		}
@@ -448,7 +486,8 @@ func (s *SessionDeletionService) audit(result *SessionDeletionResult) {
 	payload, err := json.Marshal(result)
 	if err != nil {
 		log.Printf("[session-delete] audit marshal failed: %v", err)
-		return
+		return err
 	}
 	log.Printf("[session-delete] audit=%s", payload)
+	return nil
 }
