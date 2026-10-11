@@ -12,6 +12,8 @@ class PptExperimentClaimsTests(unittest.TestCase):
     def test_claim_manifest_has_explicit_evidence_boundaries(self):
         payload = json.loads(CLAIMS.read_text(encoding="utf-8"))
         self.assertEqual(payload["schema_version"], "1.0")
+        self.assertRegex(payload["source_ppt_sha256"], r"^[0-9a-f]{64}$")
+        self.assertEqual(payload["source_ppt_slide_count"], 25)
         self.assertGreaterEqual(len(payload["claims"]), 6)
         required = {"id", "slides", "statement", "evidence_level", "formal_result", "source"}
         for claim in payload["claims"]:

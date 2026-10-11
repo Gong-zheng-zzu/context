@@ -2,6 +2,8 @@
   "schema_version": "1.0",
   "reviewed_at": "2026-10-11",
   "source_ppt": "忆安智护（第六改）.pptx",
+  "source_ppt_sha256": "7201f8f71d088d8a8f9d65d0fb43d32f319894a6977ed191d1341c6e8f6a4cdc",
+  "source_ppt_slide_count": 25,
   "claim_policy": {
     "formal_result_requires": [
       "dataset_sha256",
