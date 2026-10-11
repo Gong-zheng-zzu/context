@@ -352,6 +352,63 @@ func (cre *ContextRuleEngine) LoadDefaultRules() {
 		BaseScore: 0.6,
 		Priority:  7,
 	})
+
+	// Semantic descriptions are common in care notes when an operator avoids
+	// writing the value itself (for example, "138 开头的 11 位号码"). These
+	// deterministic rules turn the description into an auditable sensitive span
+	// without inventing the missing value. They deliberately require both a
+	// sensitive subject and a shape/length clue, which keeps ordinary dates,
+	// room numbers and postal codes outside the semantic path.
+	cre.AddRule(&ContextRule{
+		ID:         "semantic_id_shape_008",
+		Type:       SensitiveTypeIDCard,
+		Pattern:    `(?:身份证|证件)(?:号码|号|前六位)?.{0,16}(?:十八|18).{0,8}(?:位|个)?(?:数字|号码)`,
+		Triggers:   []string{"身份证", "证件"},
+		Suppressors: []string{"邮编", "邮政", "订单", "快递"},
+		WindowSize:  32,
+		BaseScore:  0.72,
+		Priority:   6,
+	})
+	cre.AddRule(&ContextRule{
+		ID:         "semantic_phone_shape_009",
+		Type:       SensitiveTypePhone,
+		Pattern:    `(?:手机号|手机号码|联系电话|电话).{0,10}(?:1[3-9]\d|十一|11).{0,10}(?:位|号码)`,
+		Triggers:   []string{"手机号", "手机", "电话"},
+		Suppressors: []string{"分机", "座机", "示例"},
+		WindowSize:  30,
+		BaseScore:  0.72,
+		Priority:   6,
+	})
+	cre.AddRule(&ContextRule{
+		ID:         "semantic_medical_record_shape_010",
+		Type:       SensitiveTypeMedicalRecord,
+		Pattern:    `病历号.{0,10}(?i:MR).{0,14}(?:八|8).{0,6}(?:位|数字)`,
+		Triggers:   []string{"病历号", "病历"},
+		Suppressors: []string{"示例", "模板"},
+		WindowSize:  32,
+		BaseScore:  0.72,
+		Priority:   6,
+	})
+	cre.AddRule(&ContextRule{
+		ID:         "semantic_blood_pressure_shape_011",
+		Type:       SensitiveTypeBloodPressure,
+		Pattern:    `血压.{0,14}(?:一百二十|120).{0,6}(?:比|/).{0,6}(?:八十|80)`,
+		Triggers:   []string{"血压", "测量"},
+		Suppressors: []string{"示例", "模板"},
+		WindowSize:  32,
+		BaseScore:  0.72,
+		Priority:   6,
+	})
+	cre.AddRule(&ContextRule{
+		ID:         "semantic_id_components_012",
+		Type:       SensitiveTypeIDCard,
+		Pattern:    `(?:身份证|证件).{0,10}(?:前六位|前6位).{0,18}(?:出生日期).{0,10}(?:顺序码|四位)`,
+		Triggers:   []string{"身份证", "出生日期"},
+		Suppressors: []string{"邮编", "邮政", "订单"},
+		WindowSize:  36,
+		BaseScore:  0.72,
+		Priority:   6,
+	})
 }
 
 // LoadRulesFromJSON 从JSON加载规则
