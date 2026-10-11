@@ -186,8 +186,18 @@
         return;
       }
       if (page === 'audit') {
-        replaceLiveContent(page, '黑匣子实时查询尚未配置', '运行时尚未提供受保护 trace 查询接口，因此不显示旧版审计记录。请从比赛控制台查看本次请求的 trace_id。');
-        return;
+        var traceID = body.trace_id || '';
+        if (!traceID) {
+          replaceLiveContent(page, '黑匣子实时查询不可用', '服务端没有返回可查询的 trace_id；页面不会渲染旧版静态审计记录。');
+          return;
+        }
+        return fetchJSON('/api/v1/audit/traces/' + encodeURIComponent(traceID), headers).then(function (traceBody) {
+          var traceData = unwrap(traceBody);
+          replaceLiveContent(page, '黑匣子实时证据', '本次请求的受保护 trace 已返回。原文、令牌和内部推理不会在黑匣子页面展示。\n' + JSON.stringify(traceData, null, 2));
+          panel.innerHTML += '<br><span>trace: <code>' + escapeHTML(traceID) + '</code> · stage: ' + escapeHTML(traceData.stage || 'unknown') + '</span>';
+        }).catch(function (error) {
+          replaceLiveContent(page, '黑匣子暂时没有可查询证据', 'trace_id 已生成，但服务端尚未缓存该阶段证据：' + (error.message || 'unknown error'));
+        });
       }
       if (page === 'multimodal') {
         replaceLiveContent(page, '多模态实时能力待操作', '服务可用，但图像/音频处理必须由用户通过受保护 POST 接口触发。页面不会伪造固定识别率或历史时间戳。');

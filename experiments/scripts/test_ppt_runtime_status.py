@@ -34,6 +34,7 @@ class PptRuntimeStatusContractTest(unittest.TestCase):
 
     def test_bridge_reads_server_owned_status(self):
         self.assertIn("/api/v1/lifecycle/status", self.script)
+        self.assertIn("/api/v1/audit/traces/", self.script)
         self.assertIn("/api/v1/evidence/communities", self.script)
         self.assertIn("/api/v1/multimodal/image/deidentify", self.script)
         self.assertIn("/api/v1/multimodal/audio/privacy-analysis", self.script)

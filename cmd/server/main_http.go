@@ -443,6 +443,13 @@ func setupRoutesAndStartServer(router *gin.Engine, handler *api.Handler, cfg *co
 		protected.GET("/recommendations", api.GetRecommendationsHandler)
 		protected.POST("/call-caregiver", api.CallCaregiverHandler)
 		protected.POST("/family-message", api.FamilyMessageHandler)
+
+		// These capabilities are mounted only in the authenticated competition
+		// process. No standalone demo listener is part of the runtime path.
+		handler.RegisterCompetitionCapabilityRoutes(protected)
+		handler.RegisterCompetitionMultimodalRoutes(protected)
+		handler.RegisterAuditTraceRoutes(protected)
+		protected.GET("/v1/evidence/summary", handler.HandleCompetitionEvidenceSummary)
 	}
 
 	log.Println("✅ 受保护路由注册成功: JWT认证 + 速率限制已应用")
@@ -527,6 +534,7 @@ func setupRoutesAndStartServer(router *gin.Engine, handler *api.Handler, cfg *co
 		if err := srv.Shutdown(ctx); err != nil {
 			log.Printf("服务器关闭时出错: %v", err)
 		}
+		handler.StopCompetitionCapabilities()
 		log.Println("服务器已关闭")
 	}()
 
