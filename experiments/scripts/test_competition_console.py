@@ -40,6 +40,39 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn("live-${Date.now()}", self.console)
         self.assertIn("现场新增护理记录", self.console)
 
+    def test_console_integrates_new_capabilities_only_through_protected_evidence_routes(self):
+        """New research capabilities belong to the HTTP competition chain, not the legacy playground."""
+        for path in (
+            "/api/v1/evidence/episodes",
+            "/api/v1/evidence/entities",
+            "/api/v1/evidence/edges",
+            "/api/v1/evidence/communities",
+            "/api/v1/retrieval/risk-rerank",
+            "/api/v1/lifecycle/status",
+            "/api/v1/evidence/summary",
+            "/api/v1/multimodal/image/deidentify",
+            "/api/v1/multimodal/audio/privacy-analysis",
+        ):
+            self.assertIn(path, self.console)
+        self.assertIn("candidate_origin:'owner_scoped_evidence'", self.console)
+        self.assertIn("evaluated_evidence:true", self.console)
+        self.assertIn("not_rrf_substitute", self.console)
+        self.assertIn("riskInputFromLastEpisode", self.console)
+        self.assertIn("[{ id:lastCapabilityEpisodeID }]", self.console)
+        self.assertIn("owner-scoped", self.console)
+        self.assertNotIn("riskInputsFromLastRRF", self.console)
+        self.assertIn("original_returned !== false", self.console)
+        self.assertIn("execution_mode !== 'memory_only'", self.console)
+        self.assertNotIn("/api/tiered/", self.console)
+
+    def test_new_capability_controls_are_disabled_in_offline_fixture_mode(self):
+        self.assertIn("capabilityEpisodeRun", self.console)
+        self.assertIn("capabilityCommunityRun", self.console)
+        self.assertIn("capabilityRiskRun", self.console)
+        self.assertIn("capabilityLifecycleRun", self.console)
+        self.assertIn("capabilityMultimodalRun", self.console)
+        self.assertIn("requireLiveCapability", self.console)
+
     def test_console_uses_one_validated_trace_across_lifecycle_calls(self):
         self.assertIn("let lifecycleTraceID = createTraceID();", self.console)
         self.assertIn("'X-Trace-ID':lifecycleTraceID", self.console)
@@ -79,7 +112,8 @@ class CompetitionConsoleContractTests(unittest.TestCase):
 
     def test_fixture_mode_has_no_network_or_mutating_controls(self):
         self.assertIn("严格离线：不联网、不写入、不检索、不删除", self.console)
-        self.assertIn("for (const id of ['securityRun','researchRun','liveSeedRun','rrfRun','unlearningVerify','unlearningRun','reviewSubmit'])", self.console)
+        for control in ("securityRun", "researchRun", "liveSeedRun", "rrfRun", "unlearningVerify", "unlearningRun", "reviewSubmit"):
+            self.assertIn(control, self.console)
         fixture_branch = self.console.split("async function refreshStatus()", 1)[1].split("function requireEvalScope", 1)[0]
         self.assertLess(fixture_branch.index("if (fixtureMode)"), fixture_branch.index("fetch(API_BASE + '/health'"))
 
@@ -128,6 +162,16 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn("quality:{tuple_valid:true", self.console)
         self.assertIn("evidence_spans", self.console)
         self.assertIn('autocomplete="off"', self.console)
+
+    def test_console_accepts_only_in_memory_portal_auth_bridge(self):
+        self.assertIn("contextkeeper-auth-ready", self.console)
+        self.assertIn("contextkeeper-auth", self.console)
+        self.assertIn("contextkeeper-auth-revoked", self.console)
+        self.assertIn("event.origin !== location.origin", self.console)
+        self.assertIn("event.source !== window.opener", self.console)
+        self.assertIn("window.opener.postMessage", self.console)
+        self.assertIn("announceAuthReady();", self.console)
+        self.assertNotRegex(self.console, r"[?&](?:token|jwt)=")
 
     def test_launcher_records_safe_manifest_and_checks_mode(self):
         self.assertIn('[ValidateSet("ollama", "fixture")]', self.launcher)
@@ -187,6 +231,13 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn("三路融合完成", self.console)
         self.assertIn("来源审计不完整", self.console)
         self.assertIn("本次响应没有可追溯的检索结果", self.console)
+
+    def test_console_groups_competition_actions_into_responsive_audit_sections(self):
+        self.assertIn("Competition-facing presentation layer", self.console)
+        self.assertIn("grid-template-columns:repeat(12, minmax(0, 1fr))", self.console)
+        self.assertIn("@media (max-width:980px)", self.console)
+        self.assertIn('aria-label="记忆子图验证"', self.console)
+        self.assertIn('aria-label="多模态最小化处理验证"', self.console)
 
     def test_rrf_audit_normalizer_uses_only_response_evidence(self):
         node = shutil.which("node")

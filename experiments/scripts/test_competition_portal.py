@@ -27,6 +27,16 @@ class CompetitionPortalContractTests(unittest.TestCase):
         self.assertIn("token='';", self.html)
         self.assertIn('autocomplete="current-password"', self.html)
 
+    def test_competition_console_uses_scoped_in_memory_auth_bridge(self):
+        self.assertIn('id="openCompetitionConsole"', self.html)
+        self.assertIn("contextkeeper-auth-ready", self.html)
+        self.assertIn("contextkeeper-auth", self.html)
+        self.assertIn("contextkeeper-auth-revoked", self.html)
+        self.assertIn("event.origin !== location.origin", self.html)
+        self.assertIn("event.source !== consoleWindow", self.html)
+        self.assertIn("consoleWindow.postMessage", self.html)
+        self.assertNotRegex(self.html, r"[?&](?:token|jwt)=")
+
     def test_role_and_scope_are_server_authoritative(self):
         self.assertIn("serverRole=data.role || role", self.html)
         self.assertIn("角色由 JWT 决定，不能在前端切换权限", self.html)
