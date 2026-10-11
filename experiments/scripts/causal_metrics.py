@@ -64,8 +64,28 @@ def field_macro_f1(
 
 
 def evidence_gate(metrics: Mapping[str, Any], tuple_f1_min: float = 0.75, field_f1_min: float = 0.88, p95_ms_max: float = 3000.0) -> dict[str, Any]:
-    """Return a machine-readable gate result without changing measured values."""
+    """Return a machine-readable publication gate without changing measurements.
+
+    Quality thresholds alone are insufficient: a partial run can accidentally
+    pass if the few successful requests score well.  A causal report is
+    publishable only when every annotated case produced a contract-valid
+    response.  This check intentionally fails closed when coverage metadata is
+    missing or inconsistent.
+    """
+    total_samples = metrics.get("total_samples")
+    api_success_count = metrics.get("api_success_count")
+    api_error_count = metrics.get("api_error_count")
+    complete_coverage = (
+        isinstance(total_samples, int)
+        and not isinstance(total_samples, bool)
+        and total_samples > 0
+        and isinstance(api_success_count, int)
+        and not isinstance(api_success_count, bool)
+        and api_success_count == total_samples
+        and (api_error_count is None or api_error_count == 0)
+    )
     checks = {
+        "complete_sample_coverage": complete_coverage,
         "strict_tuple_f1": metrics.get("strict_tuple_f1") is not None and metrics["strict_tuple_f1"] >= tuple_f1_min,
         "field_macro_f1": metrics.get("field_macro_f1") is not None and metrics["field_macro_f1"] >= field_f1_min,
         "p95_latency_ms": metrics.get("latency_p95_ms") is not None and metrics["latency_p95_ms"] <= p95_ms_max,

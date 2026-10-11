@@ -24,13 +24,35 @@ class CausalMetricsTests(unittest.TestCase):
         self.assertLess(macro, 1.0)
 
     def test_evidence_gate_reports_each_threshold_without_mutating_metrics(self):
-        metrics = {"strict_tuple_f1": 0.8, "field_macro_f1": 0.9, "latency_p95_ms": 2800}
+        metrics = {
+            "total_samples": 20,
+            "api_success_count": 20,
+            "api_error_count": 0,
+            "strict_tuple_f1": 0.8,
+            "field_macro_f1": 0.9,
+            "latency_p95_ms": 2800,
+        }
         gate = evidence_gate(metrics)
         self.assertTrue(gate["passed"])
+        self.assertTrue(gate["checks"]["complete_sample_coverage"])
         self.assertEqual(metrics["strict_tuple_f1"], 0.8)
         failed = evidence_gate({**metrics, "latency_p95_ms": 3001})
         self.assertFalse(failed["passed"])
         self.assertFalse(failed["checks"]["p95_latency_ms"])
+
+    def test_evidence_gate_rejects_partial_run_even_with_good_scores(self):
+        gate = evidence_gate(
+            {
+                "total_samples": 20,
+                "api_success_count": 19,
+                "api_error_count": 1,
+                "strict_tuple_f1": 1.0,
+                "field_macro_f1": 1.0,
+                "latency_p95_ms": 1,
+            }
+        )
+        self.assertFalse(gate["passed"])
+        self.assertFalse(gate["checks"]["complete_sample_coverage"])
 
 
 if __name__ == "__main__":
