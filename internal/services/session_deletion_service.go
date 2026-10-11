@@ -284,6 +284,16 @@ func (s *SessionDeletionService) Delete(ctx context.Context, userID, sessionID s
 	if err == nil && owner != userID {
 		return result, fmt.Errorf("%w: session=%s", ErrSessionOwnerMismatch, sessionID)
 	}
+	// Fail closed before touching any replica or local artifact when the audit
+	// destination is already known to be unusable. This preserves a retryable
+	// session instead of deleting data and discovering the proof cannot be
+	// recorded afterwards.
+	if s.auditChain != nil {
+		if err := s.auditChain.ValidateWritable(); err != nil {
+			result.AuditError = err.Error()
+			return result, err
+		}
+	}
 
 	for _, binding := range s.replicas {
 		storeResult := SessionDeletionStoreResult{Store: binding.name}

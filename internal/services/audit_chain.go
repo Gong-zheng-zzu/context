@@ -79,6 +79,51 @@ func (c *AuditChain) Append(payload any) (string, error) {
 	return entry.EventHash, nil
 }
 
+// ValidateWritable performs a non-mutating preflight for a future append.
+// Deletion workflows use it before removing local artifacts so an invalid
+// audit destination cannot leave a partially completed cascade. It does not
+// guarantee that a later append cannot fail (the filesystem may change), but
+// catches the common misconfiguration where the configured path is a directory
+// or its parent is unavailable.
+func (c *AuditChain) ValidateWritable() error {
+	if c == nil {
+		return fmt.Errorf("audit chain is not configured")
+	}
+	info, err := os.Stat(c.path)
+	if err == nil {
+		if info.IsDir() {
+			return fmt.Errorf("audit chain path is a directory: %s", c.path)
+		}
+		file, openErr := os.OpenFile(c.path, os.O_APPEND|os.O_WRONLY, 0)
+		if openErr != nil {
+			return fmt.Errorf("audit chain is not writable: %w", openErr)
+		}
+		return file.Close()
+	}
+	if !os.IsNotExist(err) {
+		return fmt.Errorf("stat audit chain: %w", err)
+	}
+	parent := filepath.Dir(c.path)
+	if parent == "." {
+		parent = ""
+	}
+	if parent != "" {
+		parentInfo, parentErr := os.Stat(parent)
+		if parentErr != nil {
+			if os.IsNotExist(parentErr) {
+				// Append creates the parent directory, so a missing parent is
+				// valid as long as its own parent can be inspected.
+				parent = filepath.Dir(parent)
+			} else {
+				return fmt.Errorf("stat audit parent: %w", parentErr)
+			}
+		} else if !parentInfo.IsDir() {
+			return fmt.Errorf("audit parent is not a directory: %s", parent)
+		}
+	}
+	return nil
+}
+
 // Verify checks ordering and hashes. It is intended for operational evidence
 // verification and will detect modification, deletion in the middle, or a
 // malformed JSONL entry.

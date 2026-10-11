@@ -433,6 +433,21 @@ func ApplyRRFFusionToRetrieval(retrieval *RetrievalResults, cfg RRFConfig) *Fusi
 				continue
 			}
 			seenDocIDs[fc.DocID] = struct{}{}
+		} else if originalIndex < len(retrieval.Sources) {
+			// A duplicate source result may not be the representative chosen by
+			// RRF (for example, the graph result can represent a doc_id that also
+			// appears in the vector lane). Keep the unique-document contract for
+			// these non-representative rows as well.
+			duplicate := false
+			for _, candidate := range evaluationCandidatesFromResult(retrieval.Sources[originalIndex], retrieval.Results[originalIndex]) {
+				if _, seen := seenDocIDs[candidate.DocID]; seen {
+					duplicate = true
+					break
+				}
+			}
+			if duplicate {
+				continue
+			}
 		}
 		newResults = append(newResults, retrieval.Results[originalIndex])
 		if originalIndex < len(retrieval.Sources) {
@@ -464,7 +479,23 @@ func representativeResultIndex(candidate *FusedCandidate, indices map[string][]i
 	if len(choices) == 0 {
 		return 0, false
 	}
+	// Keep the production result type deterministic when a document is returned
+	// by more than one lane.  The vector lane is the canonical user-facing
+	// representation, followed by the graph and timeline lanes.  Iterating over
+	// candidate.Sources directly is insufficient because Fuse sorts that list
+	// lexicographically (knowledge would otherwise win over vector).
+	preferredSources := make([]string, 0, len(candidate.Sources))
+	for _, preferred := range canonicalRRFSources {
+		if containsString(candidate.Sources, preferred) {
+			preferredSources = append(preferredSources, preferred)
+		}
+	}
 	for _, preferred := range candidate.Sources {
+		if !containsString(preferredSources, preferred) {
+			preferredSources = append(preferredSources, preferred)
+		}
+	}
+	for _, preferred := range preferredSources {
 		for _, index := range choices {
 			if index < len(sources) && sources[index] == preferred {
 				return index, true
