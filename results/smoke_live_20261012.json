@@ -1,0 +1,39 @@
+{
+  "mode": "live",
+  "base_url": "http://localhost:8088",
+  "passed": true,
+  "checks": [
+    {
+      "name": "security",
+      "passed": true,
+      "http_status": 200,
+      "latency_ms": 4.001,
+      "error_type": null,
+      "error": null
+    },
+    {
+      "name": "causal",
+      "passed": true,
+      "http_status": 200,
+      "latency_ms": 4.324,
+      "error_type": null,
+      "error": null
+    },
+    {
+      "name": "retrieval",
+      "passed": true,
+      "http_status": 200,
+      "latency_ms": 1858.7450000000001,
+      "error_type": null,
+      "error": null
+    },
+    {
+      "name": "unlearning",
+      "passed": true,
+      "http_status": 200,
+      "latency_ms": 12.442,
+      "error_type": null,
+      "error": null
+    }
+  ]
+}
