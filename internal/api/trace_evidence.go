@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"regexp"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -36,6 +37,35 @@ const maxTraceEvidenceEntries = 512
 
 var competitionTraceEvidence = &traceEvidenceCache{entries: make(map[string]TraceEvidence)}
 
+var traceSensitiveKeys = map[string]struct{}{
+	"content": {}, "content_text": {}, "evidence": {}, "evidence_text": {},
+	"original_text": {}, "source_text": {}, "raw": {}, "prompt": {},
+	"token": {}, "jwt": {}, "password": {}, "secret": {}, "api_key": {},
+	"user_id": {}, "session_id": {}, "authorization": {}, "credential": {},
+}
+
+func redactTraceEvidence(value interface{}) interface{} {
+	switch typed := value.(type) {
+	case map[string]interface{}:
+		clean := make(map[string]interface{}, len(typed))
+		for key, item := range typed {
+			if _, blocked := traceSensitiveKeys[strings.ToLower(strings.TrimSpace(key))]; blocked {
+				continue
+			}
+			clean[key] = redactTraceEvidence(item)
+		}
+		return clean
+	case []interface{}:
+		clean := make([]interface{}, 0, len(typed))
+		for _, item := range typed {
+			clean = append(clean, redactTraceEvidence(item))
+		}
+		return clean
+	default:
+		return value
+	}
+}
+
 func rememberTraceEvidence(c *gin.Context, stage, status string, started, completed time.Time, evidence map[string]interface{}) {
 	if c == nil {
 		return
@@ -46,7 +76,8 @@ func rememberTraceEvidence(c *gin.Context, stage, status string, started, comple
 	}
 	userID, _ := c.Get("user_id")
 	owner, _ := userID.(string)
-	entry := TraceEvidence{TraceID: traceID, UserID: owner, Stage: stage, Status: status, StartedAt: started.UTC(), CompletedAt: completed.UTC(), Evidence: evidence}
+	redacted, _ := redactTraceEvidence(evidence).(map[string]interface{})
+	entry := TraceEvidence{TraceID: traceID, UserID: owner, Stage: stage, Status: status, StartedAt: started.UTC(), CompletedAt: completed.UTC(), Evidence: redacted}
 	entry.LatencyMS = completed.Sub(started).Milliseconds()
 	if entry.LatencyMS < 0 {
 		entry.LatencyMS = 0

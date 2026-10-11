@@ -45,7 +45,11 @@ func TestAuditTraceIsOwnerScopedAndRedacted(t *testing.T) {
 	ctx.Set("user_id", "user-a")
 	ctx.Set("traceId", "trace-owner-001")
 	rememberTraceEvidence(ctx, "causal_extract", "completed", time.Unix(10, 0), time.Unix(11, 0), map[string]interface{}{
-		"decision":      "verified",
+		"decision": "verified",
+		"nested": map[string]interface{}{
+			"prompt":   "do not expose",
+			"safe_key": "kept",
+		},
 		"original_text": "不得返回",
 	})
 
@@ -60,6 +64,10 @@ func TestAuditTraceIsOwnerScopedAndRedacted(t *testing.T) {
 	}
 	if strings.Contains(owner.Body.String(), "不得返回") || strings.Contains(owner.Body.String(), `"user_id"`) {
 		t.Fatalf("trace response leaked sensitive evidence: %s", owner.Body.String())
+	}
+
+	if strings.Contains(owner.Body.String(), "do not expose") || !strings.Contains(owner.Body.String(), `"safe_key":"kept"`) {
+		t.Fatalf("nested trace redaction failed: %s", owner.Body.String())
 	}
 
 	other := httptest.NewRecorder()
