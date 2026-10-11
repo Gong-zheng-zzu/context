@@ -12,6 +12,7 @@ This folder groups the project files that are directly useful for an information
 6. `项目策划书.md`
 7. `路演演示脚本.md`（历史素材，使用前须与本手册的边界核对）
 8. `项目完善清单.md`
+9. `PPT实验部分可信性审查报告-20261011.md` - PPT 实验数字与仓库证据的逐项审查
 
 ## File Guide
 
@@ -23,6 +24,8 @@ This folder groups the project files that are directly useful for an information
 - `对比实验报告.md`: quantitative comparison and experiment results
 - `路演演示脚本.md`: demo and defense speaking script
 - `项目完善清单.md`: remaining optimization and execution checklist
+- `PPT实验部分可信性审查报告-20261011.md`: slide-by-slide evidence boundary and replacement wording
+- `ppt_experiment_claims.json`: machine-readable claim manifest used by the experiment tests
 - `策划书-核心技术清单.md`: detailed technical breakdown
 
 ## Related Runtime Config

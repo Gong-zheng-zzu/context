@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "reviewed_at": "2026-10-11",
+  "source_ppt": "忆安智护（第六改）.pptx",
+  "claim_policy": {
+    "formal_result_requires": [
+      "dataset_sha256",
+      "configuration_fingerprint",
+      "model_version",
+      "run_artifact",
+      "source_audit",
+      "linux_docker_gate"
+    ],
+    "forbidden_as_current_result": [
+      "synthetic_unreviewed",
+      "fixture_output",
+      "historical_baseline",
+      "target_threshold"
+    ]
+  },
+  "claims": [
+    {
+      "id": "hardware_and_model",
+      "slides": [22],
+      "statement": "Intel i7-13700H/32GB/1TB NVMe, Qwen2.5:3b and nomic-embed-text",
+      "evidence_level": "experiment_environment",
+      "formal_result": false,
+      "source": "PPT slide 22; runtime result must provide config fingerprint"
+    },
+    {
+      "id": "planned_data_scale",
+      "slides": [22],
+      "statement": "200 records, 500 reports, 1000 prescriptions, 3000 cross-session records",
+      "evidence_level": "planned_asset_scale",
+      "formal_result": false,
+      "source": "PPT slide 22; no frozen manifest for a completed run"
+    },
+    {
+      "id": "security_historical",
+      "slides": [19, 22],
+      "statement": "asdf_casia_pccm detection rate 94.22% on 6677 positive samples",
+      "evidence_level": "historical_problem_baseline",
+      "formal_result": false,
+      "source": "docs/competition/正式实验执行报告-20260926.md"
+    },
+    {
+      "id": "causal_historical",
+      "slides": [19, 21],
+      "statement": "strict O-M-P-R Tuple F1 0.5128 and average latency about 10.6s",
+      "evidence_level": "historical_problem_baseline",
+      "formal_result": false,
+      "source": "docs/competition/正式实验执行报告-20260926.md"
+    },
+    {
+      "id": "rrf_controlled",
+      "slides": [21, 22],
+      "statement": "30-query controlled RRF MRR 0.4172 and Recall@5 0.6000",
+      "evidence_level": "controlled_preliminary",
+      "formal_result": false,
+      "source": "docs/competition/正式实验执行报告-20260926.md"
+    },
+    {
+      "id": "deletion_boundary",
+      "slides": [19, 21],
+      "statement": "cross-store deletion verification with post-delete probe",
+      "evidence_level": "restricted_main_chain",
+      "formal_result": false,
+      "source": "docs/competition/正式实验执行报告-20260926.md; deletion proof tests"
+    },
+    {
+      "id": "extensions",
+      "slides": [20, 21],
+      "statement": "multimodal, memory subgraph, tiered lifecycle and research agent",
+      "evidence_level": "controlled_extension",
+      "formal_result": false,
+      "source": "docs/competition/PPT功能落地矩阵-20261009.md"
+    }
+  ]
+}
