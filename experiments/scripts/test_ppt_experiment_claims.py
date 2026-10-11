@@ -22,8 +22,12 @@ class PptExperimentClaimsTests(unittest.TestCase):
 
     def test_report_mentions_historical_boundaries_and_gate(self):
         text = REPORT.read_text(encoding="utf-8")
-        for marker in ("历史问题基线", "受控初步", "Docker Linux", "94.22%", "0.5128", "0.4172"):
+        for marker in ("历史问题基线", "受控初步", "Docker Linux", "0.5128", "0.4172"):
             self.assertIn(marker, text)
+        # Some report revisions use the machine-readable rate (0.9422) while
+        # others use the percentage (94.22%); both must remain explicitly
+        # identified as a positive-only historical baseline.
+        self.assertTrue("94.22%" in text or "0.9422" in text)
 
 
 if __name__ == "__main__":
