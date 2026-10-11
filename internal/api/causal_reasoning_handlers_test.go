@@ -104,7 +104,7 @@ func TestExtractCausalRelationsIsAnalysisOnlyWithoutPersistFlag(t *testing.T) {
 func TestExtractCausalRelationsDefaultsToOfflineSafeCascade(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	handler := &CausalReasoningHandler{extractor: causal_reasoning.NewEntityExtractor(nil)}
-	request := httptest.NewRequest(http.MethodPost, "/causal/extract", strings.NewReader(`{"text":"鎮ｈ€呮湇鐢ㄩ檷鍘嬭嵂鍚庡嚭鐜颁綋浣嶆€т綆琛€鍘嬪苟鏈夎穼鍊掗闄?"}`))
+	request := httptest.NewRequest(http.MethodPost, "/causal/extract", strings.NewReader(`{"text":"患者服用降压药后出现体位性低血压并有跌倒风险"}`))
 	request.Header.Set("Content-Type", "application/json")
 	response := httptest.NewRecorder()
 	router := gin.New()
