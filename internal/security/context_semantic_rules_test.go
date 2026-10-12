@@ -85,6 +85,7 @@ func TestContextRuleEngineDetectsCorpusSemanticVariants(t *testing.T) {
 		{"张守义的证件号码是一幺开头的那个十八位数字", SensitiveTypeIDCard},
 		{"刘秀英的手机号码是170开头的十一位号码", SensitiveTypePhone},
 		{"马文军的病历号是MR开头后面跟着五位数字", SensitiveTypeMedicalRecord},
+		{"护理记录中的病历号是MR开头后面跟着十一位数字", SensitiveTypeMedicalRecord},
 		{"李宝林在意识模糊记录中提到的血压是一百二十比八十", SensitiveTypeBloodPressure},
 		{"高凤英的身份证前六位是440305，后面是出生日期加四位顺序码", SensitiveTypeIDCard},
 		{"赵建国的证件号码是一贰开头的那个十八位数字", SensitiveTypeIDCard},
