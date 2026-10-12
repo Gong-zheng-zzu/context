@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/contextkeeper/service/internal/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -121,6 +122,14 @@ func JWTAuth() gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"success": false,
 				"error":   fmt.Sprintf("Token验证失败: %v", err),
+			})
+			c.Abort()
+			return
+		}
+		if claims.Role != "" && !auth.IsValidRole(claims.Role) {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"success": false,
+				"error":   "invalid role claim",
 			})
 			c.Abort()
 			return

@@ -258,6 +258,13 @@ func (h *Handler) HandleStoreContext(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "error": "session store is unavailable"})
 		return
 	}
+	// A JWT identity may claim a new session, but it may never rebind an
+	// existing session owned by another user.  This check must happen before
+	// SetSessionMetadata, which otherwise permits an owner takeover.
+	if err := ensureProtectedSessionOwner(sessionStore, req.SessionID, req.UserID); err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"status": "error", "error": "session is not owned by the authenticated user"})
+		return
+	}
 	if err := sessionStore.SetSessionMetadata(req.SessionID, "userId", req.UserID); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "error": "failed to persist session owner"})
 		return
@@ -337,6 +344,21 @@ func (h *Handler) HandleRetrieveContext(c *gin.Context) {
 		})
 		return
 	}
+	userID := authenticatedUserID(c)
+	if userID == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"type": "error", "message": "authenticated user is required"})
+		return
+	}
+	if h == nil || h.contextService == nil || h.contextService.SessionStore() == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"type": "error", "message": "session ownership service is unavailable"})
+		return
+	}
+	if err := ensureProtectedSessionOwner(h.contextService.SessionStore(), req.SessionID, userID); err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"type": "error", "message": "session is not owned by the authenticated user"})
+		return
+	}
+	// The body is untrusted; retrieval must always be scoped to the JWT user.
+	req.UserID = userID
 
 	// 调用服务处理请求
 	resp, err := h.contextService.RetrieveContext(c.Request.Context(), req)
@@ -425,6 +447,9 @@ func (h *Handler) HandleMCPAssociateFile(c *gin.Context) {
 		})
 		return
 	}
+	if !h.requireProtectedSessionOwner(c, req.SessionId) {
+		return
+	}
 
 	// 转换为内部请求格式
 	internalReq := models.AssociateFileRequest{
@@ -460,6 +485,9 @@ func (h *Handler) HandleMCPRecordEdit(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "无效的请求格式: " + err.Error(),
 		})
+		return
+	}
+	if !h.requireProtectedSessionOwner(c, req.SessionId) {
 		return
 	}
 
@@ -591,6 +619,9 @@ func (h *Handler) HandleMCPProgrammingContext(c *gin.Context) {
 		})
 		return
 	}
+	if !h.requireProtectedSessionOwner(c, req.SessionId) {
+		return
+	}
 
 	// 使用GetProgrammingContext获取编程上下文
 	progContext, err := h.contextService.GetProgrammingContext(c.Request.Context(), req.SessionId, req.Query)
@@ -672,6 +703,27 @@ func (h *Handler) authorizeMCPToolSession(c *gin.Context, sessionID string) erro
 		return fmt.Errorf("session ownership service unavailable")
 	}
 	return ensureProtectedSessionOwner(h.contextService.SessionStore(), sessionID, userID)
+}
+
+// requireProtectedSessionOwner is shared by the legacy direct MCP routes.
+// The generic JSON-RPC route already performs the equivalent check, but the
+// direct endpoints must enforce it themselves because they bypass that
+// dispatcher.
+func (h *Handler) requireProtectedSessionOwner(c *gin.Context, sessionID string) bool {
+	userID := authenticatedUserID(c)
+	if userID == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "authenticated user is required"})
+		return false
+	}
+	if h == nil || h.contextService == nil || h.contextService.SessionStore() == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "session ownership service is unavailable"})
+		return false
+	}
+	if err := ensureProtectedSessionOwner(h.contextService.SessionStore(), sessionID, userID); err != nil {
+		c.JSON(http.StatusForbidden, gin.H{"error": "session is not owned by the authenticated user"})
+		return false
+	}
+	return true
 }
 
 // handleMCPToolCall 处理MCP工具调用通用接口
@@ -2414,6 +2466,18 @@ func (h *Handler) HandleToolLocalOperationCallback(ctx context.Context, params m
 }
 
 // 在init函数或者路由注册函数中添加WebSocket路由
+// requireManagementRole keeps the global session inventory behind an
+// explicitly privileged role. Ordinary role tokens may inspect only their own
+// session detail through the scoped endpoint.
+func requireManagementRole(c *gin.Context) bool {
+	role, _ := middleware.GetRole(c)
+	if role == "doctor" || role == "admin" {
+		return true
+	}
+	c.JSON(http.StatusForbidden, gin.H{"error": "management access requires doctor or admin role"})
+	return false
+}
+
 func (h *Handler) RegisterWebSocketRoutes(router *gin.Engine) {
 	// WebSocket连接端点
 	router.GET("/ws", middleware.JWTAuth(), h.HandleWebSocket)
@@ -2432,6 +2496,9 @@ func (h *Handler) RegisterWebSocketRoutes(router *gin.Engine) {
 
 // 🔥 新增：查询所有有效未过期session列表的API - 支持分页
 func (h *Handler) HandleGetSessionsList(c *gin.Context) {
+	if !requireManagementRole(c) {
+		return
+	}
 	log.Printf("[API] 收到查询会话列表请求")
 
 	// 获取分页参数
@@ -2576,6 +2643,12 @@ func (h *Handler) HandleGetUserSessionDetail(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "用户ID不能为空",
 		})
+		return
+	}
+	requester, _ := middleware.GetUserID(c)
+	role, _ := middleware.GetRole(c)
+	if role != "doctor" && role != "admin" && requester != userID {
+		c.JSON(http.StatusForbidden, gin.H{"error": "cannot inspect another user's sessions"})
 		return
 	}
 

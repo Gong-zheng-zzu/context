@@ -201,6 +201,11 @@ func CallCaregiverHandler(c *gin.Context) {
 	}
 
 	userID, _ := middleware.GetUserID(c)
+	role, _ := middleware.GetRole(c)
+	if !auth.IsValidRole(role) || !auth.CanAccessElder(userID, auth.Role(role), req.ElderID) {
+		c.JSON(http.StatusForbidden, APIResponse{Success: false, Error: "elder access is not permitted for this role"})
+		return
+	}
 	c.JSON(http.StatusOK, APIResponse{
 		Success: true,
 		Data: map[string]interface{}{
@@ -221,6 +226,11 @@ func FamilyMessageHandler(c *gin.Context) {
 	}
 
 	userID, _ := middleware.GetUserID(c)
+	role, _ := middleware.GetRole(c)
+	if !auth.IsValidRole(role) || !auth.CanAccessElder(userID, auth.Role(role), req.ElderID) {
+		c.JSON(http.StatusForbidden, APIResponse{Success: false, Error: "elder access is not permitted for this role"})
+		return
+	}
 	c.JSON(http.StatusOK, APIResponse{
 		Success: true,
 		Data: map[string]interface{}{

@@ -13,6 +13,7 @@ const (
 	RoleDoctor    Role = "doctor"    // 医生
 	RoleFamily    Role = "family"    // 家属
 	RoleElder     Role = "elder"     // 老人
+	RoleAdmin     Role = "admin"     // 系统管理员
 )
 
 // Permission 权限定义

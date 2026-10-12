@@ -113,6 +113,41 @@ class ConfigMetrics:
     captured_query_count: int = 0
 
 
+def collect_source_rankings(contexts: List[Dict[str, Any]]) -> Dict[str, Dict[str, int]]:
+    """Collect server-provided per-source ranks without inferring missing data.
+
+    The API attaches ``rrf_ranks`` to each document metadata object.  A formal
+    RRF report needs a response-level source ranking map, but the evaluator
+    must not derive source ranks from the final fused order.  Missing or
+    malformed ranks are therefore skipped and remain visible to the strict
+    evidence gate as incomplete provenance.
+    """
+    rankings: Dict[str, Dict[str, int]] = {}
+    for context in contexts:
+        if not isinstance(context, dict):
+            continue
+        doc_id = context.get("doc_id")
+        if not isinstance(doc_id, str) or not doc_id.strip():
+            continue
+        metadata = context.get("metadata")
+        if not isinstance(metadata, dict):
+            continue
+        raw_ranks = metadata.get("rrf_ranks")
+        if not isinstance(raw_ranks, dict):
+            continue
+        for source, rank in raw_ranks.items():
+            if (
+                not isinstance(source, str)
+                or not source.strip()
+                or not isinstance(rank, int)
+                or isinstance(rank, bool)
+                or rank < 1
+            ):
+                continue
+            rankings.setdefault(source.strip(), {})[doc_id.strip()] = rank
+    return rankings
+
+
 class RetrievalEvaluator(BaseEvaluator):
     """检索融合评估器"""
 
@@ -333,7 +368,11 @@ class RetrievalEvaluator(BaseEvaluator):
             # 缺失时保持 not_captured，绝不臆造。
             retrieval_metadata = data.get("retrieval_metadata")
             if isinstance(retrieval_metadata, dict):
-                result.retrieval_metadata = retrieval_metadata
+                result.retrieval_metadata = dict(retrieval_metadata)
+
+                source_rankings = collect_source_rankings(contexts)
+                if source_rankings:
+                    result.retrieval_metadata["source_rankings"] = source_rankings
 
                 fusion_mode = retrieval_metadata.get("retrieval_fusion_mode")
                 if isinstance(fusion_mode, str) and fusion_mode:
