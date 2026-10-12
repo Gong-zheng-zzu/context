@@ -432,6 +432,10 @@ func isNegatedAt(source string, offset int) bool {
 		return false
 	}
 	n := normalizeForLookup(source)
+	// Keep the negation window deliberately local. A wider document window
+	// lets "否认头晕。今晚出现头晕" inherit the historical denial and rejects
+	// the later positive span. Four normalized runes cover cues such as
+	// "未服用"/"否认曾经" while avoiding cross-clause contamination.
 	prefix := []rune(n[:offset])
 	if len(prefix) > 8 {
 		prefix = prefix[len(prefix)-8:]
@@ -443,6 +447,47 @@ func isNegatedAt(source string, offset int) bool {
 		}
 	}
 	return false
+}
+
+func findUnnegatedTermOffsetLocalClause(source, term string) int {
+	normalized := normalizeForLookup(source)
+	needle := normalizeForLookup(term)
+	if needle == "" {
+		return -1
+	}
+	for start := 0; start < len(normalized); {
+		relative := strings.Index(normalized[start:], needle)
+		if relative < 0 {
+			return -1
+		}
+		position := start + relative
+		if !isNegatedAtLocalClause(source, position) {
+			return position
+		}
+		start = position + len(needle)
+	}
+	return -1
+}
+
+func isNegatedAtLocalClause(source string, normalizedOffset int) bool {
+	if normalizedOffset < 0 {
+		return false
+	}
+	rawOffset := -1
+	for index := range source {
+		if len(normalizeForLookup(source[:index])) >= normalizedOffset {
+			rawOffset = index
+			break
+		}
+	}
+	if rawOffset < 0 {
+		rawOffset = len(source)
+	}
+	prefix := source[:rawOffset]
+	if boundary := strings.LastIndexAny(prefix, "。！？；，,;\n"); boundary >= 0 {
+		prefix = prefix[boundary+1:]
+	}
+	return isNegatedAt(prefix+source[rawOffset:], len(normalizeForLookup(prefix)))
 }
 
 func hasNegatedCausalMention(text string, rules []*MedicalRule) bool {
@@ -665,7 +710,13 @@ func normalizeLLMExtraction(source string, result LLMExtractionResult) (LLMExtra
 	if !strings.Contains(lookup, normalizeForLookup(result.Mediator)) || !strings.Contains(lookup, normalizeForLookup(result.Property)) || !strings.Contains(lookup, normalizeForLookup(result.Result)) {
 		return LLMExtractionResult{}, 0, false
 	}
-	if normalizeForLookup(result.Property) == normalizeForLookup(result.Result) || isNegatedAt(source, fieldOffset(source, result.Mediator)) || isNegatedAt(source, fieldOffset(source, result.Property)) || isNegatedAt(source, fieldOffset(source, result.Result)) {
+	// A field may first occur in a negated history and later be explicitly
+	// observed. Validate the selected value against any unnegated occurrence;
+	// checking only strings.Index rejects that valid later evidence.
+	if normalizeForLookup(result.Property) == normalizeForLookup(result.Result) ||
+		findUnnegatedTermOffsetLocalClause(source, result.Mediator) < 0 ||
+		findUnnegatedTermOffsetLocalClause(source, result.Property) < 0 ||
+		findUnnegatedTermOffsetLocalClause(source, result.Result) < 0 {
 		return LLMExtractionResult{}, 0, false
 	}
 

@@ -169,6 +169,36 @@ func TestNormalizeLLMExtractionCorrectsClinicalSpanAndTemporalOrder(t *testing.T
 	}
 }
 
+func TestNormalizeLLMExtractionUsesLaterUnnegatedMention(t *testing.T) {
+	source := "张奶奶否认头晕。今晚服用安眠药后出现头晕，随后跌倒。"
+	normalized, _, ok := normalizeLLMExtraction(source, LLMExtractionResult{
+		Object:   "张奶奶",
+		Mediator: "服用安眠药",
+		Property: "头晕",
+		Result:   "跌倒",
+		Evidence: []string{"今晚服用安眠药后出现头晕，随后跌倒。"},
+	})
+	if !ok {
+		t.Fatal("valid later positive evidence was rejected because an earlier occurrence was negated")
+	}
+	if normalized.Property != "头晕" || normalized.Result != "跌倒" {
+		t.Fatalf("normalized relation = %+v", normalized)
+	}
+}
+
+func TestNormalizeLLMExtractionStillRejectsOnlyNegatedEvidence(t *testing.T) {
+	source := "张奶奶否认头晕，未见跌倒。"
+	if _, _, ok := normalizeLLMExtraction(source, LLMExtractionResult{
+		Object:   "张奶奶",
+		Mediator: "安眠药",
+		Property: "头晕",
+		Result:   "跌倒",
+		Evidence: []string{source},
+	}); ok {
+		t.Fatal("relation supported only by negated evidence was accepted")
+	}
+}
+
 func TestPCCMFusionNormalizesOverAvailableEvidence(t *testing.T) {
 	engine := NewDefaultPCCMFusionEngine()
 	if got := engine.FuseConfidence(0, 0, 0.82, 1); math.Abs(got-0.82) > 0.0001 {
