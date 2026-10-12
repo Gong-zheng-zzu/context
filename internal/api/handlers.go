@@ -2839,6 +2839,12 @@ func (h *Handler) RegisterManagementRoutes(router *gin.Engine) {
 // handleCreateUser 新增用户接口（包含唯一性校验）
 func (h *Handler) HandleCreateUser(c *gin.Context) {
 	log.Printf("🔥 [用户管理] ===== 开始处理用户创建请求 =====")
+	// Creation is an administrative operation. Authorize before parsing or
+	// touching any repository/vector service so rejected callers cannot probe
+	// request validity or trigger initialization side effects.
+	if !authorizeUserManagement(c, "", "create") {
+		return
+	}
 
 	var req struct {
 		UserID     string                 `json:"userId" binding:"required"`
@@ -2962,6 +2968,9 @@ func (h *Handler) HandleUpdateUser(c *gin.Context) {
 		})
 		return
 	}
+	if !authorizeUserManagement(c, userID, "write") {
+		return
+	}
 
 	var req struct {
 		FirstUsed  string                 `json:"firstUsed"`
@@ -3070,6 +3079,9 @@ func (h *Handler) HandleUpdateUser(c *gin.Context) {
 // handleGetUser 查询用户信息接口
 func (h *Handler) HandleGetUser(c *gin.Context) {
 	userID := c.Param("userId")
+	if !authorizeUserManagement(c, userID, "read") {
+		return
+	}
 	log.Printf("🔥 [用户管理] ===== 开始处理用户查询请求: %s =====", userID)
 
 	if userID == "" {
