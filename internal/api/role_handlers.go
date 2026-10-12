@@ -146,8 +146,8 @@ func GetDashboardHandler(c *gin.Context) {
 	}
 
 	role, exists := middleware.GetRole(c)
-	if !exists {
-		c.JSON(http.StatusUnauthorized, APIResponse{Success: false, Error: "missing role"})
+	if !exists || !auth.IsValidRole(role) {
+		c.JSON(http.StatusUnauthorized, APIResponse{Success: false, Error: "missing or invalid role"})
 		return
 	}
 
@@ -171,8 +171,8 @@ func GetDashboardHandler(c *gin.Context) {
 
 func GetAlertsHandler(c *gin.Context) {
 	role, exists := middleware.GetRole(c)
-	if !exists {
-		c.JSON(http.StatusUnauthorized, APIResponse{Success: false, Error: "missing role"})
+	if !exists || !auth.IsValidRole(role) {
+		c.JSON(http.StatusUnauthorized, APIResponse{Success: false, Error: "missing or invalid role"})
 		return
 	}
 
@@ -183,8 +183,8 @@ func GetAlertsHandler(c *gin.Context) {
 
 func GetRecommendationsHandler(c *gin.Context) {
 	role, exists := middleware.GetRole(c)
-	if !exists {
-		c.JSON(http.StatusUnauthorized, APIResponse{Success: false, Error: "missing role"})
+	if !exists || !auth.IsValidRole(role) {
+		c.JSON(http.StatusUnauthorized, APIResponse{Success: false, Error: "missing or invalid role"})
 		return
 	}
 
