@@ -33,9 +33,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import statistics
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -51,6 +52,11 @@ DEFAULT_DATASET = REPOSITORY_ROOT / "test_data" / "test_data_100.json"
 ADVERSARIAL_RESULT_PREFIX = "ablation_adversarial_security_"
 
 CATEGORY_ORDER = ("standard", "bypass_attack", "confusing", "normal")
+
+# The protected competition endpoint intentionally exposes only deterministic
+# profiles.  The optional LLM profile remains research-only and must never be
+# requested by this formal adversarial runner.
+COMPETITION_ABLATION_PROFILES = ["regex_only", "asdf", "asdf_casia", "asdf_casia_pccm"]
 
 
 class AdversarialDatasetError(RuntimeError):
@@ -136,6 +142,56 @@ def summarise(samples: List[Dict[str, Any]], digest: str, dataset_path: Path) ->
     print(f"[OK] Dataset {dataset_path.name} sha256={digest}")
 
 
+def _summarise_variance(repeat_log: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """把多轮 profile 指标聚合成 mean/std/range，用于量化运行方差。
+
+    设计意图：确定性 profile（regex_only/asdf/asdf_casia/asdf_casia_pccm）在同一输入上
+    应逐位一致，故 std 必须为 0——这是「可复现」的直接证据；LLM profile 则天然带判定
+    漂移，本报告把它量化出来而不是回避。聚合只用标准库 statistics，与 stat_tools.py
+    的「仅标准库」约定一致。
+    """
+    series: Dict[str, Dict[str, List[float]]] = {}
+    for entry in repeat_log:
+        for name, metrics in entry["profiles"].items():
+            bucket = series.setdefault(
+                name, {"detection_rate": [], "benign_false_positive_rate": []}
+            )
+            bucket["detection_rate"].append(float(metrics["detection_rate"]))
+            if metrics["benign_false_positive_rate"] is not None:
+                bucket["benign_false_positive_rate"].append(
+                    float(metrics["benign_false_positive_rate"])
+                )
+
+    def describe(values: List[float]) -> Dict[str, Any]:
+        if not values:
+            return {"mean": None, "std": None, "min": None, "max": None, "n": 0}
+        return {
+            "mean": statistics.fmean(values),
+            "std": statistics.stdev(values) if len(values) > 1 else 0.0,
+            "min": min(values),
+            "max": max(values),
+            "n": len(values),
+        }
+
+    return {
+        "schema": "ablation-variance-report-v1",
+        "rounds": len(repeat_log),
+        "profiles": {
+            name: {
+                "detection_rate": describe(bucket["detection_rate"]),
+                "benign_false_positive_rate": describe(bucket["benign_false_positive_rate"]),
+                "per_round_detection_rate": bucket["detection_rate"],
+            }
+            for name, bucket in series.items()
+        },
+        "interpretation": (
+            "Deterministic profiles must show std=0 (identical decisions in every round); a "
+            "non-zero std there would indicate non-reproducibility. LLM profiles carry an "
+            "inherent decision drift that this report quantifies rather than hides."
+        ),
+    }
+
+
 def main(argv: List[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Adversarial sensitive-data ablation evaluation (reuses the server-owned ablation endpoint)."
@@ -160,6 +216,15 @@ def main(argv: List[str] | None = None) -> int:
         default=0,
         help="Optional cap per category for a bounded smoke run; 0 means every sample.",
     )
+    parser.add_argument(
+        "--repeat",
+        type=int,
+        default=1,
+        help=(
+            "Number of identical evaluation rounds; >1 aggregates per-profile mean/std/range "
+            "to quantify run-to-run variance. Deterministic profiles should show std=0."
+        ),
+    )
     args = parser.parse_args(argv)
     # Resolve before use. The default dataset is absolute while a caller-supplied
     # --dataset is typically relative, and the manifest records the path relative
@@ -168,7 +233,10 @@ def main(argv: List[str] | None = None) -> int:
     # dataset has already been read.
     args.dataset = args.dataset.resolve()
 
-    evaluator = SecurityAblationEvaluator(base_url=args.base_url)
+    evaluator = SecurityAblationEvaluator(
+        base_url=args.base_url,
+        profiles=COMPETITION_ABLATION_PROFILES,
+    )
 
     try:
         samples, digest = load_adversarial_samples(args.dataset)
@@ -216,14 +284,36 @@ def main(argv: List[str] | None = None) -> int:
     attacks = [sample for sample in samples if sample["sample_kind"] == "attack"]
     benign = [sample for sample in samples if sample["sample_kind"] == "benign"]
 
-    attack_results = evaluator.run_ablation_experiment(
-        args.config_label, attacks, False, interval_seconds, "attack"
-    )
-    benign_results = evaluator.run_ablation_experiment(
-        args.config_label, benign, False, interval_seconds, "benign"
-    )
+    if args.repeat < 1:
+        print("ERROR: --repeat must be at least 1", file=sys.stderr)
+        return 2
 
-    profile_metrics, deltas = evaluator.aggregate_ablation_metrics(attack_results, benign_results)
+    repeat_log: List[Dict[str, Any]] = []
+    for round_index in range(args.repeat):
+        if args.repeat > 1:
+            print(f"\n[round {round_index + 1}/{args.repeat}]")
+        attack_results = evaluator.run_ablation_experiment(
+            args.config_label, attacks, False, interval_seconds, "attack"
+        )
+        benign_results = evaluator.run_ablation_experiment(
+            args.config_label, benign, False, interval_seconds, "benign"
+        )
+        profile_metrics, deltas = evaluator.aggregate_ablation_metrics(attack_results, benign_results)
+        repeat_log.append(
+            {
+                "round": round_index + 1,
+                "profiles": {
+                    name: {
+                        "detection_rate": metrics.detection_rate,
+                        "benign_false_positive_rate": metrics.benign_false_positive_rate,
+                    }
+                    for name, metrics in profile_metrics.items()
+                },
+            }
+        )
+
+    # 只有重复运行才有方差可谈；单轮运行时保持既有行为，不产出方差报告。
+    variance_report = _summarise_variance(repeat_log) if args.repeat > 1 else None
 
     def rate(value: Any) -> str:
         return "n/a" if value is None else f"{value:.4f}"
@@ -244,6 +334,18 @@ def main(argv: List[str] | None = None) -> int:
             f"detection_rate_delta={rate(delta.detection_rate_delta)} "
             f"layers_added={delta.layers_added}"
         )
+
+    if variance_report is not None:
+        print(f"\nRun-to-run variance over {variance_report['rounds']} identical rounds")
+        for name, summary in variance_report["profiles"].items():
+            detection = summary["detection_rate"]
+            false_positive = summary["benign_false_positive_rate"]
+            print(
+                f"  {name}: detection mean={rate(detection['mean'])} "
+                f"std={rate(detection['std'])} "
+                f"range=[{rate(detection['min'])}, {rate(detection['max'])}]  |  "
+                f"benign_fp mean={rate(false_positive['mean'])} std={rate(false_positive['std'])}"
+            )
 
     output_path = evaluator.save_ablation_results(
         args.config_label,
@@ -282,6 +384,12 @@ def main(argv: List[str] | None = None) -> int:
         )
         print(f"  Raw result: {output_path}")
         return 5
+    if variance_report is not None:
+        variance_path = output_path.with_name(output_path.name.replace(".json", ".variance.json"))
+        variance_path.write_text(
+            json.dumps(variance_report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        print(f"  Variance report: {variance_path}")
     print(f"  Raw result: {output_path}")
     return 0
 
