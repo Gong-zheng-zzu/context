@@ -382,7 +382,10 @@ func (cre *ContextRuleEngine) LoadDefaultRules() {
 	cre.AddRule(&ContextRule{
 		ID:         "semantic_medical_record_shape_010",
 		Type:       SensitiveTypeMedicalRecord,
-		Pattern:    `病历号.{0,10}(?i:MR).{0,14}(?:八|8).{0,6}(?:位|数字)`,
+		// Corpus samples describe both five- and eight-digit MR suffixes. Keep
+		// the subject, MR prefix, and explicit digit-count wording mandatory so
+		// a bare "MR" acronym in a nursing note remains benign.
+		Pattern:    `病历号.{0,10}(?i:MR).{0,14}(?:[五六七八九十]|[5-9]|1[0-2]).{0,6}(?:位数字)`,
 		Triggers:   []string{"病历号", "病历"},
 		Suppressors: []string{"示例", "模板"},
 		WindowSize:  32,

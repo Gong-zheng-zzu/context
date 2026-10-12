@@ -210,6 +210,19 @@ class BreakdownBySubtypeTests(unittest.TestCase):
         self.assertEqual(8, sum(bucket["detected"] for bucket in breakdown.values()))
         self.assertEqual(16, sum(bucket["missed"] for bucket in breakdown.values()))
 
+    def test_semantic_detection_is_reported_when_runtime_redacts_all_variants(self):
+        """A fixed runtime must be able to move the semantic subtype above 0/N."""
+        rows, index = semantic_miss_fixture()
+        for row_item in rows:
+            if index[parse_source_id(row_item["sample_id"])] == SEMANTIC:
+                row_item["profiles"][PROFILE]["decision"] = "redact"
+        breakdown = breakdown_by_subtype(rows, index, PROFILE)
+        semantic = breakdown[SEMANTIC]
+        self.assertEqual(16, semantic["total"])
+        self.assertEqual(16, semantic["detected"])
+        self.assertEqual(0, semantic["missed"])
+        self.assertEqual(1.0, semantic["detection_rate"])
+
     def test_no_attack_rows_yields_empty_breakdown(self):
         index = index_of({"101": SEMANTIC})
         self.assertEqual({}, breakdown_by_subtype([], index, PROFILE))
