@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/contextkeeper/service/internal/llm"
@@ -31,6 +32,16 @@ type EntityExtractor struct {
 	ruleEngine  *RuleEngine
 	pmiCalc     *PMICalculator
 	pcccmEngine *PCCMFusionEngine
+	cacheMu     sync.RWMutex
+	cache       map[string]cachedExtraction
+	cacheOrder  []string
+}
+
+const causalExtractionCacheCapacity = 256
+
+type cachedExtraction struct {
+	relationsJSON []byte
+	executionJSON []byte
 }
 
 // NewEntityExtractor 创建实体抽取器实例
@@ -40,6 +51,7 @@ func NewEntityExtractor(llmClient *llm.OllamaLocalClient) *EntityExtractor {
 		ruleEngine:  NewRuleEngine(),
 		pmiCalc:     NewPMICalculator(),
 		pcccmEngine: NewDefaultPCCMFusionEngine(),
+		cache:       make(map[string]cachedExtraction),
 	}
 }
 
@@ -62,6 +74,19 @@ func (ee *EntityExtractor) Extract(ctx context.Context, text string, useRules, u
 // ExtractWithExecution is the audited extraction entrypoint used by the HTTP
 // API. It records the actual fallback path instead of inferring it from output.
 func (ee *EntityExtractor) ExtractWithExecution(ctx context.Context, text string, useRules, usePMI, useLLM bool) ([]CausalRelation, *ExtractionExecution, error) {
+	key := causalExtractionCacheKey(text, useRules, usePMI, useLLM)
+	if relations, execution, ok := ee.getCachedExtraction(key); ok {
+		execution.CacheHit = true
+		return relations, execution, nil
+	}
+	relations, execution, err := ee.extractWithExecutionUncached(ctx, text, useRules, usePMI, useLLM)
+	if err == nil {
+		ee.putCachedExtraction(key, relations, execution)
+	}
+	return relations, execution, err
+}
+
+func (ee *EntityExtractor) extractWithExecutionUncached(ctx context.Context, text string, useRules, usePMI, useLLM bool) ([]CausalRelation, *ExtractionExecution, error) {
 	execution := ee.ExecutionEvidence(text, useRules, usePMI, useLLM)
 	var relations []CausalRelation
 
@@ -158,6 +183,55 @@ func (ee *EntityExtractor) ExtractWithExecution(ctx context.Context, text string
 	ee.recordCorpusEvidence(relations)
 	ee.AttachAuditEvidence(relations, execution)
 	return relations, execution, nil
+}
+
+func causalExtractionCacheKey(text string, useRules, usePMI, useLLM bool) string {
+	flags := fmt.Sprintf("r=%t;p=%t;l=%t;", useRules, usePMI, useLLM)
+	sum := sha256.Sum256([]byte(flags + normalizeForLookup(text)))
+	return fmt.Sprintf("%x", sum[:])
+}
+
+func (ee *EntityExtractor) getCachedExtraction(key string) ([]CausalRelation, *ExtractionExecution, bool) {
+	ee.cacheMu.RLock()
+	entry, ok := ee.cache[key]
+	ee.cacheMu.RUnlock()
+	if !ok {
+		return nil, nil, false
+	}
+	var relations []CausalRelation
+	var execution ExtractionExecution
+	if err := json.Unmarshal(entry.relationsJSON, &relations); err != nil {
+		return nil, nil, false
+	}
+	if err := json.Unmarshal(entry.executionJSON, &execution); err != nil {
+		return nil, nil, false
+	}
+	return relations, &execution, true
+}
+
+func (ee *EntityExtractor) putCachedExtraction(key string, relations []CausalRelation, execution *ExtractionExecution) {
+	if execution == nil {
+		return
+	}
+	relationsJSON, err := json.Marshal(relations)
+	if err != nil {
+		return
+	}
+	executionJSON, err := json.Marshal(execution)
+	if err != nil {
+		return
+	}
+	ee.cacheMu.Lock()
+	defer ee.cacheMu.Unlock()
+	if _, exists := ee.cache[key]; !exists {
+		ee.cacheOrder = append(ee.cacheOrder, key)
+	}
+	ee.cache[key] = cachedExtraction{relationsJSON: relationsJSON, executionJSON: executionJSON}
+	for len(ee.cacheOrder) > causalExtractionCacheCapacity {
+		oldest := ee.cacheOrder[0]
+		ee.cacheOrder = ee.cacheOrder[1:]
+		delete(ee.cache, oldest)
+	}
 }
 
 // recordCorpusEvidence 把成功抽取的因果元组写入 PMI 语料统计。

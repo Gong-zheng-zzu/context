@@ -70,6 +70,48 @@ func TestExtractWithExecutionSkipsConfiguredLLMWhenRulesAreComplete(t *testing.T
 	}
 }
 
+func TestExtractWithExecutionUsesNormalizedInputCache(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	text := "患者服用降压药后出现体位性低血压"
+
+	first, firstExecution, err := extractor.ExtractWithExecution(context.Background(), text, true, false, false)
+	if err != nil {
+		t.Fatalf("first extraction error = %v", err)
+	}
+	if firstExecution.CacheHit {
+		t.Fatal("first extraction unexpectedly reported cache hit")
+	}
+	if len(first) == 0 {
+		t.Fatal("first extraction returned no relations")
+	}
+
+	second, secondExecution, err := extractor.ExtractWithExecution(context.Background(), "患者 服用降压药后出现体位性低血压", true, false, false)
+	if err != nil {
+		t.Fatalf("second extraction error = %v", err)
+	}
+	if !secondExecution.CacheHit {
+		t.Fatal("second extraction did not report cache hit")
+	}
+	if len(second) != len(first) || second[0].CandidateID != first[0].CandidateID {
+		t.Fatalf("cached relations = %#v, first = %#v", second, first)
+	}
+}
+
+func TestExtractWithExecutionCacheSeparatesExecutionFlags(t *testing.T) {
+	extractor := NewEntityExtractor(nil)
+	text := "患者服用降压药后出现体位性低血压"
+	if _, _, err := extractor.ExtractWithExecution(context.Background(), text, true, false, false); err != nil {
+		t.Fatalf("seed extraction error = %v", err)
+	}
+	_, execution, err := extractor.ExtractWithExecution(context.Background(), text, true, true, false)
+	if err != nil {
+		t.Fatalf("different flags extraction error = %v", err)
+	}
+	if execution.CacheHit {
+		t.Fatal("different execution flags reused cached result")
+	}
+}
+
 func TestMatchingRuleEvidenceIncludesBothCausalEdges(t *testing.T) {
 	relation := CausalRelation{Mediator: "服用降压药", Property: "体位性低血压", Result: "跌倒"}
 	rules := []RuleEvidence{
