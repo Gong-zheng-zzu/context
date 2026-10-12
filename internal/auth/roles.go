@@ -18,57 +18,61 @@ const (
 
 // Permission 权限定义
 type Permission struct {
-	CanViewAllElders      bool // 查看所有老人
-	CanEditHealthRecords  bool // 编辑健康记录
-	CanPrescribe          bool // 开处方
-	CanViewSensitiveData  bool // 查看敏感数据
-	CanReceiveAlerts      bool // 接收告警
-	CanCallCaregiver      bool // 呼叫护工
-	CanViewOwnFamily      bool // 查看自己的家人
-	CanManageElders       bool // 管理老人信息
+	CanViewAllElders     bool // 查看所有老人
+	CanEditHealthRecords bool // 编辑健康记录
+	CanPrescribe         bool // 开处方
+	CanViewSensitiveData bool // 查看敏感数据
+	CanReceiveAlerts     bool // 接收告警
+	CanCallCaregiver     bool // 呼叫护工
+	CanViewOwnFamily     bool // 查看自己的家人
+	CanManageElders      bool // 管理老人信息
 }
 
 // RolePermissions 角色权限映射
 var RolePermissions = map[Role]Permission{
 	RoleCaregiver: {
-		CanViewAllElders:      false, // 只能看负责的老人
-		CanEditHealthRecords:  true,  // 可以记录护理信息
-		CanPrescribe:          false, // 不能开处方
-		CanViewSensitiveData:  false, // 不能看敏感数据（如诊断）
-		CanReceiveAlerts:      true,  // 接收护理提醒
-		CanCallCaregiver:      false,
-		CanViewOwnFamily:      false,
-		CanManageElders:       false,
+		CanViewAllElders:     false, // 只能看负责的老人
+		CanEditHealthRecords: true,  // 可以记录护理信息
+		CanPrescribe:         false, // 不能开处方
+		CanViewSensitiveData: false, // 不能看敏感数据（如诊断）
+		CanReceiveAlerts:     true,  // 接收护理提醒
+		CanCallCaregiver:     false,
+		CanViewOwnFamily:     false,
+		CanManageElders:      false,
 	},
 	RoleDoctor: {
-		CanViewAllElders:      true,  // 可以看所有老人
-		CanEditHealthRecords:  true,  // 可以编辑健康记录
-		CanPrescribe:          true,  // 可以开处方
-		CanViewSensitiveData:  true,  // 可以看敏感数据
-		CanReceiveAlerts:      true,  // 接收医疗告警
-		CanCallCaregiver:      false,
-		CanViewOwnFamily:      false,
-		CanManageElders:       true, // 可以管理老人信息
+		CanViewAllElders:     true, // 可以看所有老人
+		CanEditHealthRecords: true, // 可以编辑健康记录
+		CanPrescribe:         true, // 可以开处方
+		CanViewSensitiveData: true, // 可以看敏感数据
+		CanReceiveAlerts:     true, // 接收医疗告警
+		CanCallCaregiver:     false,
+		CanViewOwnFamily:     false,
+		CanManageElders:      true, // 可以管理老人信息
 	},
 	RoleFamily: {
-		CanViewAllElders:      false, // 只能看自己的亲属
-		CanEditHealthRecords:  false, // 不能编辑健康记录
-		CanPrescribe:          false, // 不能开处方
-		CanViewSensitiveData:  false, // 不能看敏感数据（脱敏后的）
-		CanReceiveAlerts:      true,  // 接收异常通知
-		CanCallCaregiver:      false,
-		CanViewOwnFamily:      true, // 只能看自己的家人
-		CanManageElders:       false,
+		CanViewAllElders:     false, // 只能看自己的亲属
+		CanEditHealthRecords: false, // 不能编辑健康记录
+		CanPrescribe:         false, // 不能开处方
+		CanViewSensitiveData: false, // 不能看敏感数据（脱敏后的）
+		CanReceiveAlerts:     true,  // 接收异常通知
+		CanCallCaregiver:     false,
+		CanViewOwnFamily:     true, // 只能看自己的家人
+		CanManageElders:      false,
 	},
 	RoleElder: {
-		CanViewAllElders:      false, // 只能看自己
-		CanEditHealthRecords:  false, // 不能编辑
-		CanPrescribe:          false, // 不能开处方
-		CanViewSensitiveData:  false, // 不能看敏感数据
-		CanReceiveAlerts:      true,  // 接收用药提醒等
-		CanCallCaregiver:      true,  // 可以呼叫护工
-		CanViewOwnFamily:      false,
-		CanManageElders:       false,
+		CanViewAllElders:     false, // 只能看自己
+		CanEditHealthRecords: false, // 不能编辑
+		CanPrescribe:         false, // 不能开处方
+		CanViewSensitiveData: false, // 不能看敏感数据
+		CanReceiveAlerts:     true,  // 接收用药提醒等
+		CanCallCaregiver:     true,  // 可以呼叫护工
+		CanViewOwnFamily:     false,
+		CanManageElders:      false,
+	},
+	RoleAdmin: {
+		CanViewAllElders: true, CanEditHealthRecords: true, CanViewSensitiveData: true,
+		CanReceiveAlerts: true, CanCallCaregiver: true, CanViewOwnFamily: true, CanManageElders: true,
 	},
 }
 
@@ -90,6 +94,9 @@ func IsValidRole(role string) bool {
 
 // GetRoleName 获取角色中文名称
 func GetRoleName(role Role) string {
+	if role == RoleAdmin {
+		return "admin"
+	}
 	names := map[Role]string{
 		RoleCaregiver: "护工",
 		RoleDoctor:    "医生",
