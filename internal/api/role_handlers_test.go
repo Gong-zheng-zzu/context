@@ -46,3 +46,29 @@ func TestFamilyMessageAllowsRelatedElder(t *testing.T) {
 	}
 }
 
+func TestRoleDashboardsRejectUnknownRole(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	tests := []struct {
+		name    string
+		handler gin.HandlerFunc
+	}{
+		{"dashboard", GetDashboardHandler},
+		{"alerts", GetAlertsHandler},
+		{"recommendations", GetRecommendationsHandler},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			router := gin.New()
+			router.GET("/", func(c *gin.Context) {
+				c.Set("user_id", "user-1")
+				c.Set("role", "not-a-role")
+				test.handler(c)
+			})
+			rec := httptest.NewRecorder()
+			router.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/", nil))
+			if rec.Code != http.StatusUnauthorized {
+				t.Fatalf("status = %d, want %d", rec.Code, http.StatusUnauthorized)
+			}
+		})
+	}
+}
