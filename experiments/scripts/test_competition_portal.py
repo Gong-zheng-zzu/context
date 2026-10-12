@@ -8,18 +8,31 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 PORTAL = ROOT / "web" / "competition_portal.html"
+PORTAL_ALIAS = ROOT / "web" / "competition_portal.htm"
 
 
 class CompetitionPortalContractTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.html = PORTAL.read_text(encoding="utf-8")
+        cls.alias = PORTAL_ALIAS.read_text(encoding="utf-8")
+
+    def test_typo_tolerant_htm_alias_preserves_query_and_redirects(self):
+        self.assertIn("competition_portal.html", self.alias)
+        self.assertIn("window.location.search", self.alias)
+        self.assertIn("window.location.hash", self.alias)
+        self.assertIn("window.location.replace", self.alias)
 
     def test_role_views_and_protected_contracts_are_present(self):
         for role in ("caregiver", "doctor", "family", "elder"):
             self.assertIn(f'data-role="{role}"', self.html)
         for endpoint in ("/api/role/login", "/api/dashboard", "/api/v1/causal/extract", "/api/v1/agent/execute", "/api/sessions/"):
             self.assertIn(endpoint, self.html)
+
+    def test_login_form_uses_a_configured_role_user_hint(self):
+        self.assertIn('id="loginUser" value="caregiver_001"', self.html)
+        self.assertIn("doctor_001", self.html)
+        self.assertIn("密码使用服务端配置的演示密码", self.html)
 
     def test_browser_does_not_persist_credentials(self):
         self.assertNotRegex(self.html, r"(?:localStorage|sessionStorage)")

@@ -46,7 +46,7 @@
       <h1>忆安智护</h1><p class="subtitle">多角色护理数据治理门户</p>
       <div class="notice" style="margin:18px 0">仅使用合成评测数据。后端 JWT 才是权限依据，浏览器不会保存密码或令牌。</div>
       <div class="field"><label for="loginRole">登录角色</label><select id="loginRole"><option value="caregiver">护工</option><option value="doctor">医生</option><option value="family">家属</option><option value="elder">老人</option></select></div>
-      <div class="field"><label for="loginUser">演示用户 ID</label><input id="loginUser" autocomplete="username" placeholder="例如 caregiver_001"></div>
+      <div class="field"><label for="loginUser">演示用户 ID</label><input id="loginUser" value="caregiver_001" autocomplete="username" placeholder="例如 caregiver_001"><small class="hint">实时模式可用：caregiver_001、doctor_001、family_001、elder_001。密码使用服务端配置的演示密码。</small></div>
       <div class="field"><label for="loginPassword">演示密码</label><input id="loginPassword" type="password" autocomplete="current-password"></div>
       <div class="actions"><button id="loginButton" class="primary">安全登录</button><button id="fixtureButton" class="secondary">进入离线夹具</button></div>
       <p id="loginError" class="error" role="alert"></p>
