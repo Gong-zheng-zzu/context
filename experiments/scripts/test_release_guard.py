@@ -17,6 +17,18 @@ SPEC.loader.exec_module(release_guard)
 
 
 class ReleaseGuardTests(unittest.TestCase):
+    def test_all_competition_entrypoints_are_in_active_scan_scope(self):
+        for path in (
+            "web/competition_console.html",
+            "web/competition_portal.html",
+            "web/competition_portal.htm",
+            "web/caregiver_chat.html",
+            "web/js/chat-common.js",
+            "web/js/caregiver-trusted-workflow.js",
+            "web/js/auth-security-override.js",
+        ):
+            self.assertTrue(release_guard.is_active_path(path), path)
+
     def test_retired_command_is_blocked_on_active_surface(self):
         findings = release_guard.scan_active_text(
             "README.md", "go run cmd/server/main.go\n"

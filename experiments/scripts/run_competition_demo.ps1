@@ -14,11 +14,12 @@ $Timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
 $RunDir = Join-Path $Experiments "results\demo_runs\$Timestamp"
 New-Item -ItemType Directory -Force $RunDir | Out-Null
 $isFixture = $Mode -eq "fixture"
+$consoleMode = if ($isFixture) { "fixture" } else { "live" }
 $consolePath = Join-Path $ProjectRoot "web\competition_console.html"
 $ConsoleUrl = if ($isFixture) {
-    "$([System.Uri]::new($consolePath).AbsoluteUri)?mode=fixture"
+    "$([System.Uri]::new($consolePath).AbsoluteUri)?mode=$consoleMode"
 } else {
-    "$($BaseUrl.TrimEnd('/'))/web/competition_console.html?mode=$Mode"
+    "$($BaseUrl.TrimEnd('/'))/web/competition_console.html?mode=$consoleMode"
 }
 $health = [ordered]@{ status_code = $null; passed = $false }
 $authCheck = [ordered]@{ checked = $false; credential_source = "none_fixture"; token_persisted = $false }
@@ -65,6 +66,8 @@ $manifest = [ordered]@{
     schema = "competition-demo-run-v1"
     timestamp_local = (Get-Date).ToString("o")
     base_url = $BaseUrl
+    requested_mode = $Mode
+    console_mode = $consoleMode
     console_url = $ConsoleUrl
     health = $health
     authentication = $authCheck

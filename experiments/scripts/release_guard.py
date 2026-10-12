@@ -25,6 +25,12 @@ ACTIVE_ROOT_FILES = {
 }
 ACTIVE_PREFIXES = (
     "web/competition_console",
+    "web/competition_portal",
+    "web/caregiver_chat.html",
+    "web/js/config.js",
+    "web/js/auth-security-override.js",
+    "web/js/caregiver-trusted-workflow.js",
+    "web/js/chat-common.js",
     "docs/competition/",
     "experiments/COMPETITION_",
     "experiments/scripts/run_competition_demo",

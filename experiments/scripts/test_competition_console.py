@@ -180,7 +180,10 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn('credential_source = "environment"', self.launcher)
         self.assertIn("token_persisted = $false", self.launcher)
         self.assertIn("run_manifest.json", self.launcher)
-        self.assertIn("competition_console.html?mode=$Mode", self.launcher)
+        self.assertIn("$consoleMode = if ($isFixture) { \"fixture\" } else { \"live\" }", self.launcher)
+        self.assertIn("competition_console.html?mode=$consoleMode", self.launcher)
+        self.assertIn("requested_mode = $Mode", self.launcher)
+        self.assertIn("console_mode = $consoleMode", self.launcher)
         manifest = self.launcher.split("$manifest =", 1)[1].split("$manifest |", 1)[0]
         self.assertNotIn("EVAL_PASSWORD", manifest)
         self.assertNotIn("token =", manifest)
@@ -194,7 +197,7 @@ class CompetitionConsoleContractTests(unittest.TestCase):
         self.assertIn('if ($RunIsolatedUnlearning -and $isFixture)', self.launcher)
         self.assertIn('artifacts = $(if ($isFixture) { ,@("run_manifest.json", "smoke.json") }', self.launcher)
         self.assertIn('--mode fixture --json-output (Join-Path $RunDir "smoke.json")', self.launcher)
-        self.assertIn('$([System.Uri]::new($consolePath).AbsoluteUri)?mode=fixture', self.launcher)
+        self.assertIn('$([System.Uri]::new($consolePath).AbsoluteUri)?mode=$consoleMode', self.launcher)
         # The credential guard is inside the live-mode branch, not at script scope.
         credential_guard = 'if (-not $env:EVAL_USER_ID -or -not $env:EVAL_PASSWORD)'
         self.assertEqual(self.launcher.count(credential_guard), 1)
