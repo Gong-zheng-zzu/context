@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import uuid
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -128,6 +129,9 @@ def main() -> int:
     print("[PASS] authentication: JWT acquired from environment credentials")
 
     headers = evaluator.get_auth_headers()
+    # Use a fresh, isolated smoke scope. A shared historical session may belong
+    # to another demo identity and correctly fail the runtime owner check.
+    retrieval_session_id = f"smoke_{uuid.uuid4().hex}"
     checks = {
         "security": evaluator.call_api(
             "POST",
@@ -151,7 +155,7 @@ def main() -> int:
             "POST",
             "/api/mcp/tools/retrieve_context",
             {
-                "sessionId": "eval_retrieval_test",
+                "sessionId": retrieval_session_id,
                 "query": "health record",
                 "maxResults": 1,
                 "contextsOnly": True,

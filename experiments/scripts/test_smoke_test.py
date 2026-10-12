@@ -6,11 +6,12 @@ from pathlib import Path
 import json
 import subprocess
 import tempfile
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from base_evaluator import APIResponse
-from smoke_test import fixture_smoke, validate_contract
+from smoke_test import fixture_smoke, main, validate_contract
 
 
 def response(payload, status=200):
@@ -20,6 +21,36 @@ def response(payload, status=200):
 class SmokeContractTests(unittest.TestCase):
     def test_fixture_smoke_checks_local_console_only(self):
         self.assertEqual(fixture_smoke(), 0)
+
+    @patch("smoke_test.BaseEvaluator")
+    def test_live_retrieval_uses_a_fresh_owner_scoped_session(self, evaluator_type):
+        evaluator = evaluator_type.return_value
+        evaluator.check_service_health.return_value = (True, "healthy")
+        evaluator.authenticate_from_env.return_value = response({"token": "test"})
+        evaluator.get_auth_headers.return_value = {"Authorization": "Bearer test"}
+        def call_api(_method, endpoint, *_args, **_kwargs):
+            if endpoint == "/api/v1/security/evaluate-input":
+                return response({"data": {"decision": "allow"}})
+            if endpoint == "/api/v1/causal/extract":
+                return response({"relations": [], "execution": {"mode": "rules", "model_status": "unavailable"}, "persistence": {"status": "analysis_only"}})
+            if endpoint == "/api/mcp/tools/retrieve_context":
+                return response({"contexts": [], "retrieval_metadata": {"retrieval_fusion_mode": "vector_only_fallback", "source_statuses": {}, "source_latency_ms": {}, "wall_clock_latency_ms": 1}})
+            return response({"enabled": True})
+
+        evaluator.call_api.side_effect = call_api
+
+        with patch.dict("os.environ", {"EVAL_USER_ID": "doctor_001", "EVAL_PASSWORD": "test"}):
+            with patch("sys.argv", ["smoke_test.py", "--mode", "live"]):
+                self.assertEqual(main(), 0)
+
+        retrieval_calls = [
+            call for call in evaluator.call_api.call_args_list
+            if call.args[1] == "/api/mcp/tools/retrieve_context"
+        ]
+        self.assertEqual(len(retrieval_calls), 1)
+        session_id = retrieval_calls[0].args[2]["sessionId"]
+        self.assertTrue(session_id.startswith("smoke_"))
+        self.assertNotEqual(session_id, "eval_retrieval_test")
 
     def test_causal_requires_execution_and_persistence_audit(self):
         ok, _ = validate_contract("causal", response({"relations": [], "execution": {}, "persistence": {}}))
