@@ -21,6 +21,7 @@ RUNTIME_CONFIG_FIELDS = (
     "service_start_time",
 )
 UNCAPTURED_VALUES = {"", "not_captured"}
+REQUIRED_RRF_SOURCES = ("vector", "knowledge", "timeline")
 
 
 def is_nonempty_string(value: Any) -> bool:
@@ -29,6 +30,69 @@ def is_nonempty_string(value: Any) -> bool:
 
 def is_number(value: Any) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _validate_rrf_audit(label: str, result: Dict[str, Any]) -> List[str]:
+    """Validate the response-level evidence required for a formal RRF run.
+
+    A retrieval score by itself cannot prove that three sources participated.
+    Keep this gate deliberately strict: a missing audit object is a failed
+    evidence run rather than an implicit vector-only success.
+    """
+    errors: List[str] = []
+    metadata = result.get("retrieval_metadata")
+    if not isinstance(metadata, dict) or not metadata:
+        return [f"{label}.retrieval_metadata must be a non-empty object for RRF evidence"]
+
+    fusion_mode = metadata.get("retrieval_fusion_mode")
+    if not is_nonempty_string(fusion_mode) or fusion_mode == "not_captured":
+        errors.append(f"{label}.retrieval_metadata.retrieval_fusion_mode must be captured")
+
+    statuses = metadata.get("source_statuses")
+    if not isinstance(statuses, dict):
+        errors.append(f"{label}.retrieval_metadata.source_statuses must be an object")
+    else:
+        for source in REQUIRED_RRF_SOURCES:
+            if not is_nonempty_string(statuses.get(source)):
+                errors.append(f"{label}.retrieval_metadata.source_statuses.{source} is required")
+
+    latencies = metadata.get("source_latency_ms")
+    if not isinstance(latencies, dict):
+        errors.append(f"{label}.retrieval_metadata.source_latency_ms must be an object")
+    else:
+        for source in REQUIRED_RRF_SOURCES:
+            value = latencies.get(source)
+            if not is_number(value) or not math.isfinite(float(value)) or value < 0:
+                errors.append(
+                    f"{label}.retrieval_metadata.source_latency_ms.{source} must be non-negative"
+                )
+
+    wall_clock = metadata.get("wall_clock_latency_ms")
+    if not is_number(wall_clock) or not math.isfinite(float(wall_clock)) or wall_clock < 0:
+        errors.append(f"{label}.retrieval_metadata.wall_clock_latency_ms must be non-negative")
+
+    rankings = metadata.get("source_rankings")
+    if not isinstance(rankings, dict):
+        errors.append(
+            f"{label}.retrieval_metadata.source_rankings must map every source to doc_id ranks"
+        )
+    else:
+        for source in REQUIRED_RRF_SOURCES:
+            source_ranks = rankings.get(source)
+            if not isinstance(source_ranks, dict):
+                errors.append(f"{label}.retrieval_metadata.source_rankings.{source} is required")
+                continue
+            if isinstance(statuses, dict) and statuses.get(source) == "success" and not source_ranks:
+                errors.append(
+                    f"{label}.retrieval_metadata.source_rankings.{source} must be non-empty when source status is success"
+                )
+            for doc_id, rank in source_ranks.items():
+                if not is_nonempty_string(doc_id) or not isinstance(rank, int) or isinstance(rank, bool) or rank < 1:
+                    errors.append(
+                        f"{label}.retrieval_metadata.source_rankings.{source} must contain positive integer ranks"
+                    )
+                    break
+    return errors
 
 
 def validate_result(data: Any) -> List[str]:
@@ -68,6 +132,9 @@ def validate_result(data: Any) -> List[str]:
         not is_nonempty_string(corpus_hash) or len(corpus_hash) != 64
     ):
         errors.append("dataset.corpus_sha256 must be a 64-character SHA-256 hex string when captured")
+
+    if not isinstance(dataset, dict) or dataset.get("report_eligible") is not True:
+        errors.append("dataset.report_eligible must be true for formal retrieval evidence")
 
     detailed_results = data.get("detailed_results")
     if not isinstance(detailed_results, list) or not detailed_results:
@@ -117,6 +184,9 @@ def validate_result(data: Any) -> List[str]:
         if result.get("error_type") == "None":
             count_key = "scorable" if is_scorable else "unscorable"
             expected_counts[config_name][count_key] += 1
+
+        if evaluation_mode == "multi_source_rrf_evaluation_only":
+            errors.extend(_validate_rrf_audit(label, result))
 
     metrics = data.get("aggregated_metrics")
     if not isinstance(metrics, dict) or not metrics:
