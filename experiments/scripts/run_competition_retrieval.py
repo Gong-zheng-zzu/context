@@ -17,6 +17,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
+import requests
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from experiment_integrity import IntegrityConfigurationError, audit_signature, dual_digest_file, utc_now
 
@@ -41,6 +43,61 @@ def run_stage(name: str, command: List[str], env: Dict[str, str], run_dir: Path,
     stage["exit_code"] = process.returncode
     if process.returncode:
         raise RuntimeError(f"{name} failed; see {log_path}")
+
+
+def probe_live_runtime(base_url: str, config_name: str, env: Dict[str, str], timeout: int = 5) -> Dict[str, Any]:
+    """Require a live HTTP/authenticated runtime before any cleanup or writes."""
+    if env.get("EVAL_COMPETITION_RUNTIME_READY", "").strip() != config_name:
+        raise RuntimeError("runtime-ready marker does not match the requested configuration")
+    if env.get("EVAL_RUNTIME_CONFIG_NAME", "").strip() != config_name:
+        raise RuntimeError("runtime config name evidence is missing or mismatched")
+    config_hash = env.get("EVAL_RUNTIME_CONFIG_HASH", "").strip()
+    if len(config_hash) != 64 or any(char not in "0123456789abcdefABCDEF" for char in config_hash):
+        raise RuntimeError("runtime config SHA-256 evidence is missing or invalid")
+
+    base = base_url.rstrip("/")
+    try:
+        health = requests.get(f"{base}/health", timeout=timeout)
+    except requests.RequestException as exc:
+        raise RuntimeError(f"live health probe failed: {type(exc).__name__}") from exc
+    if health.status_code != 200:
+        raise RuntimeError(f"live health probe returned HTTP {health.status_code}")
+
+    try:
+        login = requests.post(
+            f"{base}/api/auth/login",
+            json={"user_id": ALLOWED_USER_ID, "password": env.get("EVAL_PASSWORD", "")},
+            timeout=timeout,
+        )
+    except requests.RequestException as exc:
+        raise RuntimeError(f"live authentication probe failed: {type(exc).__name__}") from exc
+    if login.status_code != 200:
+        raise RuntimeError(f"live authentication probe returned HTTP {login.status_code}")
+    try:
+        payload = login.json()
+    except ValueError as exc:
+        raise RuntimeError("live authentication probe returned invalid JSON") from exc
+    token = payload.get("token") or (payload.get("data") or {}).get("token")
+    if not isinstance(token, str) or not token:
+        raise RuntimeError("live authentication probe did not return a token")
+
+    return {
+        "health_status": health.status_code,
+        "authentication_status": login.status_code,
+        "runtime_config_name": config_name,
+        "runtime_config_sha256": config_hash,
+    }
+
+
+def seed_verification_command(seed_dir: Path, run_dir: Path, base_url: str) -> List[str]:
+    """Build the mandatory read-only all-document storage verification stage."""
+    return [
+        sys.executable, str(SCRIPTS_DIR / "verify_structured_threeway_seed.py"),
+        "--manifest", str(seed_dir / "manifest.json"),
+        "--output", str(run_dir / "seed_verification.json"),
+        "--base-url", base_url,
+        "--require-vector-evidence", "--require-threeway-evidence",
+    ]
 
 
 def main() -> int:
@@ -85,8 +142,14 @@ def main() -> int:
             run_stage("prepare_seed_dry_run", seed_command + ["--dry-run"], env, run_dir, stages)
             manifest["outcome"] = "dry_run_complete"
         else:
+            manifest["live_preflight"] = probe_live_runtime(args.base_url, args.config_name, env)
             run_stage("cleanup", [sys.executable, str(SCRIPTS_DIR / "cleanup_eval_session.py"), "--confirm", "--base-url", args.base_url, "--output", str(run_dir / "cleanup.json")], env, run_dir, stages)
             run_stage("seed", seed_command + ["--submit", "--base-url", args.base_url], env, run_dir, stages)
+            run_stage(
+                "verify_seed_threeway",
+                seed_verification_command(seed_dir, run_dir, args.base_url),
+                env, run_dir, stages,
+            )
             trace = [sys.executable, str(SCRIPTS_DIR / "run_trace_queries.py"), "--mode", mode, "--limit", "10", "--base-url", args.base_url, "--session-id", ALLOWED_SESSION_ID, "--output", str(run_dir / "trace.json")]
             run_stage("trace", trace, env, run_dir, stages)
             evaluate = [sys.executable, str(SCRIPTS_DIR / "retrieval_eval.py"), "--queries", "100", "--configs", args.config_name, "--retrieval-mode", mode, "--base-url", args.base_url, "--ground-truth-file", str(args.ground_truth_file), "--corpus-file", str(args.corpus_file), "--require-reviewed-ground-truth", "--output", str(result_path)]
