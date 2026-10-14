@@ -68,6 +68,7 @@ __pycache__/
 
 # Local competition demo outputs
 experiments/results/demo_runs/
+experiments/results/competition_runs/
 
 # Evaluation runtime environments may contain credentials or encryption keys.
 experiments/runtime_env/*.env
