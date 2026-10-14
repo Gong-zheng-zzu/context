@@ -14,8 +14,8 @@ Invoke-WebRequest http://127.0.0.1:8088/health
 
 浏览器控制台：
 
-- 在线模式：`http://127.0.0.1:8088/web/competition_console.html?mode=ollama`
-- 离线夹具：直接打开 `web/competition_console.html?mode=fixture`
+- 在线模式：`http://127.0.0.1:8088/web/competition_console.html?mode=live`
+- 离线夹具：`http://127.0.0.1:8088/web/competition_console.html?mode=fixture`（不调用模型、联网、写入、检索或删除）
 - 多角色门户：`http://127.0.0.1:8088/web/competition_portal.html?mode=fixture`
 
 离线夹具只展示固定样例，不伪造真实模型或 RRF 证据。在线演示需要在本地配置认证凭据和 Ollama；凭据只通过环境变量提供，不提交到 Git。
