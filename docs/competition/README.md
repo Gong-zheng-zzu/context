@@ -9,14 +9,17 @@ This folder groups the project files that are directly useful for an information
 3. `比赛定位与可信边界.md` - 项目定位和不应越过的陈述边界
 4. `对比实验报告.md` - 仅登记通过证据门禁的定量结果
 5. `核心创新点总结.md` - 安全机制与答辩素材
-6. `项目策划书.md`
-7. `路演演示脚本.md`（历史素材，使用前须与本手册的边界核对）
-8. `项目完善清单.md`
-9. `PPT实验部分可信性审查报告-20261011.md` - PPT 实验数字与仓库证据的逐项审查
+6. `项目策划书-强网杯报名版-20261014.md` - current competition proposal source
+7. `项目策划书.md` - legacy general-purpose proposal, not suitable as the competition submission without review
+8. `路演演示脚本.md`（历史素材，使用前须与本手册的边界核对）
+9. `强网杯报名视频脚本-20261014.md` - competition recording script
+10. `项目完善清单.md`
+11. `PPT实验部分可信性审查报告-20261011.md` - PPT 实验数字与仓库证据的逐项审查
 
 ## File Guide
 
-- `项目策划书.md`: overall project narrative and value proposition
+- `项目策划书-强网杯报名版-20261014.md`: current competition proposal source
+- `项目策划书.md`: legacy general-purpose proposal; review before reuse
 - `比赛主链创新增强改造报告.md`: audited historical baselines, trust boundaries, and phased acceptance evidence
 - `比赛架构与可信演示手册.md`: verified architecture, live/fixture distinction, and release gates
 - `比赛定位与可信边界.md`: competition positioning and claim boundaries
