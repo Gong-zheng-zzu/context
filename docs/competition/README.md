@@ -28,6 +28,7 @@ This folder groups the project files that are directly useful for an information
 - `路演演示脚本.md`: demo and defense speaking script
 - `项目完善清单.md`: remaining optimization and execution checklist
 - `PPT实验部分可信性审查报告-20261011.md`: slide-by-slide evidence boundary and replacement wording
+- `experiments/scripts/finalize_double_reviewer_annotations.py`: freeze retrieval ground truth after two independent reviews and adjudication
 - `ppt_experiment_claims.json`: machine-readable claim manifest used by the experiment tests
 - `策划书-核心技术清单.md`: detailed technical breakdown
 
