@@ -11,6 +11,20 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from experiment_integrity import IntegrityConfigurationError, dual_digest_file
 
 
+FORMAL_ANNOTATION_STATUS = "approved_double_reviewer"
+
+
+def is_formally_reviewed(metadata: dict) -> bool:
+    """Require the competition's two-reviewer and adjudication contract."""
+    return (
+        metadata.get("annotation_status") == FORMAL_ANNOTATION_STATUS
+        and metadata.get("report_eligible") is True
+        and isinstance(metadata.get("annotator_count"), int)
+        and metadata.get("annotator_count") >= 2
+        and metadata.get("adjudication_status") == "completed"
+    )
+
+
 def load(path: Path):
     try:
         return json.loads(path.read_text(encoding="utf-8"))
@@ -71,7 +85,7 @@ def validate(args) -> Tuple[bool, Dict]:
             elif expected_doc not in doc_ids:
                 missing.append(expected_doc)
     metadata = query_data.get("metadata", {}) if isinstance(query_data, dict) else {}
-    reviewed = metadata.get("annotation_status") == "approved_single_reviewer" and metadata.get("report_eligible") is True
+    reviewed = is_formally_reviewed(metadata)
     passed = (
         len(doc_ids) == args.expected_corpus_count
         and len(queries) == args.expected_query_count
@@ -83,7 +97,7 @@ def validate(args) -> Tuple[bool, Dict]:
     report = {
         "hash_algorithms": ["SHA-256", "SM3"],
         "corpus": {"path": str(corpus_path), "sha256": dual_digest_file(corpus_path)["sha256"], "dual_digest": dual_digest_file(corpus_path), "count": len(doc_ids), "expected": args.expected_corpus_count},
-        "queries": {"path": str(queries_path), "sha256": dual_digest_file(queries_path)["sha256"], "dual_digest": dual_digest_file(queries_path), "count": len(queries), "expected": args.expected_query_count, "type_counts": type_counts, "expected_type_counts": expected_types, "annotation_status": metadata.get("annotation_status", "not_recorded"), "report_eligible": metadata.get("report_eligible"), "reviewed": reviewed},
+        "queries": {"path": str(queries_path), "sha256": dual_digest_file(queries_path)["sha256"], "dual_digest": dual_digest_file(queries_path), "count": len(queries), "expected": args.expected_query_count, "type_counts": type_counts, "expected_type_counts": expected_types, "annotation_status": metadata.get("annotation_status", "not_recorded"), "report_eligible": metadata.get("report_eligible"), "reviewed": reviewed, "review_gate": {"required_annotation_status": FORMAL_ANNOTATION_STATUS, "minimum_independent_annotators": 2, "required_adjudication_status": "completed"}},
         "missing_doc_ids": sorted(set(missing))[:20],
         "duplicate_query_ids": sorted(item for item in duplicate_query_ids if item),
         "passed": passed,

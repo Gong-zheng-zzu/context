@@ -68,6 +68,19 @@ class CompetitionRetrievalRunnerTests(unittest.TestCase):
         self.assertIn("--require-threeway-evidence", command)
         self.assertIn(str(Path("seed") / "manifest.json"), command)
 
+    def test_default_ground_truth_prefers_reviewed_and_falls_back_to_draft(self):
+        with patch.object(runner, "DEFAULT_REVIEWED_GROUND_TRUTH", Path("reviewed.json")):
+            with patch.object(runner, "DEFAULT_DRAFT_GROUND_TRUTH", Path("draft.json")):
+                with patch.object(Path, "is_file", autospec=True, side_effect=lambda path: str(path) == "reviewed.json"):
+                    self.assertEqual(Path("reviewed.json"), runner.select_ground_truth_file(None))
+                with patch.object(Path, "is_file", autospec=True, return_value=False):
+                    self.assertEqual(Path("draft.json"), runner.select_ground_truth_file(None))
+
+    def test_validation_requires_review_only_for_live_runs(self):
+        source = Path(runner.__file__).read_text(encoding="utf-8")
+        self.assertIn('if not args.dry_run:', source)
+        self.assertIn('validation.append("--require-reviewed")', source)
+
     def test_runner_orders_seed_verification_before_trace_and_evaluation(self):
         source = Path(runner.__file__).read_text(encoding="utf-8")
         seed = source.index('run_stage("seed",')

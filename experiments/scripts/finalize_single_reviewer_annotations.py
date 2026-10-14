@@ -63,7 +63,10 @@ def main() -> int:
     metadata.update({
         "dataset_id": "competition_retrieval_queries_v1_reviewed",
         "annotation_status": "approved_single_reviewer",
-        "report_eligible": True,
+        # A single reviewer is useful for a development artifact, but it does
+        # not satisfy the competition's formal two-reviewer/adjudication gate.
+        "report_eligible": False,
+        "formal_report_block_reason": "requires two independent reviewers and completed adjudication",
         "review_csv_sha256": sha256(args.review_csv),
         "frozen_at_utc": datetime.now(timezone.utc).isoformat(),
         "single_reviewer_note": "This ground-truth set was reviewed by one annotator; inter-annotator agreement was not measured.",

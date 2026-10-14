@@ -27,6 +27,21 @@ EXPERIMENTS_DIR = Path(__file__).resolve().parent.parent
 SCRIPTS_DIR = EXPERIMENTS_DIR / "scripts"
 ALLOWED_USER_ID = "eval_user_001"
 ALLOWED_SESSION_ID = "eval_retrieval_test"
+DEFAULT_REVIEWED_GROUND_TRUTH = EXPERIMENTS_DIR / "datasets" / "retrieval_groundtruth" / "competition_queries_100_reviewed.json"
+DEFAULT_DRAFT_GROUND_TRUTH = EXPERIMENTS_DIR / "datasets" / "retrieval_groundtruth" / "competition_queries_100_draft.json"
+
+
+def select_ground_truth_file(explicit: Path | None) -> Path:
+    """Use the frozen reviewed set when present, otherwise expose the draft explicitly.
+
+    A draft is useful for local preparation, but the live runner still adds the
+    reviewed-data gate before it can seed or evaluate a runtime.
+    """
+    if explicit is not None:
+        return explicit
+    if DEFAULT_REVIEWED_GROUND_TRUTH.is_file():
+        return DEFAULT_REVIEWED_GROUND_TRUTH
+    return DEFAULT_DRAFT_GROUND_TRUTH
 
 
 def sha256(path: Path) -> str:
@@ -105,7 +120,7 @@ def main() -> int:
     parser.add_argument("--config-name", choices=("baseline_naive_rag", "baseline_rag_with_filter", "full_system"), required=True)
     parser.add_argument("--base-url", default="http://127.0.0.1:8088")
     parser.add_argument("--corpus-file", type=Path, default=EXPERIMENTS_DIR / "datasets" / "retrieval_corpus" / "retrieval_corpus_500.json")
-    parser.add_argument("--ground-truth-file", type=Path, default=EXPERIMENTS_DIR / "datasets" / "retrieval_groundtruth" / "competition_queries_100_reviewed.json")
+    parser.add_argument("--ground-truth-file", type=Path, default=None, help="Reviewed query set; defaults to the frozen set, or the draft for dry-run preparation.")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     if os.environ.get("EVAL_USER_ID", "").strip() != ALLOWED_USER_ID:
@@ -114,8 +129,15 @@ def main() -> int:
         parser.error("Set EVAL_COMPETITION_RUNTIME_READY to the already-running configuration; this runner never changes Docker state.")
     if not args.dry_run and not os.environ.get("EVAL_PASSWORD", ""):
         parser.error("EVAL_PASSWORD is required for live API seed, cleanup, trace, and evaluation stages.")
-    if not args.corpus_file.is_file() or not args.ground_truth_file.is_file():
-        parser.error("corpus or reviewed ground-truth file is missing")
+    args.ground_truth_file = select_ground_truth_file(args.ground_truth_file)
+    if not args.corpus_file.is_file():
+        parser.error(f"corpus file is missing: {args.corpus_file}")
+    if not args.ground_truth_file.is_file():
+        parser.error(
+            "ground-truth file is missing: "
+            f"{args.ground_truth_file}; run build_competition_retrieval_dataset.py "
+            "and complete its review queue before live evaluation"
+        )
 
     run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}_{args.config_name}_500x100"
     run_dir = EXPERIMENTS_DIR / "results" / "competition_runs" / run_id
@@ -134,7 +156,9 @@ def main() -> int:
         "stages": stages, "result": str(result_path), "outcome": "running",
     }
     try:
-        validation = [sys.executable, str(SCRIPTS_DIR / "validate_retrieval_dataset.py"), "--corpus", str(args.corpus_file), "--queries", str(args.ground_truth_file), "--expected-corpus-count", "500", "--expected-query-count", "100", "--expected-type-counts", "temporal=34,causal=33,general=33", "--require-reviewed"]
+        validation = [sys.executable, str(SCRIPTS_DIR / "validate_retrieval_dataset.py"), "--corpus", str(args.corpus_file), "--queries", str(args.ground_truth_file), "--expected-corpus-count", "500", "--expected-query-count", "100", "--expected-type-counts", "temporal=34,causal=33,general=33"]
+        if not args.dry_run:
+            validation.append("--require-reviewed")
         run_stage("validate_reviewed_dataset", validation, env, run_dir, stages)
         seed_dir = run_dir / "seed"
         seed_command = [sys.executable, str(SCRIPTS_DIR / "prepare_structured_threeway_seed.py"), "--corpus-file", str(args.corpus_file), "--output-dir", str(seed_dir), "--overwrite"]
