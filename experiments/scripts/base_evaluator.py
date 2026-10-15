@@ -198,9 +198,9 @@ class BaseEvaluator:
             return {"Authorization": f"Bearer {self._jwt_token}"}
         return {}
 
-    def check_service_health(self) -> Tuple[bool, str]:
+    def check_service_health(self, timeout: Optional[int] = None) -> Tuple[bool, str]:
         """检查服务健康状态"""
-        response = self.call_api("GET", "/health")
+        response = self.call_api("GET", "/health", timeout=timeout)
         if response.is_valid_business_response():
             return True, "服务正常"
         else:

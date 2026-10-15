@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Non-destructive JWT smoke test for the four experiment API contracts.
+"""Non-destructive JWT smoke test for protected API reachability and contracts.
 
 This intentionally tests reachability and response contracts only. Machine
 unlearning is destructive and is exercised exclusively by unlearning_eval.py.
@@ -10,7 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-import uuid
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -58,7 +58,47 @@ def validate_contract(name: str, response: APIResponse) -> tuple[bool, str]:
         missing = [key for key in required if key not in metadata]
         if missing:
             return False, "retrieval audit fields missing: " + ", ".join(missing)
-        doc_ids = [item.get("doc_id") for item in contexts if isinstance(item, dict)]
+        sources = ("vector", "knowledge", "timeline")
+        statuses = metadata.get("source_statuses")
+        if not isinstance(statuses, dict) or set(statuses) != set(sources):
+            return False, "source_statuses must contain vector, knowledge, and timeline"
+        valid_statuses = {"success", "partial_failure", "empty", "failure", "skipped", "timeout"}
+        if any(statuses[source] not in valid_statuses for source in sources):
+            return False, "source_statuses contains an invalid state"
+
+        latencies = metadata.get("source_latency_ms")
+        if not isinstance(latencies, dict) or set(latencies) != set(sources):
+            return False, "source_latency_ms must contain vector, knowledge, and timeline"
+        if any(type(latencies[source]) is not int or latencies[source] < 0 for source in sources):
+            return False, "source latency values must be non-negative integers"
+        wall_latency = metadata.get("wall_clock_latency_ms")
+        if type(wall_latency) is not int or wall_latency < 0:
+            return False, "wall clock latency must be a non-negative integer"
+
+        active_sources = {
+            source for source in sources
+            if statuses[source] in {"success", "partial_failure"}
+        }
+        mode = metadata.get("retrieval_fusion_mode")
+        if mode == "no_evidence":
+            if active_sources:
+                return False, "fusion mode no_evidence conflicts with active source statuses"
+        elif mode == "rrf_3_sources":
+            if active_sources != set(sources):
+                return False, "fusion mode rrf_3_sources conflicts with source statuses"
+        elif mode == "rrf_2_sources":
+            if len(active_sources) != 2:
+                return False, "fusion mode rrf_2_sources conflicts with source statuses"
+        elif isinstance(mode, str) and mode.endswith("_only_fallback"):
+            source = mode.removesuffix("_only_fallback")
+            if source not in sources or active_sources != {source}:
+                return False, "fusion mode single-source fallback conflicts with source statuses"
+        else:
+            return False, "retrieval fusion mode is missing or unsupported"
+
+        if any(not isinstance(item, dict) for item in contexts):
+            return False, "retrieval contexts must be objects"
+        doc_ids = [item.get("doc_id") for item in contexts]
         if any(not isinstance(doc_id, str) or not doc_id.strip() for doc_id in doc_ids):
             return False, "retrieval context is missing a non-empty doc_id"
         if len(doc_ids) != len(set(doc_ids)):
@@ -104,6 +144,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Run non-destructive authenticated API smoke checks.")
     parser.add_argument("--quick", action="store_true", help="accepted for runner compatibility; all checks are bounded")
     parser.add_argument("--base-url", default="http://localhost:8088")
+    parser.add_argument("--health-timeout", type=float, default=15.0, help="seconds to wait for a service that is still starting")
     parser.add_argument("--mode", choices=("live", "fixture"), default="live", help="live protected API checks or offline console contract checks")
     parser.add_argument("--json-output", type=Path, help="optionally write a redacted machine-readable smoke report")
     args = parser.parse_args()
@@ -114,7 +155,12 @@ def main() -> int:
         return result
 
     evaluator = BaseEvaluator(args.base_url)
-    healthy, health_message = evaluator.check_service_health()
+    deadline = time.monotonic() + max(0.0, args.health_timeout)
+    while True:
+        healthy, health_message = evaluator.check_service_health(timeout=3)
+        if healthy or time.monotonic() >= deadline:
+            break
+        time.sleep(min(0.5, max(0.0, deadline - time.monotonic())))
     if not healthy:
         print(f"[FAIL] health: {health_message}")
         write_json_report(args.json_output, {"mode": "live", "base_url": args.base_url, "passed": False, "failure": "health", "message": health_message, "checks": []})
@@ -129,9 +175,8 @@ def main() -> int:
     print("[PASS] authentication: JWT acquired from environment credentials")
 
     headers = evaluator.get_auth_headers()
-    # Use a fresh, isolated smoke scope. A shared historical session may belong
-    # to another demo identity and correctly fail the runtime owner check.
-    retrieval_session_id = f"smoke_{uuid.uuid4().hex}"
+    # Keep this smoke path read-only; retrieval session creation belongs to the
+    # dedicated retrieval evaluation runner.
     checks = {
         "security": evaluator.call_api(
             "POST",
@@ -151,18 +196,6 @@ def main() -> int:
             },
             headers,
         ),
-        "retrieval": evaluator.call_api(
-            "POST",
-            "/api/mcp/tools/retrieve_context",
-            {
-                "sessionId": retrieval_session_id,
-                "query": "health record",
-                "maxResults": 1,
-                "contextsOnly": True,
-                "evaluationRetrievalOnly": True,
-            },
-            headers,
-        ),
         "unlearning": evaluator.call_api("GET", "/api/v1/unlearning/config", headers=headers),
     }
     passed = []
@@ -176,7 +209,16 @@ def main() -> int:
         report_rows.append({"name": name, "passed": basic and contract, "http_status": response.http_status, "latency_ms": response.latency_ms, "error_type": response.error_type, "error": response.error_message})
     print(f"Summary: {sum(passed)}/{len(passed)} checks passed; no destructive request was issued.")
     if args.json_output:
-        write_json_report(args.json_output, {"mode": "live", "base_url": args.base_url, "passed": all(passed), "checks": report_rows})
+        write_json_report(args.json_output, {
+            "mode": "live",
+            "base_url": args.base_url,
+            "passed": all(passed),
+            "checks": report_rows,
+            "retrieval": {
+                "status": "not_run",
+                "reason": "retrieval may create session scope; use the dedicated retrieval evaluation runner",
+            },
+        })
     return 0 if all(passed) else 1
 
 
