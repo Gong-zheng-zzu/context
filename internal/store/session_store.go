@@ -18,6 +18,7 @@ import (
 )
 
 var ErrSessionNotFound = errors.New("session not found")
+var ErrSessionOwnerConflict = errors.New("session belongs to a different user")
 
 const sessionUserIdentifierHexLength = 16
 
@@ -153,6 +154,45 @@ func (s *SessionStore) GetSessionOwner(sessionID string) (string, error) {
 		return "", fmt.Errorf("session %s has no owner metadata", sessionID)
 	}
 	return owner, nil
+}
+
+// EnsureSessionOwner atomically creates a session or verifies its owner. It is
+// used at authenticated API boundaries where a caller may choose a new session
+// ID. The check and initial claim must share the same lock to prevent two
+// concurrent users from overwriting each other's ownership metadata.
+func (s *SessionStore) EnsureSessionOwner(sessionID, userID string) error {
+	if strings.TrimSpace(sessionID) == "" || filepath.Base(sessionID) != sessionID || strings.ContainsAny(sessionID, `\\/`) {
+		return fmt.Errorf("invalid session ID")
+	}
+	if strings.TrimSpace(userID) == "" {
+		return fmt.Errorf("session owner is required")
+	}
+
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	session, exists := s.sessions[sessionID]
+	if exists {
+		owner, _ := session.Metadata["userId"].(string)
+		if owner == "" {
+			return fmt.Errorf("session ownership cannot be verified")
+		}
+		if owner != userID {
+			return ErrSessionOwnerConflict
+		}
+		return nil
+	}
+
+	session = models.NewSession(sessionID)
+	if session.Metadata == nil {
+		session.Metadata = make(map[string]interface{})
+	}
+	session.Metadata["userId"] = userID
+	if err := s.saveSession(session); err != nil {
+		return fmt.Errorf("persist session owner: %w", err)
+	}
+	s.sessions[sessionID] = session
+	return nil
 }
 
 // SessionArtifactCount reports the persisted and in-memory artifacts for one existing session.

@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -73,19 +72,10 @@ func isControlledInputOnlyEvaluation(userID string, req ChatRequest) bool {
 // ensureProtectedSessionOwner prevents a caller-provided session ID from
 // rebinding an existing session to another authenticated user.
 func ensureProtectedSessionOwner(sessionStore *store.SessionStore, sessionID, userID string) error {
-	owner, err := sessionStore.GetSessionOwner(sessionID)
-	switch {
-	case err == nil:
-		if owner != userID {
-			return fmt.Errorf("session belongs to a different user")
-		}
-		return nil
-	case errors.Is(err, store.ErrSessionNotFound):
-		return sessionStore.SetSessionMetadata(sessionID, "userId", userID)
-	default:
-		// An ownerless legacy session cannot be safely claimed by a request.
-		return fmt.Errorf("session ownership cannot be verified: %w", err)
+	if sessionStore == nil {
+		return fmt.Errorf("session ownership service unavailable")
 	}
+	return sessionStore.EnsureSessionOwner(sessionID, userID)
 }
 
 func writeInputOnlyDecision(c *gin.Context, decision, stage string, inputRedacted, inputNormalized bool, sensitiveInfoCount, warningCount int) {
