@@ -50,6 +50,7 @@ func TestDirectSessionRoutesRejectCrossUserRequests(t *testing.T) {
 	}{
 		{"store", "/mcp/tools/create_context", `{"sessionId":"owned-session","content":"x"}`, (*Handler).HandleStoreContext},
 		{"read", "/mcp/tools/read_context", `{"sessionId":"owned-session","query":"x"}`, (*Handler).HandleRetrieveContext},
+		{"direct_retrieve", "/api/mcp/tools/retrieve_context", `{"sessionId":"owned-session","query":"x"}`, (*Handler).HandleMCPRetrieveContext},
 		{"associate", "/api/mcp/tools/associate_file", `{"sessionId":"owned-session","filePath":"a.go"}`, (*Handler).HandleMCPAssociateFile},
 		{"edit", "/api/mcp/tools/record_edit", `{"sessionId":"owned-session","filePath":"a.go","diff":"x"}`, (*Handler).HandleMCPRecordEdit},
 		{"programming", "/api/mcp/tools/programming_context", `{"sessionId":"owned-session","query":"x"}`, (*Handler).HandleMCPProgrammingContext},

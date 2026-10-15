@@ -258,15 +258,10 @@ func (h *Handler) HandleStoreContext(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "error": "session store is unavailable"})
 		return
 	}
-	// A JWT identity may claim a new session, but it may never rebind an
-	// existing session owned by another user.  This check must happen before
-	// SetSessionMetadata, which otherwise permits an owner takeover.
+	// EnsureSessionOwner atomically creates a new owner binding or verifies the
+	// existing one without allowing reassignment.
 	if err := ensureProtectedSessionOwner(sessionStore, req.SessionID, req.UserID); err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"status": "error", "error": "session is not owned by the authenticated user"})
-		return
-	}
-	if err := sessionStore.SetSessionMetadata(req.SessionID, "userId", req.UserID); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "error": "failed to persist session owner"})
 		return
 	}
 
@@ -518,10 +513,10 @@ func (h *Handler) HandleMCPRetrieveContext(c *gin.Context) {
 	log.Printf("🔍 [检索API] 收到retrieve_context请求")
 
 	// 🔒 获取JWT中的userID
-	userID, exists := c.Get("user_id")
-	log.Printf("🔍 [检索API] JWT中user_id存在: %v, 值: %v", exists, userID)
+	userID := authenticatedUserID(c)
+	log.Printf("🔍 [检索API] JWT中user_id存在: %v, 值: %v", userID != "", userID)
 
-	if !exists {
+	if userID == "" {
 		log.Printf("❌ [检索API] 未授权：缺少用户身份信息")
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "未授权：缺少用户身份信息",
@@ -556,21 +551,10 @@ func (h *Handler) HandleMCPRetrieveContext(c *gin.Context) {
 		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "会话隔离服务不可用"})
 		return
 	}
-	if err := ensureProtectedSessionOwner(sessionStore, req.SessionId, userID.(string)); err != nil {
-		log.Printf("[Retrieve] denied session ownership change: user_id=%s session_id=%s err=%v", userID.(string), req.SessionId, err)
+	if err := ensureProtectedSessionOwner(sessionStore, req.SessionId, userID); err != nil {
+		log.Printf("[Retrieve] denied session ownership change: user_id=%s session_id=%s err=%v", userID, req.SessionId, err)
 		c.JSON(http.StatusForbidden, gin.H{"error": "无权访问该受保护会话"})
 		return
-	}
-
-	if sessionStore != nil {
-		log.Printf("🔍 [检索API] 准备设置会话userId: sessionId=%s, userId=%s", req.SessionId, userID.(string))
-		if err := sessionStore.SetSessionMetadata(req.SessionId, "userId", userID.(string)); err != nil {
-			log.Printf("⚠️ [检索API] 设置会话userId失败: %v", err)
-		} else {
-			log.Printf("🔒 [检索API] 已设置会话userId: %s", userID.(string))
-		}
-	} else {
-		log.Printf("⚠️ [检索API] sessionStore为nil，无法设置userId")
 	}
 
 	// 转换为内部请求格式
@@ -578,7 +562,7 @@ func (h *Handler) HandleMCPRetrieveContext(c *gin.Context) {
 		SessionID:               req.SessionId,
 		Query:                   req.Query,
 		Limit:                   req.MaxResults,      // 映射maxResults到Limit
-		UserID:                  userID.(string),     // 🔒 添加UserID进行数据隔离
+		UserID:                  userID,               // 🔒 添加UserID进行数据隔离
 		ProjectAnalysis:         req.ProjectAnalysis, // 🆕 传递工程分析结果
 		ContextsOnly:            req.ContextsOnly,    // 🆕 传递contextsOnly标志
 		EvaluationRetrievalOnly: req.EvaluationRetrievalOnly,
