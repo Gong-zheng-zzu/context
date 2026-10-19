@@ -16,6 +16,8 @@ class RetrievalDatasetReviewGateTests(unittest.TestCase):
             corpus = root / "corpus.json"
             queries = root / "queries.json"
             corpus.write_text(json.dumps({"documents": [{"doc_id": "doc-1"}]}), encoding="utf-8")
+            metadata = dict(metadata)
+            metadata["source_corpus_sha256"] = validator.dual_digest_file(corpus)["sha256"]
             queries.write_text(json.dumps({
                 "metadata": metadata,
                 "queries": [{"query_id": "q-1", "query_type": "general", "ground_truth_docs": ["doc-1"]}],

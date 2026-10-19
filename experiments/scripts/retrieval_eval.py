@@ -31,9 +31,9 @@ DEFAULT_SESSION_ID = "eval_retrieval_test"
 STAT_BOOTSTRAP_RESAMPLES = 10000
 STAT_BOOTSTRAP_SEED = 20260920
 
-# 真值标注状态。只有经人工单评审人批准的查询集才可声明为可报告真值；由构造自动
+# 真值标注状态。只有经两名独立评审并完成冲突仲裁的查询集才可声明为可报告真值；由构造自动
 # 推导的标注必须走独立门禁，并在结果中明确记录「未经人工复核」，两者不可混用。
-REVIEWED_ANNOTATION_STATUS = "approved_single_reviewer"
+REVIEWED_ANNOTATION_STATUS = "approved_double_reviewer"
 AUTO_DERIVED_ANNOTATION_STATUS = "auto_derived_unreviewed"
 
 # 自动标注数据集必须自述其相关性来源：本项目的构造式真值来自「查询由目标文档生成」，
@@ -801,7 +801,7 @@ def main():
     parser.add_argument("--corpus-file", type=Path, default=None,
                        help="Corpus JSON used to seed this run; recorded with the result hash.")
     parser.add_argument("--require-reviewed-ground-truth", action="store_true",
-                       help="Refuse to run unless query metadata is approved for single-reviewer reporting.")
+                       help="Refuse to run unless query metadata records two reviewers, completed adjudication, and report eligibility.")
     parser.add_argument("--allow-auto-derived-ground-truth", action="store_true",
                        help="Permit query metadata that declares machine-derived, unreviewed labels; "
                             "the caveat is recorded with the result.")
@@ -849,8 +849,17 @@ def main():
     metadata = evaluator.load_ground_truth_metadata()
 
     if args.require_reviewed_ground_truth:
-        if metadata.get("annotation_status") != REVIEWED_ANNOTATION_STATUS or metadata.get("report_eligible") is not True:
-            print("[ERROR] Ground truth is not approved by the declared single reviewer; formal metrics are blocked.")
+        if (
+            metadata.get("annotation_status") != REVIEWED_ANNOTATION_STATUS
+            or metadata.get("report_eligible") is not True
+            or not isinstance(metadata.get("annotator_count"), int)
+            or metadata.get("annotator_count") < 2
+            or metadata.get("adjudication_status") != "completed"
+        ):
+            print(
+                "[ERROR] Ground truth requires two independent reviewers, completed adjudication, "
+                "and report_eligible=true; formal metrics are blocked."
+            )
             sys.exit(2)
     elif args.allow_auto_derived_ground_truth:
         # 自动标注分支不放松判据，只是承认一种**弱于**人工复核的明确标注状态，并要求

@@ -22,6 +22,8 @@ RUNTIME_CONFIG_FIELDS = (
 )
 UNCAPTURED_VALUES = {"", "not_captured"}
 REQUIRED_RRF_SOURCES = ("vector", "knowledge", "timeline")
+ALLOWED_FUSION_MODES = {"rrf_3_sources", "rrf_2_sources", "vector_only_fallback"}
+ALLOWED_SOURCE_STATUSES = {"success", "empty", "failure", "timeout", "unavailable", "skipped"}
 
 
 def is_nonempty_string(value: Any) -> bool:
@@ -47,6 +49,8 @@ def _validate_rrf_audit(label: str, result: Dict[str, Any]) -> List[str]:
     fusion_mode = metadata.get("retrieval_fusion_mode")
     if not is_nonempty_string(fusion_mode) or fusion_mode == "not_captured":
         errors.append(f"{label}.retrieval_metadata.retrieval_fusion_mode must be captured")
+    elif fusion_mode not in ALLOWED_FUSION_MODES:
+        errors.append(f"{label}.retrieval_metadata.retrieval_fusion_mode is not an allowed audit mode")
 
     statuses = metadata.get("source_statuses")
     if not isinstance(statuses, dict):
@@ -55,6 +59,16 @@ def _validate_rrf_audit(label: str, result: Dict[str, Any]) -> List[str]:
         for source in REQUIRED_RRF_SOURCES:
             if not is_nonempty_string(statuses.get(source)):
                 errors.append(f"{label}.retrieval_metadata.source_statuses.{source} is required")
+            elif statuses[source] not in ALLOWED_SOURCE_STATUSES:
+                errors.append(f"{label}.retrieval_metadata.source_statuses.{source} is not an allowed status")
+
+        successful_sources = sum(statuses.get(source) == "success" for source in REQUIRED_RRF_SOURCES)
+        if fusion_mode == "rrf_3_sources" and successful_sources != 3:
+            errors.append(f"{label}.rrf_3_sources requires all three source statuses to be success")
+        if fusion_mode == "rrf_2_sources" and successful_sources != 2:
+            errors.append(f"{label}.rrf_2_sources requires exactly two successful sources")
+        if fusion_mode == "vector_only_fallback" and statuses.get("vector") != "success":
+            errors.append(f"{label}.vector_only_fallback requires vector source status success")
 
     latencies = metadata.get("source_latency_ms")
     if not isinstance(latencies, dict):

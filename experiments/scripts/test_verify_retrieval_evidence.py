@@ -72,6 +72,19 @@ class RetrievalEvidenceGateTest(unittest.TestCase):
         errors = validate_result(payload)
         self.assertTrue(any("source_rankings.timeline must be non-empty" in error for error in errors))
 
+    def test_rrf_contract_rejects_contradictory_fusion_mode(self) -> None:
+        payload = _base_result()
+        payload["detailed_results"][0]["retrieval_metadata"]["retrieval_fusion_mode"] = "rrf_3_sources"
+        payload["detailed_results"][0]["retrieval_metadata"]["source_statuses"]["timeline"] = "empty"
+        errors = validate_result(payload)
+        self.assertTrue(any("requires all three source statuses" in error for error in errors))
+
+    def test_rrf_contract_rejects_unknown_source_status(self) -> None:
+        payload = _base_result()
+        payload["detailed_results"][0]["retrieval_metadata"]["source_statuses"]["vector"] = "maybe"
+        errors = validate_result(payload)
+        self.assertTrue(any("not an allowed status" in error for error in errors))
+
     def test_vector_mode_still_requires_eligible_dataset_but_not_rrf_fields(self) -> None:
         payload = _base_result(mode="vector_contexts_only")
         payload["detailed_results"][0]["retrieval_metadata"] = {}

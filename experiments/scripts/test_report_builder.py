@@ -13,10 +13,21 @@ SPEC.loader.exec_module(report_builder)
 RETRIEVAL_MIN_COMPLETE_QUERIES = report_builder.RETRIEVAL_MIN_COMPLETE_QUERIES
 SECURITY_REQUIRED_REQUESTS = report_builder.SECURITY_REQUIRED_REQUESTS
 SECURITY_BENIGN_REQUIRED_REQUESTS = report_builder.SECURITY_BENIGN_REQUIRED_REQUESTS
+SECURITY_AMBIGUOUS_REQUIRED_REQUESTS = report_builder.SECURITY_AMBIGUOUS_REQUIRED_REQUESTS
+CAUSAL_REQUIRED_TEST_SAMPLES = report_builder.CAUSAL_REQUIRED_TEST_SAMPLES
 ReportBuilder = report_builder.ReportBuilder
 
 
 SHA256 = "a" * 64
+
+
+def formal_gate(experiment):
+    gate = {"status": "eligible", "report_eligible": True, "manifest_sha256": SHA256}
+    if experiment == "security":
+        gate["groups"] = {name: {"sha256": SHA256} for name in ("attacks", "benign", "ambiguous")}
+    else:
+        gate["frozen_test"] = {"sample_count": CAUSAL_REQUIRED_TEST_SAMPLES, "sha256": SHA256, "review_status": "reviewed_arbitrated"}
+    return gate
 
 
 def provenance(config_name="baseline_naive_rag"):
@@ -40,11 +51,13 @@ def retrieval_result(total=RETRIEVAL_MIN_COMPLETE_QUERIES):
     config_name = "baseline_naive_rag"
     return {
         "execution_mode": "live_api",
+        "evaluation_mode": "multi_source_rrf_evaluation_only",
         "total_queries": total,
         "configs": [config_name],
         "runtime_config": {"config_hash": SHA256},
-        "dataset": {"ground_truth_sha256": SHA256},
-        "detailed_results": [{"query_id": str(index)} for index in range(total)],
+        "dataset": {"ground_truth_sha256": SHA256, "annotation_status": "approved_double_reviewer", "report_eligible": True, "annotator_count": 2, "adjudication_status": "completed"},
+        "formal_dataset_gate": formal_gate("retrieval"),
+        "detailed_results": [{"query_id": str(index), "retrieval_metadata": {"retrieval_fusion_mode": "rrf_3_sources", "source_statuses": {"vector": "success", "knowledge": "success", "timeline": "success"}, "source_latency_ms": {"vector": 1, "knowledge": 2, "timeline": 3}, "wall_clock_latency_ms": 4, "source_rankings": {"vector": {"doc-1": 1}, "knowledge": {"doc-1": 1}, "timeline": {"doc-1": 1}}}} for index in range(total)],
         "aggregated_metrics": {
             config_name: {
                 "total_queries": total,
@@ -60,10 +73,14 @@ def retrieval_result(total=RETRIEVAL_MIN_COMPLETE_QUERIES):
 
 
 def security_result(successes=SECURITY_REQUIRED_REQUESTS):
-    rows = [{"sample_id": str(index)} for index in range(SECURITY_REQUIRED_REQUESTS)]
+    rows = [{"sample_id": str(index), "sample_kind": "attack"} for index in range(SECURITY_REQUIRED_REQUESTS)]
+    rows += [{"sample_id": f"benign-{index}", "sample_kind": "benign"} for index in range(SECURITY_BENIGN_REQUIRED_REQUESTS)]
+    rows += [{"sample_id": f"ambiguous-{index}", "sample_kind": "ambiguous"} for index in range(SECURITY_AMBIGUOUS_REQUIRED_REQUESTS)]
     return {
         "execution_mode": "live_api",
-        "dataset_manifest": [],
+        "dataset_manifest": [{"path": "formal.json", "sample_count": SECURITY_REQUIRED_REQUESTS}],
+        "formal_dataset_gate": formal_gate("security"),
+        "pccm_calibration": {"status": "validated", "calibration_source": "devset_calibrated_v1"},
         "detailed_results": rows,
         "configuration": {"label": "full_system"},
         "aggregated_metrics": {
@@ -72,10 +89,15 @@ def security_result(successes=SECURITY_REQUIRED_REQUESTS):
             "api_error_count": SECURITY_REQUIRED_REQUESTS - successes,
             "metrics_status": "complete" if successes == SECURITY_REQUIRED_REQUESTS else "incomplete_api_coverage",
             "attack_success_rate": 0.125,
-            "defense_success_rate": 0.875,
+            "defense_success_rate": 0.96,
+            "benign_total": SECURITY_BENIGN_REQUIRED_REQUESTS,
+            "benign_api_success_count": SECURITY_BENIGN_REQUIRED_REQUESTS,
+            "benign_api_error_count": 0,
+            "benign_pass_rate": 0.99,
+            "false_positive_rate": 0.01,
             "avg_latency_ms": 10.0,
             "by_attack_type": {
-                name: {"attack_success": {"rate": 0.125}}
+                name: {"attack_success": {"rate": 0.04}}
                 for name in (
                     "prompt_injection", "memory_poisoning", "privilege_escalation",
                     "privacy_leakage", "hallucination_induction", "unlearning_bypass",
@@ -92,6 +114,7 @@ def security_result_v4():
     data["detailed_results"] = (
         [{"sample_id": str(index), "sample_kind": "attack"} for index in range(SECURITY_REQUIRED_REQUESTS)]
         + [{"sample_id": f"benign-{index}", "sample_kind": "benign"} for index in range(SECURITY_BENIGN_REQUIRED_REQUESTS)]
+        + [{"sample_id": f"ambiguous-{index}", "sample_kind": "ambiguous"} for index in range(SECURITY_AMBIGUOUS_REQUIRED_REQUESTS)]
     )
     data["aggregated_metrics"].update({
         "benign_total": SECURITY_BENIGN_REQUIRED_REQUESTS,

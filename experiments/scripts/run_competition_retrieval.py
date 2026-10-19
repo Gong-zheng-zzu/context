@@ -48,6 +48,20 @@ def sha256(path: Path) -> str:
     return dual_digest_file(path)["sha256"]
 
 
+def query_shape(path: Path) -> tuple[int, str]:
+    """Read the declared query set shape so validation and evaluation share it."""
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    queries = payload.get("queries", payload.get("query_answer_pairs", [])) if isinstance(payload, dict) else payload
+    if not isinstance(queries, list) or not queries:
+        raise ValueError("ground-truth query set must contain a non-empty queries array")
+    counts = {"temporal": 0, "causal": 0, "general": 0}
+    for query in queries:
+        if isinstance(query, dict) and query.get("query_type") in counts:
+            counts[query["query_type"]] += 1
+    expected_types = ",".join(f"{name}={counts[name]}" for name in ("temporal", "causal", "general"))
+    return len(queries), expected_types
+
+
 def run_stage(name: str, command: List[str], env: Dict[str, str], run_dir: Path, stages: List[Dict[str, Any]]) -> None:
     log_path = run_dir / f"{name}.log"
     stage = {"name": name, "command": command, "log": str(log_path), "started_at": utc_now()}
@@ -139,7 +153,9 @@ def main() -> int:
             "and complete its review queue before live evaluation"
         )
 
-    run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}_{args.config_name}_500x100"
+    query_count, expected_type_counts = query_shape(args.ground_truth_file)
+
+    run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}_{args.config_name}_500x{query_count}"
     run_dir = EXPERIMENTS_DIR / "results" / "competition_runs" / run_id
     run_dir.mkdir(parents=True, exist_ok=False)
     result_path = EXPERIMENTS_DIR / "results" / "raw" / f"retrieval_{run_id}.json"
@@ -152,11 +168,11 @@ def main() -> int:
         "schema": "competition-retrieval-run-v1", "run_id": run_id, "started_at": utc_now(), "config_name": args.config_name,
         "mode": mode, "scope": {"user_id": ALLOWED_USER_ID, "session_id": ALLOWED_SESSION_ID},
         "hash_algorithms": ["SHA-256", "SM3"],
-        "dataset": {"corpus": str(args.corpus_file), "corpus_sha256": corpus_digest["sha256"], "corpus_dual_digest": corpus_digest, "queries": str(args.ground_truth_file), "queries_sha256": queries_digest["sha256"], "queries_dual_digest": queries_digest},
+        "dataset": {"corpus": str(args.corpus_file), "corpus_sha256": corpus_digest["sha256"], "corpus_dual_digest": corpus_digest, "queries": str(args.ground_truth_file), "queries_sha256": queries_digest["sha256"], "queries_dual_digest": queries_digest, "query_count": query_count, "query_type_counts": expected_type_counts},
         "stages": stages, "result": str(result_path), "outcome": "running",
     }
     try:
-        validation = [sys.executable, str(SCRIPTS_DIR / "validate_retrieval_dataset.py"), "--corpus", str(args.corpus_file), "--queries", str(args.ground_truth_file), "--expected-corpus-count", "500", "--expected-query-count", "100", "--expected-type-counts", "temporal=34,causal=33,general=33"]
+        validation = [sys.executable, str(SCRIPTS_DIR / "validate_retrieval_dataset.py"), "--corpus", str(args.corpus_file), "--queries", str(args.ground_truth_file), "--expected-corpus-count", "500", "--expected-query-count", str(query_count), "--expected-type-counts", expected_type_counts]
         if not args.dry_run:
             validation.append("--require-reviewed")
         run_stage("validate_reviewed_dataset", validation, env, run_dir, stages)
@@ -176,7 +192,7 @@ def main() -> int:
             )
             trace = [sys.executable, str(SCRIPTS_DIR / "run_trace_queries.py"), "--mode", mode, "--limit", "10", "--base-url", args.base_url, "--session-id", ALLOWED_SESSION_ID, "--output", str(run_dir / "trace.json")]
             run_stage("trace", trace, env, run_dir, stages)
-            evaluate = [sys.executable, str(SCRIPTS_DIR / "retrieval_eval.py"), "--queries", "100", "--configs", args.config_name, "--retrieval-mode", mode, "--base-url", args.base_url, "--ground-truth-file", str(args.ground_truth_file), "--corpus-file", str(args.corpus_file), "--require-reviewed-ground-truth", "--output", str(result_path)]
+            evaluate = [sys.executable, str(SCRIPTS_DIR / "retrieval_eval.py"), "--queries", str(query_count), "--configs", args.config_name, "--retrieval-mode", mode, "--base-url", args.base_url, "--ground-truth-file", str(args.ground_truth_file), "--corpus-file", str(args.corpus_file), "--require-reviewed-ground-truth", "--output", str(result_path)]
             run_stage("evaluate", evaluate, env, run_dir, stages)
             run_stage("verify_result", [sys.executable, str(SCRIPTS_DIR / "verify_retrieval_evidence.py"), str(result_path)], env, run_dir, stages)
             manifest["outcome"] = "succeeded"
