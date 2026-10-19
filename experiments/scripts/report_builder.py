@@ -499,7 +499,7 @@ class ReportBuilder:
         return self._generate_chart_base64(fig)
 
     def _generate_scatter_plot(self, unlearning_results: List) -> str:
-        """生成散点图：遗忘率 vs 副作用率"""
+        """生成散点图：删除完成率 vs 残留率"""
         if not unlearning_results:
             return ""
 
@@ -877,8 +877,8 @@ class ReportBuilder:
         <table>
             <tr>
                 <th>场景</th>
-                <th>遗忘率</th>
-                <th>副作用率</th>
+                <th>删除完成率</th>
+                <th>残留率</th>
                 <th>耗时</th>
             </tr>
             {rows}
