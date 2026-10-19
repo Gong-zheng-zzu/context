@@ -131,6 +131,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 			Error:     "因果关系抽取失败：真实模型不可用且没有启用规则回退",
 		}
 		finalizeCausalResponse(&response, startTime, "failed")
+		rememberCausalTrace(c, &response)
 		c.JSON(status, response)
 		return
 	}
@@ -157,6 +158,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 				Error: "因果图谱存储不可用",
 			}
 			finalizeCausalResponse(&response, startTime, "failed")
+			rememberCausalTrace(c, &response)
 			c.JSON(http.StatusServiceUnavailable, response)
 			return
 		}
@@ -172,6 +174,7 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 				Error: "构建因果图谱失败",
 			}
 			finalizeCausalResponse(&response, startTime, "failed")
+			rememberCausalTrace(c, &response)
 			c.JSON(http.StatusInternalServerError, response)
 			return
 		}
@@ -204,7 +207,48 @@ func (h *CausalReasoningHandler) ExtractCausalRelations(c *gin.Context) {
 		ProcessTimeMs:      processTime,
 	}
 	finalizeCausalResponse(&response, startTime, "completed")
+	rememberCausalTrace(c, &response)
 	c.JSON(http.StatusOK, response)
+}
+
+// rememberCausalTrace stores only aggregate execution evidence. Relation text
+// and source spans remain in the authenticated causal response and are never
+// exposed through the black-box trace lookup endpoint.
+func rememberCausalTrace(c *gin.Context, response *causal_reasoning.ExtractResponse) {
+	if response == nil {
+		return
+	}
+	evidence := map[string]interface{}{
+		"pipeline_version":    response.PipelineVersion,
+		"calibration_version": response.CalibrationVersion,
+		"count":               response.Count,
+		"abstained":           response.Abstained,
+		"abstain_reason":      response.AbstainReason,
+		"analysis_only":       response.AnalysisOnly,
+		"graph_persisted":     response.GraphPersisted,
+		"persistence_status":  response.Persistence.Status,
+	}
+	if response.Quality != nil {
+		evidence["quality"] = map[string]interface{}{
+			"tuple_valid":         response.Quality.TupleValid,
+			"evidence_coverage":   response.Quality.EvidenceCoverage,
+			"negation_checked":    response.Quality.NegationChecked,
+			"temporal_consistent": response.Quality.TemporalConsistent,
+			"review_required":     response.Quality.ReviewRequired,
+			"confidence_level":    response.Quality.ConfidenceLevel,
+		}
+	}
+	if response.Execution != nil {
+		evidence["execution"] = map[string]interface{}{
+			"mode":                 response.Execution.Mode,
+			"model_tier":           response.Execution.ModelTier,
+			"model_status":         response.Execution.ModelStatus,
+			"fallback_reason":      response.Execution.FallbackReason,
+			"cache_hit":            response.Execution.CacheHit,
+			"latency_breakdown_ms": response.Execution.LatencyBreakdownMs,
+		}
+	}
+	rememberTraceEvidence(c, "causal_extract", response.Status, response.StartedAt, response.CompletedAt, evidence)
 }
 
 func finalizeCausalResponse(response *causal_reasoning.ExtractResponse, startedAt time.Time, status string) {

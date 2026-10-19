@@ -63,6 +63,18 @@ type Config struct {
 	MinTimeSinceLastSummary   int // 距离上次汇总的最小小时数，默认24小时
 	MaxMessageCount           int // 触发汇总的消息数阈值，默认100
 
+	// ======== 冷热分层生命周期配置 ========
+	// 总开关关闭时，记忆条目不参与分层调度（行为与接入前完全一致）。
+	TieredLifecycleEnabled bool          // 冷热分层总开关，默认关闭
+	TierEvalInterval       time.Duration // 分层判定周期，默认30分钟
+	TierHotMaxAge          time.Duration // 热层闲置上限，默认48小时
+	TierWarmMaxAge         time.Duration // 温层闲置上限，默认15天
+	TierColdMaxAge         time.Duration // 冷层闲置上限，默认90天
+	TierFrozenMaxAge       time.Duration // 冻结层保留期，默认365天
+	TierHotBudgetMB        int           // 热层内存预算(MB)，默认256
+	TierWarmBudgetMB       int           // 温层内存预算(MB)，默认1024
+	TierMinAccessKeepWarm  int           // 保级所需最小访问次数，默认3
+
 	// 多维度存储配置
 	EnableMultiDimensionalStorage bool   `json:"enable_multi_dimensional_storage"` // 多维度存储总开关
 	MultiDimTimelineEnabled       bool   `json:"multi_dim_timeline_enabled"`       // 时间线存储开关
@@ -149,6 +161,19 @@ func Load() *Config {
 		MinMessageCount:           getEnvAsInt("MIN_MESSAGE_COUNT", 20),
 		MinTimeSinceLastSummary:   getEnvAsInt("MIN_TIME_SINCE_LAST_SUMMARY", 24),
 		MaxMessageCount:           getEnvAsInt("MAX_MESSAGE_COUNT", 100),
+
+		// 冷热分层生命周期
+		// 默认关闭：分层调度会改变记忆的存储位置，属于行为变更，
+		// 必须由部署方显式开启，不能靠默认值悄悄改变线上行为。
+		TieredLifecycleEnabled: getEnvAsBool("TIERED_LIFECYCLE_ENABLED", false),
+		TierEvalInterval:       getEnvAsDuration("TIER_EVAL_INTERVAL", 30*time.Minute),
+		TierHotMaxAge:          getEnvAsDuration("TIER_HOT_MAX_AGE", 48*time.Hour),
+		TierWarmMaxAge:         getEnvAsDuration("TIER_WARM_MAX_AGE", 15*24*time.Hour),
+		TierColdMaxAge:         getEnvAsDuration("TIER_COLD_MAX_AGE", 90*24*time.Hour),
+		TierFrozenMaxAge:       getEnvAsDuration("TIER_FROZEN_MAX_AGE", 365*24*time.Hour),
+		TierHotBudgetMB:        getEnvAsInt("TIER_HOT_BUDGET_MB", 256),
+		TierWarmBudgetMB:       getEnvAsInt("TIER_WARM_BUDGET_MB", 1024),
+		TierMinAccessKeepWarm:  getEnvAsInt("TIER_MIN_ACCESS_KEEP_WARM", 3),
 
 		// 多维度存储配置
 		EnableMultiDimensionalStorage: multiDimEnabled,

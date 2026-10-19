@@ -73,6 +73,7 @@ type Handler struct {
 	agentCaller             agent.LLMCaller                   // 受保护 Agent 入口的可替换调用方（契约测试使用）
 	controlledAgentRunner   controlledAgentRunner             // 受保护 Agent 入口的可替换执行器（契约测试使用）
 	startTime               time.Time
+	competitionCapabilities *services.CompetitionCapabilityService
 }
 
 // GetBatchEmbeddingHandler 获取批量embedding处理器
@@ -84,6 +85,14 @@ func (h *Handler) GetBatchEmbeddingHandler() *BatchEmbeddingHandler {
 // handlers without duplicating detector configuration.
 func (h *Handler) GetSecurityService() *security.SecurityService {
 	return h.securityService
+}
+
+// StopCompetitionCapabilities releases optional lifecycle resources during
+// server shutdown. It is safe when the feature is disabled.
+func (h *Handler) StopCompetitionCapabilities() {
+	if h != nil && h.competitionCapabilities != nil {
+		h.competitionCapabilities.Stop()
+	}
 }
 
 // NewHandler 创建新的API处理器（🔥 修改：现在接受LLMDrivenContextService）
@@ -100,6 +109,32 @@ func NewHandler(contextService *services.LLMDrivenContextService, vectorService 
 		wideRecallService:       nil,             // TODO: 初始化宽召回服务
 		securityService:         securityService, // 🔥 新增：安全服务
 		startTime:               time.Now(),
+	}
+
+	// Competition capabilities reuse the shared sensitive-information detector
+	// for risk scoring. An absent detector remains visible in lifecycle status.
+	var sensitiveDensity func(string) float64
+	if securityService != nil && securityService.GetDetector() != nil {
+		detector := securityService.GetDetector()
+		sensitiveDensity = func(content string) float64 {
+			runes := []rune(content)
+			if len(runes) == 0 {
+				return 0
+			}
+			covered := 0
+			for _, finding := range detector.Detect(content) {
+				covered += len([]rune(finding.Value))
+			}
+			if covered >= len(runes) {
+				return 1
+			}
+			return float64(covered) / float64(len(runes))
+		}
+	}
+	if capabilities, err := services.NewCompetitionCapabilityService(cfg, sensitiveDensity); err != nil {
+		log.Printf("[CompetitionCapabilities] initialization unavailable: %v", err)
+	} else {
+		h.competitionCapabilities = capabilities
 	}
 
 	// 🔥 新增：初始化批量embedding服务
@@ -2846,7 +2881,6 @@ func (h *Handler) HandleCreateUser(c *gin.Context) {
 		})
 		return
 	}
-
 	log.Printf("📝 [用户管理] 解析用户创建请求成功 - 用户ID: %s, 设备信息: %+v", req.UserID, req.DeviceInfo)
 
 	// 只有在使用向量存储类型的用户仓库时才需要向量服务

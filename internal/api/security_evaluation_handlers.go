@@ -199,7 +199,10 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 	}
 
 	// The result is intentionally metadata-only: never return raw or redacted input.
-	c.JSON(http.StatusOK, APIResponse{Success: true, Data: gin.H{
+	traceID := competitionTraceID(c)
+	completed := time.Now().UTC()
+	data := gin.H{
+		"trace_id":              traceID,
 		"decision":              decision,
 		"stage":                 stage,
 		"attack_types":          attackTypes,
@@ -219,7 +222,13 @@ func (h *Handler) HandleSecurityInputEvaluation(c *gin.Context) {
 		"disclosure_permitted":  false,
 		"claim_generated":       false,
 		"deleted_data_returned": false,
-	}})
+	}
+	rememberTraceEvidence(c, "security_evaluation", "completed", started, completed, gin.H{
+		"decision": decision, "stage": stage, "attack_types": attackTypes,
+		"sensitive_types": sensitiveTypes, "pipeline_version": "input-security-v1",
+		"generation_skipped": true, "memory_write_applied": false,
+	})
+	c.JSON(http.StatusOK, APIResponse{Success: true, Data: data})
 }
 
 // HandleSecurityAblationEvaluation computes all security-lab profiles on the
@@ -268,6 +277,17 @@ func (h *Handler) HandleSecurityAblationEvaluation(c *gin.Context) {
 	}
 	completed := time.Now().UTC()
 	traceID := competitionTraceID(c)
+	profileEvidence := make([]gin.H, 0, len(results))
+	for _, result := range results {
+		profileEvidence = append(profileEvidence, gin.H{
+			"profile": result.Profile, "decision": result.Decision,
+			"confidence": result.Confidence, "latency_ms": result.LatencyMS,
+		})
+	}
+	rememberTraceEvidence(c, "security_ablation", "completed", started, completed, gin.H{
+		"profiles": profileEvidence, "pipeline_version": security.SecurityLabPipelineVersion,
+		"synthetic": true, "memory_write_applied": false,
+	})
 	c.JSON(http.StatusOK, APIResponse{Success: true, Data: gin.H{
 		"trace_id": traceID, "sample_id": req.SampleID, "synthetic": true,
 		"started_at": started.Format(time.RFC3339Nano), "completed_at": completed.Format(time.RFC3339Nano),
